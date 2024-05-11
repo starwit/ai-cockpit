@@ -19,7 +19,7 @@ i18n
     .init({
         resources,
         detection: lngDetectinOptions,
-        fallbackLng: ["en-US"],
+        fallbackLng: ["de-DE"],
         keySeparator: false,
         interpolation: {
             escapeValue: false
