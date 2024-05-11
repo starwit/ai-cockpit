@@ -1,0 +1,68 @@
+name: Build and publish latest image
+
+on:
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+  IMAGE_NAME: ai-cockpit
+  DOCKERHUB_USERNAME: starwit
+  DOCKERHUB_ORG: starwitorg  
+
+jobs:
+  build:
+    name: "Build and publish with build number"
+    runs-on: [self-hosted, linux, X64]
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2     
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 21
+    - name: Set up Maven
+      uses: stCarolas/setup-maven@v4.5
+      with:
+        maven-version: 3.9.2
+    - name: setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: npm --version
+    - run: node --version
+    - run: mvn --version
+
+    - name: get version from pom.xml
+      run: |      
+        echo "VERSION_BUILD=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )-${{ github.run_number }}" >> $GITHUB_ENV
+        echo "VERSION_JAR=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV
+
+    - name: npm install
+      run: |
+        if [ -d "webclient/app" ]; then
+          cd webclient/app
+          npm install
+        fi        
+    - name: Build with Maven
+      run: mvn clean -B package -P frontend --file pom.xml
+      env:
+         CI: false
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ env.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+   
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./dockerfile
+        push: true
+        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.VERSION_BUILD }}
