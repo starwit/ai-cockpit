@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import TrafficIncidentRest from "../../services/TrafficIncidentRest"
 import { DataGrid } from "@mui/x-data-grid";
 import HorizontalNonLinearStepper from "../../commons/Stepper/Stepper";
+import { trafficIncidents3 } from "./ExampleData";
 
   
 const renderActions = (params) => {
@@ -17,6 +18,9 @@ const renderActions = (params) => {
 }
 
 const renderButton = (params) => {
+    if (params.row.state === 1) {
+        return;
+    }
     return (
             <Button
                 variant="contained"
@@ -27,7 +31,7 @@ const renderButton = (params) => {
                     console.log("button pressed")
                 }}
             >
-                {params.row.state}
+                {params.row.desc}
             </Button>
     )
 }
@@ -50,7 +54,6 @@ const headers = [
       field: 'actions',
       headerName: 'Maßnahmen',
       description: 'This column has a value getter and is not sortable.',
-      sortable: false,
       renderCell: renderActions,
       disableClickEventBubbling: true,
       width: 400,
@@ -59,53 +62,20 @@ const headers = [
         field: 'button',
         headerName: '',
         width: 200,
+        sortable: false,
         align: 'right',
         renderCell: renderButton,
         disableClickEventBubbling: true,
     },
   ];
 
-  const headersDone = [
-    {
-      field: 'incidentTime',
-      type: 'datetime',
-      headerName: 'Erfassungszeit',
-      width: 200,
-      editable: true,
-    },
-    {
-      field: 'incidentType',
-      headerName: 'Typ',
-      width: 300,
-      editable: true,
-    },
-    {
-      field: 'actions',
-      headerName: 'Maßnahmen',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      renderCell: renderActions,
-      disableClickEventBubbling: true,
-      width: 400
-    },
-  ];
-
 function Level3() {
     const {t} = useTranslation();
     const [activeStep, setActiveStep] = React.useState(2);
+    const [bgcolor, setBgcolor] = React.useState('');
     const [tab, setTab] = React.useState(0);
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), [])
-    const [trafficIncidents, setTrafficIncidents] = useState([
-        { id: 1, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "Rückfrage"},
-        { id: 2, incidentTime: "2016-01-04 10:34:23", incidentType: 'Parken auf Sperrfläche', actions: ['Polizei benachrichtigen','Straße sperren'], state: "Rückfrage"},
-        { id: 3, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "in Ausführung"},
-        { id: 4, incidentTime: "2016-01-04 10:34:23", incidentType: 'hohe Geschwindigkeit', actions: ['Polizei benachrichtigen'], state: "in Ausführung"},
-        { id: 5, incidentTime: "2016-01-04 10:34:23", incidentType: 'Gefahrensituation', actions: [], state: "in Ausführung"},
-        { id: 6, incidentTime: "2016-01-04 10:34:23", incidentType: 'Gefahrensituation', actions: [], state: "erledigt"},
-        { id: 7, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "erledigt"},
-        { id: 8, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "erledigt"},
-        { id: 9, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "erledigt"},
-      ]);
+    const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents3);
 
     useEffect(() => {
         reloadTrafficIncidents();
@@ -116,12 +86,17 @@ function Level3() {
             if (response.data == null) {
                 return;
             }
-            setTrafficIncidents(response.data);
+            //setTrafficIncidents(response.data);
         });
     }
 
     const handleTabChange = (event, newValue) => {
         setTab(newValue);
+        if (newValue === 1) {
+            setBgcolor("grey")
+        } else {
+            setBgcolor("")
+        }
       };
 
     return (
@@ -135,40 +110,22 @@ function Level3() {
                 <Tab label="Offen" />
                 <Tab label="Erledigt" />
             </Tabs>
-            {tab === 0 ? (
-                    <Box sx={{ width: '100%' }}>
-                        <DataGrid
-                            rows={trafficIncidents.filter((row) => row.state !== 'erledigt')}
-                            columns={headers}
-                            initialState={{
-                            pagination: {
-                                paginationModel: {
-                                pageSize: 10,
-                                },
+                <Box sx={{ width: '100%', WebkitTextFillColor: bgcolor }}>
+                    <DataGrid
+                        rows={trafficIncidents.filter((row) => row.state === tab)}
+                        columns={headers}
+                        initialState={{
+                        pagination: {
+                            paginationModel: {
+                            pageSize: 10,
                             },
-                            }}
-                            pageSizeOptions={[10]}
-                            disableRowSelectionOnClick
-
-                        />
-                    </Box>
-            ) : (
-
-                    <Box sx={{ width: '100%', WebkitTextFillColor: 'grey'}}>
-                        <DataGrid
-                            rows={trafficIncidents.filter((row) => row.state === 'erledigt')}
-                            columns={headersDone}
-                            initialState={{
-                            pagination: {
-                                paginationModel: {
-                                pageSize: 10,
-                                },
-                            },
-                            }}
-                            pageSizeOptions={[10]}
-                        />
-                    </Box>
-            )}
+                        },
+                        }}
+                        pageSizeOptions={[10]}
+                        checkboxSelection={tab === 0}
+                        disableRowSelectionOnClick
+                    />
+                </Box>
         </Container>
     );
 }
