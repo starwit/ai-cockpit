@@ -7,7 +7,7 @@ image:
   tag: "latest"
 
 app:
-  context_path: ""
+  context_path: "/ai-cockpit"
 
 service:
   port: 8081
@@ -39,7 +39,7 @@ ingress:
   hosts:
     - host: aic.starwit-infra.de
       paths:
-        - path: /
+        - path: /ai-cockpit
           pathType: ImplementationSpecific
   tls: 
     - secretName: aic.starwit-infra.de
