@@ -10,7 +10,7 @@ function MainContentRouter() {
     return (
         <Navigation>
             <Routes>
-                <Route path="/" element={<Level1 />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/1" element={<Level1 />} />
                 <Route path="/2" element={<Level2 />} />
                 <Route path="/3" element={<Level3 />} />
