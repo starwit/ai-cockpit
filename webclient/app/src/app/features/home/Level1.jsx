@@ -94,7 +94,7 @@ function Level1() {
             if (response.data == null) {
                 return;
             }
-            setTrafficIncidents(response.data);
+            //setTrafficIncidents(response.data);
         });
     }
 
