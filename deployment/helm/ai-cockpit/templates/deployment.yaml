@@ -24,7 +24,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "ai-cockpit.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -34,24 +33,33 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:mysql://{{ .Release.Name }}-mariadb:3306/{{ .Values.mariadb.auth.database }}?useLegacyDatetimeCode=false&serverTimezone=CET
-            - name: SPRING_DATASOURCE_USERNAME
-              value: {{ .Values.mariadb.auth.username }}
-            - name: SPRING_DATASOURCE_PASSWORD
-              value: {{ .Values.mariadb.auth.password }}
             - name: SERVER_SERVLET_CONTEXT_PATH
-              value: /{{ include "ai-cockpit.fullname" . }}
-            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENTID
+              value: {{ .Values.app.context_path | quote }}
+            - name: SERVER_PORT
+              value: {{ .Values.service.port | quote }}
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://{{ include "postgresql.servicename" . }}:5432/{{ .Values.postgresql.auth.database }}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: {{ .Values.postgresql.auth.username }}
+            - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  key:  clientid
-                  name: {{ .Release.Name }}-oauth
-            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GITHUB_CLIENTSECRET
-              valueFrom:
-                secretKeyRef:
-                  key:  clientsecret
-                  name: {{ .Release.Name }}-oauth
+                  name: {{ include "postgresql.secretname" . }}
+                  key: password
+            {{- if .Values.auth.enabled }}
+            - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER-URI
+              value: {{ .Values.auth.keycloak_url }}
+            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT-ID
+              value: {{ .Values.auth.client_id }}
+            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT-SECRET
+              value: {{ .Values.auth.client_secret }}
+            {{- else }}
+            - name: SPRING_PROFILES_ACTIVE
+              value: default
+            {{- end }}
+            {{- with .Values.extraEnv }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

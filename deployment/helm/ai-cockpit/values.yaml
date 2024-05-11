@@ -1,0 +1,75 @@
+replicaCount: 1
+
+image:
+  repository: starwitorg/ai-cockpit
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+app:
+  context_path: ""
+
+service:
+  port: 8081
+
+auth:
+  enabled: false
+  keycloak_url: https://hostname/realms/aicockpit
+  client_id: aicockpit
+  client_secret: aicockpit 
+
+postgresql:
+  auth:
+    database: ai-cockpit
+    username: ai-cockpit
+    password: ai-cockpit
+
+# extraEnv: |
+#   - name: JAVA_TOOL_OPTIONS
+#     value: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5000
+#   - name: LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY
+#     value: INFO
+#   - name: LOGGING_LEVEL_ROOT
+#     value: DEBUG
+
+ingress:
+  enabled: true
+  annotations: 
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: aic.starwit-infra.de
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: 
+    - secretName: aic.starwit-infra.de
+      hosts:
+        - aic.starwit-infra.de
+
+resources: {}
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

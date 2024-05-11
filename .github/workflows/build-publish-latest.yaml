@@ -2,13 +2,18 @@ name: Build and publish latest image
 
 on:
   workflow_dispatch:
+    inputs:
+      release-type: # id of input
+        description: "prerelease, patch, minor or major"
+        required: true
+        default: "prerelease"
 
 env:
   REGISTRY: ghcr.io
-
   IMAGE_NAME: ai-cockpit
   DOCKERHUB_USERNAME: starwit
-  DOCKERHUB_ORG: starwitorg  
+  DOCKERHUB_ORG: starwitorg   
+  release-type: ${{ github.event.inputs.release-type }}
 
 jobs:
   build:
@@ -66,3 +71,30 @@ jobs:
         file: ./dockerfile
         push: true
         tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.VERSION_BUILD }}
+
+
+  publish_helm:
+    name: "Publish helm chart"
+    runs-on: [self-hosted, linux, X64]
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: get helm
+        uses: azure/setup-helm@v3  
+
+      - name: login to Helm registry
+        run: helm registry login registry-1.docker.io -u starwit -p ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: run helm update
+        working-directory: deployment/helm/ai-cockpit
+        run: helm dep update
+      - name: run helm package
+        working-directory: deployment/helm
+        run: helm package ai-cockpit
+      - name: get version number
+        working-directory: deployment/helm/ai-cockpit
+        run: |
+          echo "HELM_VERSION=$(grep version: Chart.yaml | head -1 | awk '{print $2}')" >> $GITHUB_ENV
+      - name: run helm push
+        working-directory: deployment/helm
+        run: helm push ai-cockpit-chart-${{ env.HELM_VERSION }}.tgz oci://registry-1.docker.io/starwitorg
