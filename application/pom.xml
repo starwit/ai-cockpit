@@ -52,7 +52,7 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.3.2</version>
                         <configuration>
                             <filesets>
                                 <fileset>
@@ -64,7 +64,7 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-resources-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.3.1</version>
                         <executions>
                             <execution>
                                 <id>copy-resources</id>
@@ -76,7 +76,7 @@
                                     <outputDirectory>${project.basedir}/src/main/resources/static</outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${project.parent.basedir}/webclient/app/build</directory>
+                                            <directory>${project.parent.basedir}/webclient/app/dist</directory>
                                         </resource>
                                     </resources>
                                 </configuration>
@@ -94,6 +94,10 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot-version}</version>
+                <configuration>
+                    <skip>false</skip>
+                    <mainClass>de.starwit.application.Application</mainClass>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -106,7 +110,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-                <version>2.2.4</version>
+                <version>4.9.10</version>
                 <configuration>
                     <failOnNoGitDirectory>false</failOnNoGitDirectory>
                     <failOnUnableToExtractRepoInfo>false</failOnUnableToExtractRepoInfo>
@@ -130,17 +134,19 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>prepare-package</phase>
                         <configuration>
                             <target>
                                 <concat destfile="${project.build.outputDirectory}/static/info.txt">
-                                    <fileset file="${project.build.outputDirectory}/META-INF/build-info.properties" />
+                                    <fileset
+                                        file="${project.build.outputDirectory}/META-INF/build-info.properties" />
                                     <fileset file="${project.build.outputDirectory}/git.properties" />
                                     <filterchain>
-                                        <filterreader classname="org.apache.tools.ant.filters.LineContains">
+                                        <filterreader
+                                            classname="org.apache.tools.ant.filters.LineContains">
                                             <param type="negate" value="true" />
                                             <param type="contains" value="#" />
                                         </filterreader>
@@ -157,5 +163,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
