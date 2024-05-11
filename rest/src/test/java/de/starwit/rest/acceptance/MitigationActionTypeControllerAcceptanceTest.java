@@ -23,7 +23,6 @@ public class MitigationActionTypeControllerAcceptanceTest extends AbstractContro
 
 
     final static Logger LOG = LoggerFactory.getLogger(MitigationActionTypeControllerAcceptanceTest.class);
-    private static final String data = "testdata/mitigationactiontype/";
     private static final String restpath = "/api/mitigationactiontypes/";
 
     private JacksonTester<MitigationActionTypeEntity> jsonTester;

@@ -36,7 +36,7 @@ public class TrafficIncidentTypeService implements ServiceInterface<TrafficIncid
         if (entity.getId() != null) {
             TrafficIncidentTypeEntity entityPrev = this.findById(entity.getId());
             for (TrafficIncidentEntity item : entityPrev.getTrafficIncident()) {
-                TrafficIncidentEntity existingItem = trafficincidentRepository.getById(item.getId());
+                TrafficIncidentEntity existingItem = trafficincidentRepository.getReferenceById(item.getId());
                 existingItem.setTrafficIncidentType(null);
                 this.trafficincidentRepository.save(existingItem);
             }
@@ -48,11 +48,11 @@ public class TrafficIncidentTypeService implements ServiceInterface<TrafficIncid
 
         if (trafficIncidentToSave != null && !trafficIncidentToSave.isEmpty()) {
             for (TrafficIncidentEntity item : trafficIncidentToSave) {
-                TrafficIncidentEntity newItem = trafficincidentRepository.getById(item.getId());
+                TrafficIncidentEntity newItem = trafficincidentRepository.getReferenceById(item.getId());
                 newItem.setTrafficIncidentType(entity);
                 trafficincidentRepository.save(newItem);
             }
         }
-        return this.getRepository().getById(entity.getId());
+        return this.getRepository().getReferenceById(entity.getId());
     }
 }

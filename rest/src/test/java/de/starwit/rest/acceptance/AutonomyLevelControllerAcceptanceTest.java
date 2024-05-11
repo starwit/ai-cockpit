@@ -23,7 +23,6 @@ public class AutonomyLevelControllerAcceptanceTest extends AbstractControllerAcc
 
 
     final static Logger LOG = LoggerFactory.getLogger(AutonomyLevelControllerAcceptanceTest.class);
-    private static final String data = "testdata/autonomylevel/";
     private static final String restpath = "/api/autonomylevels/";
 
     private JacksonTester<AutonomyLevelEntity> jsonTester;

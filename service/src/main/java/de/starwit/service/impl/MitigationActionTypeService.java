@@ -36,7 +36,7 @@ public class MitigationActionTypeService implements ServiceInterface<MitigationA
         if (entity.getId() != null) {
             MitigationActionTypeEntity entityPrev = this.findById(entity.getId());
             for (MitigationActionEntity item : entityPrev.getMitigationAction()) {
-                MitigationActionEntity existingItem = mitigationactionRepository.getById(item.getId());
+                MitigationActionEntity existingItem = mitigationactionRepository.getReferenceById(item.getId());
                 existingItem.setMitigationActionType(null);
                 this.mitigationactionRepository.save(existingItem);
             }
@@ -48,11 +48,11 @@ public class MitigationActionTypeService implements ServiceInterface<MitigationA
 
         if (mitigationActionToSave != null && !mitigationActionToSave.isEmpty()) {
             for (MitigationActionEntity item : mitigationActionToSave) {
-                MitigationActionEntity newItem = mitigationactionRepository.getById(item.getId());
+                MitigationActionEntity newItem = mitigationactionRepository.getReferenceById(item.getId());
                 newItem.setMitigationActionType(entity);
                 mitigationactionRepository.save(newItem);
             }
         }
-        return this.getRepository().getById(entity.getId());
+        return this.getRepository().getReferenceById(entity.getId());
     }
 }

@@ -23,7 +23,6 @@ public class TrafficIncidentControllerAcceptanceTest extends AbstractControllerA
 
 
     final static Logger LOG = LoggerFactory.getLogger(TrafficIncidentControllerAcceptanceTest.class);
-    private static final String data = "testdata/trafficincident/";
     private static final String restpath = "/api/trafficincidents/";
 
     private JacksonTester<TrafficIncidentEntity> jsonTester;

@@ -4,13 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.time.ZonedDateTime;
-import de.starwit.persistence.serializer.ZonedDateTimeSerializer;
-import de.starwit.persistence.serializer.ZonedDateTimeDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.persistence.CascadeType;
-
 /**
  * AutonomyLevel Entity class
  */

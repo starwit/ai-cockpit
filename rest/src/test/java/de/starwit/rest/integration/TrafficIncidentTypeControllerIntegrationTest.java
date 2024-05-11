@@ -1,18 +1,8 @@
 package de.starwit.rest.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
-import org.springframework.mock.web.MockHttpServletResponse;
 
 import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
 import de.starwit.rest.controller.TrafficIncidentTypeController;
@@ -32,8 +22,6 @@ public class TrafficIncidentTypeControllerIntegrationTest extends AbstractContro
     @MockBean
     private TrafficIncidentTypeService trafficincidenttypeService;
 
-    private JacksonTester<TrafficIncidentTypeEntity> jsonTrafficIncidentTypeEntity;
-    private static final String data = "testdata/trafficincidenttype/";
     private static final String restpath = "/api/trafficincidenttypes/";
 
     @Override

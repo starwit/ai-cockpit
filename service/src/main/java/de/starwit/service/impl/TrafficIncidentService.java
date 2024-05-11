@@ -44,7 +44,7 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
         if (entity.getId() != null) {
             TrafficIncidentEntity entityPrev = this.findById(entity.getId());
             for (MitigationActionEntity item : entityPrev.getMitigationAction()) {
-                MitigationActionEntity existingItem = mitigationactionRepository.getById(item.getId());
+                MitigationActionEntity existingItem = mitigationactionRepository.getReferenceById(item.getId());
                 existingItem.setTrafficIncident(null);
                 this.mitigationactionRepository.save(existingItem);
             }
@@ -56,11 +56,11 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
 
         if (mitigationActionToSave != null && !mitigationActionToSave.isEmpty()) {
             for (MitigationActionEntity item : mitigationActionToSave) {
-                MitigationActionEntity newItem = mitigationactionRepository.getById(item.getId());
+                MitigationActionEntity newItem = mitigationactionRepository.getReferenceById(item.getId());
                 newItem.setTrafficIncident(entity);
                 mitigationactionRepository.save(newItem);
             }
         }
-        return this.getRepository().getById(entity.getId());
+        return this.getRepository().getReferenceById(entity.getId());
     }
 }

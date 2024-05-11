@@ -1,18 +1,13 @@
 package de.starwit.persistence.entity;
 
+import java.util.Set;
+
 import com.fasterxml.jackson.annotation.JsonFilter;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.Set;
-
-import java.time.ZonedDateTime;
-import de.starwit.persistence.serializer.ZonedDateTimeSerializer;
-import de.starwit.persistence.serializer.ZonedDateTimeDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.persistence.CascadeType;
 
 /**
  * TrafficIncidentType Entity class
