@@ -8,10 +8,10 @@ export default defineConfig(({command}) => {
       plugins: [
         react(),
       ],
-      base: "/smartparkingconfig/",
+      base: "/ai-cockpit/",
       server: {
         proxy: {
-          "/smartparkingconfig/api": "http://localhost:8081"
+          "/ai-cockpit/api": "http://localhost:8081"
         }
       },
     };

@@ -1,45 +1,26 @@
 import React from "react";
-import AppHeader from "./appHeader/AppHeader";
 import SidebarNavigation from "./sidebarNavigation/SidebarNavigation";
 import NavigationStyles from "./NavigationStyles";
+import {styled} from "@mui/material/styles";
 
 function Navigation(props) {
-    const {menuItems, switchLength, title, logo} = props;
-    const navigationStyles = NavigationStyles();
+    const {menuItems, title, logo, removeContentSpacer} = props;
 
+    const MainDiv = styled('div')(({theme}) => removeContentSpacer ? {} : NavigationStyles.contentSpacer(theme))
 
     function renderCorrectNavigation() {
-        if (menuItems.length > switchLength) {
-            return (
-                <>
-                    <SidebarNavigation menuItems={menuItems} title={title} logo={logo}>
-                        {props.children}
-                    </SidebarNavigation>
-                </>
-            )
-        }
-
         return (
-            <>
-                <AppHeader menuItems={menuItems} title={title} logo={logo}/>
+            <SidebarNavigation menuItems={menuItems} title={title} logo={logo} focusMode={removeContentSpacer}>
                 {props.children}
-            </>
-        )
+            </SidebarNavigation>
+        );
     }
 
-    return(
-        <div className={navigationStyles.contentSpacer}>
+    return (
+        <MainDiv style={{height: "100%"}}>
             {renderCorrectNavigation()}
-        </div>
-    )
-
-}
-
-Navigation.defaultProps = {
-    switchLength: 4,
-    title: "New App",
-    menuItems: []
-
+        </MainDiv>
+    );
 }
 
 export default Navigation;

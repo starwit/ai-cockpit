@@ -1,8 +1,6 @@
-import {makeStyles} from "@mui/styles";
-
-const NavigationStyles = makeStyles(theme => ({
-    contentSpacer: {
+const NavigationStyles = {
+    contentSpacer: theme => ({
         paddingBottom: theme.spacing(4)
-    }
-}));
+    })
+};
 export default NavigationStyles;
