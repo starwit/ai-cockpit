@@ -10,7 +10,7 @@
     "@mui/material": "^5.0.0",
     "@mui/styles": "^5.0.0",
     "@starwit/react-starwit": "1.0.3",
-    "axios": "^0.24.0",
+    "axios": "^1.6.8",
     "i18next": "^21.0.1",
     "i18next-browser-languagedetector": "^6.1.2",
     "immer": "^9.0.12",
