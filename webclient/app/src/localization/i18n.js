@@ -2,9 +2,11 @@ import i18n from "i18next";
 import {initReactI18next} from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import translationEnEN from "./translation-en-EN";
+import translationDeDE from "./translation-de-DE";
 
 const resources = {
-    "en-US": {translation: translationEnEN}
+    "en-US": {translation: translationEnEN},
+    "de-DE": {translation: translationDeDE}
 };
 
 const lngDetectinOptions = {

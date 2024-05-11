@@ -10,7 +10,9 @@ const renderActions = (params) => {
     return (
         <strong>
             {params.row.actions.map(action => (
-                <Chip key={action} label={action} variant="outlined" sx={{color: 'green' }}/>
+                <Typography key={action} variant="outlined" sx={{color: 'green' }}>
+                    {/*do nothing*/}
+                </Typography>
             ))}
         </strong>
     )
@@ -28,7 +30,7 @@ const renderButton = (params) => {
                     console.log("button pressed")
                 }}
             >
-                Ausführen
+                Als erledigt kennzeichnen
             </Button>
         </strong>
     )
@@ -55,12 +57,12 @@ const headers = [
       sortable: false,
       renderCell: renderActions,
       disableClickEventBubbling: true,
-      width: 400,
+      width: 320,
     },
     {
         field: 'button',
         headerName: '',
-        width: 200,
+        width: 280,
         align: 'right',
         renderCell: renderButton,
         disableClickEventBubbling: true,
@@ -86,27 +88,26 @@ const headers = [
       headerName: 'Maßnahmen',
       description: 'This column has a value getter and is not sortable.',
       sortable: false,
-      renderCell: renderActions,
       disableClickEventBubbling: true,
       width: 400
     },
   ];
 
-function Home() {
+function Level1() {
     const {t} = useTranslation();
     const [activeStep, setActiveStep] = React.useState(0);
     const [tab, setTab] = React.useState(0);
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), [])
     const [trafficIncidents, setTrafficIncidents] = useState([
-        { id: 1, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
-        { id: 2, incidentTime: "2016-01-04 10:34:23", incidentType: 'Parken auf Sperrfläche', actions: ['Polizei benachrichtigen','Straße sperren']},
+        { id: 1, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei wurde benachrichtigt',' Straße wurde gesperrt']},
+        { id: 2, incidentTime: "2016-01-04 10:34:23", incidentType: 'Parken auf Sperrfläche', actions: ['Auto wurde abgeschleppt']},
         { id: 3, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
-        { id: 4, incidentTime: "2016-01-04 10:34:23", incidentType: 'hohe Geschwindigkeit', actions: ['Polizei benachrichtigen']},
+        { id: 4, incidentTime: "2016-01-04 10:34:23", incidentType: 'hohe Geschwindigkeit', actions: ['Polizei wurde benachrichtigt']},
         { id: 5, incidentTime: "2016-01-04 10:34:23", incidentType: 'Gefahrensituation', actions: []},
         { id: 6, incidentTime: "2016-01-04 10:34:23", incidentType: 'Gefahrensituation', actions: []},
-        { id: 7, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
-        { id: 8, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
-        { id: 9, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
+        { id: 7, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei wurde benachrichtigt',' Straße wurde gesperrt']},
+        { id: 8, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei wurde benachrichtigt',' Straße wurde gesperrt']},
+        { id: 9, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei wurde benachrichtigt',' Straße wurde gesperrt']},
       ]);
 
     useEffect(() => {
@@ -176,4 +177,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default Level1;

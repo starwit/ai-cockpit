@@ -92,9 +92,9 @@ const headers = [
     },
   ];
 
-function Home() {
+function Level2() {
     const {t} = useTranslation();
-    const [activeStep, setActiveStep] = React.useState(0);
+    const [activeStep, setActiveStep] = React.useState(1);
     const [tab, setTab] = React.useState(0);
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), [])
     const [trafficIncidents, setTrafficIncidents] = useState([
@@ -176,4 +176,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default Level2;

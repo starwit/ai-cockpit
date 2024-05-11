@@ -18,7 +18,6 @@ const renderActions = (params) => {
 
 const renderButton = (params) => {
     return (
-        <strong>
             <Button
                 variant="contained"
                 color="primary"
@@ -28,9 +27,8 @@ const renderButton = (params) => {
                     console.log("button pressed")
                 }}
             >
-                Ausführen
+                {params.row.state}
             </Button>
-        </strong>
     )
 }
 
@@ -92,21 +90,21 @@ const headers = [
     },
   ];
 
-function Home() {
+function Level3() {
     const {t} = useTranslation();
-    const [activeStep, setActiveStep] = React.useState(0);
+    const [activeStep, setActiveStep] = React.useState(2);
     const [tab, setTab] = React.useState(0);
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), [])
     const [trafficIncidents, setTrafficIncidents] = useState([
-        { id: 1, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
-        { id: 2, incidentTime: "2016-01-04 10:34:23", incidentType: 'Parken auf Sperrfläche', actions: ['Polizei benachrichtigen','Straße sperren']},
-        { id: 3, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
-        { id: 4, incidentTime: "2016-01-04 10:34:23", incidentType: 'hohe Geschwindigkeit', actions: ['Polizei benachrichtigen']},
-        { id: 5, incidentTime: "2016-01-04 10:34:23", incidentType: 'Gefahrensituation', actions: []},
-        { id: 6, incidentTime: "2016-01-04 10:34:23", incidentType: 'Gefahrensituation', actions: []},
-        { id: 7, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
-        { id: 8, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
-        { id: 9, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren']},
+        { id: 1, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "Rückfrage"},
+        { id: 2, incidentTime: "2016-01-04 10:34:23", incidentType: 'Parken auf Sperrfläche', actions: ['Polizei benachrichtigen','Straße sperren'], state: "Rückfrage"},
+        { id: 3, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "in Ausführung"},
+        { id: 4, incidentTime: "2016-01-04 10:34:23", incidentType: 'hohe Geschwindigkeit', actions: ['Polizei benachrichtigen'], state: "in Ausführung"},
+        { id: 5, incidentTime: "2016-01-04 10:34:23", incidentType: 'Gefahrensituation', actions: [], state: "in Ausführung"},
+        { id: 6, incidentTime: "2016-01-04 10:34:23", incidentType: 'Gefahrensituation', actions: [], state: "erledigt"},
+        { id: 7, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "erledigt"},
+        { id: 8, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "erledigt"},
+        { id: 9, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen','Straße sperren'], state: "erledigt"},
       ]);
 
     useEffect(() => {
@@ -140,7 +138,7 @@ function Home() {
             {tab === 0 ? (
                     <Box sx={{ width: '100%' }}>
                         <DataGrid
-                            rows={trafficIncidents}
+                            rows={trafficIncidents.filter((row) => row.state !== 'erledigt')}
                             columns={headers}
                             initialState={{
                             pagination: {
@@ -150,7 +148,6 @@ function Home() {
                             },
                             }}
                             pageSizeOptions={[10]}
-                            checkboxSelection
                             disableRowSelectionOnClick
 
                         />
@@ -159,7 +156,7 @@ function Home() {
 
                     <Box sx={{ width: '100%', WebkitTextFillColor: 'grey'}}>
                         <DataGrid
-                            rows={trafficIncidents}
+                            rows={trafficIncidents.filter((row) => row.state === 'erledigt')}
                             columns={headersDone}
                             initialState={{
                             pagination: {
@@ -176,4 +173,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default Level3;

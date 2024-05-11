@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const translationEnEN = {
+const translationDeDE = {
     "trafficIncident": "TrafficIncident",
     "trafficIncident.title": "TrafficIncident",
     "trafficIncident.create.title": "Create TrafficIncident",
@@ -47,8 +47,8 @@ const translationEnEN = {
     "mitigationActionType.description": "description",
     "mitigationActionType.description.hint": "",
     "app.baseName": "ai-cockpit",
-    "home.title": "AI Cockpit",
-    "home.welcome": "Welcome to ai-cockpit",
+    "home.title": "KI Cockpit",
+    "home.welcome": "Willkommen im KI Cockpit",
     "button.submit": "OK",
     "button.create": "Add",
     "button.update": "Edit",
@@ -76,4 +76,4 @@ const translationEnEN = {
     "error.app.notfound": "This App could not be found.",
     "error.entity.notfound": "This element could not be found."
 };
-export default translationEnEN;
+export default translationDeDE;
