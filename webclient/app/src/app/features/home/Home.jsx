@@ -75,7 +75,7 @@ function Home() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [tab, setTab] = React.useState(0);
     const [bgcolor, setBgcolor] = React.useState('');
-    const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), [])
+    const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
     const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents2);
 
     useEffect(() => {
@@ -87,7 +87,7 @@ function Home() {
             if (response.data == null) {
                 return;
             }
-            setTrafficIncidents(response.data);
+            //setTrafficIncidents(response.data);
         });
     }
 
