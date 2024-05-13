@@ -82,7 +82,7 @@ function Level1() {
     const [bgcolor, setBgcolor] = React.useState('');
     const [activeStep, setActiveStep] = React.useState(0);
     const [tab, setTab] = React.useState(0);
-    const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), [])
+    const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
     const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents1);
 
     useEffect(() => {
