@@ -108,8 +108,8 @@ function Home() {
             {t("home.welcome")}
             <HorizontalNonLinearStepper activeStep={activeStep} setActiveStep={setActiveStep} />
             <Tabs onChange={handleTabChange} value={tab}>
-                <Tab label="Offen" />
-                <Tab label="Erledigt" />
+                <Tab label={t("home.incidentTab.title.open")} />
+                <Tab label={t("home.incidentTab.title.done")} />
             </Tabs>
                 <Box sx={{ width: '100%', WebkitTextFillColor: bgcolor }}>
                     <DataGrid

@@ -74,6 +74,8 @@ const translationEnEN = {
     "error.unknown": "An unknown error occurred.",
     "error.apptemplate.notfound": "The Template could not be found.",
     "error.app.notfound": "This App could not be found.",
-    "error.entity.notfound": "This element could not be found."
+    "error.entity.notfound": "This element could not be found.",
+    "home.incidentTab.title.open": "Open",
+    "home.incidentTab.title.done": "Done"
 };
 export default translationEnEN;
