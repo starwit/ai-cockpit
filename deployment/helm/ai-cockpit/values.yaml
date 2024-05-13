@@ -16,8 +16,8 @@ auth:
   enabled: false
   keycloakRealmUrlInternal: http://internal-hostname/realms/aicockpit
   keycloakRealmUrlExternal: https://external-hostname/realms/aicockpit
-  client_id: aicockpit
-  client_secret: aicockpit 
+  clientId: aicockpit
+  clientSecret: aicockpit 
 
 postgresql:
   auth:
