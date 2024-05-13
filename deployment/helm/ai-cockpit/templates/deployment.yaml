@@ -53,12 +53,28 @@ spec:
                   name: {{ include "postgresql.secretname" . }}
                   key: password
             {{- if .Values.auth.enabled }}
-            - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER-URI
-              value: {{ .Values.auth.keycloak_url }}
-            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT-ID
-              value: {{ .Values.auth.client_id }}
-            - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT-SECRET
-              value: {{ .Values.auth.client_secret }}
+            - name: SPRING_PROFILES_ACTIVE
+              value: auth
+            - name: OIDC-CLIENT-REGISTRATION_AUTHORIZATION-URI
+              value: {{ .Values.auth.keycloakRealmUrlExternal }}/protocol/openid-connect/auth
+            - name: OIDC-CLIENT-REGISTRATION_TOKEN-URI
+              value: {{ .Values.auth.keycloakRealmUrlInternal }}/protocol/openid-connect/token
+            - name: OIDC-CLIENT-REGISTRATION_USER-INFO-URI
+              value: {{ .Values.auth.keycloakRealmUrlInternal }}/protocol/openid-connect/userinfo
+            - name: OIDC-CLIENT-REGISTRATION_JWK-SET-URI
+              value: {{ .Values.auth.keycloakRealmUrlInternal }}/protocol/openid-connect/certs
+            - name: OIDC-CLIENT-REGISTRATION_END-SESSION-ENDPOINT
+              value: {{ .Values.auth.keycloakRealmUrlExternal }}/protocol/openid-connect/logout
+            - name: OIDC-CLIENT-REGISTRATION_USERNAMEATTRIBUTE
+              value: preferred_username
+            - name: OIDC-CLIENT-REGISTRATION_SCOPE
+              value: openid
+            - name: OIDC-CLIENT-REGISTRATION_REDIRECT-URI
+              value: "{baseUrl}/login/oauth2/code/{registrationId}"
+            - name: OIDC-CLIENT-REGISTRATION_CLIENT-ID
+              value: {{ .Values.auth.clientId }}
+            - name: OIDC-CLIENT-REGISTRATION_CLIENT-SECRET
+              value: {{ .Values.auth.clientSecret }}
             {{- else }}
             - name: SPRING_PROFILES_ACTIVE
               value: default

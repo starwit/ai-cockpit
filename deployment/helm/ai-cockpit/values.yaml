@@ -14,7 +14,8 @@ service:
 
 auth:
   enabled: false
-  keycloak_url: https://hostname/realms/aicockpit
+  keycloakRealmUrlInternal: http://internal-hostname/realms/aicockpit
+  keycloakRealmUrlExternal: https://external-hostname/realms/aicockpit
   client_id: aicockpit
   client_secret: aicockpit 
 

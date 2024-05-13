@@ -36,7 +36,7 @@ services:
       - backend
     restart: unless-stopped
 
-  ai-cockpit-db-keycloak:
+  db-keycloak:
     image: postgres:latest
     restart: on-failure
     environment:
@@ -50,20 +50,18 @@ services:
       timeout: 60s
       retries: 30
     volumes:
-      - ai-cockpit-keycloak-db:/var/lib/postgresql/data
-    networks:
-      - backend
+      - keycloak-db:/var/lib/postgresql/data
 
-  ai-cockpit-keycloak:
+  aicockpit-keycloak:
     image: quay.io/keycloak/keycloak
     volumes:
       - ./keycloak/imports:/opt/keycloak/data/import
     depends_on:
-      ai-cockpit-db-keycloak:
+      db-keycloak:
         condition: service_healthy
     restart: on-failure
     environment:
-      KC_DB_URL: jdbc:postgresql://ai-cockpit-db-keycloak:5432/keycloak
+      KC_DB_URL: jdbc:postgresql://db-keycloak:5432/keycloak
       KC_DB: postgres
       KC_DB_USERNAME: keycloak
       KC_DB_PASSWORD: keycloak
@@ -73,8 +71,6 @@ services:
     command: start-dev --import-realm
     ports:
       - '8080:8080'
-    networks:
-      - backend
 
 
 networks:
@@ -83,5 +79,5 @@ networks:
 volumes:
   ai-cockpit-db:
   ai-cockpit-pgadmin:
-  ai-cockpit-keycloak-db:
+  db-keycloak:
 
