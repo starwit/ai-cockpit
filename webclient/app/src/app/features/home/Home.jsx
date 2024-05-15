@@ -1,7 +1,7 @@
 import {Box, Button, Chip, Container, Tab, Tabs, Typography} from "@mui/material";
 import React, {useState, useMemo, useEffect} from "react";
 import {useTranslation} from "react-i18next";
-import TrafficIncidentRest from "../../services/TrafficIncidentRest"
+import TrafficIncidentRest from "../../services/TrafficIncidentRest";
 import {DataGrid} from "@mui/x-data-grid";
 import HorizontalNonLinearStepper from "../../commons/Stepper/Stepper";
 import {trafficIncidents2} from "./ExampleData";
@@ -11,7 +11,7 @@ function Home() {
     const {t} = useTranslation();
     const [activeStep, setActiveStep] = React.useState(0);
     const [tab, setTab] = React.useState(0);
-    const [bgcolor, setBgcolor] = React.useState('');
+    const [bgcolor, setBgcolor] = React.useState("");
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
     const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents2);
 
@@ -24,7 +24,7 @@ function Home() {
             if (response.data == null) {
                 return;
             }
-            //setTrafficIncidents(response.data);
+            // setTrafficIncidents(response.data);
         });
     }
 
@@ -88,7 +88,7 @@ function Home() {
             </Tabs>
             <Box sx={{width: "100%", WebkitTextFillColor: bgcolor}}>
                 <DataGrid
-                    rows={trafficIncidents.filter((row) => row.state === tab)}
+                    rows={trafficIncidents.filter(row => row.state === tab)}
                     columns={headers}
                     initialState={{
                         pagination: {

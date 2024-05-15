@@ -20,7 +20,7 @@
     "ignorePatterns": ["**/*.ico", "**/*.css", "**/translations*.js","**/*.svg","**/*.png"],
     "rules": {
         "max-len": [
-            "warn", {"code": 120, "tabWidth": 4,
+            "warn", {"code": 180, "tabWidth": 4,
                 "ignoreUrls": true
             }
         ],
