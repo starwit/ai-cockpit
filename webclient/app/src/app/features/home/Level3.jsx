@@ -5,69 +5,7 @@ import TrafficIncidentRest from "../../services/TrafficIncidentRest"
 import { DataGrid } from "@mui/x-data-grid";
 import HorizontalNonLinearStepper from "../../commons/Stepper/Stepper";
 import { trafficIncidents3 } from "./ExampleData";
-
-  
-const renderActions = (params) => {
-    return (
-        <strong>
-            {params.row.actions.map(action => (
-                <Chip key={action} label={action} variant="outlined" sx={{color: 'green' }}/>
-            ))}
-        </strong>
-    )
-}
-
-const renderButton = (params) => {
-    if (params.row.state === 1) {
-        return;
-    }
-    return (
-            <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                style={{ marginLeft: 16 }}
-                onClick={() => {
-                    console.log("button pressed")
-                }}
-            >
-                {params.row.desc}
-            </Button>
-    )
-}
-
-const headers = [
-    {
-      field: 'incidentTime',
-      type: 'datetime',
-      headerName: 'Erfassungszeit',
-      width: 200,
-      editable: true,
-    },
-    {
-      field: 'incidentType',
-      headerName: 'Typ',
-      width: 300,
-      editable: true,
-    },
-    {
-      field: 'actions',
-      headerName: 'Maßnahmen',
-      description: 'This column has a value getter and is not sortable.',
-      renderCell: renderActions,
-      disableClickEventBubbling: true,
-      width: 400,
-    },
-    {
-        field: 'button',
-        headerName: '',
-        width: 200,
-        sortable: false,
-        align: 'right',
-        renderCell: renderButton,
-        disableClickEventBubbling: true,
-    },
-  ];
+import {renderActions} from "./DataGridInteractionComponents";
 
 function Level3() {
     const {t} = useTranslation();
@@ -99,16 +37,73 @@ function Level3() {
         }
       };
 
+    const renderButton = (params) => {
+        if (params.row.state === 1) {
+            return;
+        }
+        return (
+                <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    style={{ marginLeft: 16 }}
+                    onClick={() => {
+                        console.log("button pressed");
+                    }}
+                >
+                    {params.row.desc}
+                </Button>
+        )
+    }
+    
+    const headers = [
+        {
+            field: "incidentTime",
+            type: "datetime",
+            headerName: t("incidentData.columns.captureTime"),
+            width: 200,
+            editable: true
+        },
+        {
+            field: "incidentType",
+            headerName: t("incidentData.columns.type"),
+            width: 300,
+            editable: true
+        },
+        {
+            field: "incidentDetails",
+            headerName: t("incidentData.columns.details"),
+            width: 300,
+            editable: true
+        },
+        {
+            field: "actions",
+            headerName: t("incidentData.columns.action"),
+            description: "",
+            renderCell: renderActions,
+            disableClickEventBubbling: true,
+            width: 400
+        },
+        {
+            field: "actionButton",
+            headerName: "",
+            width: 200,
+            align: "right",
+            renderCell: renderButton,
+            disableClickEventBubbling: true
+        }
+    ];
+
     return (
-        <Container sx={{margin: "1em"}}>
+        <Container sx={{margin: "1em"}} >
             <Typography variant={"h2"} gutterBottom>
                 {t("home.title")}
             </Typography>
             {t("home.welcome")}
             <HorizontalNonLinearStepper activeStep={activeStep} setActiveStep={setActiveStep} />
             <Tabs onChange={handleTabChange} value={tab}>
-            <Tab label={t("home.incidentTab.title.open")} />
-                <Tab label={t("home.incidentTab.title.done")} />
+                <Tab label={t("home.incidentTab.title.open")} key="tab0" />
+                <Tab label={t("home.incidentTab.title.done")} key="tab1" />
             </Tabs>
                 <Box sx={{ width: '100%', WebkitTextFillColor: bgcolor }}>
                     <DataGrid

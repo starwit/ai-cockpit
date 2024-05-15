@@ -14,7 +14,7 @@ export const trafficIncidents1 = [
     { id: 13, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: [['Polizei wurde benachrichtigt',' Straße wurde gesperrt']], state: 1},
     { id: 14, incidentTime: "2016-01-04 10:34:23", incidentType: 'hohe Geschwindigkeit', actions: ['Polizei benachrichtigen'], state: 1},
     { id: 15, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei wurde benachrichtigt'], state: 1},
-  ]
+  ];
 
 export const trafficIncidents2 = [
     { id: 1, incidentTime: "2016-01-04 10:34:23", incidentType: 'Stau', actions: ['Polizei benachrichtigen', 'an Verkehrsfunk melden'], state: 0, desc: 'Rückfrage'},

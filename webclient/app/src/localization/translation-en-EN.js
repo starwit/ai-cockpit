@@ -76,6 +76,11 @@ const translationEnEN = {
     "error.app.notfound": "This App could not be found.",
     "error.entity.notfound": "This element could not be found.",
     "home.incidentTab.title.open": "Open",
-    "home.incidentTab.title.done": "Done"
+    "home.incidentTab.title.done": "Done",
+    "incidentData.columns.captureTime": "Capture Time",
+    "incidentData.columns.type": "Incident Type",
+    "incidentData.columns.details": "Details",
+    "incidentData.columns.action": "Mitigation Actions",
+    "incidentData.columns.action.button": "Execute"
 };
 export default translationEnEN;

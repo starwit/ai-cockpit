@@ -4,78 +4,8 @@ import { useTranslation } from "react-i18next";
 import TrafficIncidentRest from "../../services/TrafficIncidentRest"
 import { DataGrid } from "@mui/x-data-grid";
 import HorizontalNonLinearStepper from "../../commons/Stepper/Stepper";
-import { trafficIncidents1 } from "./ExampleData";
-
-  
-const renderActions = (params) => {
-    if (params.row.state === 0) {
-        return;
-    } else {
-        return (
-            <>
-                {params.row.actions.map(action => (
-                    <Typography key={action} variant="outlined" sx={{color: 'green' }}>
-                        {action + ", "}
-                    </Typography>
-                ))}
-            </>
-        )
-    }
-}
-
-const renderButton = (params) => {
-    if (params.row.state === 1) {
-        return;
-    }
-    return (
-        <strong>
-            <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                style={{ marginLeft: 16 }}
-                onClick={() => {
-                    console.log("button pressed")
-                }}
-            >
-                Als erledigt kennzeichnen
-            </Button>
-        </strong>
-    )
-}
-
-const headers = [
-    {
-      field: 'incidentTime',
-      type: 'datetime',
-      headerName: 'Erfassungszeit',
-      width: 200,
-      editable: true,
-    },
-    {
-      field: 'incidentType',
-      headerName: 'Typ',
-      width: 300,
-      editable: true,
-    },
-    {
-      field: 'actions',
-      headerName: 'Maßnahmen',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      renderCell: renderActions,
-      disableClickEventBubbling: true,
-      width: 320,
-    },
-    {
-        field: 'button',
-        headerName: '',
-        width: 280,
-        align: 'right',
-        renderCell: renderButton,
-        disableClickEventBubbling: true,
-    },
-  ];
+import {trafficIncidents1} from "./ExampleData";
+import {renderActions, renderButton} from "./DataGridInteractionComponents";
 
 function Level1() {
     const {t} = useTranslation();
@@ -101,22 +31,60 @@ function Level1() {
     const handleTabChange = (event, newValue) => {
         setTab(newValue);
         if (newValue === 1) {
-            setBgcolor("grey")
+            setBgcolor("grey");
         } else {
-            setBgcolor("")
+            setBgcolor("");
         }
       };
 
+    const headers = [
+        {
+            field: "incidentTime",
+            type: "datetime",
+            headerName: t("incidentData.columns.captureTime"),
+            width: 200,
+            editable: true
+        },
+        {
+            field: "incidentType",
+            headerName: t("incidentData.columns.type"),
+            width: 300,
+            editable: true
+        },
+        {
+            field: "incidentDetails",
+            headerName: t("incidentData.columns.details"),
+            width: 300,
+            editable: true
+        },
+        {
+            field: "actions",
+            headerName: t("incidentData.columns.action"),
+            description: "",
+            renderCell: renderActions,
+            disableClickEventBubbling: true,
+            width: 400
+        },
+        {
+            field: "actionButton",
+            headerName: "",
+            width: 200,
+            align: "right",
+            renderCell: renderButton("Als erledigt kennzeichnen"),
+            disableClickEventBubbling: true
+        }
+    ];
+
     return (
-        <Container sx={{margin: "1em"}}>
+        <Container sx={{margin: "1em"}} >
             <Typography variant={"h2"} gutterBottom>
                 {t("home.title")}
             </Typography>
             {t("home.welcome")}
             <HorizontalNonLinearStepper activeStep={activeStep} setActiveStep={setActiveStep} />
             <Tabs onChange={handleTabChange} value={tab}>
-            <Tab label={t("home.incidentTab.title.open")} />
-                <Tab label={t("home.incidentTab.title.done")} />
+                <Tab label={t("home.incidentTab.title.open")} key="tab0" />
+                <Tab label={t("home.incidentTab.title.done")} key="tab1" />
             </Tabs>
                 <Box sx={{ width: '100%', WebkitTextFillColor: bgcolor }}>
                     <DataGrid

@@ -4,7 +4,11 @@ import ColorTheme from "./ColorTheme";
 const ComponentTheme = createTheme(ColorTheme,
     {
         components: {
-            MuiContainer: {},
+            MuiContainer: {
+                defaultProps: {
+                    maxWidth: false
+                }
+            },
             MuiCard: {
                 defaultProps: {
                     elevation: 10

@@ -8,18 +8,16 @@ import Level3 from "./features/home/Level3";
 
 function MainContentRouter() {
     return (
-        <Navigation>
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/1" element={<Level1 />} />
-                <Route path="/2" element={<Level2 />} />
-                <Route path="/3" element={<Level3 />} />
-                <Route path="/logout" component={() => {
-                    window.location.href = window.location.pathname + "api/user/logout";
-                    return null;
-                }}/>
-            </Routes>
-        </Navigation>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/1" element={<Level1 />} />
+            <Route path="/2" element={<Level2 />} />
+            <Route path="/3" element={<Level3 />} />
+            <Route path="/logout" component={() => {
+                window.location.href = window.location.pathname + "api/user/logout";
+                return null;
+            }}/>
+        </Routes>
     );
 }
 
