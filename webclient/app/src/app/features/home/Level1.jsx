@@ -1,15 +1,15 @@
-import { Box, Button, Chip, Container, Tab, Tabs, Typography } from "@mui/material";
-import React, { useState, useMemo, useEffect } from "react";
-import { useTranslation } from "react-i18next";
-import TrafficIncidentRest from "../../services/TrafficIncidentRest"
-import { DataGrid } from "@mui/x-data-grid";
+import {Box, Button, Chip, Container, Tab, Tabs, Typography} from "@mui/material";
+import React, {useState, useMemo, useEffect} from "react";
+import {useTranslation} from "react-i18next";
+import TrafficIncidentRest from "../../services/TrafficIncidentRest";
+import {DataGrid} from "@mui/x-data-grid";
 import HorizontalNonLinearStepper from "../../commons/Stepper/Stepper";
 import {trafficIncidents1} from "./ExampleData";
 import {renderActions, renderButton} from "./DataGridInteractionComponents";
 
 function Level1() {
     const {t} = useTranslation();
-    const [bgcolor, setBgcolor] = React.useState('');
+    const [bgcolor, setBgcolor] = React.useState("");
     const [activeStep, setActiveStep] = React.useState(0);
     const [tab, setTab] = React.useState(0);
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
@@ -24,7 +24,7 @@ function Level1() {
             if (response.data == null) {
                 return;
             }
-            //setTrafficIncidents(response.data);
+            // setTrafficIncidents(response.data);
         });
     }
 
@@ -35,7 +35,7 @@ function Level1() {
         } else {
             setBgcolor("");
         }
-      };
+    };
 
     const headers = [
         {
@@ -82,23 +82,23 @@ function Level1() {
                 <Tab label={t("home.incidentTab.title.open")} key="tab0" />
                 <Tab label={t("home.incidentTab.title.done")} key="tab1" />
             </Tabs>
-                <Box sx={{ width: '100%', WebkitTextFillColor: bgcolor }}>
-                    <DataGrid
-                        rows={trafficIncidents.filter((row) => row.state === tab)}
-                        columns={headers}
-                        initialState={{
+            <Box sx={{width: "100%", WebkitTextFillColor: bgcolor}}>
+                <DataGrid
+                    rows={trafficIncidents.filter(row => row.state === tab)}
+                    columns={headers}
+                    initialState={{
                         pagination: {
                             paginationModel: {
-                            pageSize: 10,
-                            },
-                        },
-                        }}
-                        pageSizeOptions={[10]}
-                        checkboxSelection={tab === 0}
-                        disableRowSelectionOnClick
+                                pageSize: 10
+                            }
+                        }
+                    }}
+                    pageSizeOptions={[10]}
+                    checkboxSelection={tab === 0}
+                    disableRowSelectionOnClick
 
-                    />
-                </Box>
+                />
+            </Box>
         </Container>
     );
 }
