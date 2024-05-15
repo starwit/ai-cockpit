@@ -1,22 +1,34 @@
 import React from "react";
 import {Route, Routes} from "react-router-dom";
+import {Container, Typography} from "@mui/material";
 import Home from "./features/home/Home";
 import Level1 from "./features/home/Level1";
 import Level2 from "./features/home/Level2";
 import Level3 from "./features/home/Level3";
+import {useTranslation} from "react-i18next";
 
 function MainContentRouter() {
+    const {t} = useTranslation();
+
     return (
-        <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/1" element={<Level1 />} />
-            <Route path="/2" element={<Level2 />} />
-            <Route path="/3" element={<Level3 />} />
-            <Route path="/logout" component={() => {
-                window.location.href = window.location.pathname + "api/user/logout";
-                return null;
-            }} />
-        </Routes>
+        <>
+            <Container sx={{margin: "1em"}} >
+                <Typography variant={"h2"} gutterBottom>
+                    {t("home.title")}
+                </Typography>
+                {t("home.welcome")}
+            </Container>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/1" element={<Level1 />} />
+                <Route path="/2" element={<Level2 />} />
+                <Route path="/3" element={<Level3 />} />
+                <Route path="/logout" component={() => {
+                    window.location.href = window.location.pathname + "api/user/logout";
+                    return null;
+                }} />
+            </Routes>
+        </>
     );
 }
 

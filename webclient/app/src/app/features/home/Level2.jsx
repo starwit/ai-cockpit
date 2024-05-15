@@ -77,10 +77,6 @@ function Level2() {
 
     return (
         <Container sx={{margin: "1em"}} >
-            <Typography variant={"h2"} gutterBottom>
-                {t("home.title")}
-            </Typography>
-            {t("home.welcome")}
             <HorizontalNonLinearStepper activeStep={activeStep} setActiveStep={setActiveStep} />
             <Tabs onChange={handleTabChange} value={tab}>
                 <Tab label={t("home.incidentTab.title.open")} key="tab0" />
