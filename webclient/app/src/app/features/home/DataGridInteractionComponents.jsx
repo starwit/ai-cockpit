@@ -11,7 +11,13 @@ export const renderActions = params => {
     );
 };
 
-export const renderButton = title => params => {
+export function renderButton(title) {
+    return function getButton(params) {
+        return displayButton(params, title);
+    };
+}
+
+function displayButton(params, title) {
     if (params.row.state === 1) {
         return;
     }
@@ -23,14 +29,14 @@ export const renderButton = title => params => {
                 size="small"
                 style={{marginLeft: 16}}
                 onClick={() => {
-                    console.log("action button pressed");
+                    console.log("button pressed");
                 }}
             >
                 {title}
             </Button>
-        </strong >
+        </strong>
     );
-};
+}
 
 export function DetailsDialog(props) {
     const {open} = props;
@@ -58,5 +64,4 @@ export function DetailsDialog(props) {
             </DialogActions>
         </Dialog>
     );
-};
-
+}
