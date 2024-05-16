@@ -1,5 +1,5 @@
 import React from "react";
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, Link} from "react-router-dom";
 import {Container, Typography} from "@mui/material";
 import Home from "./features/home/Home";
 import Level1 from "./features/home/Level1";
@@ -10,13 +10,21 @@ import {useTranslation} from "react-i18next";
 function MainContentRouter() {
     const {t} = useTranslation();
 
+    const linkStyle = {
+        margin: "1rem",
+        textDecoration: "none",
+        color: "black"
+    };
+
     return (
         <>
             <Container sx={{margin: "1em"}} >
-                <Typography variant={"h2"} gutterBottom>
-                    {t("home.title")}
-                </Typography>
-                {t("home.welcome")}
+                <Link to="/" style={linkStyle}>
+                    <Typography variant={"h2"} gutterBottom>
+                        {t("home.title")}
+                    </Typography>
+                    {t("home.welcome")}
+                </Link>
             </Container>
             <Routes>
                 <Route path="/" element={<Home />} />

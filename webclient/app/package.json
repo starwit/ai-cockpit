@@ -25,6 +25,7 @@
     "react-i18next": "^14.1.0",
     "react-router": "^6.22.3",
     "react-router-dom": "^6.22.3",
+    "react-player": "2.16.0",
     "stream": "npm:stream-browserify@^3.0.0",
     "use-immer": "^0.9.0",
     "util": "npm:util@^0.12.5",

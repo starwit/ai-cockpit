@@ -1,10 +1,11 @@
-import {Box, Button, Chip, Container, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Button, Chip, Container, Tab, Tabs, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid} from "@mui/material";
 import React, {useState, useMemo, useEffect} from "react";
+import ReactPlayer from "react-player";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../services/TrafficIncidentRest";
 import {DataGrid} from "@mui/x-data-grid";
 import HorizontalNonLinearStepper from "../../commons/Stepper/Stepper";
-import {trafficIncidents3} from "./ExampleData";
+import {trafficIncidents3, interpretationData} from "./ExampleData";
 import {renderActions} from "./DataGridInteractionComponents";
 
 function Level3() {
@@ -14,6 +15,7 @@ function Level3() {
     const [tab, setTab] = React.useState(0);
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
     const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents3);
+    const [interpretData, setInterpretData] = useState(interpretationData);
 
     useEffect(() => {
         reloadTrafficIncidents();
@@ -73,6 +75,23 @@ function Level3() {
         {
             field: "incidentDetails",
             headerName: t("incidentData.columns.details"),
+            renderCell: cellValues => {
+                return (
+                    <strong>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            size="small"
+                            style={{marginLeft: 16}}
+                            onClick={event => {
+                                handleOpen(cellValues.row);
+                            }}
+                        >
+                            Details
+                        </Button>
+                    </strong>
+                );
+            },
             width: 300,
             editable: true
         },
@@ -93,6 +112,19 @@ function Level3() {
             disableClickEventBubbling: true
         }
     ];
+
+    const [open, setOpen] = React.useState(false);
+    const [rowData, setRowData] = React.useState({});
+
+    function handleClose() {
+        setOpen(false);
+    };
+
+    function handleOpen(row) {
+        console.log(row);
+        setOpen(true);
+        setRowData(row);
+    }
 
     return (
         <Container sx={{margin: "1em"}} >
@@ -117,6 +149,48 @@ function Level3() {
                     disableRowSelectionOnClick
                 />
             </Box>
+            <Dialog
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth="1200"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Incident Details
+                </DialogTitle>
+                <DialogContent>
+                    <Grid container spacing={1}>
+                        <Grid item xs={8}>
+                            <ReactPlayer
+                                className='react-player fixed-bottom'
+                                url='images/incidents/WrongSideAlert.mp4'
+                                width='70%'
+                                height='70%'
+                                controls={true}
+                                muted={true}
+                                playing={true}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Grid container spacing={1} direction="column">
+                                <Grid>
+                                    Metadata here
+                                </Grid>
+                                <Grid>
+                                    TODO show on map: {interpretData[0].position[0]},{interpretData[0].position[1]}
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} >Report Mistake</Button>
+                    <Button onClick={handleClose} autoFocus>
+                        Acknowledged
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Container>
     );
 }
