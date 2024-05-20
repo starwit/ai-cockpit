@@ -102,9 +102,13 @@ function Home() {
     };
 
     function handleOpen(row) {
-        console.log(row);
         setOpen(true);
         setRowData(row);
+    }
+
+    function handleRowUpdate() {
+        console.log("Try to update row data");
+        return rowData.actions;
     }
 
     return (
@@ -130,48 +134,13 @@ function Home() {
                     disableRowSelectionOnClick
                 />
             </Box>
-            <Dialog
+            <DetailsDialog
                 open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth="1200"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    Incident Details
-                </DialogTitle>
-                <DialogContent>
-                    <Grid container spacing={1}>
-                        <Grid item xs={8}>
-                            <ReactPlayer
-                                className='react-player fixed-bottom'
-                                url='images/incidents/SampleScene01.mp4'
-                                width='70%'
-                                height='70%'
-                                controls={true}
-                                muted={true}
-                                playing={true}
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Grid container spacing={1} direction="column">
-                                <Grid>
-                                    Metadata here
-                                </Grid>
-                                <Grid>
-                                    TODO show on map: {interpretData[0].position[0]},{interpretData[0].position[1]}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} >Report Mistake</Button>
-                    <Button onClick={handleClose} autoFocus>
-                        Acknowledged
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                handleClose={handleClose}
+                rowData={rowData}
+                interpretData={interpretData}
+                handleRowUpdate={handleRowUpdate}
+            />
         </Container>
     );
 }

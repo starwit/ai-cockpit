@@ -1,5 +1,6 @@
-import {Button, Chip, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} from "@mui/material";
+import {Button, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Grid, List, ListItem, ListItemText} from "@mui/material";
 import React, {useState, useMemo, useEffect} from "react";
+import ReactPlayer from "react-player";
 
 export const renderActions = params => {
     return (
@@ -38,8 +39,10 @@ function displayButton(params, title) {
     );
 }
 
-export function DetailsDialog(props) {
-    const {open} = props;
+export function DetailsDialog({open, rowData, interpretData, handleClose}) {
+    if (!open) {
+        return null;
+    }
 
     return (
         <Dialog
@@ -47,19 +50,50 @@ export function DetailsDialog(props) {
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
+            maxWidth="1200"
         >
             <DialogTitle id="alert-dialog-title">
-                Incident Details
+                {rowData.incidentType}
             </DialogTitle>
             <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    Incident Details
-                </DialogContentText>
+                <Grid container spacing={1}>
+                    <Grid item xs={8}>
+                        <ReactPlayer
+                            className='react-player fixed-bottom'
+                            url='images/incidents/SampleScene01.mp4'
+                            width='70%'
+                            height='70%'
+                            controls={true}
+                            muted={true}
+                            playing={true}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Grid container spacing={1} direction="column">
+                            <Grid>
+                                <List>
+                                    {
+                                        rowData.actions.map(action => {
+                                            return (
+                                                <ListItem key={action}>
+                                                    <Chip key={action} label={action} variant="outlined" sx={{color: "green"}} />
+                                                </ListItem>
+                                            );
+                                        })
+                                    }
+                                </List>
+                            </Grid>
+                            <Grid>
+                                TODO show on map: {interpretData[0].position[0]},{interpretData[0].position[1]}
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
             </DialogContent>
             <DialogActions>
-                <Button>Help</Button>
-                <Button autoFocus>
-                    Acknoledged
+                <Button onClick={handleClose} >Report Mistake</Button>
+                <Button onClick={handleClose} autoFocus>
+                    Acknowledged
                 </Button>
             </DialogActions>
         </Dialog>
