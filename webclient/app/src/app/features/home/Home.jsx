@@ -1,6 +1,5 @@
-import {Box, Button, Chip, Container, Tab, Tabs, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid} from "@mui/material";
+import {Box, Button, Container, Tab, Tabs} from "@mui/material";
 import React, {useState, useMemo, useEffect} from "react";
-import ReactPlayer from "react-player";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../services/TrafficIncidentRest";
 import {DataGrid} from "@mui/x-data-grid";
@@ -16,6 +15,8 @@ function Home() {
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
     const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents2);
     const [interpretData, setInterpretData] = useState(interpretationData);
+    const [open, setOpen] = React.useState(false);
+    const [rowData, setRowData] = React.useState({});
 
     useEffect(() => {
         reloadTrafficIncidents();
@@ -38,6 +39,19 @@ function Home() {
             setBgcolor("");
         }
     };
+
+    function handleClose() {
+        setOpen(false);
+    };
+
+    function handleOpen(row) {
+        setOpen(true);
+        setRowData(row);
+    }
+
+    function handleRowUpdate() {
+        return rowData.actions;
+    }
 
     const headers = [
         {
@@ -93,23 +107,6 @@ function Home() {
             disableClickEventBubbling: true
         }
     ];
-
-    const [open, setOpen] = React.useState(false);
-    const [rowData, setRowData] = React.useState({});
-
-    function handleClose() {
-        setOpen(false);
-    };
-
-    function handleOpen(row) {
-        setOpen(true);
-        setRowData(row);
-    }
-
-    function handleRowUpdate() {
-        console.log("Try to update row data");
-        return rowData.actions;
-    }
 
     return (
         <Container sx={{margin: "1em"}} >

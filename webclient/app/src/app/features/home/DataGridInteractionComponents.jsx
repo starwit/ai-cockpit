@@ -1,5 +1,5 @@
-import {Button, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Grid, List, ListItem, ListItemText} from "@mui/material";
-import React, {useState, useMemo, useEffect} from "react";
+import {Button, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Grid, List, ListItem} from "@mui/material";
+import React from "react";
 import ReactPlayer from "react-player";
 
 export const renderActions = params => {
@@ -39,7 +39,9 @@ function displayButton(params, title) {
     );
 }
 
-export function DetailsDialog({open, rowData, interpretData, handleClose}) {
+export function DetailsDialog(props) {
+    const {open, rowData, interpretData, handleClose} = props;
+
     if (!open) {
         return null;
     }
