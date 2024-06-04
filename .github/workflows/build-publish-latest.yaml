@@ -44,6 +44,10 @@ jobs:
       run: |      
         echo "VERSION_BUILD=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )-${{ github.run_number }}" >> $GITHUB_ENV
         echo "VERSION_JAR=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV
+    - name: install cyclone
+      run: npm install --global @cyclonedx/cyclonedx-npm
+    - name: run cyclone
+      run: cyclonedx-npm --spec-version 1.5  > sbom-frontend.json
 
     - name: npm install
       run: |
