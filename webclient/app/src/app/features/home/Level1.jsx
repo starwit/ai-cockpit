@@ -1,4 +1,4 @@
-import {Box, Button, Chip, Container, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Container, Tab, Tabs} from "@mui/material";
 import React, {useState, useMemo, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../services/TrafficIncidentRest";

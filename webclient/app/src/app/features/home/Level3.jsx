@@ -1,12 +1,11 @@
-import {Box, Button, Chip, Container, Tab, Tabs, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid} from "@mui/material";
+import {Box, Button, Container, Tab, Tabs} from "@mui/material";
 import React, {useState, useMemo, useEffect} from "react";
-import ReactPlayer from "react-player";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../services/TrafficIncidentRest";
 import {DataGrid} from "@mui/x-data-grid";
 import HorizontalNonLinearStepper from "../../commons/Stepper/Stepper";
 import {trafficIncidents3, interpretationData} from "./ExampleData";
-import {renderActions} from "./DataGridInteractionComponents";
+import {renderActions, DetailsDialog} from "./DataGridInteractionComponents";
 
 function Level3() {
     const {t} = useTranslation();
@@ -121,7 +120,6 @@ function Level3() {
     };
 
     function handleOpen(row) {
-        console.log(row);
         setOpen(true);
         setRowData(row);
     }
@@ -149,48 +147,12 @@ function Level3() {
                     disableRowSelectionOnClick
                 />
             </Box>
-            <Dialog
+            <DetailsDialog
                 open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                maxWidth="1200"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    Incident Details
-                </DialogTitle>
-                <DialogContent>
-                    <Grid container spacing={1}>
-                        <Grid item xs={8}>
-                            <ReactPlayer
-                                className='react-player fixed-bottom'
-                                url='images/incidents/WrongSideAlert.mp4'
-                                width='70%'
-                                height='70%'
-                                controls={true}
-                                muted={true}
-                                playing={true}
-                            />
-                        </Grid>
-                        <Grid item xs={4}>
-                            <Grid container spacing={1} direction="column">
-                                <Grid>
-                                    Metadata here
-                                </Grid>
-                                <Grid>
-                                    TODO show on map: {interpretData[0].position[0]},{interpretData[0].position[1]}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} >Report Mistake</Button>
-                    <Button onClick={handleClose} autoFocus>
-                        Acknowledged
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                handleClose={handleClose}
+                rowData={rowData}
+                interpretData={interpretData}
+            />
         </Container>
     );
 }

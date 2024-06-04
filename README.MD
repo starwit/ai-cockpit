@@ -92,3 +92,9 @@ Start the database without keycloak:
 cd deployment
 docker-compose -f postgreslocal-docker-compose.yml up
 ```
+
+# Architecture & Concepts
+
+## Data Model
+
+![architecture](./docs/imgs/architecture.drawio.svg)
