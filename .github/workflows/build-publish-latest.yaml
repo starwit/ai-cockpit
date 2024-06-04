@@ -50,7 +50,16 @@ jobs:
         if [ -d "webclient/app" ]; then
           cd webclient/app
           npm install
-        fi        
+        fi
+    - name: install cyclone
+      run: npm install --global @cyclonedx/cyclonedx-npm
+    - name: run cyclone
+      run: |
+        if [ -d "webclient/app" ]; then
+          cd webclient/app
+          cyclonedx-npm --spec-version 1.5  > sbom-frontend.json
+        fi
+
     - name: Build with Maven
       run: mvn clean -B package -P frontend --file pom.xml
       env:

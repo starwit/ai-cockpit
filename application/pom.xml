@@ -132,7 +132,34 @@
                     </excludeProperties>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <groupId>org.cyclonedx</groupId>
+                <artifactId>cyclonedx-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>makeAggregateBom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <projectType>library</projectType>
+                    <schemaVersion>1.5</schemaVersion>
+                    <includeBomSerialNumber>true</includeBomSerialNumber>
+                    <includeCompileScope>true</includeCompileScope>
+                    <includeProvidedScope>true</includeProvidedScope>
+                    <includeRuntimeScope>true</includeRuntimeScope>
+                    <includeSystemScope>true</includeSystemScope>
+                    <includeTestScope>false</includeTestScope>
+                    <includeLicenseText>false</includeLicenseText>
+                    <outputReactorProjects>true</outputReactorProjects>
+                    <outputFormat>json</outputFormat>
+                    <outputName>sbom-backend</outputName>
+                    <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+                    <verbose>false</verbose>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -155,6 +182,11 @@
                                         <replaceregex pattern="=" replace=":    " />
                                     </filterchain>
                                 </concat>
+                                <copy toDir="${project.build.outputDirectory}/static">
+                                    <fileset dir="../webclient/app/">
+                                        <include name="sbom-frontend.json" />
+                                    </fileset>
+                                </copy>
                             </target>
                         </configuration>
                         <goals>
