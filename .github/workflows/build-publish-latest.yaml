@@ -44,6 +44,13 @@ jobs:
       run: |      
         echo "VERSION_BUILD=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )-${{ github.run_number }}" >> $GITHUB_ENV
         echo "VERSION_JAR=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV
+
+    - name: npm install
+      run: |
+        if [ -d "webclient/app" ]; then
+          cd webclient/app
+          npm install
+        fi
     - name: install cyclone
       run: npm install --global @cyclonedx/cyclonedx-npm
     - name: run cyclone
@@ -53,12 +60,6 @@ jobs:
           cyclonedx-npm --spec-version 1.5  > sbom-frontend.json
         fi
 
-    - name: npm install
-      run: |
-        if [ -d "webclient/app" ]; then
-          cd webclient/app
-          npm install
-        fi
     - name: Build with Maven
       run: mvn clean -B package -P frontend --file pom.xml
       env:
