@@ -130,6 +130,7 @@ function Home() {
                     checkboxSelection
                     disableRowSelectionOnClick
                 />
+                <a href="static/sbom-backend.json">SBOM</a>
             </Box>
             <DetailsDialog
                 open={open}
