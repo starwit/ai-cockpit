@@ -40,21 +40,21 @@ function Level2() {
 
     const headers = [
         {
-            field: "incidentTime",
+            field: "acquisitionTime",
             type: "datetime",
-            headerName: t("incidentData.columns.captureTime"),
+            headerName: t("trafficIncident.acquisitionTime"),
             width: 200,
             editable: true
         },
         {
-            field: "incidentType",
-            headerName: t("incidentData.columns.type"),
+            field: "trafficIncidentType",
+            headerName: t("trafficIncident.trafficIncidentType"),
             width: 300,
             editable: true
         },
         {
-            field: "incidentDetails",
-            headerName: t("incidentData.columns.details"),
+            field: "description",
+            headerName: t("trafficIncident.description"),
             renderCell: cellValues => {
                 return (
                     <strong>
@@ -76,8 +76,8 @@ function Level2() {
             editable: true
         },
         {
-            field: "actions",
-            headerName: t("incidentData.columns.action"),
+            field: "mitigationAction",
+            headerName: t("trafficIncident.mitigationAction"),
             description: "",
             renderCell: renderActions,
             disableClickEventBubbling: true,

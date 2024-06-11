@@ -5,7 +5,7 @@ import ReactPlayer from "react-player";
 export const renderActions = params => {
     return (
         <strong>
-            {params.row.actions.map(action => (
+            {params.row.mitigationAction.map(action => (
                 <Chip key={action} label={action} variant="outlined" sx={{color: "green"}} />
             ))}
         </strong>
@@ -75,7 +75,7 @@ export function DetailsDialog(props) {
                             <Grid>
                                 <List>
                                     {
-                                        rowData.actions.map(action => {
+                                        rowData.mitigationAction.map(action => {
                                             return (
                                                 <ListItem key={action}>
                                                     <Chip key={action} label={action} variant="outlined" sx={{color: "green"}} />

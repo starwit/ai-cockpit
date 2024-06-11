@@ -50,7 +50,7 @@ services:
       timeout: 60s
       retries: 30
     volumes:
-      - keycloak-db:/var/lib/postgresql/data
+      - db-keycloak:/var/lib/postgresql/data
 
   aicockpit-keycloak:
     image: quay.io/keycloak/keycloak
