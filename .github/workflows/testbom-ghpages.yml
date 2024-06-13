@@ -15,7 +15,7 @@ jobs:
       - name: Generate SBOM
         run: |
           # Hier SBOM-Generierungslogik einfügen
-          # Beispiel: sbom-generator generate -o sbom.xml
+          sbom-generator generate -o sbom.xml
       
       - name: Upload SBOM as artifact
         uses: actions/upload-artifact@v2
