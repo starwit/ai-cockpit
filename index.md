@@ -10,7 +10,6 @@ Hier finden Sie Informationen über unsere hochriskante KI-Anwendung gemäß den
 - [Einschränkungen und Risiken](docs/limitations-risks.md)
 - [Kontakt und Feedback](docs/contact-feedback.md)
 - [Benachrichtigungen](docs/notifications.md)
-
 ---
 
 © 2024, Starwit Technologies Gmbh

@@ -15,3 +15,9 @@ Die KI-Anwendung wurde entwickelt, um [Hauptfunktion beschreiben].
 ### Offenlegung
 
 Nutzer werden durch ein Symbol oder eine Nachricht darüber informiert, dass sie mit einer KI-Anwendung interagieren.
+
+### Zusätzliche Informationen
+
+- [UI Mockup](imgs/ki-cockpit.drawio.svg)
+- [Use Cases](imgs/use-cases.drawio.svg)
+- [Architektur](imgs/architecture.drawio.svg)
