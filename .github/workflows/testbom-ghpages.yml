@@ -6,25 +6,22 @@ on:
       - main
 
 jobs:
-  generate-sbom:
+  build:
     runs-on: ubuntu-latest
+    name: Install and build javascript
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: '18'
-
-      - name: Install SBOM generator
-        run: npm install -g @cyclonedx/bom
-
-      - name: Generate SBOM
-        run: cyclonedx-bom -o sbom.xml
+          node-version: '16'
+      - run: npm install
+      - name: Create SBOM with CycloneDX
+        uses: CycloneDX/gh-node-module-generatebom@v1
+        with: 
+          output: './sbom.xml'
 
       - name: Upload SBOM as artifact
         uses: actions/upload-artifact@v2
         with:
           name: sbom
-          path: sbom.xml
+          path: './sbom.xml'
