@@ -22,4 +22,4 @@ Nutzer werden durch ein Symbol oder eine Nachricht darüber informiert, dass sie
 - [Use Cases](imgs/use-cases.drawio.svg)
 - [Architektur](imgs/architecture.drawio.svg)
 
-<iframe frameborder="0" style="width:100%;height:337px;" src="https://viewer.diagrams.net/?tags=https://starwit.github.io/ai-cockpit/docs/imgs/ki-cockpit.drawio.svg"></iframe>
+<iframe frameborder="0" style="width:100%;height:500px;" src="https://app.diagrams.net/?https://starwit.github.io/ai-cockpit/docs/imgs/ki-cockpit.drawio.svg"></iframe>
