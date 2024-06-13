@@ -130,3 +130,29 @@
    - FAQ
    - Kontakt
    - Benutzerhandbuch
+```
+
+# Detaillierte Funktionen
+## Funktion und Zweck
+- Hauptfunktion: Beschreiben Sie klar und einfach, wofür das KI-System entwickelt wurde und welche Aufgaben es erfüllt.
+- Anwendungsgebiete: Geben Sie Beispiele oder Szenarien, in denen das KI-System verwendet wird.
+
+## Offenlegung der KI-Interaktion
+- Interaktionserkennung: Fügen Sie Hinweise oder Symbole hinzu, die anzeigen, wann Benutzer mit einer KI interagieren, um Transparenz zu gewährleisten.
+
+## Datenschutzmaßnahmen
+- Sicherheitsmaßnahmen: Detaillierte Beschreibung, wie Benutzerdaten vor unberechtigtem Zugriff und Verlust geschützt werden.
+- Zugriffsrechte: Erläutern Sie, wer Zugang zu den Daten hat und unter welchen Umständen.
+
+## Erklärungen zu Entscheidungen
+- Algorithmische Logik: Erklären Sie die grundlegenden Prinzipien, wie das KI-System Entscheidungen trifft, ohne technische Details zu überladen.
+- Einflussfaktoren: Geben Sie eine Liste der wichtigsten Daten oder Parameter, die Entscheidungen beeinflussen.
+- Erklärung anfordern: Ein klarer und sichtbarer Button oder Link, der es Benutzern ermöglicht, detaillierte Erklärungen für spezifische Entscheidungen anzufordern.
+## Technische Einschränkungen und Risiken
+- Fehlerquellen: Listen Sie bekannte Schwachstellen oder typische Fehler auf.
+- Risikoanalyse: Erläutern Sie, wie Risiken überwacht und gemindert werden.
+## Support und Feedback
+- Feedback-Formular: Ein einfach zu bedienendes Formular, in dem Benutzer - Anmerkungen oder Beschwerden einreichen können.
+- Kontaktinformationen: Stellen Sie sicher, dass Benutzer leicht technische Unterstützung oder weitere Informationen anfordern können.
+## Benachrichtigungen
+- Systemaktualisierungen: Echtzeit-Informationen über Änderungen oder wichtige Nachrichten, die Benutzer betreffen könnten.
