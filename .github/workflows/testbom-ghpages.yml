@@ -1,0 +1,24 @@
+name: Generate SBOM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Generate SBOM
+        run: |
+          # Hier SBOM-Generierungslogik einfügen
+          # Beispiel: sbom-generator generate -o sbom.xml
+      
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: sbom
+          path: sbom.xml
