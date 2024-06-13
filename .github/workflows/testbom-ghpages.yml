@@ -11,12 +11,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install SBOM generator
+        run: npm install -g @cyclonedx/bom
+
       - name: Generate SBOM
-        run: |
-          # Hier SBOM-Generierungslogik einfügen
-          sbom-generator generate -o sbom.xml
-      
+        run: cyclonedx-bom -o sbom.xml
+
       - name: Upload SBOM as artifact
         uses: actions/upload-artifact@v2
         with:
