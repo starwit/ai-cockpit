@@ -21,3 +21,5 @@ Nutzer werden durch ein Symbol oder eine Nachricht darüber informiert, dass sie
 - [UI Mockup](imgs/ki-cockpit.drawio.svg)
 - [Use Cases](imgs/use-cases.drawio.svg)
 - [Architektur](imgs/architecture.drawio.svg)
+
+<iframe src='imgs/ki-cockpit.drawio.svg' frameborder='0' width='100%' height='600'></iframe>
