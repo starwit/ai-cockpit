@@ -12,6 +12,10 @@ Die KI-Anwendung wurde entwickelt, um [Hauptfunktion beschreiben].
 - **Name**: [Name des Entwicklers/Unternehmens]
 - **Kontakt**: [Kontaktinformationen]
 
+### Verwendete Biliotheken & Versionen
+
+- [Software Bill of Material](https://cockpit.aic.starwit-infra.de/ai-cockpit/sbom-frontend.json)
+
 ### Offenlegung
 
 Nutzer werden durch ein Symbol oder eine Nachricht darüber informiert, dass sie mit einer KI-Anwendung interagieren.
