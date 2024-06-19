@@ -1,11 +1,12 @@
 import {Box, Button, Container, Tab, Tabs} from "@mui/material";
 import React, {useState, useMemo, useEffect} from "react";
 import {useTranslation} from "react-i18next";
-import TrafficIncidentRest from "../../services/TrafficIncidentRest";
+import TrafficIncidentRest from "../../../services/TrafficIncidentRest";
 import {DataGrid} from "@mui/x-data-grid";
-import HorizontalNonLinearStepper from "../../commons/Stepper/Stepper";
-import {trafficIncidents3, interpretationData} from "./ExampleData";
-import {renderActions, DetailsDialog} from "./DataGridInteractionComponents";
+import HorizontalNonLinearStepper from "../../../commons/Stepper/Stepper";
+import {trafficIncidents3, interpretationData} from "../mock/ExampleData";
+import {renderActions} from "../TrafficIncidentActions";
+import TrafficIncidentDetail from "../TrafficIncidentDetail";
 
 function Level3() {
     const {t} = useTranslation();
@@ -29,6 +30,19 @@ function Level3() {
         });
     }
 
+    function handleClose() {
+        setOpen(false);
+    };
+
+    function handleOpen(row) {
+        setOpen(true);
+        setRowData(row);
+    }
+
+    function handleRowUpdate() {
+        return rowData.mitigationAction;
+    }
+
     const handleTabChange = (event, newValue) => {
         setTab(newValue);
         if (newValue === 1) {
@@ -49,7 +63,7 @@ function Level3() {
                 size="small"
                 style={{marginLeft: 16}}
                 onClick={() => {
-                    console.log("button pressed");
+                    handleOpen(cellValues.row);
                 }}
             >
                 {params.row.desc}
@@ -73,7 +87,7 @@ function Level3() {
         },
         {
             field: "description",
-            headerName: t("trafficIncident.mitigationAction"),
+            headerName: t("trafficIncident.description"),
             renderCell: cellValues => {
                 return (
                     <strong>
@@ -147,11 +161,12 @@ function Level3() {
                     disableRowSelectionOnClick
                 />
             </Box>
-            <DetailsDialog
+            <TrafficIncidentDetail
                 open={open}
                 handleClose={handleClose}
                 rowData={rowData}
                 interpretData={interpretData}
+                handleRowUpdate={handleRowUpdate}
             />
         </Container>
     );

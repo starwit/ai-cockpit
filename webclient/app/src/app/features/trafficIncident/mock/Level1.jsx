@@ -1,19 +1,20 @@
 import {Box, Button, Container, Tab, Tabs} from "@mui/material";
 import React, {useState, useMemo, useEffect} from "react";
 import {useTranslation} from "react-i18next";
-import TrafficIncidentRest from "../../services/TrafficIncidentRest";
+import TrafficIncidentRest from "../../../services/TrafficIncidentRest";
 import {DataGrid} from "@mui/x-data-grid";
-import HorizontalNonLinearStepper from "../../commons/Stepper/Stepper";
-import {trafficIncidents2, interpretationData} from "./ExampleData";
-import {renderActions, renderButton, DetailsDialog} from "./DataGridInteractionComponents";
+import HorizontalNonLinearStepper from "../../../commons/Stepper/Stepper";
+import {trafficIncidents1, interpretationData} from "./ExampleData";
+import {renderActions, renderButton} from "../TrafficIncidentActions";
+import TrafficIncidentDetail from "../TrafficIncidentDetail";
 
-function Home() {
+function Level1() {
     const {t} = useTranslation();
     const [activeStep, setActiveStep] = React.useState(0);
     const [tab, setTab] = React.useState(0);
     const [bgcolor, setBgcolor] = React.useState("");
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
-    const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents2);
+    const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents1);
     const [interpretData, setInterpretData] = useState(interpretationData);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
@@ -50,7 +51,7 @@ function Home() {
     }
 
     function handleRowUpdate() {
-        return rowData.actions;
+        return rowData.mitigationAction;
     }
 
     const headers = [
@@ -93,17 +94,15 @@ function Home() {
         {
             field: "mitigationAction",
             headerName: t("trafficIncident.mitigationAction"),
-            description: "",
-            renderCell: renderActions,
             disableClickEventBubbling: true,
             width: 400
         },
         {
             field: "actionButton",
             headerName: "",
-            width: 200,
+            width: 400,
             align: "right",
-            renderCell: renderButton(t("button.action.execute")),
+            renderCell: renderButton("Als erledigt kennzeichnen"),
             disableClickEventBubbling: true
         }
     ];
@@ -131,7 +130,7 @@ function Home() {
                     disableRowSelectionOnClick
                 />
             </Box>
-            <DetailsDialog
+            <TrafficIncidentDetail
                 open={open}
                 handleClose={handleClose}
                 rowData={rowData}
@@ -142,4 +141,4 @@ function Home() {
     );
 }
 
-export default Home;
+export default Level1;

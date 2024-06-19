@@ -2,44 +2,7 @@ import {Button, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Grid, L
 import React from "react";
 import ReactPlayer from "react-player";
 
-export const renderActions = params => {
-    return (
-        <strong>
-            {params.row.mitigationAction.map(action => (
-                <Chip key={action} label={action} variant="outlined" sx={{color: "green"}} />
-            ))}
-        </strong>
-    );
-};
-
-export function renderButton(title) {
-    return function getButton(params) {
-        return displayButton(params, title);
-    };
-}
-
-function displayButton(params, title) {
-    if (params.row.state === 1) {
-        return;
-    }
-    return (
-        <strong>
-            <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                style={{marginLeft: 16}}
-                onClick={() => {
-                    console.log("button pressed");
-                }}
-            >
-                {title}
-            </Button>
-        </strong>
-    );
-}
-
-export function DetailsDialog(props) {
+function TrafficIncidentDetail(props) {
     const {open, rowData, interpretData, handleClose} = props;
 
     if (!open) {
@@ -101,3 +64,6 @@ export function DetailsDialog(props) {
         </Dialog>
     );
 }
+
+export default TrafficIncidentDetail;
+

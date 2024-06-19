@@ -1,19 +1,19 @@
 export const trafficIncidents1 = [
-    {id: 1, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Stau", mitigationAction: [], state: 0},
-    {id: 2, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Parken auf Sperrfläche", mitigationAction: [], state: 0},
-    {id: 3, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Stau", mitigationAction: [], state: 0},
-    {id: 4, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "hohe Geschwindigkeit", mitigationAction: [], state: 0},
-    {id: 5, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Gefahrensituation", mitigationAction: []},
-    {id: 6, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Gefahrensituation", mitigationAction: []},
-    {id: 7, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Stau", mitigationAction: [], state: 0},
-    {id: 8, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Stau", mitigationAction: [], state: 0},
-    {id: 9, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Stau", mitigationAction: [], state: 0},
-    {id: 10, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Stau", mitigationAction: ["Polizei wurde benachrichtigt", " Straße wurde gesperrt"], state: 1},
-    {id: 11, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Parken auf Sperrfläche", mitigationAction: ["Polizei wurde benachrichtigt"], state: 1},
-    {id: 12, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Parken auf Sperrfläche", mitigationAction: ["Polizei wurde benachrichtigt"], state: 1},
-    {id: 13, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Stau", mitigationAction: [["Polizei wurde benachrichtigt", " Straße wurde gesperrt"]], state: 1},
-    {id: 14, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "hohe Geschwindigkeit", mitigationAction: ["Polizei benachrichtigen"], state: 1},
-    {id: 15, acquisitionTime: "2016-01-04 10:34:23", traffictrafficIncidentType: "Stau", mitigationAction: ["Polizei wurde benachrichtigt"], state: 1}
+    {id: 1, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Stau", mitigationAction: [], state: 0},
+    {id: 2, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Parken auf Sperrfläche", mitigationAction: [], state: 0},
+    {id: 3, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Stau", mitigationAction: [], state: 0},
+    {id: 4, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "hohe Geschwindigkeit", mitigationAction: [], state: 0},
+    {id: 5, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Gefahrensituation", mitigationAction: []},
+    {id: 6, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Gefahrensituation", mitigationAction: []},
+    {id: 7, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Stau", mitigationAction: [], state: 0},
+    {id: 8, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Stau", mitigationAction: [], state: 0},
+    {id: 9, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Stau", mitigationAction: [], state: 0},
+    {id: 10, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Stau", mitigationAction: ["Polizei wurde benachrichtigt", " Straße wurde gesperrt"], state: 1},
+    {id: 11, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Parken auf Sperrfläche", mitigationAction: ["Polizei wurde benachrichtigt"], state: 1},
+    {id: 12, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Parken auf Sperrfläche", mitigationAction: ["Polizei wurde benachrichtigt"], state: 1},
+    {id: 13, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Stau", mitigationAction: [["Polizei wurde benachrichtigt", " Straße wurde gesperrt"]], state: 1},
+    {id: 14, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "hohe Geschwindigkeit", mitigationAction: ["Polizei benachrichtigen"], state: 1},
+    {id: 15, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Stau", mitigationAction: ["Polizei wurde benachrichtigt"], state: 1}
 ];
 
 export const trafficIncidents2 = [
