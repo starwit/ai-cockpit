@@ -16,10 +16,8 @@ import {
     Select,
     MenuItem,
     OutlinedInput,
-    IconButton,
     ListItemIcon,
     ListItemText,
-    Paper,
     Typography
 } from "@mui/material";
 import React from "react";
@@ -32,7 +30,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import TrafficIncidentMap from "./TrafficIncidentMap";
-import zIndex from "@mui/material/styles/zIndex";
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, interpretData, handleClose} = props;
@@ -41,16 +38,6 @@ function TrafficIncidentDetail(props) {
     const [trafficIncidentType, setTrafficIncidentType] = React.useState("");
 
     const {t} = useTranslation();
-
-    const handleChangeAction = event => {
-        const {
-            target: {value}
-        } = event;
-        setMitigationAction(
-            // On autofill we get a stringified value.
-            typeof value === "string" ? value.split(",") : value
-        );
-    };
 
     const mitigationActions = [
         "Polizei benachrichtigen",
@@ -66,6 +53,16 @@ function TrafficIncidentDetail(props) {
         {id: 40, value: "Parken auf Sperrfläche"},
         {id: 50, value: "Stau"}
     ];
+
+    const handleChangeAction = event => {
+        const {
+            target: {value}
+        } = event;
+        setMitigationAction(
+            // On autofill we get a stringified value.
+            typeof value === "string" ? value.split(",") : value
+        );
+    };
 
     const handleChangeTrafficIncidentType = event => {
         setTrafficIncidentType(event.target.value);

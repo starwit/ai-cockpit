@@ -24,8 +24,9 @@ const translationEnEN = {
     "mitigationAction.mitigationActionType": "mitigationActionType",
     "autonomyLevel": "AutonomyLevel",
     "autonomyLevel.title": "AutonomyLevel",
-    "autonomyLevel.create.title": "Create AutonomyLevel",
-    "autonomyLevel.update.title": "Edit AutonomyLevel",
+    "autonomyLevel.create.title": "Create Autonomy Level",
+    "autonomyLevel.update.title": "Edit Autonomy Level",
+    "autonomyLevel.change.title": "Change Autonomy Level",
     "autonomyLevel.id": "id",
     "autonomyLevel.name": "name",
     "autonomyLevel.name.hint": "",
@@ -77,6 +78,7 @@ const translationEnEN = {
     "error.apptemplate.notfound": "The Template could not be found.",
     "error.app.notfound": "This App could not be found.",
     "error.entity.notfound": "This element could not be found.",
+    "home.about": "Information about the Application",
     "home.incidentTab.title.open": "Open",
     "home.incidentTab.title.done": "Done"
 };
