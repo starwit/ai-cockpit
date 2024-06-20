@@ -18,7 +18,9 @@ import {
     OutlinedInput,
     IconButton,
     ListItemIcon,
-    ListItemText
+    ListItemText,
+    Paper,
+    Typography
 } from "@mui/material";
 import React from "react";
 import ReactPlayer from "react-player";
@@ -29,6 +31,8 @@ import ErrorIcon from "@mui/icons-material/Error";
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import TrafficIncidentMap from "./TrafficIncidentMap";
+import zIndex from "@mui/material/styles/zIndex";
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, interpretData, handleClose} = props;
@@ -85,7 +89,8 @@ function TrafficIncidentDetail(props) {
 
         >
             <DialogTitle id="alert-dialog-title">
-                {rowData.incidentType}
+                <Typography variant="h4">{rowData.trafficIncidentType}</Typography>
+                <Typography variant="subtitle1">{rowData.acquisitionTime}</Typography>
             </DialogTitle>
             <DialogContent>
                 <Grid container spacing={2}>
@@ -106,16 +111,16 @@ function TrafficIncidentDetail(props) {
                             expanded={expanded === "panel1"}
                             onChange={handleChange("panel1")}>
                             <AccordionSummary
-                                sx={{backgroundColor: "#eeeeee"}}
-                                expandIcon={<ExpandMoreIcon />}
+                                sx={{
+                                    backgroundColor: "#eeeeee", zIndex: 1000, borderBottom: "1px #aaa solid"
+                                }}
+                                expandIcon={< ExpandMoreIcon />}
                                 aria-controls="panel1d-content"
                                 id="panel1d-header">
-                                Position auf Karte
+                                <Box>Position auf Karte</Box>
                             </AccordionSummary>
                             <AccordionDetails sx={{height: "400px"}}>
-                                <Box sx={{height: "100%", flexShrink: 0}}>
-                                    <img width="100%" height="100%" src="https://media.wired.com/photos/59269cd37034dc5f91bec0f1/master/w_1920,c_limit/GoogleMapTA.jpg" alt="Logo" />
-                                </Box>
+                                <TrafficIncidentMap sx={{zIndex: "-1"}} />
                             </AccordionDetails>
                         </Accordion>
                         <Accordion
