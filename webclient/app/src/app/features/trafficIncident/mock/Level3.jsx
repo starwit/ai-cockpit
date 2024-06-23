@@ -1,12 +1,11 @@
 import {Box, Button, Container, Tab, Tabs} from "@mui/material";
-import React, {useState, useMemo, useEffect} from "react";
+import {DataGrid} from "@mui/x-data-grid";
+import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../../services/TrafficIncidentRest";
-import {DataGrid} from "@mui/x-data-grid";
-import HorizontalNonLinearStepper from "../../../commons/Stepper/Stepper";
-import {trafficIncidents3, interpretationData} from "../mock/ExampleData";
 import {renderActions} from "../TrafficIncidentActions";
 import TrafficIncidentDetail from "../TrafficIncidentDetail";
+import {interpretationData, trafficIncidents3} from "../mock/ExampleData";
 
 function Level3() {
     const {t} = useTranslation();
@@ -140,7 +139,6 @@ function Level3() {
 
     return (
         <Container sx={{margin: "1em"}} >
-            <HorizontalNonLinearStepper activeStep={activeStep} setActiveStep={setActiveStep} />
             <Tabs onChange={handleTabChange} value={tab}>
                 <Tab label={t("home.incidentTab.title.open")} key="tab0" />
                 <Tab label={t("home.incidentTab.title.done")} key="tab1" />

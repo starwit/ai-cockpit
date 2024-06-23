@@ -9,7 +9,10 @@ const translationDeDE = {
     "trafficIncident.acquisitionTime": "Erfassungszeit",
     "trafficIncident.acquisitionTime.hint": "",
     "trafficIncident.trafficIncidentType": "Gefahrentyp",
-    "trafficIncident.mitigationAction": "Ausgeführte Aktion",
+    "trafficIncident.trafficIncidentType.new": "Neuen Typ Anlegen",
+    "trafficIncident.mitigationAction": "Maßnahmen",
+    "trafficIncident.button.acknowledged": "Geprüft",
+    "trafficIncident.button.reportmistake": "Fehler",
     "mitigationAction": "Aktion",
     "mitigationAction.title": "Aktionen",
     "mitigationAction.create.title": "Aktion erfassen",
@@ -26,6 +29,7 @@ const translationDeDE = {
     "autonomyLevel.title": "Autonomielevel",
     "autonomyLevel.create.title": "Autonomielevel erstellen",
     "autonomyLevel.update.title": "Autonomielevel bearbeiten",
+    "autonomyLevel.change.title": "Autonomielevel ändern",
     "autonomyLevel.id": "id",
     "autonomyLevel.name": "name",
     "autonomyLevel.name.hint": "",
@@ -77,6 +81,7 @@ const translationDeDE = {
     "error.apptemplate.notfound": "The Template could not be found.",
     "error.app.notfound": "This App could not be found.",
     "error.entity.notfound": "This element could not be found.",
+    "home.about": "Informationen über die Anwendung",
     "home.incidentTab.title.open": "Offen",
     "home.incidentTab.title.done": "Erledigt"
 };
