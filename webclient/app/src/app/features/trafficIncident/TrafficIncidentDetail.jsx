@@ -142,7 +142,7 @@ function TrafficIncidentDetail(props) {
 
                                         >
                                             <MenuItem value="">
-                                                <ListItemText>New</ListItemText><ListItemIcon><AddIcon /></ListItemIcon>
+                                                <ListItemText>{t("trafficIncident.trafficIncidentType.new")}</ListItemText><ListItemIcon><AddIcon /></ListItemIcon>
                                             </MenuItem>
                                             {incidentTypes.map(incidentType => (
                                                 <MenuItem
@@ -156,7 +156,7 @@ function TrafficIncidentDetail(props) {
                                         </Select>
                                     </FormControl>
                                     <FormControl>
-                                        <InputLabel id="trafficIncident.mitigationAction.label">Maßnahmen</InputLabel>
+                                        <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
                                         <Select
                                             labelId="trafficIncident.mitigationAction.label"
                                             id="trafficIncident.mitigationAction.select"
@@ -203,9 +203,9 @@ function TrafficIncidentDetail(props) {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} variant="contained" color="error" startIcon={<ErrorIcon />}>Report Mistake</Button>
+                <Button onClick={handleClose} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
                 <Button onClick={handleClose} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
-                    Acknowledged
+                    {t("trafficIncident.button.acknowledged")}
                 </Button>
             </DialogActions>
         </Dialog >
