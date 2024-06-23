@@ -80,20 +80,19 @@ function TrafficIncidentDetail(props) {
         <Dialog
             open={open}
             onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
+            aria-labelledby="traffic-incident-detail-dialog-title"
+            aria-describedby="traffic-incident-detail-dialog-description"
             maxWidth="xl"
 
         >
-            <DialogTitle id="alert-dialog-title">
+            <DialogTitle id="traffic-incident-detail-dialog-title">
                 <Typography variant="h4">{rowData.trafficIncidentType}</Typography>
                 <Typography variant="subtitle1">{rowData.acquisitionTime}</Typography>
             </DialogTitle>
-            <DialogContent>
+            <DialogContent id="traffic-incident-detail-dialog-description">
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
                         <ReactPlayer
-                            className='react-player fixed-bottom'
                             url='images/incidents/SampleScene01.mp4'
                             width='100%'
                             height='100%'
@@ -132,13 +131,13 @@ function TrafficIncidentDetail(props) {
                             <AccordionDetails sx={{height: "400px"}}>
                                 <Stack>
                                     <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
-                                        <InputLabel id="demo-simple-select-standard-label">{t("trafficIncident.trafficIncidentType")}</InputLabel>
+                                        <InputLabel id="trafficIncident.trafficIncidentType.label">{t("trafficIncident.trafficIncidentType")}</InputLabel>
                                         <Select
-                                            labelId="demo-simple-select-standard-label"
-                                            id="demo-simple-select-standard"
+                                            labelId="trafficIncident.trafficIncidentType.label"
+                                            id="trafficIncident.trafficIncidentType"
                                             value={trafficIncidentType}
                                             onChange={handleChangeTrafficIncidentType}
-                                            label="incidentType"
+                                            label="incidentTypetrafficIncident.trafficIncidentType.select"
                                             renderValue={selected => (<ListItemText>{selected.value}</ListItemText>)}
 
                                         >
@@ -157,14 +156,14 @@ function TrafficIncidentDetail(props) {
                                         </Select>
                                     </FormControl>
                                     <FormControl>
-                                        <InputLabel id="demo-multiple-chip-label">Maßnahmen</InputLabel>
+                                        <InputLabel id="trafficIncident.mitigationAction.label">Maßnahmen</InputLabel>
                                         <Select
-                                            labelId="demo-multiple-chip-label"
-                                            id="demo-multiple-chip"
+                                            labelId="trafficIncident.mitigationAction.label"
+                                            id="trafficIncident.mitigationAction.select"
                                             multiple
                                             value={mitigationAction}
                                             onChange={handleChangeAction}
-                                            input={<OutlinedInput id="select-multiple-chip" label="Maßnahmen" />}
+                                            input={<OutlinedInput id="trafficIncident.mitigationAction.select.chip" label="trafficIncident.mitigationAction.select.chip.label" />}
                                             renderValue={selected => (
                                                 <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                                                     {selected.map(value => (
