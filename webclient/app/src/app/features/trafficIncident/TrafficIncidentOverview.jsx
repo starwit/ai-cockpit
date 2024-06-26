@@ -1,11 +1,13 @@
-import {Box, Button, Container, Tab, Tabs} from "@mui/material";
+import {Box, Button, Container, IconButton, Tab, Tabs} from "@mui/material";
 import {DataGrid} from "@mui/x-data-grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../services/TrafficIncidentRest";
-import {renderActions, renderButton} from "./TrafficIncidentActions";
+import {renderActions} from "./TrafficIncidentActions";
 import TrafficIncidentDetail from "./TrafficIncidentDetail";
 import {interpretationData, trafficIncidents2} from "./mock/ExampleData";
+import ErrorIcon from "@mui/icons-material/Error";
+import CheckIcon from "@mui/icons-material/Check";
 
 function TrafficIncidentOverview() {
     const {t} = useTranslation();
@@ -63,13 +65,39 @@ function TrafficIncidentOverview() {
         {
             field: "trafficIncidentType",
             headerName: t("trafficIncident.trafficIncidentType"),
-            width: 300,
+            width: 200,
             editable: true
+        },
+        {
+            field: "mitigationAction",
+            headerName: t("trafficIncident.mitigationAction"),
+            description: "",
+            renderCell: renderActions,
+            disableClickEventBubbling: true,
+            width: 300
         },
         {
             field: "description",
             headerName: t("trafficIncident.description"),
+            width: 600,
+            editable: true
+        },
+        {
+            field: "actionButton",
+            headerName: "",
+            width: 100,
+            align: "right",
+            disableClickEventBubbling: true,
             renderCell: cellValues => {
+                if (tab === 1 && cellValues.row.trafficIncidentType == "Stau") {
+                    return (
+                        <IconButton color="success"><CheckIcon /></IconButton>
+                    );
+                } else if (tab === 1) {
+                    return (
+                        <IconButton color="error"><ErrorIcon /></IconButton>
+                    );
+                }
                 return (
                     <strong>
                         <Button
@@ -81,29 +109,11 @@ function TrafficIncidentOverview() {
                                 handleOpen(cellValues.row);
                             }}
                         >
-                            Details
+                            {t("trafficIncident.button.details")}
                         </Button>
-                    </strong>
+                    </strong >
                 );
-            },
-            width: 300,
-            editable: true
-        },
-        {
-            field: "mitigationAction",
-            headerName: t("trafficIncident.mitigationAction"),
-            description: "",
-            renderCell: renderActions,
-            disableClickEventBubbling: true,
-            width: 400
-        },
-        {
-            field: "actionButton",
-            headerName: "",
-            width: 200,
-            align: "right",
-            renderCell: renderButton(t("button.action.execute")),
-            disableClickEventBubbling: true
+            }
         }
     ];
 

@@ -92,14 +92,42 @@ function TrafficIncidentDetail(props) {
             <DialogContent id="traffic-incident-detail-dialog-description">
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
-                        <ReactPlayer
-                            url='images/incidents/SampleScene01.mp4'
-                            width='100%'
-                            height='100%'
-                            controls={true}
-                            muted={true}
-                            playing={true}
-                        />
+                        <Stack>
+                            <ReactPlayer
+                                url='images/incidents/SampleScene01.mp4'
+                                width='100%'
+                                height='100%'
+                                controls={true}
+                                muted={true}
+                                playing={true}
+                            />
+
+                            <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
+                                <InputLabel id="trafficIncident.trafficIncidentType.label">{t("trafficIncident.trafficIncidentType")}</InputLabel>
+                                <Select
+                                    labelId="trafficIncident.trafficIncidentType.label"
+                                    id="trafficIncident.trafficIncidentType"
+                                    value={trafficIncidentType}
+                                    onChange={handleChangeTrafficIncidentType}
+                                    label="incidentTypetrafficIncident.trafficIncidentType.select"
+                                    renderValue={selected => (<ListItemText>{selected.value}</ListItemText>)}
+
+                                >
+                                    <MenuItem value="">
+                                        <ListItemText>{t("trafficIncident.trafficIncidentType.new")}</ListItemText><ListItemIcon><AddIcon /></ListItemIcon>
+                                    </MenuItem>
+                                    {incidentTypes.map(incidentType => (
+                                        <MenuItem
+                                            key={incidentType.id}
+                                            value={incidentType}
+                                        >
+                                            <ListItemText>{incidentType.value}</ListItemText>
+                                            <ListItemIcon><DeleteIcon /></ListItemIcon>
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Stack>
                     </Grid>
                     <Grid item xs={6}>
                         <Accordion
@@ -113,7 +141,7 @@ function TrafficIncidentDetail(props) {
                                 expandIcon={< ExpandMoreIcon />}
                                 aria-controls="panel1d-content"
                                 id="panel1d-header">
-                                <Box>Position auf Karte</Box>
+                                <Box>{t("trafficIncident.location")}</Box>
                             </AccordionSummary>
                             <AccordionDetails sx={{height: "400px"}}>
                                 <TrafficIncidentMap sx={{zIndex: "-1"}} />
@@ -126,35 +154,10 @@ function TrafficIncidentDetail(props) {
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel2d-content"
                                 id="panel2d-header">
-                                Standardwerte für Gefahrentypen und Maßnahmen festlegen
+                                {t("trafficIncident.mitigationAction.header4standardvalues")}
                             </AccordionSummary>
                             <AccordionDetails sx={{height: "400px"}}>
                                 <Stack>
-                                    <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
-                                        <InputLabel id="trafficIncident.trafficIncidentType.label">{t("trafficIncident.trafficIncidentType")}</InputLabel>
-                                        <Select
-                                            labelId="trafficIncident.trafficIncidentType.label"
-                                            id="trafficIncident.trafficIncidentType"
-                                            value={trafficIncidentType}
-                                            onChange={handleChangeTrafficIncidentType}
-                                            label="incidentTypetrafficIncident.trafficIncidentType.select"
-                                            renderValue={selected => (<ListItemText>{selected.value}</ListItemText>)}
-
-                                        >
-                                            <MenuItem value="">
-                                                <ListItemText>{t("trafficIncident.trafficIncidentType.new")}</ListItemText><ListItemIcon><AddIcon /></ListItemIcon>
-                                            </MenuItem>
-                                            {incidentTypes.map(incidentType => (
-                                                <MenuItem
-                                                    key={incidentType.id}
-                                                    value={incidentType}
-                                                >
-                                                    <ListItemText>{incidentType.value}</ListItemText>
-                                                    <ListItemIcon><DeleteIcon /></ListItemIcon>
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
                                     <FormControl>
                                         <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
                                         <Select
