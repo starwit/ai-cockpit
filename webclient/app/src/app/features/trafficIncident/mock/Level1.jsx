@@ -5,20 +5,21 @@ import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../../services/TrafficIncidentRest";
 import {renderButton} from "../TrafficIncidentActions";
 import TrafficIncidentDetail from "../TrafficIncidentDetail";
-import {interpretationData, trafficIncidents1} from "./ExampleData";
+import {interpretationData} from "./ExampleData";
 
 function Level1() {
     const {t} = useTranslation();
     const [tab, setTab] = React.useState(0);
     const [bgcolor, setBgcolor] = React.useState("");
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
-    const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents1);
+    const [trafficIncidents, setTrafficIncidents] = useState([]);
     const [interpretData, setInterpretData] = useState(interpretationData);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
 
     useEffect(() => {
         reloadTrafficIncidents();
+        
     }, []);
 
     function reloadTrafficIncidents() {
@@ -26,7 +27,7 @@ function Level1() {
             if (response.data == null) {
                 return;
             }
-            // setTrafficIncidents(response.data);
+            setTrafficIncidents(response.data);
         });
     }
 
@@ -64,6 +65,15 @@ function Level1() {
             field: "trafficIncidentType",
             headerName: t("trafficIncident.trafficIncidentType"),
             width: 300,
+            valueGetter: (params) => {
+                let result = [];
+                if (params.id) {
+                    result.push(params.id);
+                } else {
+                    result = ["Unknown"];
+                }
+                return result.join(", ");
+            },
             editable: true
         },
         {
@@ -113,7 +123,7 @@ function Level1() {
             </Tabs>
             <Box sx={{width: "100%", WebkitTextFillColor: bgcolor}}>
                 <DataGrid
-                    rows={trafficIncidents.filter(row => row.state === tab)}
+                    rows={trafficIncidents}
                     columns={headers}
                     initialState={{
                         pagination: {

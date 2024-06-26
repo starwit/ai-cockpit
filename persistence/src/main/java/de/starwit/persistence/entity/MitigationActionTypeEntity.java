@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -27,7 +28,7 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
 
     // entity relations
     @JsonFilter("filterId")
-    @OneToMany(mappedBy = "mitigationActionType")
+    @OneToMany(mappedBy = "mitigationActionType", cascade = {CascadeType.ALL})
     private Set<MitigationActionEntity> mitigationAction;
 
     // entity fields getters and setters

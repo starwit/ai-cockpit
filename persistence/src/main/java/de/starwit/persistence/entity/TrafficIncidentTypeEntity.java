@@ -5,6 +5,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonFilter;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -23,7 +24,7 @@ public class TrafficIncidentTypeEntity extends AbstractEntity<Long> {
 
     // entity relations
     @JsonFilter("filterId")
-    @OneToMany(mappedBy = "trafficIncidentType")
+    @OneToMany(mappedBy = "trafficIncidentType", cascade = {CascadeType.ALL})
     private Set<TrafficIncidentEntity> trafficIncident;
 
     // entity fields getters and setters
