@@ -20,7 +20,7 @@ import {
     ListItemText,
     Typography
 } from "@mui/material";
-import React from "react";
+import React, {useMemo, useState} from "react";
 import ReactPlayer from "react-player";
 import {useTranslation} from "react-i18next";
 import Accordion from "@mui/material/Accordion";
@@ -30,29 +30,23 @@ import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import TrafficIncidentMap from "./TrafficIncidentMap";
+import MitigationActionRest from "../../services/MitigationActionTypeRest";
+import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, interpretData, handleClose} = props;
     const [expanded, setExpanded] = React.useState("panel1");
     const [mitigationAction, setMitigationAction] = React.useState([]);
     const [trafficIncidentType, setTrafficIncidentType] = React.useState("");
+    const mitigationActionRest = useMemo(() => new MitigationActionRest(), []);
+    const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
 
     const {t} = useTranslation();
 
-    const mitigationActions = [
-        "Polizei benachrichtigen",
-        "an Ferkehrsfunk melden",
-        "Straße Sperren",
-        "Abschleppdienst benachrichtigen"
-    ];
+    const mitigationActions = mitigationActionRest.findAll();
 
-    const incidentTypes = [
-        {id: 10, value: "Falschfahrer"},
-        {id: 20, value: "Gefahrensituation"},
-        {id: 30, value: "hohe Geschwindigkeit"},
-        {id: 40, value: "Parken auf Sperrfläche"},
-        {id: 50, value: "Stau"}
-    ];
+    const incidentTypes = trafficIncidentTypeRest.findAll();
+    console.log(incidentTypes);
 
     const handleChangeAction = event => {
         const {
@@ -121,7 +115,7 @@ function TrafficIncidentDetail(props) {
                                             key={incidentType.id}
                                             value={incidentType}
                                         >
-                                            <ListItemText>{incidentType.value}</ListItemText>
+                                            <ListItemText>{incidentType.name}</ListItemText>
                                             <ListItemIcon><DeleteIcon /></ListItemIcon>
                                         </MenuItem>
                                     ))}
@@ -178,10 +172,10 @@ function TrafficIncidentDetail(props) {
                                         >
                                             {mitigationActions.map(value => (
                                                 <MenuItem
-                                                    key={value}
+                                                    key={value.id}
                                                     value={value}
                                                 >
-                                                    {value}
+                                                    {value.name}
                                                 </MenuItem>
                                             ))}
                                         </Select>

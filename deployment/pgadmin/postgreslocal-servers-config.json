@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "databackend": {
+            "Name": "Ai-cockpit",
+            "Group": "Servers",
+            "Port": 5432,
+            "Username": "ai-cockpit",
+            "Host": "postgres",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres",
+            "PasswordExecCommand": "echo 'ai-cockpit'"
+        }
+    }
+}
