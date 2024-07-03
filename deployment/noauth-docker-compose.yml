@@ -1,7 +1,7 @@
-version: "3.9"
+name: ai-cockpit
+
 services:
   postgres:
-    container_name: ai-cockpit-db
     image: postgres:latest
     environment:
       POSTGRES_DB: ai-cockpit
@@ -14,31 +14,22 @@ services:
       timeout: 60s
       retries: 30
     volumes:
-      - ai-cockpit-db:/var/lib/postgresql/data
+      - db:/var/lib/postgresql/data
     ports:
       - "5433:5432"
-    networks:
-      - backend
-    restart: unless-stopped
   
   pgadmin:
-    container_name: pgadmin_container
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: admin
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     volumes:
-       - ai-cockpit-pgadmin:/var/lib/pgadmin
+       - pgadmin:/var/lib/pgadmin
+       - ./pgadmin/postgreslocal-servers-config.json:/pgadmin4/servers.json
     ports:
       - "5050:80"
-    networks:
-      - backend
-    restart: unless-stopped
-
-networks:
-  backend:
 
 volumes:
-  ai-cockpit-db:
-  ai-cockpit-pgadmin:
+  db:
+  pgadmin:
