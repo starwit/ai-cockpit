@@ -9,6 +9,10 @@
         <version>3.3.1</version>
     </parent>
 
+    <scm>
+        <developerConnection>scm:git:https://github.com/starwit/ai-cockpit.git</developerConnection>
+    </scm>
+
     <groupId>de.starwit</groupId>
     <artifactId>ai-cockpit</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -105,5 +109,12 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
+        </plugins>
     </build>
 </project>
