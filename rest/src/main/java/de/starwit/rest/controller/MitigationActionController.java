@@ -77,7 +77,6 @@ public class MitigationActionController {
     @Operation(summary = "Create mitigationaction")
     @PostMapping
     public MitigationActionEntity save(@Valid @RequestBody MitigationActionEntity entity) {
-        LOG.info("CREATE---------------------------------------------");
         return update(entity);
     }
 
