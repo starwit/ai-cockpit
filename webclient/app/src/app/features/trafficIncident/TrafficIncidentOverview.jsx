@@ -23,7 +23,7 @@ function TrafficIncidentOverview() {
 
     useEffect(() => {
         reloadTrafficIncidents();
-    }, []);
+    }, [open]);
 
     function reloadTrafficIncidents() {
         trafficIncidentRest.findAll().then(response => {
