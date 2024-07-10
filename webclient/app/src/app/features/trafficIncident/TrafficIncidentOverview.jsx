@@ -158,7 +158,7 @@ function TrafficIncidentOverview() {
                 <Tab label={t("home.incidentTab.title.open")} key="tab0" />
                 <Tab label={t("home.incidentTab.title.done")} key="tab1" />
             </Tabs>
-            <div style={{ height: 400, width: "100%" }}>
+            <Box sx={{width: "100%", WebkitTextFillColor: bgcolor}}>
                 <DataGrid
                     rows={trafficIncidents}
                     columns={headers}
@@ -182,7 +182,7 @@ function TrafficIncidentOverview() {
                         },
                     }}
                 />
-            </div>
+            </Box>
             {renderDialog()}
         </Container>
     );
