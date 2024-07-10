@@ -28,6 +28,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ErrorIcon from "@mui/icons-material/Error";
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from "@mui/icons-material/Check";
+import IconButton from '@mui/material/IconButton';
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import TrafficIncidentMap from "./TrafficIncidentMap";
@@ -47,7 +48,7 @@ function TrafficIncidentDetail(props) {
 
     useEffect(() => {
         reload();
-        
+
     }, [open]);
 
     function reload() {
@@ -62,15 +63,15 @@ function TrafficIncidentDetail(props) {
                 return;
             }
             setAllTrafficIncidentType(response.data);
-            setTrafficIncidentType(response.data.find(value => value.id==rowData.trafficIncidentType.id ));            
+            setTrafficIncidentType(response.data.find(value => value.id == rowData.trafficIncidentType.id));
         });
     }
 
     const handleChangeAction = event => {
-    const {
+        const {
             target: {value}
         } = event;
-    setMitigationAction(value);
+        setMitigationAction(value);
 
     };
 
@@ -94,10 +95,22 @@ function TrafficIncidentDetail(props) {
             maxWidth="xl"
 
         >
-            <DialogTitle id="traffic-incident-detail-dialog-title">
-                <Typography component="span" variant="h4">{rowData.trafficIncidentType.name}</Typography> <br></br>
+            <DialogTitle id="traffic-incident-detail-dialog-title" >
+                <Typography component="span" variant="h4">{rowData.trafficIncidentType.name}</Typography>
+                <br></br>
                 <Typography component="span" variant="subtitle1">{rowData.acquisitionTime}</Typography>
             </DialogTitle>
+            <IconButton
+                onClick={handleClose}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 8,
+                    color: (theme) => theme.palette.grey[500],
+                }}
+            >
+                <CloseIcon />
+            </IconButton>
             <DialogContent id="traffic-incident-detail-dialog-description">
                 <Grid container spacing={2}>
                     <Grid item xs={6}>
@@ -215,9 +228,8 @@ function TrafficIncidentDetail(props) {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} variant="contained"  startIcon={<CloseIcon />}>{t("button.close")}</Button>
                 <Button onClick={handleClose} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
-                <Button onClick={()=>handleSave(mitigationAction, trafficIncidentType)} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
+                <Button onClick={() => handleSave(mitigationAction, trafficIncidentType)} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
                     {t("trafficIncident.button.acknowledged")}
                 </Button>
             </DialogActions>
