@@ -124,7 +124,6 @@ function TrafficIncidentDetail(props) {
                                 muted={true}
                                 playing={true}
                             />
-
                             <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
                                 <InputLabel id="trafficIncident.trafficIncidentType.label">{t("trafficIncident.trafficIncidentType")}</InputLabel>
                                 <Select

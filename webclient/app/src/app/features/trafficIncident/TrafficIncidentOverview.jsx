@@ -78,14 +78,14 @@ function TrafficIncidentOverview() {
             field: "acquisitionTime",
             type: "datetime",
             headerName: t("trafficIncident.acquisitionTime"),
-            width: 230,
+            width: 200,
             editable: true,
             valueGetter: (value) => formatDateShort(value),
         },
         {
             field: "trafficIncidentType",
             headerName: t("trafficIncident.trafficIncidentType"),
-            width: 200,
+            flex:0.7,
             editable: true,
             valueGetter: (value) => value.name,
         },
@@ -95,18 +95,18 @@ function TrafficIncidentOverview() {
             description: "",
             renderCell: renderActions,
             disableClickEventBubbling: true,
-            width: 600
+            flex:1.5,
         },
         {
             field: "description",
             headerName: t("trafficIncident.description"),
-            width: 600,
+            flex:1.5,
             editable: true
         },
         {
             field: "actionButton",
             headerName: "",
-            width: 100,
+            width: 110,
             align: "right",
             disableClickEventBubbling: true,
             renderCell: cellValues => {
@@ -158,7 +158,7 @@ function TrafficIncidentOverview() {
                 <Tab label={t("home.incidentTab.title.open")} key="tab0" />
                 <Tab label={t("home.incidentTab.title.done")} key="tab1" />
             </Tabs>
-            <Box sx={{width: "100%", WebkitTextFillColor: bgcolor}}>
+            <div style={{ height: 400, width: "100%" }}>
                 <DataGrid
                     rows={trafficIncidents}
                     columns={headers}
@@ -182,7 +182,7 @@ function TrafficIncidentOverview() {
                         },
                     }}
                 />
-            </Box>
+            </div>
             {renderDialog()}
         </Container>
     );
