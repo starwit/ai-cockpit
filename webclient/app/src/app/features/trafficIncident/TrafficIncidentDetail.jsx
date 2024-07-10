@@ -34,6 +34,7 @@ import AddIcon from "@mui/icons-material/Add";
 import TrafficIncidentMap from "./TrafficIncidentMap";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
+import {formatDateFull} from "../../commons/formatter/DateFormatter"
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, interpretData, handleClose, handleSave} = props;
@@ -98,7 +99,7 @@ function TrafficIncidentDetail(props) {
             <DialogTitle id="traffic-incident-detail-dialog-title" >
                 <Typography component="span" variant="h4">{rowData.trafficIncidentType.name}</Typography>
                 <br></br>
-                <Typography component="span" variant="subtitle1">{rowData.acquisitionTime}</Typography>
+                <Typography component="span" variant="subtitle1">{formatDateFull(rowData.acquisitionTime)}</Typography>
             </DialogTitle>
             <IconButton
                 onClick={handleClose}
@@ -116,7 +117,7 @@ function TrafficIncidentDetail(props) {
                     <Grid item xs={6}>
                         <Stack>
                             <ReactPlayer
-                                url='images/incidents/SampleScene01.mp4'
+                                url='https://www.youtube.com/watch?v=A28zps9Q-gE'
                                 width='100%'
                                 height='100%'
                                 controls={true}

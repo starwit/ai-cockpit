@@ -1,5 +1,5 @@
 import {Box, Button, Container, IconButton, Tab, Tabs} from "@mui/material";
-import {DataGrid} from "@mui/x-data-grid";
+import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../services/TrafficIncidentRest";
@@ -9,13 +9,15 @@ import TrafficIncidentDetail from "./TrafficIncidentDetail";
 import {interpretationData, trafficIncidents2} from "./mock/ExampleData";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckIcon from "@mui/icons-material/Check";
+import {formatDateShort} from "../../commons/formatter/DateFormatter"
+
 
 function TrafficIncidentOverview() {
     const {t} = useTranslation();
     const [tab, setTab] = React.useState(0);
     const [bgcolor, setBgcolor] = React.useState("");
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
-    const mitigationActionRest =  useMemo(() => new MitigationActionRest(), []);
+    const mitigationActionRest = useMemo(() => new MitigationActionRest(), []);
     const [trafficIncidents, setTrafficIncidents] = useState([]);
     const [interpretData, setInterpretData] = useState(interpretationData);
     const [open, setOpen] = React.useState(false);
@@ -49,16 +51,16 @@ function TrafficIncidentOverview() {
 
     function handleSave(mitigationActions, trafficIncidentType) {
         setOpen(false);
-        rowData.trafficIncidentType= trafficIncidentType;
+        rowData.trafficIncidentType = trafficIncidentType;
         mitigationActions.forEach(mActiontype => {
-            var entity={
-                name:"",
-                description:"",
+            var entity = {
+                name: "",
+                description: "",
                 trafficIncident: rowData,
                 mitigationActionType: mActiontype
             }
             mitigationActionRest.create(entity);
-        });        
+        });
     };
 
     function handleOpen(row) {
@@ -70,20 +72,6 @@ function TrafficIncidentOverview() {
         return rowData.mitigationAction;
     }
 
-    const formatDate = (isoString) => {
-        const date = new Date(isoString);
-
-        const options = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-        };
-
-        return date.toLocaleDateString('de-DE', options);
-    };
 
     const headers = [
         {
@@ -92,7 +80,7 @@ function TrafficIncidentOverview() {
             headerName: t("trafficIncident.acquisitionTime"),
             width: 230,
             editable: true,
-            valueGetter: (value) => formatDate(value),
+            valueGetter: (value) => formatDateShort(value),
         },
         {
             field: "trafficIncidentType",
@@ -150,18 +138,18 @@ function TrafficIncidentOverview() {
         }
     ];
 
-    function renderDialog(){
+    function renderDialog() {
         if (!open) {
             return null;
         }
-        return<TrafficIncidentDetail
-                open={open}
-                handleClose={handleClose}
-                handleSave={handleSave}
-                rowData={rowData}
-                interpretData={interpretData}
-                handleRowUpdate={handleRowUpdate}
-            />
+        return <TrafficIncidentDetail
+            open={open}
+            handleClose={handleClose}
+            handleSave={handleSave}
+            rowData={rowData}
+            interpretData={interpretData}
+            handleRowUpdate={handleRowUpdate}
+        />
     }
 
     return (
@@ -184,8 +172,17 @@ function TrafficIncidentOverview() {
                     pageSizeOptions={[10]}
                     checkboxSelection
                     disableRowSelectionOnClick
+                    disableColumnSelector
+                    slots={{toolbar: GridToolbar}}
+                    slotProps={{
+                        toolbar: {
+                            showQuickFilter: true,
+                            printOptions: {disableToolbarButton: true},
+                            csvOptions: {disableToolbarButton: true},
+                        },
+                    }}
                 />
-            </Box>  
+            </Box>
             {renderDialog()}
         </Container>
     );
