@@ -26,6 +26,7 @@ import {useTranslation} from "react-i18next";
 import Accordion from "@mui/material/Accordion";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ErrorIcon from "@mui/icons-material/Error";
+import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
@@ -215,6 +216,7 @@ function TrafficIncidentDetail(props) {
                 </Grid>
             </DialogContent>
             <DialogActions>
+                <Button onClick={handleClose} variant="contained"  startIcon={<CloseIcon />}>{t("button.close")}</Button>
                 <Button onClick={handleClose} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
                 <Button onClick={()=>handleSave(mitigationAction, trafficIncidentType)} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
                     {t("trafficIncident.button.acknowledged")}
