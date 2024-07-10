@@ -20,7 +20,7 @@ import {
     ListItemText,
     Typography
 } from "@mui/material";
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import ReactPlayer from "react-player";
 import {useTranslation} from "react-i18next";
 import Accordion from "@mui/material/Accordion";
@@ -30,32 +30,48 @@ import CheckIcon from "@mui/icons-material/Check";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import TrafficIncidentMap from "./TrafficIncidentMap";
-import MitigationActionRest from "../../services/MitigationActionTypeRest";
+import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
 
 function TrafficIncidentDetail(props) {
-    const {open, rowData, interpretData, handleClose} = props;
+    const {open, rowData, interpretData, handleClose, handleSave} = props;
     const [expanded, setExpanded] = React.useState("panel1");
-    const [mitigationAction, setMitigationAction] = React.useState([]);
-    const [trafficIncidentType, setTrafficIncidentType] = React.useState("");
-    const mitigationActionRest = useMemo(() => new MitigationActionRest(), []);
+    const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
-
+    const [mitigationAction, setMitigationAction] = React.useState([]);
+    const [trafficIncidentType, setTrafficIncidentType] = React.useState('');
+    const [allMitigationAction, setAllMitigationAction] = React.useState([]);
+    const [allTrafficIncidentType, setAllTrafficIncidentType] = React.useState([]);
     const {t} = useTranslation();
 
-    const mitigationActions = mitigationActionRest.findAll();
+    useEffect(() => {
+        reload();
+        
+    }, [open]);
 
-    const incidentTypes = trafficIncidentTypeRest.findAll();
-    console.log(incidentTypes);
+    function reload() {
+        mitigationActionTypeRest.findAll().then(response => {
+            if (response.data == null) {
+                return;
+            }
+            setAllMitigationAction(response.data);
+        });
+        trafficIncidentTypeRest.findAll().then(response => {
+            if (response.data == null) {
+                return;
+            }
+            console.log(rowData);
+            setAllTrafficIncidentType(response.data);
+            setTrafficIncidentType(response.data.find(value => value.id==rowData.trafficIncidentType.id ));            
+        });
+    }
 
     const handleChangeAction = event => {
-        const {
+    const {
             target: {value}
         } = event;
-        setMitigationAction(
-            // On autofill we get a stringified value.
-            typeof value === "string" ? value.split(",") : value
-        );
+    setMitigationAction(value);
+
     };
 
     const handleChangeTrafficIncidentType = event => {
@@ -69,7 +85,6 @@ function TrafficIncidentDetail(props) {
     if (!open) {
         return null;
     }
-
     return (
         <Dialog
             open={open}
@@ -80,8 +95,8 @@ function TrafficIncidentDetail(props) {
 
         >
             <DialogTitle id="traffic-incident-detail-dialog-title">
-                <Typography variant="h4">{rowData.trafficIncidentType}</Typography>
-                <Typography variant="subtitle1">{rowData.acquisitionTime}</Typography>
+                <Typography component="span" variant="h4">{rowData.trafficIncidentType.name}</Typography> <br></br>
+                <Typography component="span" variant="subtitle1">{rowData.acquisitionTime}</Typography>
             </DialogTitle>
             <DialogContent id="traffic-incident-detail-dialog-description">
                 <Grid container spacing={2}>
@@ -104,13 +119,13 @@ function TrafficIncidentDetail(props) {
                                     value={trafficIncidentType}
                                     onChange={handleChangeTrafficIncidentType}
                                     label="incidentTypetrafficIncident.trafficIncidentType.select"
-                                    renderValue={selected => (<ListItemText>{selected.value}</ListItemText>)}
+                                    renderValue={selected => (<ListItemText>{selected.name}</ListItemText>)}
 
                                 >
                                     <MenuItem value="">
                                         <ListItemText>{t("trafficIncident.trafficIncidentType.new")}</ListItemText><ListItemIcon><AddIcon /></ListItemIcon>
                                     </MenuItem>
-                                    {incidentTypes.map(incidentType => (
+                                    {allTrafficIncidentType.map(incidentType => (
                                         <MenuItem
                                             key={incidentType.id}
                                             value={incidentType}
@@ -137,7 +152,7 @@ function TrafficIncidentDetail(props) {
                                 id="panel1d-header">
                                 <Box>{t("trafficIncident.location")}</Box>
                             </AccordionSummary>
-                            <AccordionDetails sx={{height: "400px"}}>
+                            <AccordionDetails sx={{height: "394px"}}>
                                 <TrafficIncidentMap sx={{zIndex: "-1"}} />
                             </AccordionDetails>
                         </Accordion>
@@ -150,7 +165,7 @@ function TrafficIncidentDetail(props) {
                                 id="panel2d-header">
                                 {t("trafficIncident.mitigationAction.header4standardvalues")}
                             </AccordionSummary>
-                            <AccordionDetails sx={{height: "400px"}}>
+                            <AccordionDetails sx={{height: "394px"}}>
                                 <Stack>
                                     <FormControl>
                                         <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
@@ -164,13 +179,13 @@ function TrafficIncidentDetail(props) {
                                             renderValue={selected => (
                                                 <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                                                     {selected.map(value => (
-                                                        <Chip key={value} label={value} variant="outlined" sx={{color: "green"}} />
+                                                        <Chip key={value.id} label={value.name} variant="outlined" sx={{color: "green"}} />
 
                                                     ))}
                                                 </Box>
                                             )}
                                         >
-                                            {mitigationActions.map(value => (
+                                            {allMitigationAction.map(value => (
                                                 <MenuItem
                                                     key={value.id}
                                                     value={value}
@@ -201,7 +216,7 @@ function TrafficIncidentDetail(props) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
-                <Button onClick={handleClose} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
+                <Button onClick={()=>handleSave(mitigationAction, trafficIncidentType)} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
                     {t("trafficIncident.button.acknowledged")}
                 </Button>
             </DialogActions>

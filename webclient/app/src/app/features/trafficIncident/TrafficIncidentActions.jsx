@@ -4,7 +4,7 @@ export const renderActions = params => {
     return (
         <strong>
             {params.row.mitigationAction.map(action => (
-                <Chip key={action} label={action} variant="outlined" sx={{color: "green"}} />
+                <Chip key={action.id} label={action.mitigationActionType.name} variant="outlined" sx={{color: "green"}} />
             ))}
         </strong>
     );

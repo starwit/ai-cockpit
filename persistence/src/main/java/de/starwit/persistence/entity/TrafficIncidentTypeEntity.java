@@ -3,6 +3,7 @@ package de.starwit.persistence.entity;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.CascadeType;
@@ -24,6 +25,7 @@ public class TrafficIncidentTypeEntity extends AbstractEntity<Long> {
 
     // entity relations
     @JsonFilter("filterId")
+    @JsonIgnore
     @OneToMany(mappedBy = "trafficIncidentType", cascade = {CascadeType.ALL})
     private Set<TrafficIncidentEntity> trafficIncident;
 

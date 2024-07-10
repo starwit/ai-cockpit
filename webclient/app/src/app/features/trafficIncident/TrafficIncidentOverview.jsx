@@ -3,6 +3,7 @@ import {DataGrid} from "@mui/x-data-grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../services/TrafficIncidentRest";
+import MitigationActionRest from "../../services/MitigationActionRest";
 import {renderActions} from "./TrafficIncidentActions";
 import TrafficIncidentDetail from "./TrafficIncidentDetail";
 import {interpretationData, trafficIncidents2} from "./mock/ExampleData";
@@ -14,7 +15,8 @@ function TrafficIncidentOverview() {
     const [tab, setTab] = React.useState(0);
     const [bgcolor, setBgcolor] = React.useState("");
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
-    const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents2);
+    const mitigationActionRest =  useMemo(() => new MitigationActionRest(), []);
+    const [trafficIncidents, setTrafficIncidents] = useState([]);
     const [interpretData, setInterpretData] = useState(interpretationData);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
@@ -28,8 +30,8 @@ function TrafficIncidentOverview() {
             if (response.data == null) {
                 return;
             }
-            // setTrafficIncidents(response.data);
-        });
+            setTrafficIncidents(response.data);
+            console.log(new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(Date.now()));        });
     }
 
     const handleTabChange = (event, newValue) => {
@@ -45,6 +47,20 @@ function TrafficIncidentOverview() {
         setOpen(false);
     };
 
+    function handleSave(mitigationActions, trafficIncidentType) {
+        setOpen(false);
+        rowData.trafficIncidentType= trafficIncidentType;
+        mitigationActions.forEach(mActiontype => {
+            var entity={
+                name:"",
+                description:"",
+                trafficIncident: rowData,
+                mitigationActionType: mActiontype
+            }
+            mitigationActionRest.create(entity);
+        });        
+    };
+
     function handleOpen(row) {
         setOpen(true);
         setRowData(row);
@@ -54,19 +70,36 @@ function TrafficIncidentOverview() {
         return rowData.mitigationAction;
     }
 
+    const formatDate = (isoString) => {
+        const date = new Date(isoString);
+
+        const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+        };
+
+        return date.toLocaleDateString('de-DE', options);
+    };
+
     const headers = [
         {
             field: "acquisitionTime",
             type: "datetime",
             headerName: t("trafficIncident.acquisitionTime"),
-            width: 200,
-            editable: true
+            width: 230,
+            editable: true,
+            valueGetter: (value) => formatDate(value),
         },
         {
             field: "trafficIncidentType",
             headerName: t("trafficIncident.trafficIncidentType"),
             width: 200,
-            editable: true
+            editable: true,
+            valueGetter: (value) => value.name,
         },
         {
             field: "mitigationAction",
@@ -74,7 +107,7 @@ function TrafficIncidentOverview() {
             description: "",
             renderCell: renderActions,
             disableClickEventBubbling: true,
-            width: 300
+            width: 600
         },
         {
             field: "description",
@@ -117,6 +150,20 @@ function TrafficIncidentOverview() {
         }
     ];
 
+    function renderDialog(){
+        if (!open) {
+            return null;
+        }
+        return<TrafficIncidentDetail
+                open={open}
+                handleClose={handleClose}
+                handleSave={handleSave}
+                rowData={rowData}
+                interpretData={interpretData}
+                handleRowUpdate={handleRowUpdate}
+            />
+    }
+
     return (
         <Container sx={{margin: "1em"}} >
             <Tabs onChange={handleTabChange} value={tab}>
@@ -125,7 +172,7 @@ function TrafficIncidentOverview() {
             </Tabs>
             <Box sx={{width: "100%", WebkitTextFillColor: bgcolor}}>
                 <DataGrid
-                    rows={trafficIncidents.filter(row => row.state === tab)}
+                    rows={trafficIncidents}
                     columns={headers}
                     initialState={{
                         pagination: {
@@ -138,14 +185,8 @@ function TrafficIncidentOverview() {
                     checkboxSelection
                     disableRowSelectionOnClick
                 />
-            </Box>
-            <TrafficIncidentDetail
-                open={open}
-                handleClose={handleClose}
-                rowData={rowData}
-                interpretData={interpretData}
-                handleRowUpdate={handleRowUpdate}
-            />
+            </Box>  
+            {renderDialog()}
         </Container>
     );
 }

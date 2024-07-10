@@ -72,6 +72,7 @@ public class TrafficIncidentController {
     @Operation(summary = "Update trafficincident")
     @PutMapping
     public TrafficIncidentEntity update(@Valid @RequestBody TrafficIncidentEntity entity) {
+        LOG.info("UPDATEEEEEEE");
         return trafficincidentService.saveOrUpdate(entity);
     }
 

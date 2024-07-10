@@ -33,12 +33,10 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
 
 
     // entity relations
-    @JsonFilter("filterId")
     @ManyToOne
     @JoinColumn(name = "trafficincidenttype_id")
     private TrafficIncidentTypeEntity trafficIncidentType;
 
-    @JsonFilter("filterId")
     @OneToMany(mappedBy = "trafficIncident", cascade = { CascadeType.ALL })
     private Set<MitigationActionEntity> mitigationAction;
 
