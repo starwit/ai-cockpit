@@ -61,7 +61,6 @@ function TrafficIncidentDetail(props) {
             if (response.data == null) {
                 return;
             }
-            console.log(rowData);
             setAllTrafficIncidentType(response.data);
             setTrafficIncidentType(response.data.find(value => value.id==rowData.trafficIncidentType.id ));            
         });
