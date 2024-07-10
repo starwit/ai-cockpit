@@ -117,7 +117,7 @@ function TrafficIncidentDetail(props) {
                     <Grid item xs={6}>
                         <Stack>
                             <ReactPlayer
-                                url='https://www.youtube.com/watch?v=A28zps9Q-gE'
+                                url='images/incidents/SampleScene01.mp4'
                                 width='100%'
                                 height='100%'
                                 controls={true}
