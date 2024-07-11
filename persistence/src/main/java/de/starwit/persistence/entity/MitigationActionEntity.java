@@ -42,7 +42,6 @@ public class MitigationActionEntity extends AbstractEntity<Long> {
     @JoinColumn(name = "trafficincident_id")
     private TrafficIncidentEntity trafficIncident;
 
-    @JsonFilter("filterId")
     @ManyToOne
     @JoinColumn(name = "mitigationactiontype_id")
     private MitigationActionTypeEntity mitigationActionType;
