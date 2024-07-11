@@ -60,6 +60,7 @@ const translationDeDE = {
     "button.submit": "OK",
     "button.create": "Hinzufügen",
     "button.update": "Bearbeiten",
+    "button.close": "Schließen",
     "button.delete": "Löschen",
     "button.action.execute": "Ausführen",
     "select.none": "Keine",

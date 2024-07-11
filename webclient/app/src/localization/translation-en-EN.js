@@ -60,6 +60,7 @@ const translationEnEN = {
     "button.submit": "OK",
     "button.create": "Add",
     "button.update": "Edit",
+    "button.close": "Close",
     "button.delete": "Delete",
     "button.action.execute": "Execute",
     "select.none": "None",

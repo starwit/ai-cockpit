@@ -15,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.CascadeType;
+
 
 /**
  * TrafficIncident Entity class
@@ -31,13 +33,11 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
 
 
     // entity relations
-    @JsonFilter("filterId")
     @ManyToOne
     @JoinColumn(name = "trafficincidenttype_id")
     private TrafficIncidentTypeEntity trafficIncidentType;
 
-    @JsonFilter("filterId")
-    @OneToMany(mappedBy = "trafficIncident")
+    @OneToMany(mappedBy = "trafficIncident", cascade = { CascadeType.ALL })
     private Set<MitigationActionEntity> mitigationAction;
 
     // entity fields getters and setters

@@ -3,9 +3,8 @@ import {DataGrid} from "@mui/x-data-grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../../services/TrafficIncidentRest";
-import {renderActions} from "../TrafficIncidentActions";
 import TrafficIncidentDetail from "../TrafficIncidentDetail";
-import {interpretationData, trafficIncidents3} from "../mock/ExampleData";
+import {renderActions, interpretationData, trafficIncidents3} from "../mock/ExampleData";
 
 function Level3() {
     const {t} = useTranslation();
@@ -87,23 +86,6 @@ function Level3() {
         {
             field: "description",
             headerName: t("trafficIncident.description"),
-            renderCell: cellValues => {
-                return (
-                    <strong>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="small"
-                            style={{marginLeft: 16}}
-                            onClick={event => {
-                                handleOpen(cellValues.row);
-                            }}
-                        >
-                            Details
-                        </Button>
-                    </strong>
-                );
-            },
             width: 300,
             editable: true
         },

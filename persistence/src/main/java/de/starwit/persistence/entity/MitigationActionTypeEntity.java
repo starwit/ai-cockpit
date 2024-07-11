@@ -3,7 +3,9 @@ package de.starwit.persistence.entity;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -27,7 +29,8 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
 
     // entity relations
     @JsonFilter("filterId")
-    @OneToMany(mappedBy = "mitigationActionType")
+    @JsonIgnore
+    @OneToMany(mappedBy = "mitigationActionType", cascade = {CascadeType.ALL})
     private Set<MitigationActionEntity> mitigationAction;
 
     // entity fields getters and setters
