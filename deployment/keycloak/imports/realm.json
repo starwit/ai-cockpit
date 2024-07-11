@@ -78,19 +78,19 @@
         "attributes": {}
       },
       {
-        "name": "ROLE_admin",
+        "name": "admin",
         "composite": false,
         "clientRole": false,
         "attributes": {}
       },
       {
-        "name": "ROLE_reader",
+        "name": "reader",
         "composite": false,
         "clientRole": false,
         "attributes": {}
       },
       {
-        "name": "ROLE_user",
+        "name": "user",
         "composite": false,
         "clientRole": false,
         "attributes": {}
@@ -652,7 +652,6 @@
       ],
       "protocolMappers": [
         {
-          "id": "8741eb9f-9d31-4f0d-86c9-a5b9c66b4b5f",
           "name": "groups",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usermodel-realm-role-mapper",
@@ -667,7 +666,6 @@
           }
         },
         {
-          "id": "6db650d3-b452-4d98-b3eb-11288006100a",
           "name": "realm roles",
           "protocol": "openid-connect",
           "protocolMapper": "oidc-usermodel-realm-role-mapper",
@@ -677,7 +675,7 @@
             "userinfo.token.claim": "true",
             "id.token.claim": "true",
             "access.token.claim": "true",
-            "claim.name": "roles",
+            "claim.name": "realm_access.roles",
             "jsonType.label": "String"
           }
         }
@@ -2105,7 +2103,6 @@
       "emailVerified": false,
       "credentials": [
         {
-          "id": "1ec1abd6-bb09-4a90-b874-bbb8e1e64290",
           "type": "password",
           "createdDate": 1689189284762,
           "secretData": "{\"value\":\"bdTG67Kc8WkmG5O9FidYPVms6la4EVyA7eRGm4aKmbpuwXIO4PGHZxYzLWeLAaRstqz8xatqtostvs4LKWd/vw==\",\"salt\":\"y99TTu8C8VZFt8j64Lf2hw==\",\"additionalParameters\":{}}",
@@ -2116,7 +2113,7 @@
       "requiredActions": [],
       "realmRoles": [
         "default-roles-ai-cockpit",
-        "ROLE_admin"
+        "admin"
       ],
       "notBefore": 0
     },
@@ -2128,7 +2125,6 @@
       "emailVerified": false,
       "credentials": [
         {
-          "id": "f7724b15-c2f0-4625-8528-cebbb89268f1",
           "type": "password",
           "createdDate": 1689189284783,
           "secretData": "{\"value\":\"o2sxyw56EK8jKnh0CQSV2FiN9plXTSzwOWNlt7SiIUd/Ox+huiDWYGlCL4gqSM0R/3Q+PONjG0Dl7dQrvtfU2A==\",\"salt\":\"m63ldw2Y1VagMqRIEhQZOg==\",\"additionalParameters\":{}}",
@@ -2139,7 +2135,7 @@
       "requiredActions": [],
       "realmRoles": [
         "default-roles-ai-cockpit",
-        "ROLE_reader"
+        "reader"
       ],
       "notBefore": 0
     },
@@ -2151,7 +2147,6 @@
       "emailVerified": false,
       "credentials": [
         {
-          "id": "6de67af4-01e6-4092-b184-45e64ba67ad4",
           "type": "password",
           "createdDate": 1689189284774,
           "secretData": "{\"value\":\"o2sxyw56EK8jKnh0CQSV2FiN9plXTSzwOWNlt7SiIUd/Ox+huiDWYGlCL4gqSM0R/3Q+PONjG0Dl7dQrvtfU2A==\",\"salt\":\"m63ldw2Y1VagMqRIEhQZOg==\",\"additionalParameters\":{}}",
@@ -2162,7 +2157,7 @@
       "requiredActions": [],
       "realmRoles": [
         "default-roles-ai-cockpit",
-        "ROLE_user"
+        "user"
       ],
       "notBefore": 0
     }
