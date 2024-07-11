@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -9,8 +11,8 @@
 
     <scm>
         <developerConnection>scm:git:https://github.com/starwit/ai-cockpit.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <groupId>de.starwit</groupId>
     <artifactId>ai-cockpit</artifactId>
@@ -108,5 +110,42 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>io.kokuwa.maven</groupId>
+                <artifactId>helm-maven-plugin</artifactId>
+                <version>6.15.0</version>
+                <configuration>
+                    <chartDirectory>${project.basedir}/deployment/helm/ai-cockpit</chartDirectory>
+                    <chartVersion>${project.version}</chartVersion>
+                    <chartName>${artifactId}</chartName>
+                    <uploadRepoStable>
+                        <name>stable-repo</name>
+                        <url>https://helm.internal.starwit-infra.de</url>
+                        <type>CHARTMUSEUM</type>
+                        <username>chartmuseum</username>
+                        <password>${env.HELM_REPO_PWD}</password>
+                    </uploadRepoStable>
+                    <uploadRepoSnapshot>
+                        <name>snapshot-repo</name>
+                        <url>https://helm.internal.starwit-infra.de</url>
+                        <type>CHARTMUSEUM</type>
+                        <username>chartmuseum</username>
+                        <password>${env.HELM_REPO_PWD}</password>
+                    </uploadRepoSnapshot>
+                    <useLocalHelmBinary>true</useLocalHelmBinary>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>package</goal>
+                            <goal>lint</goal>
+                            <goal>template</goal>
+                            <!--<goal>deploy</goal>-->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 </project>
