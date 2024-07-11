@@ -1,6 +1,6 @@
 ### Prerequisites
 
-* Java JDK 17 or later
+* Java JDK 21 or later
 * Maven 3
 * NodeJs (16.9.1) and NPM (8.3.2) - [NodeJS Install](https://nodejs.org/en/download/package-manager/)
 * Postgres (available for development via docker-compose scripts)
@@ -38,7 +38,8 @@
    You can also run the main-class via Visual Studio Code.
 
 
-* **Project Builder can be reached under http://localhost:8081/starwit/**
+* **application can be reached under http://localhost:8081/ai-cockpit/**
+* **swagger under http://localhost:8081/ai-cockpit/swagger-ui/**
 * **If you are using keycloak:**
     * **default user/password is admin/admin**
     * **keycloak can be reached under http://localost:8081/auth**

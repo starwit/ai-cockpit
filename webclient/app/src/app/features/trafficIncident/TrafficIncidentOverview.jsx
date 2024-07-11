@@ -6,7 +6,7 @@ import TrafficIncidentRest from "../../services/TrafficIncidentRest";
 import MitigationActionRest from "../../services/MitigationActionRest";
 import {renderActions} from "./TrafficIncidentActions";
 import TrafficIncidentDetail from "./TrafficIncidentDetail";
-import {interpretationData, trafficIncidents2} from "./mock/ExampleData";
+import {interpretationData} from "./mock/ExampleData";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckIcon from "@mui/icons-material/Check";
 import {formatDateShort} from "../../commons/formatter/DateFormatter";
