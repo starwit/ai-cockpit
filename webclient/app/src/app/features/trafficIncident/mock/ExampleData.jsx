@@ -1,3 +1,15 @@
+import {Chip} from "@mui/material";
+
+export const renderActions = params => {
+    return (
+        <strong>
+            {params.row.mitigationAction.map(action => (
+                <Chip key={action} label={action} variant="outlined" sx={{color: "green"}} />
+            ))}
+        </strong>
+    );
+};
+
 export const trafficIncidents1 = [
     {id: 1, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Stau", mitigationAction: [], state: 0},
     {id: 2, acquisitionTime: "2016-01-04 10:34:23", trafficIncidentType: "Parken auf Sperrfläche", mitigationAction: [], state: 0},

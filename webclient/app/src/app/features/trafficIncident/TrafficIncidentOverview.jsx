@@ -9,8 +9,7 @@ import TrafficIncidentDetail from "./TrafficIncidentDetail";
 import {interpretationData, trafficIncidents2} from "./mock/ExampleData";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckIcon from "@mui/icons-material/Check";
-import {formatDateShort} from "../../commons/formatter/DateFormatter"
-
+import {formatDateShort} from "../../commons/formatter/DateFormatter";
 
 function TrafficIncidentOverview() {
     const {t} = useTranslation();
@@ -53,12 +52,12 @@ function TrafficIncidentOverview() {
         setOpen(false);
         rowData.trafficIncidentType = trafficIncidentType;
         mitigationActions.forEach(mActiontype => {
-            var entity = {
+            const entity = {
                 name: "",
                 description: "",
                 trafficIncident: rowData,
                 mitigationActionType: mActiontype
-            }
+            };
             mitigationActionRest.create(entity);
         });
     };
@@ -72,7 +71,6 @@ function TrafficIncidentOverview() {
         return rowData.mitigationAction;
     }
 
-
     const headers = [
         {
             field: "acquisitionTime",
@@ -80,14 +78,14 @@ function TrafficIncidentOverview() {
             headerName: t("trafficIncident.acquisitionTime"),
             width: 200,
             editable: true,
-            valueGetter: (value) => formatDateShort(value),
+            valueGetter: value => formatDateShort(value)
         },
         {
             field: "trafficIncidentType",
             headerName: t("trafficIncident.trafficIncidentType"),
-            flex:0.7,
+            flex: 0.7,
             editable: true,
-            valueGetter: (value) => value.name,
+            valueGetter: value => value.name
         },
         {
             field: "mitigationAction",
@@ -95,12 +93,12 @@ function TrafficIncidentOverview() {
             description: "",
             renderCell: renderActions,
             disableClickEventBubbling: true,
-            flex:1.5,
+            flex: 1.5
         },
         {
             field: "description",
             headerName: t("trafficIncident.description"),
-            flex:1.5,
+            flex: 1.5,
             editable: true
         },
         {
@@ -149,7 +147,7 @@ function TrafficIncidentOverview() {
             rowData={rowData}
             interpretData={interpretData}
             handleRowUpdate={handleRowUpdate}
-        />
+        />;
     }
 
     return (
@@ -178,8 +176,8 @@ function TrafficIncidentOverview() {
                         toolbar: {
                             showQuickFilter: true,
                             printOptions: {disableToolbarButton: true},
-                            csvOptions: {disableToolbarButton: true},
-                        },
+                            csvOptions: {disableToolbarButton: true}
+                        }
                     }}
                 />
             </Box>

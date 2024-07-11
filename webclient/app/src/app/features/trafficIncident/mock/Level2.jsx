@@ -3,20 +3,15 @@ import {DataGrid} from "@mui/x-data-grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentRest from "../../../services/TrafficIncidentRest";
-import {renderActions, renderButton} from "../TrafficIncidentActions";
-import TrafficIncidentDetail from "../TrafficIncidentDetail";
-import {interpretationData, trafficIncidents2} from "../mock/ExampleData";
+import {renderButton} from "../TrafficIncidentActions";
+import {renderActions, trafficIncidents2} from "../mock/ExampleData";
 
 function Level2() {
     const {t} = useTranslation();
-    const [activeStep, setActiveStep] = React.useState(1);
     const [bgcolor, setBgcolor] = React.useState("");
     const [tab, setTab] = React.useState(0);
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
     const [trafficIncidents, setTrafficIncidents] = useState(trafficIncidents2);
-    const [interpretData, setInterpretData] = useState(interpretationData);
-    const [open, setOpen] = React.useState(false);
-    const [rowData, setRowData] = React.useState({});
 
     useEffect(() => {
         reloadTrafficIncidents();
@@ -38,10 +33,6 @@ function Level2() {
         } else {
             setBgcolor("");
         }
-    };
-
-    function handleClose() {
-        setOpen(false);
     };
 
     function handleOpen(row) {
@@ -66,23 +57,6 @@ function Level2() {
         {
             field: "description",
             headerName: t("trafficIncident.description"),
-            renderCell: cellValues => {
-                return (
-                    <strong>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="small"
-                            style={{marginLeft: 16}}
-                            onClick={event => {
-                                handleOpen(cellValues.row);
-                            }}
-                        >
-                            Details
-                        </Button>
-                    </strong>
-                );
-            },
             width: 300,
             editable: true
         },
@@ -127,12 +101,6 @@ function Level2() {
 
                 />
             </Box>
-            <TrafficIncidentDetail
-                open={open}
-                handleClose={handleClose}
-                rowData={rowData}
-                interpretData={interpretData}
-            />
         </Container>
     );
 }
