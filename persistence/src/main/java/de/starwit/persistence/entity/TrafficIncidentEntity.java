@@ -36,10 +36,10 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
     @Column(name = "mediaurl")
     private String mediaUrl;
 
-    @Column(name = "camera_latitude")
+    @Column(name = "cameralatitude")
     private BigDecimal cameraLatitude;
 
-    @Column(name = "camera_longitude")
+    @Column(name = "cameralongitude")
     private BigDecimal cameraLongitude;
 
     @Enumerated(EnumType.STRING)
