@@ -4,7 +4,7 @@ CREATE TABLE "trafficincident"
 (
     "acquisitiontime" TIMESTAMP WITH TIME ZONE,
     "trafficincidenttype_id" BIGINT,
-    "mediaurl" VARCHAR(255),
+    "mediaurl" VARCHAR(500),
     "cameralatitude" DECIMAL(22,19),
     "cameralongitude" DECIMAL(22,19),
     "state" VARCHAR(255),
