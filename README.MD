@@ -14,14 +14,14 @@
 
     ```bash
     cd deployment
-    docker-compose -f localenv-docker-compose.yml up
+    docker compose up
     ```
 
 2) go to `webclient/app` and install the frontend applications dependencies
 
     ```bash
     cd webclient/app
-    npm install --legacy-peer-deps
+    npm install
     ```
 
 3) build the project
@@ -91,7 +91,7 @@ Start the database without keycloak:
 
 ```bash
 cd deployment
-docker-compose -f postgreslocal-docker-compose.yml up
+docker compose up
 ```
 
 # Architecture & Concepts
