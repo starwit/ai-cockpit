@@ -4,6 +4,11 @@ CREATE TABLE "trafficincident"
 (
     "acquisitiontime" TIMESTAMP WITH TIME ZONE,
     "trafficincidenttype_id" BIGINT,
+    "mediaurl" VARCHAR(500),
+    "cameralatitude" DECIMAL(22,19),
+    "cameralongitude" DECIMAL(22,19),
+    "state" VARCHAR(255),
+    "description" VARCHAR(255),
     "id" BIGINT NOT NULL DEFAULT nextval('trafficincident_id_seq'),
     CONSTRAINT "trafficincident_pkey" PRIMARY KEY ("id")
 );

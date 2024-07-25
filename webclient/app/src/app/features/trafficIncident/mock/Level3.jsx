@@ -8,7 +8,6 @@ import {renderActions, interpretationData, trafficIncidents3} from "../mock/Exam
 
 function Level3() {
     const {t} = useTranslation();
-    const [activeStep, setActiveStep] = React.useState(2);
     const [bgcolor, setBgcolor] = React.useState("");
     const [tab, setTab] = React.useState(0);
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);

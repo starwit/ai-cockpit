@@ -1,5 +1,6 @@
 package de.starwit.persistence.entity;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
@@ -9,14 +10,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import de.starwit.persistence.serializer.ZonedDateTimeDeserializer;
 import de.starwit.persistence.serializer.ZonedDateTimeSerializer;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.CascadeType;
-
 
 /**
  * TrafficIncident Entity class
@@ -26,13 +28,29 @@ import jakarta.persistence.CascadeType;
 public class TrafficIncidentEntity extends AbstractEntity<Long> {
 
     // entity fields
-    @Column(name="acquisitiontime")
+    @Column(name = "acquisitiontime")
     @JsonSerialize(using = ZonedDateTimeSerializer.class)
     @JsonDeserialize(using = ZonedDateTimeDeserializer.class)
     private ZonedDateTime acquisitionTime;
 
+    @Column(name = "mediaurl")
+    private String mediaUrl;
+
+    @Column(name = "cameralatitude")
+    private BigDecimal cameraLatitude;
+
+    @Column(name = "cameralongitude")
+    private BigDecimal cameraLongitude;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    private IncidentState state;
+
+    @Column(name = "description")
+    private String description;
 
     // entity relations
+    @JsonFilter("filterIdName")
     @ManyToOne
     @JoinColumn(name = "trafficincidenttype_id")
     private TrafficIncidentTypeEntity trafficIncidentType;
@@ -47,6 +65,46 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
 
     public void setAcquisitionTime(ZonedDateTime acquisitionTime) {
         this.acquisitionTime = acquisitionTime;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
+    }
+
+    public BigDecimal getCameraLatitude() {
+        return cameraLatitude;
+    }
+
+    public void setCameraLatitude(BigDecimal cameraLatitude) {
+        this.cameraLatitude = cameraLatitude;
+    }
+
+    public BigDecimal getCameraLongitude() {
+        return cameraLongitude;
+    }
+
+    public void setCameraLongitude(BigDecimal cameraLongitude) {
+        this.cameraLongitude = cameraLongitude;
+    }
+
+    public IncidentState getState() {
+        return state;
+    }
+
+    public void setState(IncidentState state) {
+        this.state = state;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     // entity relations getters and setters
