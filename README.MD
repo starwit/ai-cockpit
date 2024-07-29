@@ -6,6 +6,11 @@
 * Postgres (available for development via docker-compose scripts)
 * using Keycloak is optional
 
+### Version update
+
+* mvn -B release:update-versions
+* mvn versions:set -DremoveSnapshot
+
 ### Installation Steps
 
 :exclamation: Each step is executed from the project home directory.
