@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>de.starwit</groupId>
@@ -126,10 +128,10 @@
                         <includeOnlyProperty>git.commit.id</includeOnlyProperty>
                         <includeOnlyProperty>git.commit.message.full</includeOnlyProperty>
                         <includeOnlyProperty>git.commit.time</includeOnlyProperty>
-                        <includeOnlyProperty>git.commit.user.email</includeOnlyProperty>
-                        <includeOnlyProperty>git.commit.user.name</includeOnlyProperty>
                     </includeOnlyProperties>
                     <excludeProperties>
+                        <includeOnlyProperty>git.commit.user.email</includeOnlyProperty>
+                        <includeOnlyProperty>git.commit.user.name</includeOnlyProperty>
                         <excludeProperty>git.commit.id.abbrev</excludeProperty>
                         <excludeProperty>git.commit.id.describe*</excludeProperty>
                     </excludeProperties>
@@ -173,10 +175,12 @@
                         <configuration>
                             <target>
                                 <concat destfile="${project.build.outputDirectory}/static/info.txt">
-                                    <fileset file="${project.build.outputDirectory}/META-INF/build-info.properties" />
+                                    <fileset
+                                        file="${project.build.outputDirectory}/META-INF/build-info.properties" />
                                     <fileset file="${project.build.outputDirectory}/git.properties" />
                                     <filterchain>
-                                        <filterreader classname="org.apache.tools.ant.filters.LineContains">
+                                        <filterreader
+                                            classname="org.apache.tools.ant.filters.LineContains">
                                             <param type="negate" value="true" />
                                             <param type="contains" value="#" />
                                         </filterreader>
@@ -236,8 +240,19 @@
                             <goal>git-changelog</goal>
                         </goals>
                         <configuration>
+                            <customIssues>
+                                <customIssue>
+                                    <name>Incident</name>
+                                    <pattern>^feat:|^fix:|^feat!:|^BREAKING CHANGE:|^fix!:|^BREAKING
+                                        CHANGE!:</pattern>
+                                    <title>${PATTERN_GROUP_1}</title>
+                                </customIssue>
+                            </customIssues>
                             <useIntegrations>true</useIntegrations>
                             <readableTagName>-([^-]+?)$</readableTagName>
+                            <ignoreCommitsWithoutIssue>true</ignoreCommitsWithoutIssue>
+                            <ignoreCommitsIfMessageMatches>^\\[maven-release-plugin\\].*|^\\[Gradle
+                                Release Plugin\\].*|^Merge.*</ignoreCommitsIfMessageMatches>
                             <file>CHANGELOG.md</file>
                         </configuration>
                     </execution>

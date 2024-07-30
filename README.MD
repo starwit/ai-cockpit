@@ -10,7 +10,7 @@
 
 * mvn -B release:update-versions
 * mvn versions:set -DremoveSnapshot
-* changelog
+* changelog convetions: https://www.conventionalcommits.org/en/v1.0.0/
 
 ### Installation Steps
 
