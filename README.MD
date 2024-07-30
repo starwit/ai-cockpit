@@ -10,6 +10,7 @@
 
 * mvn -B release:update-versions
 * mvn versions:set -DremoveSnapshot
+* changelog
 
 ### Installation Steps
 
