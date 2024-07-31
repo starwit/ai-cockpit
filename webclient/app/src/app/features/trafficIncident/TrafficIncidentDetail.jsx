@@ -90,12 +90,17 @@ function TrafficIncidentDetail(props) {
     function renderTrafficIncidentMap() {
         if (rowData.cameraLatitude == undefined || rowData.cameraLongitude == undefined) {
             return (
-                <Typography>
-                    {t("error.coordinates")}
-                </Typography>
+                <AccordionDetails >
+                    <Typography align="center">
+                        {t("error.coordinates")}
+                    </Typography>
+                </AccordionDetails>
             );
         }
-        return (<TrafficIncidentMap sx={{zIndex: "-1"}} latitude={rowData.cameraLatitude} longitude={rowData.cameraLongitude} />);
+        return (
+            <AccordionDetails sx={{height: "394px"}}>
+                <TrafficIncidentMap sx={{zIndex: "-1"}} latitude={rowData.cameraLatitude} longitude={rowData.cameraLongitude} />
+            </AccordionDetails>);
     }
 
     return (
@@ -176,9 +181,7 @@ function TrafficIncidentDetail(props) {
                                 id="panel1d-header">
                                 <Box>{t("trafficIncident.location")}</Box>
                             </AccordionSummary>
-                            <AccordionDetails sx={{height: "394px"}}>
-                                {renderTrafficIncidentMap()}
-                            </AccordionDetails>
+                            {renderTrafficIncidentMap()}
                         </Accordion>
                         <Accordion
                             disableGutters expanded={expanded === "panel2"} onChange={handleChange("panel2")}>
