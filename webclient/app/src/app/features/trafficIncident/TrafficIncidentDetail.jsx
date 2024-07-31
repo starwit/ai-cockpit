@@ -249,6 +249,7 @@ function TrafficIncidentDetail(props) {
             <DialogActions>
                 <Button onClick={() => handleSave(mitigationAction, trafficIncidentType, description, "REJECTED")} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
                 <Button onClick={() => handleSave(mitigationAction, trafficIncidentType, description, "ACCEPTED")} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
+
                     {t("trafficIncident.button.acknowledged")}
                 </Button>
             </DialogActions>

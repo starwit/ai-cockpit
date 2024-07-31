@@ -48,12 +48,14 @@ function TrafficIncidentOverview() {
         setOpen(false);
     };
 
+
     function handleSave(mitigationActions, trafficIncidentType, description, state) {
         setOpen(false);
         rowData.trafficIncidentType = trafficIncidentType;
         rowData.description = description;
         rowData.state = state;
         trafficIncidentRest.update(rowData);
+
         mitigationActions.forEach(mActiontype => {
             const entity = {
                 name: "",
