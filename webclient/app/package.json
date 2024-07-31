@@ -45,7 +45,7 @@
     "@mui/x-data-grid": "7.11.1",
     "buffer": "npm:buffer@^6.0.3",
     "crypto": "npm:crypto-browserify@^3.12.0",
-    "eslint": "^9.8.0",
+    "eslint": "^9.8.0 || ^8",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
