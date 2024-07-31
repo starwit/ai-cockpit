@@ -45,6 +45,7 @@ function TrafficIncidentDetail(props) {
     const [trafficIncidentType, setTrafficIncidentType] = React.useState('');
     const [allMitigationAction, setAllMitigationAction] = React.useState([]);
     const [allTrafficIncidentType, setAllTrafficIncidentType] = React.useState([]);
+    const [description, setDescription] = React.useState([]);
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -237,13 +238,17 @@ function TrafficIncidentDetail(props) {
                             type="text"
                             fullWidth
                             variant="standard"
+                            value={description}
+                            onChange={(e) => {
+                                setDescription(e.target.value);
+                            }}
                         />
                     </Grid>
                 </Grid>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
-                <Button onClick={() => handleSave(mitigationAction, trafficIncidentType)} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
+                <Button onClick={() => handleSave(mitigationAction, trafficIncidentType, description)} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
                     {t("trafficIncident.button.acknowledged")}
                 </Button>
             </DialogActions>
