@@ -45,11 +45,11 @@ function TrafficIncidentDetail(props) {
     const [trafficIncidentType, setTrafficIncidentType] = React.useState('');
     const [allMitigationAction, setAllMitigationAction] = React.useState([]);
     const [allTrafficIncidentType, setAllTrafficIncidentType] = React.useState([]);
+    const [description, setDescription] = React.useState("");
     const {t} = useTranslation();
 
     useEffect(() => {
         reload();
-
     }, [open]);
 
     function reload() {
@@ -87,6 +87,23 @@ function TrafficIncidentDetail(props) {
     if (!open) {
         return null;
     }
+
+    function renderTrafficIncidentMap() {
+        if (rowData.cameraLatitude == undefined || rowData.cameraLongitude == undefined) {
+            return (
+                <AccordionDetails >
+                    <Typography align="center">
+                        {t("error.coordinates")}
+                    </Typography>
+                </AccordionDetails>
+            );
+        }
+        return (
+            <AccordionDetails sx={{height: "300px"}}>
+                <TrafficIncidentMap sx={{zIndex: "-1"}} latitude={rowData.cameraLatitude} longitude={rowData.cameraLongitude} />
+            </AccordionDetails>);
+    }
+
     return (
         <Dialog
             open={open}
@@ -165,9 +182,7 @@ function TrafficIncidentDetail(props) {
                                 id="panel1d-header">
                                 <Box>{t("trafficIncident.location")}</Box>
                             </AccordionSummary>
-                            <AccordionDetails sx={{height: '300px'}}>
-                                <TrafficIncidentMap sx={{zIndex: "-1"}} />
-                            </AccordionDetails>
+                            {renderTrafficIncidentMap()}
                         </Accordion>
                         <Accordion
                             disableGutters expanded={expanded === "panel2"} onChange={handleChange("panel2")}>
@@ -223,13 +238,17 @@ function TrafficIncidentDetail(props) {
                             type="text"
                             fullWidth
                             variant="standard"
+                            value={description}
+                            onChange={(e) => {
+                                setDescription(e.target.value);
+                            }}
                         />
                     </Grid>
                 </Grid>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
-                <Button onClick={() => handleSave(mitigationAction, trafficIncidentType)} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
+                <Button onClick={() => handleSave(mitigationAction, trafficIncidentType, description)} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
                     {t("trafficIncident.button.acknowledged")}
                 </Button>
             </DialogActions>
