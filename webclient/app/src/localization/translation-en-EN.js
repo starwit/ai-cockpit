@@ -88,6 +88,7 @@ const translationEnEN = {
     "error.entity.notfound": "This element could not be found.",
     "home.about": "Information about the Application",
     "home.incidentTab.title.open": "Open",
-    "home.incidentTab.title.done": "Done"
+    "home.incidentTab.title.done": "Done",
+    "menu.config": "Configuration"
 };
 export default translationEnEN;
