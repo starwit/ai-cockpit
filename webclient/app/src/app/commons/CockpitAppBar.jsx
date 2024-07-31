@@ -35,6 +35,10 @@ function CockpitAppBar() {
         justifyContent: 'flex-start',
     }));
 
+    function closeDrawer(href) {
+        setOpenDrawer(false);
+        navigate(href);
+    }
 
     return (
         <>
@@ -82,7 +86,7 @@ function CockpitAppBar() {
                 <Divider />
                 <List>
                     {configSites.map((site, index) => (
-                        <ListItem key={index} disablePadding onClick={() => navigate(site.href)}>
+                        <ListItem key={index} disablePadding onClick={() => closeDrawer(site.href)}>
                             <ListItemButton>
                                 <ListItemIcon>
                                     <KeyboardDoubleArrowRightIcon />
