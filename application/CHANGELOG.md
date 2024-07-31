@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## refs/tags/project.version (2024-07-31)
+
+### Bug Fixes
+
+-  corrected tests ([dd27c](https://github.com/starwit/ai-cockpit/commit/dd27c6b5e7f678c) Anett)  
+
 ## 0.0.2 (2024-07-30)
 
 ### Features
