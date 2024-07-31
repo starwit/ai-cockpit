@@ -13,122 +13,131 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.context.ContextConfiguration;
 
 import de.starwit.persistence.entity.TrafficIncidentEntity;
 
 @SpringBootTest
+@ContextConfiguration
 @EnableAutoConfiguration
 @AutoConfigureMockMvc(addFilters = false)
 public class TrafficIncidentControllerAcceptanceTest extends AbstractControllerAcceptanceTest<TrafficIncidentEntity> {
 
+        final static Logger LOG = LoggerFactory.getLogger(TrafficIncidentControllerAcceptanceTest.class);
+        private static final String restpath = "/api/trafficincidents/";
 
-    final static Logger LOG = LoggerFactory.getLogger(TrafficIncidentControllerAcceptanceTest.class);
-    private static final String restpath = "/api/trafficincidents/";
+        private JacksonTester<TrafficIncidentEntity> jsonTester;
 
-    private JacksonTester<TrafficIncidentEntity> jsonTester;
+        @Override
+        public Class<TrafficIncidentEntity> getEntityClass() {
+                return TrafficIncidentEntity.class;
+        }
 
-    @Override
-    public Class<TrafficIncidentEntity> getEntityClass() {
-        return TrafficIncidentEntity.class;
-    }
+        @Override
+        public String getRestPath() {
+                return restpath;
+        }
 
-    @Override
-    public String getRestPath() {
-        return restpath;
-    }
+        @Override
+        public JacksonTester<TrafficIncidentEntity> getJsonTester() {
+                return jsonTester;
+        }
 
-    @Override
-    public JacksonTester<TrafficIncidentEntity> getJsonTester() {
-        return jsonTester;
-    }
+        @Test
+        public void canCreate() throws Exception {
+                // given
+                // TrafficIncidentEntity entity = readFromFile(data + "TrafficIncident.json");
 
-    @Test
-    public void canCreate() throws Exception {
-        // given
-//        TrafficIncidentEntity entity = readFromFile(data + "TrafficIncident.json");
-  
-        // when
-//        MockHttpServletResponse response = create(entity);
+                // when
+                // MockHttpServletResponse response = create(entity);
 
-        // then
-//        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-//        TrafficIncidentEntity entityresult = mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
-//        assertThat(entityresult.getBranch()).isEqualTo("v2");
-    }
+                // then
+                // assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+                // TrafficIncidentEntity entityresult =
+                // mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
+                // assertThat(entityresult.getBranch()).isEqualTo("v2");
+        }
 
-    @Test
-    public void isValidated() throws Exception {
-        // given
-//        TrafficIncidentEntity entity = readFromFile(data + "TrafficIncident-wrong.json");
-  
-        // when
-//        MockHttpServletResponse response = create(entity);
+        @Test
+        public void isValidated() throws Exception {
+                // given
+                // TrafficIncidentEntity entity = readFromFile(data +
+                // "TrafficIncident-wrong.json");
 
-        // then
-//        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
-    }
+                // when
+                // MockHttpServletResponse response = create(entity);
 
-    @Test
-    public void canNotFindById() throws Exception {
-        // when
-        MockHttpServletResponse response = mvc
-                .perform(get(getRestPath() + "/4242").contentType(MediaType.APPLICATION_JSON)).andReturn()
-                .getResponse();
+                // then
+                // assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        }
 
-        // then
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-    }
+        @Test
+        public void canNotFindById() throws Exception {
+                // when
+                MockHttpServletResponse response = mvc
+                                .perform(get(getRestPath() + "/4242").contentType(MediaType.APPLICATION_JSON))
+                                .andReturn()
+                                .getResponse();
 
-    @Test
-    public void canRetrieveById() throws Exception {
-        // given
-//        TrafficIncidentEntity entity = readFromFile(data + "TrafficIncident.json");
-//        MockHttpServletResponse response = create(entity);
-//        TrafficIncidentEntity entity2 = mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
+                // then
+                assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        }
 
-        // when
-//        response = retrieveById(entity2.getId());
+        @Test
+        public void canRetrieveById() throws Exception {
+                // given
+                // TrafficIncidentEntity entity = readFromFile(data + "TrafficIncident.json");
+                // MockHttpServletResponse response = create(entity);
+                // TrafficIncidentEntity entity2 =
+                // mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
 
-        // then
-//        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-//        TrafficIncidentEntity entityresult = mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
-//        assertThat(dtoresult.getBranch()).isEqualTo("v2");
-    }
+                // when
+                // response = retrieveById(entity2.getId());
 
-    @Test
-    public void canUpdate() throws Exception {
+                // then
+                // assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+                // TrafficIncidentEntity entityresult =
+                // mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
+                // assertThat(dtoresult.getBranch()).isEqualTo("v2");
+        }
 
-        // given
-//        TrafficIncidentEntity entity = readFromFile(data + "TrafficIncident.json");
-//        MockHttpServletResponse response = create(entity);
-//        TrafficIncidentEntity entity2 = mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
+        @Test
+        public void canUpdate() throws Exception {
 
-        // when
-//        response = update(entity2);
+                // given
+                // TrafficIncidentEntity entity = readFromFile(data + "TrafficIncident.json");
+                // MockHttpServletResponse response = create(entity);
+                // TrafficIncidentEntity entity2 =
+                // mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
 
-        // then
-//        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-//        TrafficIncidentEntity entityresult = mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
-//        assertThat(dtoresult.getBranch()).isEqualTo("v2");
-    }
+                // when
+                // response = update(entity2);
 
-    @Override
-    @Test
-    public void canDelete() throws Exception {
-        // given
-//        TrafficIncidentEntity entity = readFromFile(data + "TrafficIncident.json");
-//        MockHttpServletResponse response = create(entity);
-//        TrafficIncidentEntity entity2 = mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
-//        response = retrieveById(entity2.getId());
-//        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+                // then
+                // assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+                // TrafficIncidentEntity entityresult =
+                // mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
+                // assertThat(dtoresult.getBranch()).isEqualTo("v2");
+        }
 
-        // when
-//        delete(entity2.getId());
+        @Override
+        @Test
+        public void canDelete() throws Exception {
+                // given
+                // TrafficIncidentEntity entity = readFromFile(data + "TrafficIncident.json");
+                // MockHttpServletResponse response = create(entity);
+                // TrafficIncidentEntity entity2 =
+                // mapper.readValue(response.getContentAsString(), TrafficIncidentEntity.class);
+                // response = retrieveById(entity2.getId());
+                // assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 
-        // then
-//        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-//        response = retrieveById(entity2.getId());
-//        assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
-    }
+                // when
+                // delete(entity2.getId());
+
+                // then
+                // assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+                // response = retrieveById(entity2.getId());
+                // assertThat(response.getStatus()).isEqualTo(HttpStatus.NOT_FOUND.value());
+        }
 
 }
