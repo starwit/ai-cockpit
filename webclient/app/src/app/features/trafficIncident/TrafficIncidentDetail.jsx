@@ -45,7 +45,7 @@ function TrafficIncidentDetail(props) {
     const [trafficIncidentType, setTrafficIncidentType] = React.useState('');
     const [allMitigationAction, setAllMitigationAction] = React.useState([]);
     const [allTrafficIncidentType, setAllTrafficIncidentType] = React.useState([]);
-    const [description, setDescription] = React.useState([]);
+    const [description, setDescription] = React.useState("");
     const {t} = useTranslation();
 
     useEffect(() => {

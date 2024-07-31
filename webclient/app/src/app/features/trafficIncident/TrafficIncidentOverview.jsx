@@ -51,10 +51,13 @@ function TrafficIncidentOverview() {
     function handleSave(mitigationActions, trafficIncidentType, description) {
         setOpen(false);
         rowData.trafficIncidentType = trafficIncidentType;
+        rowData.description = description;
+        trafficIncidentRest.update(rowData);
+
         mitigationActions.forEach(mActiontype => {
             const entity = {
                 name: "",
-                description: description,
+                description: "",
                 trafficIncident: rowData,
                 mitigationActionType: mActiontype
             };
