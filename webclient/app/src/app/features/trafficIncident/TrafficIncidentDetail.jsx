@@ -165,7 +165,7 @@ function TrafficIncidentDetail(props) {
                                 id="panel1d-header">
                                 <Box>{t("trafficIncident.location")}</Box>
                             </AccordionSummary>
-                            <AccordionDetails sx={{height: "394px"}}>
+                            <AccordionDetails sx={{height: '300px'}}>
                                 <TrafficIncidentMap sx={{zIndex: "-1"}} />
                             </AccordionDetails>
                         </Accordion>
@@ -178,7 +178,7 @@ function TrafficIncidentDetail(props) {
                                 id="panel2d-header">
                                 {t("trafficIncident.mitigationAction.header4standardvalues")}
                             </AccordionSummary>
-                            <AccordionDetails sx={{height: "394px"}}>
+                            <AccordionDetails sx={{height: 'auto'}}>
                                 <Stack>
                                     <FormControl>
                                         <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
