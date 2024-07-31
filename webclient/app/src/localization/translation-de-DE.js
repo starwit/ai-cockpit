@@ -88,6 +88,7 @@ const translationDeDE = {
     "error.entity.notfound": "This element could not be found.",
     "home.about": "Informationen über die Anwendung",
     "home.incidentTab.title.open": "Offen",
-    "home.incidentTab.title.done": "Erledigt"
+    "home.incidentTab.title.done": "Erledigt",
+    "menu.config": "Konfiguration"
 };
 export default translationDeDE;

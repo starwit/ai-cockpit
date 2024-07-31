@@ -99,7 +99,7 @@ function TrafficIncidentDetail(props) {
             );
         }
         return (
-            <AccordionDetails sx={{height: "394px"}}>
+            <AccordionDetails sx={{height: "300px"}}>
                 <TrafficIncidentMap sx={{zIndex: "-1"}} latitude={rowData.cameraLatitude} longitude={rowData.cameraLongitude} />
             </AccordionDetails>);
     }
@@ -193,7 +193,7 @@ function TrafficIncidentDetail(props) {
                                 id="panel2d-header">
                                 {t("trafficIncident.mitigationAction.header4standardvalues")}
                             </AccordionSummary>
-                            <AccordionDetails sx={{height: "394px"}}>
+                            <AccordionDetails sx={{height: 'auto'}}>
                                 <Stack>
                                     <FormControl>
                                         <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
