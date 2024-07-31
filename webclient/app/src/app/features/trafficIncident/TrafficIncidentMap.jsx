@@ -10,9 +10,10 @@ const ICON_MAPPING = {
 };
 
 function TrafficIncidentMap(props) {
+    const {latitude, longitude} = props;
     const INITIAL_VIEW_STATE = {
-        longitude: -86.12976853407069,
-        latitude: 39.976426593193516,
+        longitude: longitude,
+        latitude: latitude,
         zoom: 15,
         pitch: 0,
         bearing: 0
