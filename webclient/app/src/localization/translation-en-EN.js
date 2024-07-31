@@ -78,6 +78,7 @@ const translationEnEN = {
     "error.general.delete": "This element could not be deleted.",
     "error.general.create": "This element could not be created.",
     "error.general.update": "This element could not be updated.",
+    "error.coordinates": "No coordinates available",
     "error.general.get": "This element could not be loaded.",
     "error.serverOffline": "The server seems to be offline.",
     "error.userOffline": "You appear to be offline.",

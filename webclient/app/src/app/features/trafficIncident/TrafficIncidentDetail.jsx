@@ -49,7 +49,6 @@ function TrafficIncidentDetail(props) {
 
     useEffect(() => {
         reload();
-
     }, [open]);
 
     function reload() {
@@ -87,6 +86,18 @@ function TrafficIncidentDetail(props) {
     if (!open) {
         return null;
     }
+
+    function renderTrafficIncidentMap() {
+        if (rowData.cameraLatitude == undefined || rowData.cameraLongitude == undefined) {
+            return (
+                <Typography>
+                    {t("error.coordinates")}
+                </Typography>
+            );
+        }
+        return (<TrafficIncidentMap sx={{zIndex: "-1"}} latitude={rowData.cameraLatitude} longitude={rowData.cameraLongitude} />);
+    }
+
     return (
         <Dialog
             open={open}
@@ -166,7 +177,7 @@ function TrafficIncidentDetail(props) {
                                 <Box>{t("trafficIncident.location")}</Box>
                             </AccordionSummary>
                             <AccordionDetails sx={{height: "394px"}}>
-                                <TrafficIncidentMap sx={{zIndex: "-1"}} />
+                                {renderTrafficIncidentMap()}
                             </AccordionDetails>
                         </Accordion>
                         <Accordion
