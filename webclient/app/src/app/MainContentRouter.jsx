@@ -4,6 +4,8 @@ import {Route, Routes} from "react-router-dom";
 import TrafficIncidentOverview from "./features/trafficIncident/TrafficIncidentOverview";
 import Level2 from "./features/trafficIncident/mock/Level2";
 import Level3 from "./features/trafficIncident/mock/Level3";
+import ActionConfig from "./features/config/ActionConfig";
+import IncidentTypeConfig from "./features/config/IncidentTypeConfig";
 import CockpitAppBar from "./commons/CockpitAppBar";
 
 function MainContentRouter() {
@@ -17,6 +19,8 @@ function MainContentRouter() {
                 <Route path="/1" element={<TrafficIncidentOverview />} />
                 <Route path="/2" element={<Level2 />} />
                 <Route path="/3" element={<Level3 />} />
+                <Route path="/action-config" element={<ActionConfig />} />
+                <Route path="/incidenttype-config" element={<IncidentTypeConfig />} />
                 <Route path="/logout" component={() => {
                     window.location.href = window.location.pathname + "api/user/logout";
                     return null;
