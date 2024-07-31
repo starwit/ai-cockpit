@@ -2,6 +2,16 @@
 
 Changelog of ai-cockpit.
 
+## 0.0.6 (2024-07-31)
+
+### Breaking changes
+
+-  added changelog ([48bc4](https://github.com/starwit/ai-cockpit/commit/48bc490d49754a2) Anett)  
+
+### Bug Fixes
+
+-  added changelog ([48bc4](https://github.com/starwit/ai-cockpit/commit/48bc490d49754a2) Anett)  
+
 ## refs/tags/project.version (2024-07-31)
 
 ### Bug Fixes
