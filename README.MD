@@ -100,6 +100,10 @@ cd deployment
 docker compose up
 ```
 
+# Deployment
+
+see https://github.com/starwit/ai-cockpit-deployment
+
 # Architecture & Concepts
 
 ## Data Model
