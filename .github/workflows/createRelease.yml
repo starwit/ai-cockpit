@@ -46,6 +46,7 @@ jobs:
       run: mvn -B release:clean release:prepare -Darguments="-DskipTests" --file pom.xml
       env:
          CI: false
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: get version from pom.xml
       run: |
@@ -54,3 +55,4 @@ jobs:
       run: mvn -B release:clean --file pom.xml
       env:
          CI: false
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
