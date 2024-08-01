@@ -1,13 +1,12 @@
 package de.starwit.persistence.repository;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ContextConfiguration;
 
 import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
 
@@ -15,7 +14,6 @@ import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
  * Tests for TrafficIncidentTypeRepository
  */
 @DataJpaTest
-@ContextConfiguration
 public class TrafficIncidentTypeRepositoryTest {
 
     @Autowired

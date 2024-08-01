@@ -17,6 +17,7 @@ public interface MitigationActionRepository extends JpaRepository<MitigationActi
 
     @Query("SELECT e FROM MitigationActionEntity e WHERE NOT EXISTS (SELECT r FROM e.trafficIncident r WHERE r.id <> ?1)")
     public List<MitigationActionEntity> findAllWithoutOtherTrafficIncident(Long id);
+
     @Query("SELECT e FROM MitigationActionEntity e WHERE NOT EXISTS (SELECT r FROM e.mitigationActionType r)")
     public List<MitigationActionEntity> findAllWithoutMitigationActionType();
 
