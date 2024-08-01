@@ -17,7 +17,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/starwit/ai-cockpit.git</connection>
-        <tag>ai-cockpit-0.0.8</tag>
+        <tag>0.1.0</tag>
     </scm>
 
     <properties>
