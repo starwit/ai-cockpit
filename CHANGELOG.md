@@ -2,6 +2,16 @@
 
 Changelog of ai-cockpit.
 
+## refs/tags/0.1.2 (2024-08-01)
+
+### Breaking changes
+
+-  changed pom ([34bdf](https://github.com/starwit/ai-cockpit/commit/34bdfa287d0a29a) Anett)  
+
+### Features
+
+-  changed pom ([34bdf](https://github.com/starwit/ai-cockpit/commit/34bdfa287d0a29a) Anett)  
+
 ## 0.0.6 (2024-07-31)
 
 ### Breaking changes

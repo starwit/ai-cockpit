@@ -37,112 +37,20 @@ jobs:
       uses: stCarolas/setup-maven@v4.5
       with:
          maven-version: 3.9.2        
-    - name: setup node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
-    - run: npm --version
-    - run: node --version
 
-    - name: generate tag and release body
-      run: |
-        RELEASE_TYPE=$(sh ${{ github.workspace }}/.github/workflows/getReleaseType.sh ${{ env.release-type }})
-        git config user.name github-ai-cockpit
-        git config user.email code@starwit.de
-        npx standard-version -i CHANGELOG.md --release-as $RELEASE_TYPE
-
-    - name: Read CHANGELOG.md
-      id: package
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./CHANGELOG.md
-    - name: Echo CHANGELOG.md
-      run: echo '${{ steps.package.outputs.content }}'
-
-    # - name: publish tag
-    #   id: publish_tag
-    #   run: |
-    #     git push --follow-tags
-    #     echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
-
-    # - name: create release
-    #   uses: actions/create-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     release_name: Release ${{ steps.publish_tag.outputs.tag_name }}
-    #     tag_name: ${{ steps.publish_tag.outputs.tag_name }}
-    #     body_path: CHANGELOG.md
-
-    - name: npm install
-      run: |
-        if [ -d "webclient/app" ]; then
-          cd webclient/app
-          npm install --legacy-peer-deps
-        fi
 
     - name: get version from pom.xml
       run: |
         echo "VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV        
     - name: Build with Maven
-      run: mvn clean -B package -P frontend --file pom.xml
+      run: mvn -B release:clean release:prepare -Darguments="-DskipTests"
       env:
          CI: false
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ env.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-    - name: Build and push
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        file: ./dockerfile
-        push: true
-        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
-
-    - name: Log in to the Container registry
-      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-      with:
-        registry: ${{ vars.INTERNAL_REGISTRY_URL }}
-        username: docker
-        password: ${{ secrets.INTERNAL_REGISTRY_PASSWORD }}
-  
-    - name: Build and push Docker image
-      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-      with:
-        context: .
-        push: true
-        tags: ${{ vars.INTERNAL_REGISTRY_URL }}/${{env.IMAGE_NAME}}:${{ env.VERSION }}
-        labels: "release"
-
-
-  publish_helm:
-    name: "Publish helm chart"
-    runs-on: [self-hosted, linux, X64]
-
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: get helm
-        uses: azure/setup-helm@v3  
-
-      - name: login to Helm registry
-        run: helm registry login registry-1.docker.io -u starwit -p ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: run helm update
-        working-directory: deployment/helm/ai-cockpit
-        run: helm dep update
-      - name: run helm package
-        working-directory: deployment/helm
-        run: helm package ai-cockpit
-      - name: get version number
-        working-directory: deployment/helm/ai-cockpit
-        run: |
-          echo "HELM_VERSION=$(grep version: Chart.yaml | head -1 | awk '{print $2}')" >> $GITHUB_ENV
-      - name: run helm push
-        working-directory: deployment/helm
-        run: helm push ai-cockpit-chart-${{ env.HELM_VERSION }}.tgz oci://registry-1.docker.io/starwitorg
+    - name: get version from pom.xml
+      run: |
+        echo "VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV        
+    - name: Build with Maven
+      run: mvn -B release:clean
+      env:
+         CI: false
