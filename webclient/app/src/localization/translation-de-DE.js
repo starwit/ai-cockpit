@@ -91,6 +91,8 @@ const translationDeDE = {
     "home.incidentTab.title.done": "Erledigt",
     "menu.config": "Konfiguration",
     "mitigationactiontype.heading": "Konfiguration Maßnahmentypen",
+    "mitigationactiontype.name": "Action Type Name",
+    "mitigationactiontype.addItem": "Add Action Type",
     "mitigationactiontype.description": "Maßnahmenbeschreibung",
     "mitigationactiontype.policy": "Ausführungslevel",
     "mitigationactiontype.policy.manual": "Manuell",

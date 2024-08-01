@@ -1,17 +1,8 @@
-import {Box, Container, MenuItem, Select, Typography} from '@mui/material';
+import {Button, MenuItem, Select, Typography} from '@mui/material';
 import {DataGrid} from '@mui/x-data-grid';
 import {useTranslation} from "react-i18next";
-import React, {useState} from "react";
-
-const staticRows = [
-    {id: 1, name: 'Traffic Jam', description: 'Defined amount of vehicles moving slower than average', executionPolicy: 1},
-    {id: 2, name: 'Accident', description: 'Traffic accident', executionPolicy: 2},
-    {id: 3, name: 'Unknown', description: 'Unkown anormal situation', executionPolicy: 1},
-    {id: 4, name: 'Wrong Side Driver', description: 'Vehicle driving on wrong side of the road', executionPolicy: 2},
-    {id: 5, name: 'Disabled Vehicle', description: 'Vehicle not moving over a certain period of time', executionPolicy: 2},
-    {id: 6, name: 'Helpless Person', description: 'Person on road segment not moving over a certain period of time', executionPolicy: 2},
-    {id: 7, name: 'Dangerous Situation', description: 'AI driven situation interpretation', executionPolicy: 2}
-];
+import React, {useEffect, useState, useMemo} from "react";
+import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 
 const DropdownMenu = ({row, updateRow}) => {
     const {t} = useTranslation();
@@ -23,16 +14,30 @@ const DropdownMenu = ({row, updateRow}) => {
 
     return (
         <Select value={row.executionPolicy} onChange={handleChange}>
-            <MenuItem value={1}>{t("mitigationactiontype.policy.manual")}</MenuItem>
-            <MenuItem value={2}>{t("mitigationactiontype.policy.withcheck")}</MenuItem>
-            <MenuItem value={3}>{t("mitigationactiontype.policy.automated")}</MenuItem>
+            <MenuItem value={"MANUAL"}>{t("mitigationactiontype.policy.manual")}</MenuItem>
+            <MenuItem value={"WITHCHECK"}>{t("mitigationactiontype.policy.withcheck")}</MenuItem>
+            <MenuItem value={"AUTOMATIC"}>{t("mitigationactiontype.policy.automated")}</MenuItem>
         </Select>
     );
 };
 
 function MitigationActionTypeOverview(props) {
     const {t} = useTranslation();
-    const [rows, setRows] = React.useState(staticRows);
+    const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest, []);
+    const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
+
+    useEffect(() => {
+        reloadMitigationActionTypes();
+    }, []);
+
+    function reloadMitigationActionTypes() {
+        mitigationActionTypeRest.findAll().then(response => {
+            if (response.data == null) {
+                return;
+            }
+            setMitigationActionTypes(response.data);
+        });
+    }
 
     const columns = [
         {field: 'id', headerName: 'ID', width: 90},
@@ -53,32 +58,52 @@ function MitigationActionTypeOverview(props) {
             headerName: t("mitigationactiontype.policy"),
             width: 180,
             editable: true,
-            renderCell: (params) => <DropdownMenu row={params.row} />
+            renderCell: (params) => <DropdownMenu row={params.row} updateRow={params.updateRow} />
         }
     ];
 
     const updateRow = (id, newValue) => {
-        const updatedRows = rows.map((row) =>
-            row.id === id ? {...row, dropdownValue: newValue} : row
+        console.log(newValue);
+        const updatedRows = mitigationActionTypes.map((row) =>
+            row.id === id ? {...row, executionPolicy: newValue} : row
         );
-        setRows(updatedRows);
+        console.log(updatedRows)
+        setMitigationActionTypes(updatedRows);
     };
 
     const columnsWithUpdateRow = columns.map((column) => ({
         ...column,
-        renderCell: column.renderCell
-            ? (params) => column.renderCell({...params, updateRow})
-            : undefined,
+        renderCell: column.renderCell ? (params) => column.renderCell({...params, updateRow}) : undefined,
     }));
+
+    const addRow = () => {
+        const newRow = {
+            id: "",
+            name: "NONE",
+            description: "NONE",
+            executionPolicy: 'MANUAL',
+        };
+        setMitigationActionTypes([...mitigationActionTypes, newRow]);
+    };
+
+    const saveAll = () => {
+        mitigationActionTypeRest.updateList(mitigationActionTypes);
+    };
 
     return (
         <>
             <Typography variant="h1" gutterBottom>
                 {t("mitigationactiontype.heading")}
             </Typography>
+            <Button variant="contained" color="primary" onClick={addRow} style={{marginBottom: '10px'}}>
+                {t("mitigationactiontype.addItem")}
+            </Button>
+            <Button variant="contained" color="primary" onClick={saveAll} style={{marginBottom: '10px'}}>
+                {t("mitigationactiontype.saveItem")}
+            </Button>
             <DataGrid
                 autoHeight
-                rows={rows}
+                rows={mitigationActionTypes}
                 columns={columnsWithUpdateRow}
                 initialState={{
                     pagination: {

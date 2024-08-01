@@ -51,6 +51,7 @@ CREATE TABLE "mitigationactiontype"
 (
     "name" VARCHAR(255),
     "description" VARCHAR(255),
+    "executionpolicy" VARCHAR(255),
     "id" BIGINT NOT NULL DEFAULT nextval('mitigationactiontype_id_seq'),
     CONSTRAINT "mitigationactiontype_pkey" PRIMARY KEY ("id")
 );
