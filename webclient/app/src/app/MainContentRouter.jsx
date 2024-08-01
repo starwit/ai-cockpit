@@ -7,6 +7,7 @@ import Level3 from "./features/trafficIncident/mock/Level3";
 import MitigationActionTypeOverview from "./features/config/MitigationActionTypeOverview";
 import TrafficIncidentTypeOverview from "./features/config/TrafficIncidentTypeOverview";
 import CockpitAppBar from "./commons/CockpitAppBar";
+import {Container} from "@mui/material";
 
 function MainContentRouter() {
     const {t} = useTranslation();
@@ -14,18 +15,20 @@ function MainContentRouter() {
     return (
         <>
             <CockpitAppBar />
-            <Routes>
-                <Route path="/" element={<TrafficIncidentOverview />} />
-                <Route path="/1" element={<TrafficIncidentOverview />} />
-                <Route path="/2" element={<Level2 />} />
-                <Route path="/3" element={<Level3 />} />
-                <Route path="/mitigation-action-type" element={<MitigationActionTypeOverview />} />
-                <Route path="/traffic-incident-type" element={<TrafficIncidentTypeOverview />} />
-                <Route path="/logout" component={() => {
-                    window.location.href = window.location.pathname + "api/user/logout";
-                    return null;
-                }} />
-            </Routes>
+            <Container sx={{margin: "1em", marginTop: "4em"}} >
+                <Routes>
+                    <Route path="/" element={<TrafficIncidentOverview />} />
+                    <Route path="/1" element={<TrafficIncidentOverview />} />
+                    <Route path="/2" element={<Level2 />} />
+                    <Route path="/3" element={<Level3 />} />
+                    <Route path="/mitigation-action-type" element={<MitigationActionTypeOverview />} />
+                    <Route path="/traffic-incident-type" element={<TrafficIncidentTypeOverview />} />
+                    <Route path="/logout" component={() => {
+                        window.location.href = window.location.pathname + "api/user/logout";
+                        return null;
+                    }} />
+                </Routes>
+            </Container>
         </>
     );
 }

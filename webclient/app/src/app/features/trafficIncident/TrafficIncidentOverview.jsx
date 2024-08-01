@@ -156,7 +156,7 @@ function TrafficIncidentOverview() {
     }
 
     return (
-        <Container sx={{margin: "1em"}} >
+        <>
             <Tabs onChange={handleTabChange} value={tab}>
                 <Tab label={t("home.incidentTab.title.open")} key="tab0" />
                 <Tab label={t("home.incidentTab.title.done")} key="tab1" />
@@ -187,7 +187,7 @@ function TrafficIncidentOverview() {
                 />
             </Box>
             {renderDialog()}
-        </Container>
+        </>
     );
 }
 

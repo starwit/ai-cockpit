@@ -89,6 +89,13 @@ const translationEnEN = {
     "home.about": "Information about the Application",
     "home.incidentTab.title.open": "Open",
     "home.incidentTab.title.done": "Done",
-    "menu.config": "Configuration"
+    "menu.config": "Configuration",
+    "mitigationactiontype.heading": "Mitigation Action Type Definition",
+    "mitigationactiontype.name": "Action Type Name",
+    "mitigationactiontype.description": "Action Type Description",
+    "mitigationactiontype.policy": "Action Execution Policy",
+    "mitigationactiontype.policy.manual": "Manual",
+    "mitigationactiontype.policy.withcheck": "Approval",
+    "mitigationactiontype.policy.automated": "Automated"
 };
 export default translationEnEN;
