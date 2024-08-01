@@ -1,8 +1,10 @@
 package de.starwit.persistence;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
-@SpringBootApplication
+@SpringBootConfiguration
+@EnableAutoConfiguration
 public class PersistenceConfiguration {
 
 }
