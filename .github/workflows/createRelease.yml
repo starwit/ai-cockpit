@@ -20,7 +20,7 @@ env:
 
 jobs:
   build:
-    name: "Creating changelog and release"
+    name: "Creating maven release"
     runs-on: [self-hosted, linux, X64]
 
     steps:
@@ -43,7 +43,7 @@ jobs:
       run: |
         echo "VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV        
     - name: Build with Maven
-      run: mvn -B release:clean release:prepare -Darguments="-DskipTests"
+      run: mvn -B release:clean release:prepare -Darguments="-DskipTests" --file pom.xml
       env:
          CI: false
 
@@ -51,6 +51,6 @@ jobs:
       run: |
         echo "VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV        
     - name: Build with Maven
-      run: mvn -B release:clean
+      run: mvn -B release:clean --file pom.xml
       env:
          CI: false
