@@ -1,5 +1,7 @@
-import {Button, MenuItem, Select, Typography} from '@mui/material';
+import {Button, MenuItem, Select, Stack, Typography} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import {DataGrid, GridActionsCellItem} from '@mui/x-data-grid';
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useState, useMemo} from "react";
@@ -14,7 +16,7 @@ const DropdownMenu = ({row, updateRow}) => {
     };
 
     return (
-        <Select value={row.executionPolicy} onChange={handleChange}>
+        <Select value={row.executionPolicy} onChange={handleChange} sx={{width: 175, height: 40}} >
             <MenuItem value={"MANUAL"}>{t("mitigationactiontype.policy.manual")}</MenuItem>
             <MenuItem value={"WITHCHECK"}>{t("mitigationactiontype.policy.withcheck")}</MenuItem>
             <MenuItem value={"AUTOMATIC"}>{t("mitigationactiontype.policy.automated")}</MenuItem>
@@ -37,7 +39,6 @@ function MitigationActionTypeOverview(props) {
             if (response.data == null) {
                 return;
             }
-            console.log(response.data);
             setMitigationActionTypes(response.data);
         });
     }
@@ -59,7 +60,7 @@ function MitigationActionTypeOverview(props) {
         {
             field: 'executionPolicy',
             headerName: t("mitigationactiontype.policy"),
-            width: 180,
+            width: 185,
             editable: false,
             renderCell: (params) => <DropdownMenu row={params.row} updateRow={params.updateRow} />
         },
@@ -80,12 +81,11 @@ function MitigationActionTypeOverview(props) {
     ];
 
     function updateRow(id, newValue) {
-        console.log(newValue);
         const updatedRows = mitigationActionTypes.map((row) =>
             row.id === id ? {...row, executionPolicy: newValue} : row
         );
-        console.log(updatedRows)
         setMitigationActionTypes(updatedRows);
+        setIsSaved(false);
     };
 
     const columnsWithUpdateRow = columns.map((column) => ({
@@ -135,25 +135,20 @@ function MitigationActionTypeOverview(props) {
         });
     };
 
-    function debug() {
-        console.log(mitigationActionTypes);
-    };
-
     return (
         <>
             <Typography variant="h1" gutterBottom>
                 {t("mitigationactiontype.heading")}
             </Typography>
-            <Button variant="contained" color="primary" onClick={addRow} style={{marginBottom: '10px'}}>
-                {t("mitigationactiontype.addItem")}
-            </Button>
-            <Button variant="contained" color="primary" onClick={saveAll} style={{marginBottom: '10px'}}>
-                {t("mitigationactiontype.saveItem")}
-                {isSaved ? '' : '*'}
-            </Button>
-            <Button variant="contained" color="primary" onClick={debug} style={{marginBottom: '10px'}}>
-                Debug
-            </Button>
+            <Stack direction="row" spacing={1} sx={{mb: 1}}>
+                <Button variant="contained" color="primary" onClick={addRow} style={{marginBottom: '10px'}} endIcon={<AddCircleOutlineIcon />}>
+                    {t("mitigationactiontype.addItem")}
+                </Button>
+                <Button variant="contained" color="primary" onClick={saveAll} style={{marginBottom: '10px'}} endIcon={<SaveIcon />}>
+                    {t("mitigationactiontype.saveItem")}
+                    {isSaved ? '' : '*'}
+                </Button>
+            </Stack>
             <DataGrid
                 autoHeight
                 rows={mitigationActionTypes}
@@ -164,6 +159,9 @@ function MitigationActionTypeOverview(props) {
                             pageSize: 10,
                         },
                     },
+                    sorting: {
+                        sortModel: [{field: 'id', sort: 'asc'}],
+                    }
                 }}
                 pageSizeOptions={[10]}
                 checkboxSelection
