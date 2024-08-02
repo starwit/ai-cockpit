@@ -56,3 +56,12 @@ jobs:
       run: mvn -B release:clean --file pom.xml
       env:
          CI: false
+
+    # - name: create release
+    #   uses: actions/create-release@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     release_name: Release ${{ steps.publish_tag.outputs.tag_name }}
+    #     tag_name: ${{ steps.publish_tag.outputs.tag_name }}
+    #     body_path: CHANGELOG.md
