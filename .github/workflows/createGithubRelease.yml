@@ -1,0 +1,36 @@
+
+name: Create release by tag
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+  build:
+    name: "Creating maven release"
+    runs-on: [self-hosted, linux, X64]
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+
+    - name: Maven clean install
+      run: mvn clean install
+      env:
+         CI: false
+
+    - name: Get tag name
+      run: |
+        echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
+
+    - name: create release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_name: Release ${{ env.TAG }}
+        tag_name: ${{ env.TAG }}
+        body_path: CHANGELOG.md

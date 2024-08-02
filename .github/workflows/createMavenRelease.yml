@@ -45,21 +45,8 @@ jobs:
       run: mvn -B release:clean release:prepare -Darguments="-DskipTests" --file pom.xml
       env:
          CI: false
-
-    - name: Get tag name
-      run: |
-        echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
  
     - name: Maven release clean
       run: mvn -B release:clean --file pom.xml
       env:
          CI: false
-
-    # - name: create release
-    #   uses: actions/create-release@v1
-    #   env:
-    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    #   with:
-    #     release_name: Release ${{ env.TAG }}
-    #     tag_name: ${{ env.TAG }}
-    #     body_path: CHANGELOG.md
