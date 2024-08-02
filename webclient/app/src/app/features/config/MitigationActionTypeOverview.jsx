@@ -1,5 +1,6 @@
 import {Button, MenuItem, Select, Typography} from '@mui/material';
-import {DataGrid} from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {DataGrid, GridActionsCellItem} from '@mui/x-data-grid';
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useState, useMemo} from "react";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
@@ -27,7 +28,7 @@ function MitigationActionTypeOverview(props) {
     const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
 
-    useEffect(() => {
+    useEffect(function () {
         reloadMitigationActionTypes();
     }, []);
 
@@ -36,6 +37,7 @@ function MitigationActionTypeOverview(props) {
             if (response.data == null) {
                 return;
             }
+            console.log(response.data);
             setMitigationActionTypes(response.data);
         });
     }
@@ -58,8 +60,22 @@ function MitigationActionTypeOverview(props) {
             field: 'executionPolicy',
             headerName: t("mitigationactiontype.policy"),
             width: 180,
-            editable: true,
+            editable: false,
             renderCell: (params) => <DropdownMenu row={params.row} updateRow={params.updateRow} />
+        },
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            sortable: false,
+            width: 100,
+            renderCell: (params) =>
+                <GridActionsCellItem
+                    icon={<DeleteIcon />}
+                    label="Delete"
+                    onClick={(e) => handleDeleteClick(e, params.row)}
+                    color="inherit"
+                />
         }
     ];
 
@@ -78,16 +94,27 @@ function MitigationActionTypeOverview(props) {
     }));
 
     function addRow() {
-        const newRow = {
-            id: "",
-            name: "NONE",
-            description: "NONE",
-            executionPolicy: 'MANUAL',
-        };
-        setMitigationActionTypes([...mitigationActionTypes, newRow]);
+        if (isSaved) {
+            const newRow = {
+                id: "",
+                name: "NONE",
+                description: "NONE",
+                executionPolicy: 'MANUAL',
+            };
+            setMitigationActionTypes([...mitigationActionTypes, newRow]);
+            setIsSaved(false);
+        }
     };
 
     function handleProcessRowUpdate(newRow) {
+        mitigationActionTypes.forEach(row => {
+            if (row.id === newRow.id) {
+                row.name = newRow.name;
+                row.description = newRow.description;
+                row.executionPolicy = newRow.executionPolicy;
+            }
+        });
+        setMitigationActionTypes(mitigationActionTypes);
         setIsSaved(false);
         return newRow;
     }
@@ -96,8 +123,16 @@ function MitigationActionTypeOverview(props) {
     }
 
     function saveAll() {
-        mitigationActionTypeRest.updateList(mitigationActionTypes).then(reloadMitigationActionTypes());
+        mitigationActionTypeRest.updateList(mitigationActionTypes).then(function () {
+            reloadMitigationActionTypes();
+        });
         setIsSaved(true);
+    };
+
+    function handleDeleteClick(event, row) {
+        mitigationActionTypeRest.delete(row.id).then(function () {
+            reloadMitigationActionTypes();
+        });
     };
 
     function debug() {
@@ -115,6 +150,9 @@ function MitigationActionTypeOverview(props) {
             <Button variant="contained" color="primary" onClick={saveAll} style={{marginBottom: '10px'}}>
                 {t("mitigationactiontype.saveItem")}
                 {isSaved ? '' : '*'}
+            </Button>
+            <Button variant="contained" color="primary" onClick={debug} style={{marginBottom: '10px'}}>
+                Debug
             </Button>
             <DataGrid
                 autoHeight
