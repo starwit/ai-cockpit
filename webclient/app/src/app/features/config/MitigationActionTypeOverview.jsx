@@ -25,6 +25,7 @@ function MitigationActionTypeOverview(props) {
     const {t} = useTranslation();
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest, []);
     const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
+    const [isSaved, setIsSaved] = useState([true]);
 
     useEffect(() => {
         reloadMitigationActionTypes();
@@ -62,7 +63,7 @@ function MitigationActionTypeOverview(props) {
         }
     ];
 
-    const updateRow = (id, newValue) => {
+    function updateRow(id, newValue) {
         console.log(newValue);
         const updatedRows = mitigationActionTypes.map((row) =>
             row.id === id ? {...row, executionPolicy: newValue} : row
@@ -76,7 +77,7 @@ function MitigationActionTypeOverview(props) {
         renderCell: column.renderCell ? (params) => column.renderCell({...params, updateRow}) : undefined,
     }));
 
-    const addRow = () => {
+    function addRow() {
         const newRow = {
             id: "",
             name: "NONE",
@@ -86,8 +87,21 @@ function MitigationActionTypeOverview(props) {
         setMitigationActionTypes([...mitigationActionTypes, newRow]);
     };
 
-    const saveAll = () => {
-        mitigationActionTypeRest.updateList(mitigationActionTypes);
+    function handleProcessRowUpdate(newRow) {
+        setIsSaved(false);
+        return newRow;
+    }
+
+    function handleProcessRowUpdateError() {
+    }
+
+    function saveAll() {
+        mitigationActionTypeRest.updateList(mitigationActionTypes).then(reloadMitigationActionTypes());
+        setIsSaved(true);
+    };
+
+    function debug() {
+        console.log(mitigationActionTypes);
     };
 
     return (
@@ -100,6 +114,7 @@ function MitigationActionTypeOverview(props) {
             </Button>
             <Button variant="contained" color="primary" onClick={saveAll} style={{marginBottom: '10px'}}>
                 {t("mitigationactiontype.saveItem")}
+                {isSaved ? '' : '*'}
             </Button>
             <DataGrid
                 autoHeight
@@ -115,6 +130,8 @@ function MitigationActionTypeOverview(props) {
                 pageSizeOptions={[10]}
                 checkboxSelection
                 disableRowSelectionOnClick
+                processRowUpdate={handleProcessRowUpdate}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
             />
         </>
     );
