@@ -11,6 +11,9 @@ on:
         required: true
         default: "prerelease"
 
+permissions:
+  contents: write
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ai-cockpit
@@ -38,7 +41,6 @@ jobs:
       with:
          maven-version: 3.9.2        
 
-
     - name: get version from pom.xml
       run: |
         echo "VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV        
@@ -46,7 +48,6 @@ jobs:
       run: mvn -B release:clean release:prepare -Darguments="-DskipTests" --file pom.xml
       env:
          CI: false
-         GITHUB_TOKEN: ${{ secrets.WRITE_GITHUB_TOKEN }}
 
     - name: get version from pom.xml
       run: |
@@ -55,4 +56,3 @@ jobs:
       run: mvn -B release:clean --file pom.xml
       env:
          CI: false
-         GITHUB_TOKEN: ${{ secrets.WRITE_GITHUB_TOKEN }}
