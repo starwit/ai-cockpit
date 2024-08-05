@@ -1,7 +1,7 @@
 
 name: Create release
 
-# Full workflow to build and publish Maven, Docker, Helm; TODO automatic version update. Everything depends on version in pom.xml
+# Creating maven and github release
 
 on:
   workflow_dispatch:
@@ -19,7 +19,7 @@ env:
 
 jobs:
   build:
-    name: "Creating maven release"
+    name: "Creating maven and github release"
     runs-on: [self-hosted, linux, X64]
 
     steps:
