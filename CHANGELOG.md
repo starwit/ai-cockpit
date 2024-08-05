@@ -6,6 +6,12 @@ Changelog of ai-cockpit.
 
 ### Bug Fixes
 
+-  change version of mvn site ([bf9b6](https://github.com/starwit/ai-cockpit/commit/bf9b680a2cbdc52) Anett)  
+
+## refs/tags/v0.0.7 (2024-08-05)
+
+### Bug Fixes
+
 -  commit changelog from github actions ([9c1f7](https://github.com/starwit/ai-cockpit/commit/9c1f7ec66affbaf) Anett)  
 -  generate changelog ([28fcc](https://github.com/starwit/ai-cockpit/commit/28fcccccd70ba1b) Anett)  
 
