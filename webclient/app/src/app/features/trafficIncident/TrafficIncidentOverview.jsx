@@ -163,6 +163,7 @@ function TrafficIncidentOverview() {
             </Tabs>
             <Box sx={{width: "100%", WebkitTextFillColor: bgcolor}}>
                 <DataGrid
+                    autoHeight
                     rows={trafficIncidents}
                     columns={headers}
                     initialState={{

@@ -89,6 +89,9 @@ const translationDeDE = {
     "home.about": "Informationen über die Anwendung",
     "home.incidentTab.title.open": "Offen",
     "home.incidentTab.title.done": "Erledigt",
-    "menu.config": "Konfiguration"
+    "menu.config": "Konfiguration",
+    "menu.config.mitigationactiontype": "Maßnahmenkonfiguration",
+    "menu.config.trafficincidenttype": "Vorgangskonfiguration",
+    "menu.info": "Info"
 };
 export default translationDeDE;

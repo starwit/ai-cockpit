@@ -89,6 +89,9 @@ const translationEnEN = {
     "home.about": "Information about the Application",
     "home.incidentTab.title.open": "Open",
     "home.incidentTab.title.done": "Done",
-    "menu.config": "Configuration"
+    "menu.config": "Configuration",
+    "menu.config.mitigationactiontype": "Mitigation Action Config",
+    "menu.config.trafficincidenttype": "Incidend Type Config",
+    "menu.info": "Info"
 };
 export default translationEnEN;

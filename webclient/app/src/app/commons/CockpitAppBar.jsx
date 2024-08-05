@@ -1,13 +1,10 @@
 import HomeIcon from "@mui/icons-material/Home";
-import {AppBar, Button, Container, IconButton, Toolbar, Tooltip, Typography} from "@mui/material";
+import {AppBar, Container, IconButton, Toolbar, Typography} from "@mui/material";
 import React from "react";
-import {useTranslation} from "react-i18next";
-import SettingsIcon from "@mui/icons-material/Settings";
-import Info from "@mui/icons-material/Info";
+import ConfigMenu from "../features/config/ConfigMenu";
+import InfoMenu from "../features/config/InfoMenu";
 
 function CockpitAppBar() {
-    const {t} = useTranslation();
-
     return (
         <>
             <Container sx={{margin: "1em"}} >
@@ -24,18 +21,13 @@ function CockpitAppBar() {
                             <HomeIcon />
                         </IconButton>
                         <Typography variant="h1" component="div" sx={{flexGrow: 1}}>KI Cockpit</Typography>
-                        <Button variant="contained" size="large"
-                            startIcon={<SettingsIcon />}>
-                            <Typography>{t("menu.config")}</Typography>
-                        </Button>
-                        <Tooltip title={t("home.about")} size="large">
-                            <IconButton variant="outlined">
-                                <Info />
-                            </IconButton>
-                        </Tooltip>
+                        <>
+                            <ConfigMenu />
+                            <InfoMenu />
+                        </>
                     </Toolbar>
                 </AppBar>
-            </Container>
+            </Container >
         </>
     );
 }
