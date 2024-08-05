@@ -13,7 +13,7 @@ jobs:
     runs-on: [self-hosted, linux, X64]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: '0'
 
@@ -21,10 +21,6 @@ jobs:
       run: mvn clean install --file pom.xml
       env:
          CI: false
-
-    - name: Get tag name
-      run: |
-        echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
 
     - name: create release
       uses: actions/create-release@v1
