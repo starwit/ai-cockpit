@@ -1,5 +1,5 @@
 
-name: Create release by tag
+name: Create github release
 
 on:
   push:

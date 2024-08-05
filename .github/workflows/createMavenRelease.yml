@@ -1,5 +1,5 @@
 
-name: Create release and tag
+name: Create maven release and tag
 
 # Full workflow to build and publish Maven, Docker, Helm; TODO automatic version update. Everything depends on version in pom.xml
 
