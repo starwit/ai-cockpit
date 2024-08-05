@@ -78,6 +78,7 @@ const translationDeDE = {
     "error.general.delete": "This element could not be deleted.",
     "error.general.create": "This element could not be created.",
     "error.general.update": "This element could not be updated.",
+    "error.coordinates": "Kein Koordianten verfügbar",
     "error.general.get": "This element could not be loaded.",
     "error.serverOffline": "The server seems to be offline.",
     "error.userOffline": "You appear to be offline.",
@@ -87,6 +88,7 @@ const translationDeDE = {
     "error.entity.notfound": "This element could not be found.",
     "home.about": "Informationen über die Anwendung",
     "home.incidentTab.title.open": "Offen",
-    "home.incidentTab.title.done": "Erledigt"
+    "home.incidentTab.title.done": "Erledigt",
+    "menu.config": "Konfiguration"
 };
 export default translationDeDE;

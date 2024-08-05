@@ -22,4 +22,3 @@ Changelog of ai-cockpit.
 
 -  added changelog ([48bc4](https://github.com/starwit/ai-cockpit/commit/48bc490d49754a2) Anett)  
 -  corrected tests ([dd27c](https://github.com/starwit/ai-cockpit/commit/dd27c6b5e7f678c) Anett)  
-
