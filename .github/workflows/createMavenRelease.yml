@@ -1,5 +1,5 @@
 
-name: Create release and tag
+name: Create maven release
 
 # Full workflow to build and publish Maven, Docker, Helm; TODO automatic version update. Everything depends on version in pom.xml
 
@@ -27,7 +27,7 @@ jobs:
     runs-on: [self-hosted, linux, X64]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       with:
         fetch-depth: '0'
 

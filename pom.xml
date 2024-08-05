@@ -262,6 +262,7 @@
                                 <ignoreCommitsWithoutIssue>true</ignoreCommitsWithoutIssue>
                                 <ignoreCommitsIfMessageMatches>^\\[maven-release-plugin\\].*|^\\[Gradle
                                     Release Plugin\\].*|^Merge.*</ignoreCommitsIfMessageMatches>
+                                <untaggedName>Current Version</untaggedName>
                                 <file>../CHANGELOG.md</file>
                             </configuration>
                         </execution>
