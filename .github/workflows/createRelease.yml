@@ -66,4 +66,4 @@ jobs:
     - name: Create github release
       run: gh release create ${{ env.TAG }} -F CHANGELOG.md
       env:
-         CI: false
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
