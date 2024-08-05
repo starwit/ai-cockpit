@@ -60,11 +60,7 @@ jobs:
       env:
          CI: false
 
-    - name: create github release
-      uses: actions/create-release@v1
+    - name: Create github release
+      run: gh release create ${{ env.TAG }} -F CHANGELOG.md
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ env.TAG }}
-        release_name: Release ${{ env.TAG }}
-        body_path: CHANGELOG.md
+         CI: false
