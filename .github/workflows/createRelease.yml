@@ -35,12 +35,14 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: 21
+
     - name: Set up Maven
-      uses: stCarolas/setup-maven@v4.5
+      uses: stCarolas/setup-maven@v5
       with:
          maven-version: 3.9.2        
 
-    - uses: actions/checkout@v4
+    - name: checkout
+      uses: actions/checkout@v4
       with:
         fetch-depth: '0'
 
