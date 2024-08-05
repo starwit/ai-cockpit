@@ -15,10 +15,6 @@ permissions:
   contents: write
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ai-cockpit
-  DOCKERHUB_USERNAME: starwit
-  DOCKERHUB_ORG: starwitorg   
   release-type: ${{ github.event.inputs.release-type }}
 
 jobs:
