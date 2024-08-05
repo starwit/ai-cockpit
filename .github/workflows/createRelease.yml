@@ -1,5 +1,5 @@
 
-name: Create maven release
+name: Create release
 
 # Full workflow to build and publish Maven, Docker, Helm; TODO automatic version update. Everything depends on version in pom.xml
 
@@ -50,3 +50,21 @@ jobs:
       run: mvn -B release:clean --file pom.xml
       env:
          CI: false
+
+    - name: Get tag name
+      run: |
+        echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
+
+    - name: Maven clean install
+      run: mvn clean install --file pom.xml
+      env:
+         CI: false
+
+    - name: create github release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.TAG }}
+        release_name: Release ${{ env.TAG }}
+        body_path: CHANGELOG.md
