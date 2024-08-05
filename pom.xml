@@ -15,6 +15,11 @@
     <description>App template from test @ spring</description>
     <packaging>pom</packaging>
 
+    <scm>
+        <connection>scm:git:https://github.com/starwit/ai-cockpit.git</connection>
+        <tag>0.0.1</tag>
+    </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -89,6 +94,12 @@
                 <artifactId>persistence</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <type>maven-plugin</type>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -100,10 +111,188 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot-version}</version>
                     <configuration>
-                        <skip>true</skip>
+                        <skip>false</skip>
+                        <mainClass>de.starwit.application.Application</mainClass>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>build-info</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>3.1.1</version>
+                    <configuration>
+                        <checkModificationExcludes>
+                            <checkModificationExclude>pom.xml</checkModificationExclude>
+                        </checkModificationExcludes>
+                        <tagNameFormat>v@{project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>4.0.0-M1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.6.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.cyclonedx</groupId>
+                    <artifactId>cyclonedx-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>makeAggregateBom</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <projectType>library</projectType>
+                        <schemaVersion>1.5</schemaVersion>
+                        <includeBomSerialNumber>true</includeBomSerialNumber>
+                        <includeCompileScope>true</includeCompileScope>
+                        <includeProvidedScope>true</includeProvidedScope>
+                        <includeRuntimeScope>true</includeRuntimeScope>
+                        <includeSystemScope>true</includeSystemScope>
+                        <includeTestScope>false</includeTestScope>
+                        <includeLicenseText>false</includeLicenseText>
+                        <outputReactorProjects>true</outputReactorProjects>
+                        <outputFormat>json</outputFormat>
+                        <outputName>sbom-backend</outputName>
+                        <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+                        <verbose>false</verbose>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <executions>
+                        <execution>
+                            <phase>prepare-package</phase>
+                            <configuration>
+                                <target>
+                                    <concat
+                                        destfile="${project.build.outputDirectory}/static/info.txt">
+                                        <fileset
+                                            file="${project.build.outputDirectory}/META-INF/build-info.properties" />
+                                        <fileset
+                                            file="${project.build.outputDirectory}/git.properties" />
+                                        <filterchain>
+                                            <filterreader
+                                                classname="org.apache.tools.ant.filters.LineContains">
+                                                <param type="negate" value="true" />
+                                                <param type="contains" value="#" />
+                                            </filterreader>
+                                            <replaceregex pattern="=" replace=": " />
+                                        </filterchain>
+                                    </concat>
+                                    <copy toDir="${project.build.outputDirectory}/static">
+                                        <fileset dir="../webclient/app/">
+                                            <include name="sbom-frontend.json" />
+                                        </fileset>
+                                    </copy>
+                                </target>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pdf-plugin</artifactId>
+                    <version>1.6.1</version>
+                    <executions>
+                        <execution>
+                            <id>pdf</id>
+                            <phase>site</phase>
+                            <goals>
+                                <goal>pdf</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>
+                                    ${project.reporting.outputDirectory}
+                                </outputDirectory>
+                                <aggregate>true</aggregate>
+
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>se.bjurr.gitchangelog</groupId>
+                    <artifactId>git-changelog-maven-plugin</artifactId>
+                    <version>2.1.0</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.openjdk.nashorn</groupId>
+                            <artifactId>nashorn-core</artifactId>
+                            <version>15.4</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>GenerateGitChangelogTemplateFromFileAndToken</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>git-changelog</goal>
+                            </goals>
+                            <configuration>
+                                <customIssues>
+                                    <customIssue>
+                                        <name>Incident</name>
+                                        <pattern>^feat:|^fix:|^feat!:|^BREAKING
+                                            CHANGE:|^fix!:|^BREAKING
+                                            CHANGE!:</pattern>
+                                        <title>${PATTERN_GROUP_1}</title>
+                                    </customIssue>
+                                </customIssues>
+                                <useIntegrations>true</useIntegrations>
+                                <readableTagName>-([^-]+?)$</readableTagName>
+                                <ignoreCommitsWithoutIssue>true</ignoreCommitsWithoutIssue>
+                                <ignoreCommitsIfMessageMatches>^\\[maven-release-plugin\\].*|^\\[Gradle
+                                    Release Plugin\\].*|^Merge.*</ignoreCommitsIfMessageMatches>
+                                <file>../CHANGELOG.md</file>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>3.6.2</version>
                 </plugin>
             </plugins>
         </pluginManagement>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>summary</report>
+                            <report>modules</report>
+                            <report>dependency-management</report>
+                            <report>dependency-convergence</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
 </project>
