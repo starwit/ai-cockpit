@@ -1,18 +1,20 @@
 import {Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Typography} from "@mui/material";
-import React from "react";
+
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
+import {useEffect, useRef, useState} from "react";
 
 
 function ConfigMenu() {
     const {t} = useTranslation();
-    const [open, setOpen] = React.useState(false);
-    const anchorRef = React.useRef(null);
+    const [open, setOpen] = useState(false);
+    const anchorRef = useRef(null);
 
     // return focus to the button when we transitioned from !open -> open
-    const prevOpen = React.useRef(open);
-    React.useEffect(function () {
+    const prevOpen = useRef(open);
+
+    useEffect(function () {
         if (prevOpen.current === true && open === false) {
             anchorRef.current.focus();
         }
