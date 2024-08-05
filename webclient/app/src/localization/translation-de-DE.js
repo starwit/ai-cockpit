@@ -92,6 +92,15 @@ const translationDeDE = {
     "menu.config": "Konfiguration",
     "menu.config.mitigationactiontype": "Maßnahmenkonfiguration",
     "menu.config.trafficincidenttype": "Vorgangskonfiguration",
-    "menu.info": "Info"
+    "menu.info": "Info
+    "mitigationactiontype.heading": "Konfiguration Maßnahmentypen",
+    "mitigationactiontype.name": "Name Maßnahme",
+    "mitigationactiontype.addItem": "Maßnahme hinzufügen",
+    "mitigationactiontype.saveItem": "SPeichern",
+    "mitigationactiontype.description": "Maßnahmenbeschreibung",
+    "mitigationactiontype.policy": "Ausführungslevel",
+    "mitigationactiontype.policy.manual": "Manuell",
+    "mitigationactiontype.policy.withcheck": "Genehmigungsvorbehalt",
+    "mitigationactiontype.policy.automated": "Automatisch"
 };
 export default translationDeDE;

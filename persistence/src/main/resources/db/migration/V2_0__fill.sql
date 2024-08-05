@@ -6,12 +6,12 @@ VALUES
     ('Falschfahrer'),
     ('hohe Geschwindigkeit');
 
-INSERT INTO "mitigationactiontype" ("name", "description")
+INSERT INTO "mitigationactiontype" ("name", "description", "executionpolicy")
 VALUES 
-    ('Polizei benachrichtigen', 'Polizei description'),
-    ('an Verkehrsfunk melden', 'Verkehrsfunk description'),
-    ('Straße Sperren', 'Sperren description'),
-    ('Abschleppdienst benachrichtigen', 'Abschleppdienst description');
+    ('Polizei benachrichtigen', 'Polizei description', 'MANUAL'),
+    ('an Verkehrsfunk melden', 'Verkehrsfunk description', 'MANUAL'),
+    ('Straße Sperren', 'Sperren description', 'MANUAL'),
+    ('Abschleppdienst benachrichtigen', 'Abschleppdienst description', 'MANUAL');
 
 INSERT INTO "trafficincident" ("acquisitiontime", "trafficincidenttype_id")
 VALUES 

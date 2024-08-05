@@ -93,5 +93,14 @@ const translationEnEN = {
     "menu.config.mitigationactiontype": "Mitigation Action Config",
     "menu.config.trafficincidenttype": "Incidend Type Config",
     "menu.info": "Info"
+    "mitigationactiontype.heading": "Mitigation Action Type Definition",
+    "mitigationactiontype.name": "Action Type Name",
+    "mitigationactiontype.addItem": "Add Action Type",
+    "mitigationactiontype.saveItem": "Save All",
+    "mitigationactiontype.description": "Action Type Description",
+    "mitigationactiontype.policy": "Action Execution Policy",
+    "mitigationactiontype.policy.manual": "Manual",
+    "mitigationactiontype.policy.withcheck": "Approval",
+    "mitigationactiontype.policy.automated": "Automated"
 };
 export default translationEnEN;
