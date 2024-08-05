@@ -7,41 +7,11 @@ import {useTranslation} from "react-i18next";
 import React, {useEffect, useState, useMemo} from "react";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 
-const DropdownMenu = ({row, updateRow}) => {
-    const {t} = useTranslation();
-
-    const handleChange = event => {
-        const newValue = event.target.value;
-        updateRow(row.id, newValue);
-    };
-
-    return (
-        <Select value={row.executionPolicy} onChange={handleChange} sx={{width: 175, height: 40}} >
-            <MenuItem value={"MANUAL"}>{t("mitigationactiontype.policy.manual")}</MenuItem>
-            <MenuItem value={"WITHCHECK"}>{t("mitigationactiontype.policy.withcheck")}</MenuItem>
-            <MenuItem value={"AUTOMATIC"}>{t("mitigationactiontype.policy.automated")}</MenuItem>
-        </Select>
-    );
-};
-
 function MitigationActionTypeOverview(props) {
     const {t} = useTranslation();
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest, []);
     const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
-
-    useEffect(function () {
-        reloadMitigationActionTypes();
-    }, []);
-
-    function reloadMitigationActionTypes() {
-        mitigationActionTypeRest.findAll().then(response => {
-            if (response.data == null) {
-                return;
-            }
-            setMitigationActionTypes(response.data);
-        });
-    }
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
@@ -60,7 +30,7 @@ function MitigationActionTypeOverview(props) {
         {
             field: "executionPolicy",
             headerName: t("mitigationactiontype.policy"),
-            width: 185,
+            width: 220,
             editable: false,
             renderCell: params => <DropdownMenu row={params.row} updateRow={params.updateRow} />
         },
@@ -79,6 +49,19 @@ function MitigationActionTypeOverview(props) {
                 />
         }
     ];
+
+    useEffect(function () {
+        reloadMitigationActionTypes();
+    }, []);
+
+    function reloadMitigationActionTypes() {
+        mitigationActionTypeRest.findAll().then(response => {
+            if (response.data == null) {
+                return;
+            }
+            setMitigationActionTypes(response.data);
+        });
+    }
 
     function updateRow(id, newValue) {
         const updatedRows = mitigationActionTypes.map(row =>
@@ -135,6 +118,23 @@ function MitigationActionTypeOverview(props) {
         });
     };
 
+    const DropdownMenu = ({row, updateRow}) => {
+        const {t} = useTranslation();
+
+        const handleChange = event => {
+            const newValue = event.target.value;
+            updateRow(row.id, newValue);
+        };
+
+        return (
+            <Select value={row.executionPolicy} onChange={handleChange} sx={{width: 175, height: 40}} >
+                <MenuItem value={"MANUAL"}>{t("mitigationactiontype.policy.manual")}</MenuItem>
+                <MenuItem value={"WITHCHECK"}>{t("mitigationactiontype.policy.withcheck")}</MenuItem>
+                <MenuItem value={"AUTOMATIC"}>{t("mitigationactiontype.policy.automated")}</MenuItem>
+            </Select>
+        );
+    };
+
     return (
         <>
             <Typography variant="h2" gutterBottom>
@@ -164,7 +164,6 @@ function MitigationActionTypeOverview(props) {
                     }
                 }}
                 pageSizeOptions={[10]}
-                checkboxSelection
                 disableRowSelectionOnClick
                 processRowUpdate={handleProcessRowUpdate}
                 onProcessRowUpdateError={handleProcessRowUpdateError}
