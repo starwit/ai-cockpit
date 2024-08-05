@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonFilter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -22,6 +24,10 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
 
     @Column(name = "description")
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "executionpolicy")
+    private ExecutionPolicies executionPolicy;
 
     // entity relations
     @JsonFilter("filterId")
@@ -52,6 +58,14 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
 
     public void setMitigationAction(Set<MitigationActionEntity> mitigationAction) {
         this.mitigationAction = mitigationAction;
+    }
+
+    public ExecutionPolicies getExecutionPolicy() {
+        return executionPolicy;
+    }
+
+    public void setExecutionPolicy(ExecutionPolicies executionPolicy) {
+        this.executionPolicy = executionPolicy;
     }
 
 }

@@ -45,7 +45,6 @@ public class MitigationActionTypeController {
         return this.mitigationactiontypeService.findAll();
     }
 
-
     @Operation(summary = "Get mitigationactiontype with id")
     @GetMapping(value = "/{id}")
     public MitigationActionTypeEntity findById(@PathVariable("id") Long id) {
@@ -64,6 +63,12 @@ public class MitigationActionTypeController {
         return mitigationactiontypeService.saveOrUpdate(entity);
     }
 
+    @Operation(summary = "Update a list of mitigationactiontype")
+    @PutMapping(value = "/updateList")
+    public void updateList(@Valid @RequestBody List<MitigationActionTypeEntity> entityList) {
+        mitigationactiontypeService.saveOrUpdateList(entityList);
+    }
+
     @Operation(summary = "Delete mitigationactiontype")
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable("id") Long id) throws NotificationException {
@@ -73,7 +78,8 @@ public class MitigationActionTypeController {
     @ExceptionHandler(value = { EntityNotFoundException.class })
     public ResponseEntity<Object> handleException(EntityNotFoundException ex) {
         LOG.info("MitigationActionType not found. {}", ex.getMessage());
-        NotificationDto output = new NotificationDto("error.mitigationactiontype.notfound", "MitigationActionType not found.");
+        NotificationDto output = new NotificationDto("error.mitigationactiontype.notfound",
+                "MitigationActionType not found.");
         return new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
     }
 }

@@ -89,6 +89,15 @@ const translationDeDE = {
     "home.about": "Informationen über die Anwendung",
     "home.incidentTab.title.open": "Offen",
     "home.incidentTab.title.done": "Erledigt",
-    "menu.config": "Konfiguration"
+    "menu.config": "Konfiguration",
+    "mitigationactiontype.heading": "Konfiguration Maßnahmentypen",
+    "mitigationactiontype.name": "Name Maßnahme",
+    "mitigationactiontype.addItem": "Maßnahme hinzufügen",
+    "mitigationactiontype.saveItem": "SPeichern",
+    "mitigationactiontype.description": "Maßnahmenbeschreibung",
+    "mitigationactiontype.policy": "Ausführungslevel",
+    "mitigationactiontype.policy.manual": "Manuell",
+    "mitigationactiontype.policy.withcheck": "Genehmigungsvorbehalt",
+    "mitigationactiontype.policy.automated": "Automatisch"
 };
 export default translationDeDE;

@@ -40,8 +40,8 @@ CREATE SEQUENCE IF NOT EXISTS "trafficincidenttype_id_seq";
 
 CREATE TABLE "trafficincidenttype"
 (
-    "name" VARCHAR(255),
     "id" BIGINT NOT NULL DEFAULT nextval('trafficincidenttype_id_seq'),
+    "name" VARCHAR(255),
     CONSTRAINT "trafficincidenttype_pkey" PRIMARY KEY ("id")
 );
 
@@ -51,6 +51,7 @@ CREATE TABLE "mitigationactiontype"
 (
     "name" VARCHAR(255),
     "description" VARCHAR(255),
+    "executionpolicy" VARCHAR(255),
     "id" BIGINT NOT NULL DEFAULT nextval('mitigationactiontype_id_seq'),
     CONSTRAINT "mitigationactiontype_pkey" PRIMARY KEY ("id")
 );
