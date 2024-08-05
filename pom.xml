@@ -11,13 +11,13 @@
 
     <groupId>de.starwit</groupId>
     <artifactId>ai-cockpit</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <description>App template from test @ spring</description>
     <packaging>pom</packaging>
 
     <scm>
         <connection>scm:git:https://github.com/starwit/ai-cockpit.git</connection>
-        <tag>0.1.0</tag>
+        <tag>0.0.1</tag>
     </scm>
 
     <properties>
@@ -272,28 +272,6 @@
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.6.2</version>
                 </plugin>
-
-                <!--plugin>
-                    <groupId>com.github.danielflower.mavenplugins</groupId>
-                    <artifactId>gitlog-maven-plugin</artifactId>
-                    <version>1.14.0</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>generate</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <outputDirectory>changelog</outputDirectory>
-                        <markdownChangeLogFilename>changelog.md</markdownChangeLogFilename>
-                        <generateMarkdownChangeLog>true</generateMarkdownChangeLog>
-                        <generatePlainTextChangeLog>false</generatePlainTextChangeLog>
-                        <generateSimpleHTMLChangeLog>false</generateSimpleHTMLChangeLog>
-                        <generateJSONChangeLog>false</generateJSONChangeLog>
-                        <excludeCommitsPattern>.*\b(without|Upgraded)\b.*</excludeCommitsPattern>
-                    </configuration>
-                </plugin-->
             </plugins>
         </pluginManagement>
     </build>
