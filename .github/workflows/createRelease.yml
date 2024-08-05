@@ -27,10 +27,6 @@ jobs:
     runs-on: [self-hosted, linux, X64]
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: '0'
-
     - name: Install GH CLI
       uses: dev-hanz-ops/install-gh-cli-action@v0.2.0
 
@@ -43,25 +39,22 @@ jobs:
       uses: stCarolas/setup-maven@v4.5
       with:
          maven-version: 3.9.2        
-   
+
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: '0'
+
     - name: Maven release pepare
-      run: mvn -B release:clean release:prepare -Darguments="-DskipTests" --file pom.xml
+      run: | 
+        mvn generate-sources --file pom.xml
+        mvn -B release:clean release:prepare -Darguments="-DskipTests" --file pom.xml
+        mvn -B release:clean --file pom.xml
       env:
          CI: false
  
-    - name: Maven release clean
-      run: mvn -B release:clean --file pom.xml
-      env:
-         CI: false
-
     - name: Get tag name
       run: |
         echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
-
-    - name: Maven clean install
-      run: mvn clean install --file pom.xml
-      env:
-         CI: false
 
     - name: Create github release
       run: gh release create ${{ env.TAG }} -F CHANGELOG.md
