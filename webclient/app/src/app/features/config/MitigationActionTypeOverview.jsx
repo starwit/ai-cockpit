@@ -1,8 +1,8 @@
-import {Button, MenuItem, Select, Stack, Typography} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import SaveIcon from '@mui/icons-material/Save';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import {DataGrid, GridActionsCellItem} from '@mui/x-data-grid';
+import {Button, MenuItem, Select, Stack, Typography} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SaveIcon from "@mui/icons-material/Save";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useState, useMemo} from "react";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
@@ -10,7 +10,7 @@ import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 const DropdownMenu = ({row, updateRow}) => {
     const {t} = useTranslation();
 
-    const handleChange = (event) => {
+    const handleChange = event => {
         const newValue = event.target.value;
         updateRow(row.id, newValue);
     };
@@ -44,53 +44,53 @@ function MitigationActionTypeOverview(props) {
     }
 
     const columns = [
-        {field: 'id', headerName: 'ID', width: 90},
+        {field: "id", headerName: "ID", width: 90},
         {
-            field: 'name',
+            field: "name",
             headerName: t("mitigationactiontype.name"),
             width: 150,
-            editable: true,
+            editable: true
         },
         {
-            field: 'description',
+            field: "description",
             headerName: t("mitigationactiontype.description"),
             width: 350,
-            editable: true,
+            editable: true
         },
         {
-            field: 'executionPolicy',
+            field: "executionPolicy",
             headerName: t("mitigationactiontype.policy"),
             width: 185,
             editable: false,
-            renderCell: (params) => <DropdownMenu row={params.row} updateRow={params.updateRow} />
+            renderCell: params => <DropdownMenu row={params.row} updateRow={params.updateRow} />
         },
         {
-            field: 'actions',
-            type: 'actions',
-            headerName: 'Actions',
+            field: "actions",
+            type: "actions",
+            headerName: "Actions",
             sortable: false,
             width: 100,
-            renderCell: (params) =>
+            renderCell: params =>
                 <GridActionsCellItem
                     icon={<DeleteIcon />}
                     label="Delete"
-                    onClick={(e) => handleDeleteClick(e, params.row)}
+                    onClick={e => handleDeleteClick(e, params.row)}
                     color="inherit"
                 />
         }
     ];
 
     function updateRow(id, newValue) {
-        const updatedRows = mitigationActionTypes.map((row) =>
+        const updatedRows = mitigationActionTypes.map(row =>
             row.id === id ? {...row, executionPolicy: newValue} : row
         );
         setMitigationActionTypes(updatedRows);
         setIsSaved(false);
     };
 
-    const columnsWithUpdateRow = columns.map((column) => ({
+    const columnsWithUpdateRow = columns.map(column => ({
         ...column,
-        renderCell: column.renderCell ? (params) => column.renderCell({...params, updateRow}) : undefined,
+        renderCell: column.renderCell ? params => column.renderCell({...params, updateRow}) : undefined
     }));
 
     function addRow() {
@@ -99,7 +99,7 @@ function MitigationActionTypeOverview(props) {
                 id: "",
                 name: "NONE",
                 description: "NONE",
-                executionPolicy: 'MANUAL',
+                executionPolicy: "MANUAL"
             };
             setMitigationActionTypes([...mitigationActionTypes, newRow]);
             setIsSaved(false);
@@ -137,16 +137,16 @@ function MitigationActionTypeOverview(props) {
 
     return (
         <>
-            <Typography variant="h1" gutterBottom>
+            <Typography variant="h2" gutterBottom>
                 {t("mitigationactiontype.heading")}
             </Typography>
-            <Stack direction="row" spacing={1} sx={{mb: 1}}>
-                <Button variant="contained" color="primary" onClick={addRow} style={{marginBottom: '10px'}} endIcon={<AddCircleOutlineIcon />}>
+            <Stack direction="row" spacing={1} sx={{marginBottom: 1}}>
+                <Button variant="contained" color="primary" onClick={addRow} startIcon={<AddCircleOutlineIcon />}>
                     {t("mitigationactiontype.addItem")}
                 </Button>
-                <Button variant="contained" color="primary" onClick={saveAll} style={{marginBottom: '10px'}} endIcon={<SaveIcon />}>
+                <Button variant="contained" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
                     {t("mitigationactiontype.saveItem")}
-                    {isSaved ? '' : '*'}
+                    {isSaved ? "" : "*"}
                 </Button>
             </Stack>
             <DataGrid
@@ -156,11 +156,11 @@ function MitigationActionTypeOverview(props) {
                 initialState={{
                     pagination: {
                         paginationModel: {
-                            pageSize: 10,
-                        },
+                            pageSize: 10
+                        }
                     },
                     sorting: {
-                        sortModel: [{field: 'id', sort: 'asc'}],
+                        sortModel: [{field: "id", sort: "asc"}]
                     }
                 }}
                 pageSizeOptions={[10]}
