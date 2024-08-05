@@ -92,7 +92,7 @@ const translationEnEN = {
     "menu.config": "Configuration",
     "menu.config.mitigationactiontype": "Mitigation Action Config",
     "menu.config.trafficincidenttype": "Incidend Type Config",
-    "menu.info": "Info"
+    "menu.info": "Info",
     "mitigationactiontype.heading": "Mitigation Action Type Definition",
     "mitigationactiontype.name": "Action Type Name",
     "mitigationactiontype.addItem": "Add Action Type",
