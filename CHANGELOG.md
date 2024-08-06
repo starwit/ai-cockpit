@@ -6,6 +6,13 @@ Changelog of ai-cockpit.
 
 ### Features
 
+-  ab#1188: added sbom generation for npm in mvn pom ([19feb](https://github.com/starwit/ai-cockpit/commit/19febd3c5468281) Anett)  
+-  ab#1188: added sbom generation for npm in mvn pom ([e07b1](https://github.com/starwit/ai-cockpit/commit/e07b1e53790ddd5) Anett)  
+
+## refs/tags/0.0.1 (2024-08-05)
+
+### Features
+
 -  add docker build + publish ([a57ca](https://github.com/starwit/ai-cockpit/commit/a57ca4fa8c31b69) Anett)  
 -  added translations in traffic incident details dialog ([eabcc](https://github.com/starwit/ai-cockpit/commit/eabcc344d0441a1) Anett)  
 

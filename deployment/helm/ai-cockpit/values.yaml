@@ -4,7 +4,7 @@ image:
   repository: starwitorg/ai-cockpit
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: ${project.version}
 
 app:
   context_path: "/ai-cockpit"

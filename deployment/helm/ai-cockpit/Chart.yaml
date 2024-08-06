@@ -4,9 +4,9 @@ description: A Helm chart to deploy AI Cockpit to Kubernetes
 
 type: application
 
-version: 0.0.1
+version: ${project.version}
 
-appVersion: "0.0.1"
+appVersion: "${project.version}"
 
 dependencies:
   - name: postgresql
