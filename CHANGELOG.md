@@ -6,6 +6,7 @@ Changelog of ai-cockpit.
 
 ### Features
 
+-  deploy helm with maven version ([62cb2](https://github.com/starwit/ai-cockpit/commit/62cb2d4b6c51a61) Anett)  
 -  ab#1188: added sbom generation for npm in mvn pom ([19feb](https://github.com/starwit/ai-cockpit/commit/19febd3c5468281) Anett)  
 -  ab#1188: added sbom generation for npm in mvn pom ([e07b1](https://github.com/starwit/ai-cockpit/commit/e07b1e53790ddd5) Anett)  
 
