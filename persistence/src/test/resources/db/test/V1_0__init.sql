@@ -71,3 +71,18 @@ ALTER TABLE "mitigationaction"
     FOREIGN KEY ("mitigationactiontype_id")
     REFERENCES "mitigationactiontype" ("id");
 
+CREATE TABLE "trafficincidenttype_mitigationactiontype" (
+    "trafficincidenttype_id" BIGINT NOT NULL,
+    "mitigationactiontype_id" BIGINT NOT NULL,
+    PRIMARY KEY ("trafficincidenttype_id", "mitigationactiontype_id")
+);
+
+ALTER TABLE "trafficincidenttype_mitigationactiontype"
+    ADD CONSTRAINT "fk_trafficincidenttype_mitigationactiontype"
+    FOREIGN KEY ("trafficincidenttype_id")
+    REFERENCES "trafficincidenttype" ("id");
+
+ALTER TABLE "trafficincidenttype_mitigationactiontype"
+    ADD CONSTRAINT "fk_mitigationactiontype_mitigationactiontype"
+    FOREIGN KEY ("mitigationactiontype_id")
+    REFERENCES "mitigationactiontype" ("id");
