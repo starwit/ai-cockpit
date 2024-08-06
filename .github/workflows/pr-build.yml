@@ -36,7 +36,8 @@ jobs:
     - name: setup node
       uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: 20
+        
     - run: npm --version
     - run: node --version
     - run: mvn --version
@@ -50,7 +51,8 @@ jobs:
         if [ -d "webclient/app" ]; then
           cd webclient/app
           npm install
-        fi        
+        fi
+
     - name: Build with Maven
       run: mvn clean -B package -P frontend --file pom.xml
       env:

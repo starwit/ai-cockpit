@@ -34,7 +34,8 @@
   },
   "scripts": {
     "start": "vite --force",
-    "build": "vite build"
+    "build": "vite build",
+    "sbom": "cyclonedx-npm --spec-version 1.5"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -60,6 +61,7 @@
     "util": "npm:util@^0.12.5",
     "vfile": "npm:vfile@^6.0.1",
     "vite": "^5.3.5",
-    "zlib": "npm:browserify-zlib@^0.2.0"
+    "zlib": "npm:browserify-zlib@^0.2.0",
+    "@cyclonedx/cyclonedx-npm": "^1.19.3"
   }
 }

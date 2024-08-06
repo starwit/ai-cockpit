@@ -22,20 +22,24 @@ jobs:
 
     steps:
     - name: checkout
-      uses: actions/checkout@v2     
+      uses: actions/checkout@v4    
+
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 21
+
     - name: Set up Maven
       uses: stCarolas/setup-maven@v4.5
       with:
         maven-version: 3.9.2
+
     - name: setup node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: 20
+
     - run: npm --version
     - run: node --version
     - run: mvn --version
@@ -50,14 +54,6 @@ jobs:
         if [ -d "webclient/app" ]; then
           cd webclient/app
           npm install
-        fi
-    - name: install cyclone
-      run: npm install --global @cyclonedx/cyclonedx-npm
-    - name: run cyclone
-      run: |
-        if [ -d "webclient/app" ]; then
-          cd webclient/app
-          cyclonedx-npm --spec-version 1.5  > sbom-frontend.json
         fi
 
     - name: Build with Maven
