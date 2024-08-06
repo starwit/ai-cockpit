@@ -65,9 +65,9 @@ jobs:
       working-directory: application/target/helm/ai-cockpit
       run: helm dep update
 
-    - name: run helm template
-      working-directory: application/target/helm
-      run: helm template ai-cockpit
+#    - name: run helm template
+#      working-directory: application/target/helm
+#      run: helm template ai-cockpit
 
 
 
