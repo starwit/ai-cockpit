@@ -9,7 +9,6 @@ on:
         default: "prerelease"
 
 env:
-  REGISTRY: ghcr.io
   IMAGE_NAME: ai-cockpit
   DOCKERHUB_USERNAME: starwit
   DOCKERHUB_ORG: starwitorg   
