@@ -57,3 +57,17 @@ jobs:
       run: mvn clean -B package -P frontend --file pom.xml
       env:
          CI: false
+
+    - name: get helm
+      uses: azure/setup-helm@v3  
+
+    - name: run helm dependency update
+      working-directory: application/target/helm/ai-cockpit
+      run: helm dep update
+
+#    - name: run helm template
+#      working-directory: application/target/helm
+#      run: helm template ai-cockpit
+
+
+
