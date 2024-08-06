@@ -101,6 +101,12 @@ const translationEnEN = {
     "mitigationactiontype.policy": "Action Execution Policy",
     "mitigationactiontype.policy.manual": "Manual",
     "mitigationactiontype.policy.withcheck": "Approval",
-    "mitigationactiontype.policy.automated": "Automated"
+    "mitigationactiontype.policy.automated": "Automated",
+    "trafficincidenttype.heading": "Incident Types",
+    "trafficincidenttype.name": "Incident Name",
+    "trafficincidenttype.addItem": "Add Incident Types",
+    "trafficincidenttype.saveItem": "Save All",
+    "trafficincidenttype.description": "Incident Type Description",
+    "trafficincidenttype.selectaction": "Select default action for type "
 };
 export default translationEnEN;

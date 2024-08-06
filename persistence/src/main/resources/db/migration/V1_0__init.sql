@@ -42,6 +42,7 @@ CREATE TABLE "trafficincidenttype"
 (
     "id" BIGINT NOT NULL DEFAULT nextval('trafficincidenttype_id_seq'),
     "name" VARCHAR(255),
+    "description" VARCHAR(255),
     CONSTRAINT "trafficincidenttype_pkey" PRIMARY KEY ("id")
 );
 

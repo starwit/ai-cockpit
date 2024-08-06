@@ -21,6 +21,9 @@ public class TrafficIncidentTypeEntity extends AbstractEntity<Long> {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
+    private String description;
+
     // entity relations
     @OneToMany(mappedBy = "trafficIncidentType", cascade = { CascadeType.ALL })
     private Set<TrafficIncidentEntity> trafficIncident;
@@ -37,6 +40,14 @@ public class TrafficIncidentTypeEntity extends AbstractEntity<Long> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     // entity relations getters and setters

@@ -23,6 +23,6 @@ VALUES
     ('2016-01-04 10:34:23', 3),
     ('2016-01-04 10:34:23', 2);
 
-INSERT INTO public.trafficincidenttype_mitigationactiontype(
-	trafficincidenttype_id, mitigationactiontype_id)
+INSERT INTO "trafficincidenttype_mitigationactiontype"(
+	"trafficincidenttype_id", "mitigationactiontype_id")
 	VALUES (1, 1), (1, 2);
