@@ -48,15 +48,25 @@ function TrafficIncidentOverview() {
         setOpen(false);
     };
 
-
-    function handleSave(mitigationActions, trafficIncidentType, description, state) {
+    function handleSave(mitigationActionTypes, trafficIncidentType, description, state) {
         setOpen(false);
         rowData.trafficIncidentType = trafficIncidentType;
         rowData.description = description;
         rowData.state = state;
         trafficIncidentRest.update(rowData);
 
-        mitigationActions.forEach(mActiontype => {
+        const newActions = mitigationActionTypes;
+        rowData.mitigationAction.forEach(action => {
+            const found = mitigationActionTypes.find(value => value.id == action.mitigationActionType.id);
+            if (found === undefined) {
+                mitigationActionRest.delete(action);
+            } else {
+                newActions = mitigationActionTypes.filter();
+            }
+        });
+        setMitigationActionTypes(actions);
+
+        mitigationActionTypes.forEach(mActiontype => {
             const entity = {
                 name: "",
                 description: "",
