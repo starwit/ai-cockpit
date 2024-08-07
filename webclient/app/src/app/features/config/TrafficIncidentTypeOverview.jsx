@@ -2,6 +2,7 @@ import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import React, {useEffect, useState, useMemo} from "react";
 import {useTranslation} from "react-i18next";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
+import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import {Button, Stack, Typography} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
@@ -13,10 +14,13 @@ import TrafficIncidentTypeDetail from "./TrafficIncidentTypeDetail";
 function TrafficIncidentTypeOverview(props) {
     const {t} = useTranslation();
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest, []);
+    const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const [trafficIncidentTypes, setTrafficIncidentTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = useState({});
+    const [allMitigationActionType, setAllMitigationActionType] = useState([]);
+    const [actionSelection, setActionSelection] = useState([]);
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
@@ -134,7 +138,6 @@ function TrafficIncidentTypeOverview(props) {
     };
 
     function handleSave() { }
-    function interpretData() { }
     function handleRowUpdate() { }
 
     function renderDialog() {
@@ -146,8 +149,9 @@ function TrafficIncidentTypeOverview(props) {
             handleClose={handleClose}
             handleSave={handleSave}
             rowData={rowData}
-            interpretData={interpretData}
             handleRowUpdate={handleRowUpdate}
+            actionSelectionData={actionSelection}
+            mitigationActions={allMitigationActionType}
         />;
     }
 

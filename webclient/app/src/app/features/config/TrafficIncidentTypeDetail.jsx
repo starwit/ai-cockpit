@@ -1,11 +1,15 @@
 import {
+    Button,
     Checkbox,
     Dialog,
     DialogContent,
     DialogTitle,
+    Grid,
     IconButton,
+    Stack,
     Typography
 } from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
 import React, {useEffect, useState, useMemo} from "react";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
@@ -18,7 +22,8 @@ function TrafficIncidentTypeDetail(props) {
     const {open, rowData, handleClose} = props;
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
-    const [allMitigationActionType, setAllMitigationActionType] = useState([]);
+    const [isSaved, setIsSaved] = useState([true]);
+    const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
 
     // Mitigation Action Type List
     const columns = [
@@ -42,19 +47,17 @@ function TrafficIncidentTypeDetail(props) {
             editable: false
         },
         {
-            field: "actions",
+            field: "actions2",
             type: "actions",
-            headerName: "Actions",
+            headerName: "Select",
             sortable: false,
             width: 100,
             renderCell: params => {
-                let checked = false;
-                params.row.trafficIncidentType.forEach(type => {
-                    if (type.id === rowData.id) {
-                        checked = true;
-                    }
-                });
-                return <Checkbox checked={checked} />
+                //console.log(params);
+                return <Checkbox
+                    checked={params.row.isSelected}
+                    onChange={handleActionSelection2(params.row.isSelected, params.row.id)}
+                />
             }
         }
     ];
@@ -68,12 +71,37 @@ function TrafficIncidentTypeDetail(props) {
     }
 
     function reload() {
+
         mitigationActionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
+            } else {
+                response.data.forEach(mitigationType => {
+                    mitigationType['isSelected'] = false;
+                    mitigationType.trafficIncidentType.forEach(incidentType => {
+                        if (incidentType.id === rowData.id) {
+                            mitigationType['isSelected'] = true;
+                        }
+                    });
+                });
             }
-            setAllMitigationActionType(response.data);
+            setMitigationActionTypes(response.data);
         });
+
+    }
+
+    function handleActionSelection2(value, id) {
+        mitigationActionTypes.forEach((action) => {
+            action.isSelected = !value;
+        });
+
+        console.log(mitigationActionTypes);
+        setMitigationActionTypes(mitigationActionTypes);
+    }
+
+    function saveSelection() {
+        //setIsSaved(true);
+        console.log(mySelectionData);
     }
 
     return <>
@@ -102,11 +130,17 @@ function TrafficIncidentTypeDetail(props) {
                 <GridCloseIcon />
             </IconButton>
             <DialogContent id="traffic-incident-type-detail-dialog-description">
-                <DataGrid
-                    autoHeight
-                    rows={allMitigationActionType}
-                    columns={columns}
-                />
+                <Grid>
+                    <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
+                        {t("trafficincidenttype.saveselect")}
+                        {isSaved ? "" : "*"}
+                    </Button>
+                    <DataGrid
+                        autoHeight
+                        rows={mitigationActionTypes}
+                        columns={columns}
+                    />
+                </Grid>
             </DialogContent>
         </Dialog>
     </>;

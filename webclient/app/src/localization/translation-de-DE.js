@@ -107,6 +107,7 @@ const translationDeDE = {
     "trafficincidenttype.addItem": "Add Incident Types",
     "trafficincidenttype.saveItem": "Save All",
     "trafficincidenttype.description": "Incident Type Description",
-    "trafficincidenttype.selectaction": "Maßnahmen für Vorgangstyp auswählen "
+    "trafficincidenttype.selectaction": "Maßnahmen für Vorgangstyp auswählen ",
+    "trafficincidenttype.saveselect": "Zuordnung speichern"
 };
 export default translationDeDE;
