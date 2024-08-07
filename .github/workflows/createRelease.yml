@@ -73,6 +73,10 @@ jobs:
       env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Checkout tag
+      run: |
+        git checkout ${{ env.TAG }}
+
     - name: npm install
       run: |
         if [ -d "webclient/app" ]; then
