@@ -57,8 +57,12 @@ jobs:
     - name: Maven release pepare
       run: | 
         mvn generate-sources --file pom.xml
-        git commit -am "modified changelog"
-        git push
+        git add .
+        if [git status | grep -q modified]
+        then
+          git commit -m "modified changelog"
+          git push
+        fi
         mvn -B release:clean release:prepare -Darguments="-DskipTests" --file pom.xml
         mvn -B release:clean --file pom.xml
       env:
