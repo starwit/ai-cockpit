@@ -53,10 +53,9 @@ function TrafficIncidentTypeDetail(props) {
             sortable: false,
             width: 100,
             renderCell: params => {
-                //console.log(params);
                 return <Checkbox
                     checked={params.row.isSelected}
-                    onChange={handleActionSelection2(params.row.isSelected, params.row.id)}
+                    onClick={handleActionSelection2(params.row.isSelected, params.row.id)}
                 />
             }
         }
@@ -71,7 +70,6 @@ function TrafficIncidentTypeDetail(props) {
     }
 
     function reload() {
-
         mitigationActionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
@@ -87,7 +85,6 @@ function TrafficIncidentTypeDetail(props) {
             }
             setMitigationActionTypes(response.data);
         });
-
     }
 
     function handleActionSelection2(value, id) {
@@ -101,7 +98,7 @@ function TrafficIncidentTypeDetail(props) {
 
     function saveSelection() {
         //setIsSaved(true);
-        console.log(mySelectionData);
+        console.log(mitigationActionTypes);
     }
 
     return <>

@@ -19,8 +19,6 @@ function TrafficIncidentTypeOverview(props) {
     const [isSaved, setIsSaved] = useState([true]);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = useState({});
-    const [allMitigationActionType, setAllMitigationActionType] = useState([]);
-    const [actionSelection, setActionSelection] = useState([]);
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
@@ -137,9 +135,6 @@ function TrafficIncidentTypeOverview(props) {
         setOpen(false);
     };
 
-    function handleSave() { }
-    function handleRowUpdate() { }
-
     function renderDialog() {
         if (!open) {
             return null;
@@ -147,11 +142,7 @@ function TrafficIncidentTypeOverview(props) {
         return <TrafficIncidentTypeDetail
             open={open}
             handleClose={handleClose}
-            handleSave={handleSave}
             rowData={rowData}
-            handleRowUpdate={handleRowUpdate}
-            actionSelectionData={actionSelection}
-            mitigationActions={allMitigationActionType}
         />;
     }
 
