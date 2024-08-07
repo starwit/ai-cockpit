@@ -52,14 +52,33 @@ function TrafficIncidentTypeDetail(props) {
             headerName: "Select",
             sortable: false,
             width: 100,
-            renderCell: params => {
-                return <Checkbox
-                    checked={params.row.isSelected}
-                    onChange={e => selectChange(e, params.row)}
-                />
-            }
+            renderCell: params => <MyRenderCheckBox isSelected={params.row.isSelected} actionId={params.row.id} />
         }
     ];
+
+    function MyRenderCheckBox(props) {
+        const [checked, setChecked] = useState(props.isSelected);
+
+        function handleChange(e) {
+            setChecked(e.target.checked);
+
+            let tmpActions = mitigationActionTypes;
+            tmpActions.forEach((action) => {
+                if (action.id === props.actionId) {
+                    action.isSelected = e.target.checked;
+                    setIsSaved(false);
+                }
+            });
+
+            console.log(tmpActions);
+            setMitigationActionTypes(tmpActions);
+        }
+
+        return <Checkbox
+            checked={checked}
+            onChange={handleChange}
+        />
+    }
 
     useEffect(() => {
         reload();
@@ -81,21 +100,6 @@ function TrafficIncidentTypeDetail(props) {
             }
             setMitigationActionTypes(response.data);
         });
-    }
-
-    const selectChange = (e, row) => {
-        let tmpActions = mitigationActionTypes;
-        console.log(row.id);
-
-        tmpActions.forEach((action) => {
-            console.log(action);
-            if (action.id === row.id) {
-                action.isSelected = e.target.checked;
-            }
-        });
-
-        console.log(tmpActions);
-        setMitigationActionTypes(tmpActions);
     }
 
     function saveSelection() {
