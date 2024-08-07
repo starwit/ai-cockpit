@@ -24,6 +24,7 @@ function TrafficIncidentTypeDetail(props) {
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const [isSaved, setIsSaved] = useState([true]);
     const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
+    const [unsafedDataFeedback, setUnsafedDataFeedback] = useState("");
 
     // Mitigation Action Type List
     const columns = [
@@ -113,13 +114,23 @@ function TrafficIncidentTypeDetail(props) {
         trafficIncidentTypeRest.update(dataToSave).then(response => {
             //TODO error handling
             setIsSaved(true);
+            setUnsafedDataFeedback("");
         });
+    }
+
+    function checkClose() {
+        if (isSaved) {
+            handleClose();
+        } else {
+            console.log("not saved!");
+            setUnsafedDataFeedback(t("trafficincidenttype.makeselect.notsaved"))
+        }
     }
 
     return <>
         <Dialog
             open={open}
-            onClose={handleClose}
+            onClose={checkClose}
             aria-labelledby="traffic-incident-type-detail-dialog-title"
             aria-describedby="traffic-incident-type-detail-dialog-description"
             maxWidth="xl"
@@ -131,7 +142,7 @@ function TrafficIncidentTypeDetail(props) {
                 </Typography>
             </DialogTitle>
             <IconButton
-                onClick={handleClose}
+                onClick={checkClose}
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -148,6 +159,9 @@ function TrafficIncidentTypeDetail(props) {
                             {t("trafficincidenttype.saveselect")}
                             {isSaved ? "" : "*"}
                         </Button>
+                        <Typography component="span">
+                            {unsafedDataFeedback}
+                        </Typography>
                     </Stack>
                     <DataGrid
                         autoHeight

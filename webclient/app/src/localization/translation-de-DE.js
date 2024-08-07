@@ -109,6 +109,7 @@ const translationDeDE = {
     "trafficincidenttype.description": "Incident Type Description",
     "trafficincidenttype.selectaction": "Maßnahmen für Vorgangstyp auswählen ",
     "trafficincidenttype.saveselect": "Zuordnung speichern",
-    "trafficincidenttype.makeselect": "Aktionstyp zuordnen"
+    "trafficincidenttype.makeselect": "Aktionstyp zuordnen",
+    "trafficincidenttype.makeselect.notsaved": "Ungesicherte Änderungen!"
 };
 export default translationDeDE;
