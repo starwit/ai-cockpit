@@ -108,6 +108,7 @@ const translationEnEN = {
     "trafficincidenttype.saveItem": "Save All",
     "trafficincidenttype.description": "Incident Type Description",
     "trafficincidenttype.selectaction": "Select default action for type ",
-    "trafficincidenttype.saveselect": "Save selection"
+    "trafficincidenttype.saveselect": "Save selection",
+    "trafficincidenttype.makeselect": "Select Action Type"
 };
 export default translationEnEN;

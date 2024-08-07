@@ -49,9 +49,9 @@ function TrafficIncidentTypeDetail(props) {
         {
             field: "actions2",
             type: "actions",
-            headerName: "Select",
+            headerName: t("trafficincidenttype.makeselect"),
             sortable: false,
-            width: 100,
+            width: 160,
             renderCell: params => <MyRenderCheckBox isSelected={params.row.isSelected} actionId={params.row.id} />
         }
     ];
@@ -69,8 +69,6 @@ function TrafficIncidentTypeDetail(props) {
                     setIsSaved(false);
                 }
             });
-
-            console.log(tmpActions);
             setMitigationActionTypes(tmpActions);
         }
 
@@ -103,8 +101,19 @@ function TrafficIncidentTypeDetail(props) {
     }
 
     function saveSelection() {
-        //setIsSaved(true);
-        console.log(mitigationActionTypes);
+        let dataToSave = rowData;
+        let actionTypeIds = [];
+        mitigationActionTypes.filter(actionType => {
+            if (actionType.isSelected) {
+                actionTypeIds.push({id: actionType.id});
+                return actionType;
+            }
+        });
+        dataToSave.mitigationActionType = actionTypeIds;
+        trafficIncidentTypeRest.update(dataToSave).then(response => {
+            //TODO error handling
+            setIsSaved(true);
+        });
     }
 
     return <>
@@ -134,10 +143,12 @@ function TrafficIncidentTypeDetail(props) {
             </IconButton>
             <DialogContent id="traffic-incident-type-detail-dialog-description">
                 <Grid>
-                    <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
-                        {t("trafficincidenttype.saveselect")}
-                        {isSaved ? "" : "*"}
-                    </Button>
+                    <Stack direction="row" spacing={1} sx={{marginBottom: 1}}>
+                        <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
+                            {t("trafficincidenttype.saveselect")}
+                            {isSaved ? "" : "*"}
+                        </Button>
+                    </Stack>
                     <DataGrid
                         autoHeight
                         rows={mitigationActionTypes}
