@@ -55,7 +55,7 @@ function TrafficIncidentTypeDetail(props) {
             renderCell: params => {
                 return <Checkbox
                     checked={params.row.isSelected}
-                    onClick={handleActionSelection2(params.row.isSelected, params.row.id)}
+                    onChange={e => selectChange(e, params.row)}
                 />
             }
         }
@@ -64,10 +64,6 @@ function TrafficIncidentTypeDetail(props) {
     useEffect(() => {
         reload();
     }, [open]);
-
-    if (!open) {
-        return null;
-    }
 
     function reload() {
         mitigationActionTypeRest.findAll().then(response => {
@@ -87,13 +83,19 @@ function TrafficIncidentTypeDetail(props) {
         });
     }
 
-    function handleActionSelection2(value, id) {
-        mitigationActionTypes.forEach((action) => {
-            action.isSelected = !value;
+    const selectChange = (e, row) => {
+        let tmpActions = mitigationActionTypes;
+        console.log(row.id);
+
+        tmpActions.forEach((action) => {
+            console.log(action);
+            if (action.id === row.id) {
+                action.isSelected = e.target.checked;
+            }
         });
 
-        console.log(mitigationActionTypes);
-        setMitigationActionTypes(mitigationActionTypes);
+        console.log(tmpActions);
+        setMitigationActionTypes(tmpActions);
     }
 
     function saveSelection() {
