@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram name="draft" id="a3xRBjFOB7cAsyfC0EUM">
-        <mxGraphModel dx="1333" dy="434" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+        <mxGraphModel dx="1333" dy="696" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
             <root>
                 <mxCell id="D_3S4Ifsa7l87r18UFxj-0"/>
                 <mxCell id="D_3S4Ifsa7l87r18UFxj-1" parent="D_3S4Ifsa7l87r18UFxj-0"/>
@@ -67,10 +67,10 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="D_3S4Ifsa7l87r18UFxj-20" value="Persistent&lt;br&gt;Volume&lt;br&gt;Claim" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="D_3S4Ifsa7l87r18UFxj-1">
-                    <mxGeometry x="660" y="690" width="100" height="80" as="geometry"/>
+                    <mxGeometry x="660" y="673" width="100" height="80" as="geometry"/>
                 </mxCell>
-                <mxCell id="D_3S4Ifsa7l87r18UFxj-21" value="MetaData&lt;br&gt;S3 URL" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;" vertex="1" parent="D_3S4Ifsa7l87r18UFxj-1">
-                    <mxGeometry x="820" y="310" width="80" height="60" as="geometry"/>
+                <mxCell id="D_3S4Ifsa7l87r18UFxj-21" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;MetaData&lt;/span&gt;&lt;/div&gt;S3 URL" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=11;verticalAlign=top;align=center;" vertex="1" parent="D_3S4Ifsa7l87r18UFxj-1">
+                    <mxGeometry x="810" y="339" width="100" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="D_3S4Ifsa7l87r18UFxj-22" value="Spring&lt;br&gt;Boot" style="shape=component;align=left;spacingLeft=36;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=1;fontFamily=Verdana;fontSize=12;html=1;" vertex="1" parent="D_3S4Ifsa7l87r18UFxj-1">
                     <mxGeometry x="1101" y="464" width="85" height="40" as="geometry"/>
@@ -94,7 +94,7 @@
         </mxGraphModel>
     </diagram>
     <diagram name="Page-1" id="5f0bae14-7c28-e335-631c-24af17079c00">
-        <mxGraphModel dx="1333" dy="781" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
+        <mxGraphModel dx="1333" dy="696" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="none" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
