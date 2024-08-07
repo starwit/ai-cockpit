@@ -2,11 +2,6 @@ name: Build and publish latest image
 
 on:
   workflow_dispatch:
-    inputs:
-      release-type: # id of input
-        description: "prerelease, patch, minor or major"
-        required: true
-        default: "prerelease"
 
 env:
   IMAGE_NAME: ai-cockpit
