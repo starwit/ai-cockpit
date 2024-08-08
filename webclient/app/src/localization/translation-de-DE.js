@@ -101,6 +101,15 @@ const translationDeDE = {
     "mitigationactiontype.policy": "Ausführungslevel",
     "mitigationactiontype.policy.manual": "Manuell",
     "mitigationactiontype.policy.withcheck": "Genehmigungsvorbehalt",
-    "mitigationactiontype.policy.automated": "Automatisch"
+    "mitigationactiontype.policy.automated": "Automatisch",
+    "trafficincidenttype.heading": "Incident Types",
+    "trafficincidenttype.name": "Incident Name",
+    "trafficincidenttype.addItem": "Add Incident Types",
+    "trafficincidenttype.saveItem": "Save All",
+    "trafficincidenttype.description": "Incident Type Description",
+    "trafficincidenttype.selectaction": "Maßnahmen für Vorgangstyp auswählen ",
+    "trafficincidenttype.saveselect": "Zuordnung speichern",
+    "trafficincidenttype.makeselect": "Aktionstyp zuordnen",
+    "trafficincidenttype.makeselect.notsaved": "Ungesicherte Änderungen!"
 };
 export default translationDeDE;

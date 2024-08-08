@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.starwit.persistence.entity.MitigationActionTypeEntity;
 import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
 import de.starwit.service.impl.TrafficIncidentTypeService;
 import de.starwit.persistence.exception.NotificationException;
@@ -45,7 +46,6 @@ public class TrafficIncidentTypeController {
         return this.trafficincidenttypeService.findAll();
     }
 
-
     @Operation(summary = "Get trafficincidenttype with id")
     @GetMapping(value = "/{id}")
     public TrafficIncidentTypeEntity findById(@PathVariable("id") Long id) {
@@ -64,6 +64,12 @@ public class TrafficIncidentTypeController {
         return trafficincidenttypeService.saveOrUpdate(entity);
     }
 
+    @Operation(summary = "Update a list of Traffic Incident Type")
+    @PutMapping(value = "/updateList")
+    public void updateList(@Valid @RequestBody List<TrafficIncidentTypeEntity> entityList) {
+        trafficincidenttypeService.saveOrUpdateList(entityList);
+    }
+
     @Operation(summary = "Delete trafficincidenttype")
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable("id") Long id) throws NotificationException {
@@ -73,7 +79,8 @@ public class TrafficIncidentTypeController {
     @ExceptionHandler(value = { EntityNotFoundException.class })
     public ResponseEntity<Object> handleException(EntityNotFoundException ex) {
         LOG.info("TrafficIncidentType not found. {}", ex.getMessage());
-        NotificationDto output = new NotificationDto("error.trafficincidenttype.notfound", "TrafficIncidentType not found.");
+        NotificationDto output = new NotificationDto("error.trafficincidenttype.notfound",
+                "TrafficIncidentType not found.");
         return new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
     }
 }

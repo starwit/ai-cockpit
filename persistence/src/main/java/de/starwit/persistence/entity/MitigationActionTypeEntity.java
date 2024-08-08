@@ -8,12 +8,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
-/**
- * MitigationActionType Entity class
- */
 @Entity
 @Table(name = "mitigationactiontype")
 public class MitigationActionTypeEntity extends AbstractEntity<Long> {
@@ -33,6 +31,10 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
     @JsonFilter("filterId")
     @OneToMany(mappedBy = "mitigationActionType")
     private Set<MitigationActionEntity> mitigationAction;
+
+    @JsonFilter("filterId")
+    @ManyToMany(mappedBy = "mitigationActionType")
+    private Set<TrafficIncidentTypeEntity> trafficIncidentType;
 
     // entity fields getters and setters
     public String getName() {
@@ -66,6 +68,14 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
 
     public void setExecutionPolicy(ExecutionPolicies executionPolicy) {
         this.executionPolicy = executionPolicy;
+    }
+
+    public Set<TrafficIncidentTypeEntity> getTrafficIncidentType() {
+        return trafficIncidentType;
+    }
+
+    public void setTrafficIncidentType(Set<TrafficIncidentTypeEntity> trafficIncidentType) {
+        this.trafficIncidentType = trafficIncidentType;
     }
 
 }
