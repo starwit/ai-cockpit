@@ -1,13 +1,18 @@
 package de.starwit.service.impl;
+
+import java.util.HashSet;
 import java.util.List;
-import de.starwit.persistence.entity.TrafficIncidentEntity;
-import de.starwit.persistence.repository.TrafficIncidentRepository;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
 import de.starwit.persistence.entity.MitigationActionEntity;
+import de.starwit.persistence.entity.TrafficIncidentEntity;
 import de.starwit.persistence.repository.MitigationActionRepository;
+import de.starwit.persistence.repository.TrafficIncidentRepository;
 
 /**
  * 
@@ -36,31 +41,57 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
         return trafficincidentRepository.findAllWithoutOtherTrafficIncidentType(id);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public TrafficIncidentEntity saveOrUpdate(TrafficIncidentEntity entity) {
 
-        Set<MitigationActionEntity> mitigationActionToSave = entity.getMitigationAction();
+        Set<MitigationActionEntity> mitigationActionsToSave = entity.getMitigationAction();
+        Set<MitigationActionEntity> mitigationActionsPrev = null;
 
         if (entity.getId() != null) {
             TrafficIncidentEntity entityPrev = this.findById(entity.getId());
-            for (MitigationActionEntity item : entityPrev.getMitigationAction()) {
-                MitigationActionEntity existingItem = mitigationactionRepository.getReferenceById(item.getId());
-                existingItem.setTrafficIncident(null);
-                this.mitigationactionRepository.save(existingItem);
-            }
-        }
+            mitigationActionsPrev = entityPrev.getMitigationAction();
+            Set<MitigationActionEntity> toDelete = new HashSet<>();
+            toDelete.addAll(mitigationActionsPrev);
 
-        entity.setMitigationAction(null);
-        entity = this.getRepository().save(entity);
+            if (mitigationActionsToSave != null && !mitigationActionsToSave.isEmpty()) {
+                for (MitigationActionEntity actionToSave : mitigationActionsToSave) {
+                    if (actionToSave.getId() == null) {
+                        actionToSave.setTrafficIncident(entity);
+                        MitigationActionEntity newEntity = mitigationactionRepository.save(actionToSave);
+                        actionToSave.setId(newEntity.getId());
+                    }
+                    if (mitigationActionsPrev != null && !mitigationActionsPrev.isEmpty()) {
+                        for (MitigationActionEntity actionPrev : mitigationActionsPrev) {
+                            if (actionToSave.getId() == actionPrev.getId()) {
+                                toDelete.remove(actionPrev);
+                            }
+                        }
+                    }
+                }
+            }
+            if (!toDelete.isEmpty()) {
+                for (MitigationActionEntity delete : toDelete) {
+                    delete.setTrafficIncident(null);
+                    delete = mitigationactionRepository.save(delete);
+                    mitigationactionRepository.deleteById(delete.getId());
+                }
+            }
+
+            mitigationactionRepository.flush();
+            this.getRepository().flush();
+
+            entityPrev.setDescription(entity.getDescription());
+            entityPrev.setState(entity.getState());
+            entityPrev.setTrafficIncidentType(entity.getTrafficIncidentType());
+            // entity = this.getRepository().save(entityPrev);
+
+        } else {
+            // entity = this.getRepository().save(entity);
+        }
+        List<MitigationActionEntity> mitActions = mitigationactionRepository.findAll();
         this.getRepository().flush();
-
-        if (mitigationActionToSave != null && !mitigationActionToSave.isEmpty()) {
-            for (MitigationActionEntity item : mitigationActionToSave) {
-                MitigationActionEntity newItem = mitigationactionRepository.getReferenceById(item.getId());
-                newItem.setTrafficIncident(entity);
-                mitigationactionRepository.save(newItem);
-            }
-        }
-        return this.getRepository().getReferenceById(entity.getId());
+        entity = getRepository().findById(entity.getId()).orElseThrow();
+        return entity;
     }
 }
