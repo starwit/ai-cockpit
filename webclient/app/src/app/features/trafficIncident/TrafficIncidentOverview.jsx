@@ -49,31 +49,39 @@ function TrafficIncidentOverview() {
     };
 
     function handleSave(mitigationActionTypes, trafficIncidentType, description, state) {
-        setOpen(false);
-        rowData.trafficIncidentType = trafficIncidentType;
-        rowData.description = description;
-        rowData.state = state;
-        trafficIncidentRest.update(rowData);
+        const foundIncident = trafficIncidents.find(value => value.id == rowData.id);
+        foundIncident.trafficIncidentType = trafficIncidentType;
+        foundIncident.description = description;
+        foundIncident.state = state;
+        const remoteFunctions = [];
 
         const newActions = mitigationActionTypes;
+
+        let newActionTypes = mitigationActionTypes;
         rowData.mitigationAction.forEach(action => {
             const found = mitigationActionTypes.find(value => value.id == action.mitigationActionType.id);
             if (found === undefined) {
-                mitigationActionRest.delete(action);
+                remoteFunctions.push(mitigationActionRest.delete(action.id));
             } else {
-                newActions = mitigationActionTypes.filter();
+                newActionTypes = newActionTypes.filter(value => value.id !== action.mitigationActionType.id);
+                newActions.push(action);
             }
         });
-        setMitigationActionTypes(actions);
 
-        mitigationActionTypes.forEach(mActiontype => {
+        newActionTypes.forEach(mActiontype => {
             const entity = {
                 name: "",
                 description: "",
-                trafficIncident: rowData,
+                trafficIncident: {id: rowData.id},
                 mitigationActionType: mActiontype
             };
-            mitigationActionRest.create(entity);
+            remoteFunctions.push(mitigationActionRest.create(entity));
+        });
+
+        trafficIncidentRest.update(foundIncident).then(response => {
+            Promise.all(remoteFunctions).then(() => {
+                setOpen(false);
+            });
         });
     };
 
