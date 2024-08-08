@@ -14,7 +14,7 @@ function CockpitAppBar() {
                             size="large"
                             edge="start"
                             color="inherit"
-                            href="/"
+                            href="./"
                             aria-label="menu"
                             sx={{mr: 2}}
                         >
