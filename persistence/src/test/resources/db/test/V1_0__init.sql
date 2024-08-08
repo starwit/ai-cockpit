@@ -40,8 +40,9 @@ CREATE SEQUENCE IF NOT EXISTS "trafficincidenttype_id_seq";
 
 CREATE TABLE "trafficincidenttype"
 (
-    "name" VARCHAR(255),
     "id" BIGINT NOT NULL DEFAULT nextval('trafficincidenttype_id_seq'),
+    "name" VARCHAR(255),
+    "description" VARCHAR(255),
     CONSTRAINT "trafficincidenttype_pkey" PRIMARY KEY ("id")
 );
 
@@ -71,3 +72,18 @@ ALTER TABLE "mitigationaction"
     FOREIGN KEY ("mitigationactiontype_id")
     REFERENCES "mitigationactiontype" ("id");
 
+CREATE TABLE "trafficincidenttype_mitigationactiontype" (
+    "trafficincidenttype_id" BIGINT NOT NULL,
+    "mitigationactiontype_id" BIGINT NOT NULL,
+    PRIMARY KEY ("trafficincidenttype_id", "mitigationactiontype_id")
+);
+
+ALTER TABLE "trafficincidenttype_mitigationactiontype"
+    ADD CONSTRAINT "fk_trafficincidenttype_mitigationactiontype"
+    FOREIGN KEY ("trafficincidenttype_id")
+    REFERENCES "trafficincidenttype" ("id");
+
+ALTER TABLE "trafficincidenttype_mitigationactiontype"
+    ADD CONSTRAINT "fk_mitigationactiontype_mitigationactiontype"
+    FOREIGN KEY ("mitigationactiontype_id")
+    REFERENCES "mitigationactiontype" ("id");
