@@ -26,26 +26,26 @@ import {useTranslation} from "react-i18next";
 import Accordion from "@mui/material/Accordion";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ErrorIcon from "@mui/icons-material/Error";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import TrafficIncidentMap from "./TrafficIncidentMap";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
-import {formatDateFull} from "../../commons/formatter/DateFormatter"
+import {formatDateFull} from "../../commons/formatter/DateFormatter";
 
 function TrafficIncidentDetail(props) {
-    const {open, rowData, interpretData, handleClose, handleSave} = props;
-    const [expanded, setExpanded] = React.useState("panel1");
+    const {open, rowData, handleClose, handleSave} = props;
+    const [expanded, setExpanded] = useState("panel1");
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
-    const [mitigationAction, setMitigationAction] = React.useState([]);
-    const [trafficIncidentType, setTrafficIncidentType] = React.useState('');
-    const [allMitigationAction, setAllMitigationAction] = React.useState([]);
-    const [allTrafficIncidentType, setAllTrafficIncidentType] = React.useState([]);
-    const [description, setDescription] = React.useState("");
+    const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
+    const [trafficIncidentType, setTrafficIncidentType] = useState([]);
+    const [allMitigationActionTypes, setAllMitigationActionTypes] = useState([]);
+    const [allTrafficIncidentType, setAllTrafficIncidentType] = useState([]);
+    const [description, setDescription] = useState(rowData.description);
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -57,7 +57,15 @@ function TrafficIncidentDetail(props) {
             if (response.data == null) {
                 return;
             }
-            setAllMitigationAction(response.data);
+            setAllMitigationActionTypes(response.data);
+            const actions = [];
+            rowData.mitigationAction.forEach(action => {
+                const found = response.data.find(value => value.id == action.mitigationActionType.id);
+                if (found != undefined) {
+                    actions.push(found);
+                }
+            });
+            setMitigationActionTypes(actions);
         });
         trafficIncidentTypeRest.findAll().then(response => {
             if (response.data == null) {
@@ -68,15 +76,14 @@ function TrafficIncidentDetail(props) {
         });
     }
 
-    const handleChangeAction = event => {
+    function handleChangeAction(event) {
         const {
             target: {value}
         } = event;
-        setMitigationAction(value);
-
+        setMitigationActionTypes(value);
     };
 
-    const handleChangeTrafficIncidentType = event => {
+    function handleChangeTrafficIncidentType(event) {
         setTrafficIncidentType(event.target.value);
     };
 
@@ -121,10 +128,10 @@ function TrafficIncidentDetail(props) {
             <IconButton
                 onClick={handleClose}
                 sx={{
-                    position: 'absolute',
+                    position: "absolute",
                     right: 8,
                     top: 8,
-                    color: (theme) => theme.palette.grey[500],
+                    color: theme => theme.palette.grey[500]
                 }}
             >
                 <CloseIcon />
@@ -193,7 +200,7 @@ function TrafficIncidentDetail(props) {
                                 id="panel2d-header">
                                 {t("trafficIncident.mitigationAction.header4standardvalues")}
                             </AccordionSummary>
-                            <AccordionDetails sx={{height: 'auto'}}>
+                            <AccordionDetails sx={{height: "auto"}}>
                                 <Stack>
                                     <FormControl>
                                         <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
@@ -201,9 +208,12 @@ function TrafficIncidentDetail(props) {
                                             labelId="trafficIncident.mitigationAction.label"
                                             id="trafficIncident.mitigationAction.select"
                                             multiple
-                                            value={mitigationAction}
+                                            value={mitigationActionTypes}
                                             onChange={handleChangeAction}
-                                            input={<OutlinedInput id="trafficIncident.mitigationAction.select.chip" label="trafficIncident.mitigationAction.select.chip.label" />}
+                                            input={<OutlinedInput
+                                                id="trafficIncident.mitigationAction.mitigationActionType.select.chip"
+                                                label="trafficIncident.mitigationAction.mitigationActionType.select.chip.label"
+                                            />}
                                             renderValue={selected => (
                                                 <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                                                     {selected.map(value => (
@@ -213,7 +223,7 @@ function TrafficIncidentDetail(props) {
                                                 </Box>
                                             )}
                                         >
-                                            {allMitigationAction.map(value => (
+                                            {allMitigationActionTypes.map(value => (
                                                 <MenuItem
                                                     key={value.id}
                                                     value={value}
@@ -239,7 +249,7 @@ function TrafficIncidentDetail(props) {
                             fullWidth
                             variant="standard"
                             value={description}
-                            onChange={(e) => {
+                            onChange={e => {
                                 setDescription(e.target.value);
                             }}
                         />
@@ -247,9 +257,8 @@ function TrafficIncidentDetail(props) {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => handleSave(mitigationAction, trafficIncidentType, description, "REJECTED")} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
-                <Button onClick={() => handleSave(mitigationAction, trafficIncidentType, description, "ACCEPTED")} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
-
+                <Button onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "REJECTED")} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
+                <Button onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "ACCEPTED")} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
                     {t("trafficIncident.button.acknowledged")}
                 </Button>
             </DialogActions>

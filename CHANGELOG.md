@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Bug Fixes
+
+-  save traffic incident ([7c1d2](https://github.com/starwit/ai-cockpit/commit/7c1d24e13f04f7b) Anett)  
+
 ## refs/tags/0.0.2 (2024-08-06)
 
 ### Features

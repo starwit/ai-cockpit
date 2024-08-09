@@ -48,22 +48,40 @@ function TrafficIncidentOverview() {
         setOpen(false);
     };
 
+    function handleSave(mitigationActionTypes, trafficIncidentType, description, state) {
+        const foundIncident = trafficIncidents.find(value => value.id == rowData.id);
+        foundIncident.trafficIncidentType = trafficIncidentType;
+        foundIncident.description = description;
+        foundIncident.state = state;
+        const remoteFunctions = [];
 
-    function handleSave(mitigationActions, trafficIncidentType, description, state) {
-        setOpen(false);
-        rowData.trafficIncidentType = trafficIncidentType;
-        rowData.description = description;
-        rowData.state = state;
-        trafficIncidentRest.update(rowData);
+        const newActions = mitigationActionTypes;
 
-        mitigationActions.forEach(mActiontype => {
+        let newActionTypes = mitigationActionTypes;
+        rowData.mitigationAction.forEach(action => {
+            const found = mitigationActionTypes.find(value => value.id == action.mitigationActionType.id);
+            if (found === undefined) {
+                remoteFunctions.push(mitigationActionRest.delete(action.id));
+            } else {
+                newActionTypes = newActionTypes.filter(value => value.id !== action.mitigationActionType.id);
+                newActions.push(action);
+            }
+        });
+
+        newActionTypes.forEach(mActiontype => {
             const entity = {
                 name: "",
                 description: "",
-                trafficIncident: rowData,
+                trafficIncident: {id: rowData.id},
                 mitigationActionType: mActiontype
             };
-            mitigationActionRest.create(entity);
+            remoteFunctions.push(mitigationActionRest.create(entity));
+        });
+
+        trafficIncidentRest.update(foundIncident).then(response => {
+            Promise.all(remoteFunctions).then(() => {
+                setOpen(false);
+            });
         });
     };
 
