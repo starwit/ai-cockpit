@@ -72,8 +72,8 @@ function ConfigMenu() {
                                 aria-labelledby="composition-button"
                                 onKeyDown={handleListKeyDown}
                             >
-                                <MenuItem component={Link} to={"/"}>
-                                    Info
+                                <MenuItem component={Link} to={"/info/component-breakdown"}>
+                                    {t("menu.info.componentbreakdown")}
                                 </MenuItem>
                             </MenuList>
                         </ClickAwayListener>

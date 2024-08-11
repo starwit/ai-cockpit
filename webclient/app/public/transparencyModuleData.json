@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "name": "AnDe",
+        "description": "A fantastic AI module",
+        "useAI": true,
+        "aiType": "Misc",
+        "modelVersion": "1.0.0",
+        "sbom": [
+            {
+                "backend": "http://localhost:8081/ai-cockpit/sbom-backend.json"
+            },
+            {
+                "frontend": "http://localhost:8081/ai-cockpit/sbom-frontend.json"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "RuDi",
+        "description": "A super fantastic AI module",
+        "useAI": true,
+        "aiType": "Misc",
+        "modelVersion": "1.0.0"
+    },
+    {
+        "id": 3,
+        "name": "Sandy",
+        "description": "Another super fantastic AI module",
+        "useAI": true,
+        "aiType": "LLM",
+        "modelVersion": "1.0.0"
+    },
+    {
+        "id": 4,
+        "name": "Dieter",
+        "description": "A boring non AI module",
+        "useAI": false,
+        "aiType": null,
+        "modelVersion": null
+    },
+    {
+        "id": 5,
+        "name": "KI-Cockpit",
+        "description": "The very cockpit you are looking at",
+        "useAI": false,
+        "aiType": null,
+        "modelVersion": null
+    }
+]

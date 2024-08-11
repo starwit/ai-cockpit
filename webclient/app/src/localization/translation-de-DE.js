@@ -110,6 +110,10 @@ const translationDeDE = {
     "trafficincidenttype.selectaction": "Maßnahmen für Vorgangstyp auswählen ",
     "trafficincidenttype.saveselect": "Zuordnung speichern",
     "trafficincidenttype.makeselect": "Aktionstyp zuordnen",
-    "trafficincidenttype.makeselect.notsaved": "Ungesicherte Änderungen!"
+    "trafficincidenttype.makeselect.notsaved": "Ungesicherte Änderungen!",
+    "menu.info.componentbreakdown": "Modulübersicht",
+    "menu.info.riskoverview": "Risikobewertung",
+    "transparency.components.title": "Modulübersicht",
+    "transparency.sbom.title": "Bill of Material"
 };
 export default translationDeDE;

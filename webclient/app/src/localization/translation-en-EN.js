@@ -92,7 +92,6 @@ const translationEnEN = {
     "menu.config": "Configuration",
     "menu.config.mitigationactiontype": "Mitigation Action Config",
     "menu.config.trafficincidenttype": "Incidend Type Config",
-    "menu.info": "Info",
     "mitigationactiontype.heading": "Mitigation Action Type Definition",
     "mitigationactiontype.name": "Action Type Name",
     "mitigationactiontype.addItem": "Add Action Type",
@@ -110,6 +109,10 @@ const translationEnEN = {
     "trafficincidenttype.selectaction": "Select default action for type ",
     "trafficincidenttype.saveselect": "Save selection",
     "trafficincidenttype.makeselect": "Select Action Type",
-    "trafficincidenttype.makeselect.notsaved": "Unsafed Changes!"
+    "trafficincidenttype.makeselect.notsaved": "Unsafed Changes!",
+    "menu.info.componentbreakdown": "Component Overview",
+    "menu.info.riskoverview": "Risk Assesment",
+    "transparency.components.title": "System Module Overview",
+    "transparency.sbom.title": "Bill of Material"
 };
 export default translationEnEN;
