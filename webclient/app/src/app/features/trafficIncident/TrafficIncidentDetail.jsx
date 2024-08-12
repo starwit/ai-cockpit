@@ -257,8 +257,19 @@ function TrafficIncidentDetail(props) {
                 </Grid>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "REJECTED")} variant="contained" color="error" startIcon={<ErrorIcon />}>{t("trafficIncident.button.reportmistake")}</Button>
-                <Button onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "ACCEPTED")} variant="contained" color="success" startIcon={<CheckIcon />} autoFocus>
+                <Button
+                    onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "REJECTED")}
+                    variant="contained"
+                    color="error"
+                    startIcon={<ErrorIcon />}>
+                    {t("trafficIncident.button.reportmistake")}
+                </Button>
+                <Button
+                    onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "ACCEPTED")}
+                    variant="contained"
+                    color="success"
+                    startIcon={<CheckIcon />}
+                    autoFocus>
                     {t("trafficIncident.button.acknowledged")}
                 </Button>
             </DialogActions>

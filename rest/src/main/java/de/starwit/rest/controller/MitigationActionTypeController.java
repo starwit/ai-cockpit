@@ -51,6 +51,14 @@ public class MitigationActionTypeController {
         return this.mitigationactiontypeService.findById(id);
     }
 
+    @Operation(summary = "Get mitigationactiontype by incident type")
+    @GetMapping(value = "/by-incident-type/{id}")
+    public List<MitigationActionTypeEntity> findByTrafficIncidentType(@PathVariable("id") Long trafficIncidentId) {
+        List<MitigationActionTypeEntity> result = this.mitigationactiontypeService
+                .findByTrafficIncidentType(trafficIncidentId);
+        return result;
+    }
+
     @Operation(summary = "Create mitigationactiontype")
     @PostMapping
     public MitigationActionTypeEntity save(@Valid @RequestBody MitigationActionTypeEntity entity) {
