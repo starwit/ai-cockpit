@@ -52,27 +52,46 @@ function TrafficIncidentDetail(props) {
         reload();
     }, [open]);
 
+    useEffect(() => {
+        reloadMitigationActionTypes();
+    }, [trafficIncidentType]);
+
     function reload() {
-        mitigationActionTypeRest.findAll().then(response => {
-            if (response.data == null) {
-                return;
-            }
-            setAllMitigationActionTypes(response.data);
-            const actions = [];
-            rowData.mitigationAction.forEach(action => {
-                const found = response.data.find(value => value.id == action.mitigationActionType.id);
-                if (found != undefined) {
-                    actions.push(found);
-                }
-            });
-            setMitigationActionTypes(actions);
-        });
         trafficIncidentTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
             }
             setAllTrafficIncidentType(response.data);
             setTrafficIncidentType(response.data.find(value => value.id == rowData.trafficIncidentType.id));
+        });
+    }
+
+    function findExistingMitigationActions(defaultMitigationActionTypes) {
+        const actions = [];
+        rowData.mitigationAction.forEach(action => {
+            const found = defaultMitigationActionTypes.find(value => value.id == action.mitigationActionType.id);
+            if (found != undefined) {
+                actions.push(found);
+            }
+        });
+        return actions;
+    }
+
+    function reloadMitigationActionTypes() {
+        if (trafficIncidentType == undefined || trafficIncidentType.id == undefined) {
+            return null;
+        }
+
+        mitigationActionTypeRest.findByTrafficIncidentType(trafficIncidentType.id).then(response => {
+            if (response.data == null) {
+                return;
+            }
+            setAllMitigationActionTypes(response.data);
+            if (rowData.trafficIncidentType.id === trafficIncidentType.id) {
+                setMitigationActionTypes(findExistingMitigationActions(response.data));
+            } else {
+                setMitigationActionTypes(response.data);
+            }
         });
     }
 
@@ -85,6 +104,7 @@ function TrafficIncidentDetail(props) {
 
     function handleChangeTrafficIncidentType(event) {
         setTrafficIncidentType(event.target.value);
+        setExpanded("panel2");
     };
 
     const handleChange = panel => (event, newExpanded) => {
@@ -159,9 +179,6 @@ function TrafficIncidentDetail(props) {
                                     renderValue={selected => (<ListItemText>{selected.name}</ListItemText>)}
 
                                 >
-                                    <MenuItem value="">
-                                        <ListItemText>{t("trafficIncident.trafficIncidentType.new")}</ListItemText><ListItemIcon><AddIcon /></ListItemIcon>
-                                    </MenuItem>
                                     {allTrafficIncidentType.map(incidentType => (
                                         <MenuItem
                                             key={incidentType.id}

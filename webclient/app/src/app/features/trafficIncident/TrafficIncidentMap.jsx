@@ -63,6 +63,7 @@ function TrafficIncidentMap(props) {
             <DeckGL
                 layers={layers}
                 views={MAP_VIEW}
+
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={{dragRotate: false}}
             >
