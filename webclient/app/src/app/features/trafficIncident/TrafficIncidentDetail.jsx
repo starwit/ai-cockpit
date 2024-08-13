@@ -128,9 +128,8 @@ function TrafficIncidentDetail(props) {
             maxWidth="xl"
         >
             <DialogTitle id="traffic-incident-detail-dialog-title" >
-                <Typography component="span" variant="h4">{rowData.trafficIncidentType.name}</Typography>
-                <br></br>
-                <Typography component="span" variant="subtitle1">{formatDateFull(rowData.acquisitionTime)}</Typography>
+                <Typography variant="h4">{rowData.trafficIncidentType.name}</Typography>
+                <Typography variant="subtitle1">{formatDateFull(rowData.acquisitionTime)}</Typography>
             </DialogTitle>
             <IconButton
                 onClick={handleClose}
@@ -143,20 +142,27 @@ function TrafficIncidentDetail(props) {
             >
                 <CloseIcon />
             </IconButton>
-            <DialogContent id="traffic-incident-detail-dialog-description" sx={{overflow: "hidden"}}>
-                <Grid container spacing={2} sx={{width: "70vw"}}>
+            <DialogContent id="traffic-incident-detail-dialog-description" sx={{paddingTop: "0px"}}>
+                <Grid container spacing={2} sx={{width: "70vw", overflow: "hidden"}}>
+                    <Grid item xs={12} sx={{paddingTop: "0px"}}>
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            id="description"
+                            name="description"
+                            label={t("trafficIncident.description")}
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={description}
+                            onChange={e => {
+                                setDescription(e.target.value);
+                            }}
+                        />
+                    </Grid>
                     <Grid item xs={6}>
                         <Stack>
-                            <Box>
-                                <ReactPlayer
-                                    url='images/incidents/SampleScene01.mp4'
-                                    width='100%'
-                                    height='100%'
-                                    controls={true}
-                                    muted={true}
-                                    playing={true}
-                                />
-                            </Box>
                             <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
                                 <InputLabel id="trafficIncident.trafficIncidentType.label">{t("trafficIncident.trafficIncidentType")}</InputLabel>
                                 <Select
@@ -174,16 +180,24 @@ function TrafficIncidentDetail(props) {
                                             value={incidentType}
                                         >
                                             <ListItemText>{incidentType.name}</ListItemText>
-                                            <ListItemIcon><DeleteIcon /></ListItemIcon>
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
+                            <Box>
+                                <ReactPlayer
+                                    url='images/incidents/SampleScene01.mp4'
+                                    width='100%'
+                                    height='100%'
+                                    controls={true}
+                                    muted={true}
+                                    playing={true}
+                                />
+                            </Box>
                         </Stack>
                     </Grid>
                     <Grid item xs={6}>
                         <Stack direction="column">
-                            {renderTrafficIncidentMap()}
                             <FormControl>
                                 <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
                                 <Select
@@ -215,25 +229,8 @@ function TrafficIncidentDetail(props) {
                                     ))}
                                 </Select>
                             </FormControl>
-
+                            {renderTrafficIncidentMap()}
                         </Stack>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            autoFocus
-                            required
-                            margin="dense"
-                            id="description"
-                            name="description"
-                            label={t("trafficIncident.description")}
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={description}
-                            onChange={e => {
-                                setDescription(e.target.value);
-                            }}
-                        />
                     </Grid>
                 </Grid>
             </DialogContent>
