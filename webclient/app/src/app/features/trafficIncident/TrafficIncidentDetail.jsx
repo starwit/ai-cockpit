@@ -41,10 +41,10 @@ function TrafficIncidentDetail(props) {
     const [expanded, setExpanded] = useState("panel1");
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
-    const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
-    const [trafficIncidentType, setTrafficIncidentType] = useState([]);
-    const [allMitigationActionTypes, setAllMitigationActionTypes] = useState([]);
-    const [allTrafficIncidentType, setAllTrafficIncidentType] = useState([]);
+    const [mitigationActionTypes, setMitigationActionTypes] = useState([""]);
+    const [trafficIncidentType, setTrafficIncidentType] = useState([""]);
+    const [allMitigationActionTypes, setAllMitigationActionTypes] = useState([""]);
+    const [allTrafficIncidentType, setAllTrafficIncidentType] = useState([""]);
     const [description, setDescription] = useState(rowData.description);
     const {t} = useTranslation();
 
