@@ -59,16 +59,17 @@ function TrafficIncidentMap(props) {
     ];
 
     return (
-        <>
+        <div style={{
+            height: "100%", width: "100%", aspectRatio: "16/9", position: "relative"
+        }}>
             <DeckGL
                 layers={layers}
                 views={MAP_VIEW}
-
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={{dragRotate: false}}
             >
             </DeckGL >
-        </>
+        </div >
     );
 }
 

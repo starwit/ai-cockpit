@@ -1,44 +1,38 @@
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ErrorIcon from "@mui/icons-material/Error";
 import {
+    Box,
     Button,
     Chip,
     Dialog,
-    DialogTitle,
-    DialogContent,
     DialogActions,
-    Grid,
-    Stack,
-    TextField,
-    Box,
-    AccordionDetails,
-    AccordionSummary,
+    DialogContent,
+    DialogTitle,
     FormControl,
+    Grid,
     InputLabel,
-    Select,
-    MenuItem,
-    OutlinedInput,
     ListItemIcon,
     ListItemText,
+    MenuItem,
+    OutlinedInput,
+    Select,
+    Stack,
+    TextField,
     Typography
 } from "@mui/material";
-import React, {useEffect, useMemo, useState} from "react";
-import ReactPlayer from "react-player";
-import {useTranslation} from "react-i18next";
-import Accordion from "@mui/material/Accordion";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ErrorIcon from "@mui/icons-material/Error";
-import CloseIcon from "@mui/icons-material/Close";
-import CheckIcon from "@mui/icons-material/Check";
 import IconButton from "@mui/material/IconButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
-import TrafficIncidentMap from "./TrafficIncidentMap";
+import React, {useEffect, useMemo, useState} from "react";
+import {useTranslation} from "react-i18next";
+import ReactPlayer from "react-player";
+import {formatDateFull} from "../../commons/formatter/DateFormatter";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
-import {formatDateFull} from "../../commons/formatter/DateFormatter";
+import TrafficIncidentMap from "./TrafficIncidentMap";
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
-    const [expanded, setExpanded] = useState("panel1");
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
     const [mitigationActionTypes, setMitigationActionTypes] = useState([""]);
@@ -104,11 +98,6 @@ function TrafficIncidentDetail(props) {
 
     function handleChangeTrafficIncidentType(event) {
         setTrafficIncidentType(event.target.value);
-        setExpanded("panel2");
-    };
-
-    const handleChange = panel => (event, newExpanded) => {
-        setExpanded(newExpanded ? panel : false);
     };
 
     if (!open) {
@@ -118,17 +107,16 @@ function TrafficIncidentDetail(props) {
     function renderTrafficIncidentMap() {
         if (rowData.cameraLatitude == undefined || rowData.cameraLongitude == undefined) {
             return (
-                <AccordionDetails >
-                    <Typography align="center">
-                        {t("error.coordinates")}
-                    </Typography>
-                </AccordionDetails>
+                <Typography align="center">
+                    {t("error.coordinates")}
+                </Typography>
             );
         }
         return (
-            <AccordionDetails sx={{height: "300px"}}>
+            <Box sx={{width: "100%", position: "relative"}}>
                 <TrafficIncidentMap sx={{zIndex: "-1"}} latitude={rowData.cameraLatitude} longitude={rowData.cameraLongitude} />
-            </AccordionDetails>);
+            </Box>
+        );
     }
 
     return (
@@ -138,7 +126,6 @@ function TrafficIncidentDetail(props) {
             aria-labelledby="traffic-incident-detail-dialog-title"
             aria-describedby="traffic-incident-detail-dialog-description"
             maxWidth="xl"
-
         >
             <DialogTitle id="traffic-incident-detail-dialog-title" >
                 <Typography component="span" variant="h4">{rowData.trafficIncidentType.name}</Typography>
@@ -156,18 +143,20 @@ function TrafficIncidentDetail(props) {
             >
                 <CloseIcon />
             </IconButton>
-            <DialogContent id="traffic-incident-detail-dialog-description">
-                <Grid container spacing={2}>
+            <DialogContent id="traffic-incident-detail-dialog-description" sx={{overflow: "hidden"}}>
+                <Grid container spacing={2} sx={{width: "70vw"}}>
                     <Grid item xs={6}>
                         <Stack>
-                            <ReactPlayer
-                                url='images/incidents/SampleScene01.mp4'
-                                width='100%'
-                                height='100%'
-                                controls={true}
-                                muted={true}
-                                playing={true}
-                            />
+                            <Box>
+                                <ReactPlayer
+                                    url='images/incidents/SampleScene01.mp4'
+                                    width='100%'
+                                    height='100%'
+                                    controls={true}
+                                    muted={true}
+                                    playing={true}
+                                />
+                            </Box>
                             <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
                                 <InputLabel id="trafficIncident.trafficIncidentType.label">{t("trafficIncident.trafficIncidentType")}</InputLabel>
                                 <Select
@@ -193,66 +182,41 @@ function TrafficIncidentDetail(props) {
                         </Stack>
                     </Grid>
                     <Grid item xs={6}>
-                        <Accordion
-                            disableGutters
-                            expanded={expanded === "panel1"}
-                            onChange={handleChange("panel1")}>
-                            <AccordionSummary
-                                sx={{
-                                    backgroundColor: "#eeeeee", zIndex: 1000, borderBottom: "1px #aaa solid"
-                                }}
-                                expandIcon={< ExpandMoreIcon />}
-                                aria-controls="panel1d-content"
-                                id="panel1d-header">
-                                <Box>{t("trafficIncident.location")}</Box>
-                            </AccordionSummary>
+                        <Stack direction="column">
                             {renderTrafficIncidentMap()}
-                        </Accordion>
-                        <Accordion
-                            disableGutters expanded={expanded === "panel2"} onChange={handleChange("panel2")}>
-                            <AccordionSummary
-                                sx={{backgroundColor: "#eeeeee"}}
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel2d-content"
-                                id="panel2d-header">
-                                {t("trafficIncident.mitigationAction.header4standardvalues")}
-                            </AccordionSummary>
-                            <AccordionDetails sx={{height: "auto"}}>
-                                <Stack>
-                                    <FormControl>
-                                        <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
-                                        <Select
-                                            labelId="trafficIncident.mitigationAction.label"
-                                            id="trafficIncident.mitigationAction.select"
-                                            multiple
-                                            value={mitigationActionTypes}
-                                            onChange={handleChangeAction}
-                                            input={<OutlinedInput
-                                                id="trafficIncident.mitigationAction.mitigationActionType.select.chip"
-                                                label="trafficIncident.mitigationAction.mitigationActionType.select.chip.label"
-                                            />}
-                                            renderValue={selected => (
-                                                <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
-                                                    {selected.map(value => (
-                                                        <Chip key={value.id} label={value.name} variant="outlined" sx={{color: "green"}} />
+                            <FormControl>
+                                <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
+                                <Select
+                                    labelId="trafficIncident.mitigationAction.label"
+                                    id="trafficIncident.mitigationAction.select"
+                                    multiple
+                                    value={mitigationActionTypes}
+                                    onChange={handleChangeAction}
+                                    input={<OutlinedInput
+                                        id="trafficIncident.mitigationAction.mitigationActionType.select.chip"
+                                        label="trafficIncident.mitigationAction.mitigationActionType.select.chip.label"
+                                    />}
+                                    renderValue={selected => (
+                                        <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
+                                            {selected.map(value => (
+                                                <Chip key={value.id} label={value.name} variant="outlined" sx={{color: "green"}} />
 
-                                                    ))}
-                                                </Box>
-                                            )}
-                                        >
-                                            {allMitigationActionTypes.map(value => (
-                                                <MenuItem
-                                                    key={value.id}
-                                                    value={value}
-                                                >
-                                                    {value.name}
-                                                </MenuItem>
                                             ))}
-                                        </Select>
-                                    </FormControl>
-                                </Stack>
-                            </AccordionDetails>
-                        </Accordion>
+                                        </Box>
+                                    )}
+                                >
+                                    {allMitigationActionTypes.map(value => (
+                                        <MenuItem
+                                            key={value.id}
+                                            value={value}
+                                        >
+                                            {value.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+
+                        </Stack>
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
