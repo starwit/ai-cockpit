@@ -65,4 +65,8 @@ public class MitigationActionTypeService
             saveOrUpdate(mitigationActionTypeEntity);
         }
     }
+
+    public List<MitigationActionTypeEntity> findByTrafficIncidentType(Long trafficIncidentTypeId) {
+        return mitigationactiontypeRepository.findByTrafficIncidentType(trafficIncidentTypeId);
+    }
 }

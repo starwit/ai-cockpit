@@ -1,10 +1,12 @@
 package de.starwit.service.impl;
+
 import java.util.List;
-import de.starwit.persistence.entity.MitigationActionEntity;
-import de.starwit.persistence.repository.MitigationActionRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.starwit.persistence.entity.MitigationActionEntity;
+import de.starwit.persistence.repository.MitigationActionRepository;
 
 /**
  * 
@@ -29,6 +31,7 @@ public class MitigationActionService implements ServiceInterface<MitigationActio
     public List<MitigationActionEntity> findAllWithoutOtherTrafficIncident(Long id) {
         return mitigationactionRepository.findAllWithoutOtherTrafficIncident(id);
     }
+
     public List<MitigationActionEntity> findAllWithoutMitigationActionType() {
         return mitigationactionRepository.findAllWithoutMitigationActionType();
     }
