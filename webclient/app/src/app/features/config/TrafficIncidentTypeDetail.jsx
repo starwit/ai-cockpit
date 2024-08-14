@@ -24,7 +24,6 @@ function TrafficIncidentTypeDetail(props) {
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const [isSaved, setIsSaved] = useState([true]);
     const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
-    const [unsafedDataFeedback, setUnsafedDataFeedback] = useState("");
 
     // Mitigation Action Type List
     const columns = [
@@ -114,23 +113,14 @@ function TrafficIncidentTypeDetail(props) {
         trafficIncidentTypeRest.update(dataToSave).then(response => {
             //TODO error handling
             setIsSaved(true);
-            setUnsafedDataFeedback("");
         });
-    }
-
-    function checkClose() {
-        if (isSaved) {
-            handleClose();
-        } else {
-            console.log("not saved!");
-            setUnsafedDataFeedback(t("trafficincidenttype.makeselect.notsaved"))
-        }
+        handleClose();
     }
 
     return <>
         <Dialog
             open={open}
-            onClose={checkClose}
+            onClose={handleClose}
             aria-labelledby="traffic-incident-type-detail-dialog-title"
             aria-describedby="traffic-incident-type-detail-dialog-description"
             maxWidth="xl"
@@ -142,7 +132,7 @@ function TrafficIncidentTypeDetail(props) {
                 </Typography>
             </DialogTitle>
             <IconButton
-                onClick={checkClose}
+                onClick={handleClose}
                 sx={{
                     position: 'absolute',
                     right: 8,
@@ -154,20 +144,17 @@ function TrafficIncidentTypeDetail(props) {
             </IconButton>
             <DialogContent id="traffic-incident-type-detail-dialog-description">
                 <Grid>
-                    <Stack direction="row" spacing={1} sx={{marginBottom: 1}}>
-                        <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
-                            {t("trafficincidenttype.saveselect")}
-                            {isSaved ? "" : "*"}
-                        </Button>
-                        <Typography component="span">
-                            {unsafedDataFeedback}
-                        </Typography>
-                    </Stack>
                     <DataGrid
                         autoHeight
                         rows={mitigationActionTypes}
                         columns={columns}
                     />
+                    <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{marginTop:1}}>
+                        <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
+                            {t("trafficincidenttype.saveselect")}
+                            {isSaved ? "" : "*"}
+                        </Button>
+                    </Stack>
                 </Grid>
             </DialogContent>
         </Dialog>
