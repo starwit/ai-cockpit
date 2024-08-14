@@ -16,7 +16,6 @@ import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
 import {DataGrid, GridCloseIcon} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
 
-
 function TrafficIncidentTypeDetail(props) {
     const {t} = useTranslation();
     const {open, rowData, handleClose} = props;
@@ -62,8 +61,8 @@ function TrafficIncidentTypeDetail(props) {
         function handleChange(e) {
             setChecked(e.target.checked);
 
-            let tmpActions = mitigationActionTypes;
-            tmpActions.forEach((action) => {
+            const tmpActions = mitigationActionTypes;
+            tmpActions.forEach(action => {
                 if (action.id === props.actionId) {
                     action.isSelected = e.target.checked;
                     setIsSaved(false);
@@ -75,7 +74,7 @@ function TrafficIncidentTypeDetail(props) {
         return <Checkbox
             checked={checked}
             onChange={handleChange}
-        />
+        />;
     }
 
     useEffect(() => {
@@ -88,10 +87,10 @@ function TrafficIncidentTypeDetail(props) {
                 return;
             } else {
                 response.data.forEach(mitigationType => {
-                    mitigationType['isSelected'] = false;
+                    mitigationType["isSelected"] = false;
                     mitigationType.trafficIncidentType.forEach(incidentType => {
                         if (incidentType.id === rowData.id) {
-                            mitigationType['isSelected'] = true;
+                            mitigationType["isSelected"] = true;
                         }
                     });
                 });
@@ -101,8 +100,8 @@ function TrafficIncidentTypeDetail(props) {
     }
 
     function saveSelection() {
-        let dataToSave = rowData;
-        let actionTypeIds = [];
+        const dataToSave = rowData;
+        const actionTypeIds = [];
         mitigationActionTypes.filter(actionType => {
             if (actionType.isSelected) {
                 actionTypeIds.push({id: actionType.id});
@@ -111,7 +110,7 @@ function TrafficIncidentTypeDetail(props) {
         });
         dataToSave.mitigationActionType = actionTypeIds;
         trafficIncidentTypeRest.update(dataToSave).then(response => {
-            //TODO error handling
+            // TODO error handling
             setIsSaved(true);
         });
         handleClose();
@@ -126,18 +125,17 @@ function TrafficIncidentTypeDetail(props) {
             maxWidth="xl"
         >
             <DialogTitle id="traffic-incident-type-detail-dialog-title" >
-                <Typography component="span" variant="h4">
-                    {t("trafficincidenttype.selectaction")}
-                    {rowData.name}
+                <Typography component="p" variant="h2">
+                    {t("trafficincidenttype.selectaction")}{rowData.name}
                 </Typography>
             </DialogTitle>
             <IconButton
                 onClick={handleClose}
                 sx={{
-                    position: 'absolute',
+                    position: "absolute",
                     right: 8,
                     top: 8,
-                    color: (theme) => theme.palette.grey[500],
+                    color: theme => theme.palette.grey[500]
                 }}
             >
                 <GridCloseIcon />
@@ -149,7 +147,7 @@ function TrafficIncidentTypeDetail(props) {
                         rows={mitigationActionTypes}
                         columns={columns}
                     />
-                    <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{marginTop:1}}>
+                    <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{marginTop: 1}}>
                         <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
                             {t("trafficincidenttype.saveselect")}
                             {isSaved ? "" : "*"}
