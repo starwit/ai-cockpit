@@ -10,6 +10,7 @@ import {interpretationData} from "./mock/ExampleData";
 import ErrorIcon from "@mui/icons-material/Error";
 import CheckIcon from "@mui/icons-material/Check";
 import {formatDateShort} from "../../commons/formatter/DateFormatter";
+import FiberNewIcon from '@mui/icons-material/FiberNew';
 
 function TrafficIncidentOverview() {
     const {t} = useTranslation();
@@ -21,10 +22,11 @@ function TrafficIncidentOverview() {
     const [interpretData, setInterpretData] = useState(interpretationData);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
+    const [visibleRows, setVisibleRows] = React.useState({});
 
     useEffect(() => {
         reloadTrafficIncidents();
-    }, [open]);
+    }, [open, tab]);
 
     function reloadTrafficIncidents() {
         trafficIncidentRest.findAll().then(response => {
@@ -32,6 +34,12 @@ function TrafficIncidentOverview() {
                 return;
             }
             setTrafficIncidents(response.data);
+            if (tab === 0) {
+                setTrafficIncidents(response.data.filter(incident => incident.state == null || incident.state == "NEW"))
+            }
+            if (tab === 1) {
+                setTrafficIncidents(response.data.filter(incident => incident.state == "ACCEPTED" || incident.state == "REJECTED"))
+            }
         });
     }
 
@@ -39,8 +47,12 @@ function TrafficIncidentOverview() {
         setTab(newValue);
         if (newValue === 1) {
             setBgcolor("grey");
+            setVisibleRows({
+                state: false
+            });
         } else {
             setBgcolor("");
+            setVisibleRows({});
         }
     };
 
@@ -96,6 +108,28 @@ function TrafficIncidentOverview() {
 
     const headers = [
         {
+            field: "state",
+            headerName: t("trafficIncident.state"),
+            width: 70,
+            editable: false,
+            renderCell: cellValues => {
+                if (tab === 1 && cellValues.row.state == "ACCEPTED") {
+                    return (
+                        <IconButton color="success"><CheckIcon /></IconButton>
+                    );
+                } else if (tab === 1 && cellValues.row.state == "REJECTED") {
+                    return (
+                        <IconButton color="error"><ErrorIcon /></IconButton>
+                    );
+                } else if (tab === 0 && (cellValues.row.state == "NEW" || cellValues.row.state == null)) {
+                    return (
+                        <FiberNewIcon color="grey"></FiberNewIcon>
+                    );
+                }
+
+            }
+        },
+        {
             field: "acquisitionTime",
             type: "datetime",
             headerName: t("trafficIncident.acquisitionTime"),
@@ -131,15 +165,6 @@ function TrafficIncidentOverview() {
             align: "right",
             disableClickEventBubbling: true,
             renderCell: cellValues => {
-                if (tab === 1 && cellValues.row.trafficIncidentType == "Stau") {
-                    return (
-                        <IconButton color="success"><CheckIcon /></IconButton>
-                    );
-                } else if (tab === 1) {
-                    return (
-                        <IconButton color="error"><ErrorIcon /></IconButton>
-                    );
-                }
                 return (
                     <strong>
                         <Button
@@ -189,11 +214,14 @@ function TrafficIncidentOverview() {
                             paginationModel: {
                                 pageSize: 10
                             }
-                        }
+                        },
+                        columns: {
+                            columnVisibilityModel: {visibleRows}
+                        },
                     }}
                     pageSizeOptions={[10]}
-                    checkboxSelection
                     disableRowSelectionOnClick
+                    isCellEditable={(params) => tab == 0 ? true : false}
                     disableColumnSelector
                     slots={{toolbar: GridToolbar}}
                     slotProps={{
