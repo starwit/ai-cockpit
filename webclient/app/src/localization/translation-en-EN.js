@@ -61,6 +61,7 @@ const translationEnEN = {
     "button.create": "Add",
     "button.update": "Edit",
     "button.close": "Close",
+    "button.cancel": "Cancel",
     "button.delete": "Delete",
     "button.action.execute": "Execute",
     "select.none": "None",
@@ -110,6 +111,7 @@ const translationEnEN = {
     "trafficincidenttype.selectaction": "Select default action for type ",
     "trafficincidenttype.saveselect": "Save selection",
     "trafficincidenttype.makeselect": "Select Action Type",
-    "trafficincidenttype.makeselect.notsaved": "Unsafed Changes!"
+    "trafficincidenttype.makeselect.notsaved": "Unsafed Changes!",
+    "trafficincidenttype.delete.message" :"The configuration will be deleted"
 };
 export default translationEnEN;

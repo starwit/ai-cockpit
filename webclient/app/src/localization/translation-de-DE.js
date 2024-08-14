@@ -61,6 +61,7 @@ const translationDeDE = {
     "button.create": "Hinzufügen",
     "button.update": "Bearbeiten",
     "button.close": "Schließen",
+    "button.cancel": "Abbrechen",
     "button.delete": "Löschen",
     "button.action.execute": "Ausführen",
     "select.none": "Keine",
@@ -110,6 +111,7 @@ const translationDeDE = {
     "trafficincidenttype.selectaction": "Maßnahmen für Vorgangstyp auswählen ",
     "trafficincidenttype.saveselect": "Zuordnung speichern",
     "trafficincidenttype.makeselect": "Aktionstyp zuordnen",
-    "trafficincidenttype.makeselect.notsaved": "Ungesicherte Änderungen!"
+    "trafficincidenttype.makeselect.notsaved": "Ungesicherte Änderungen!",
+    "trafficincidenttype.delete.message": "Die Vorgangskonfiguration wird unwiderruflich gelöscht.",
 };
 export default translationDeDE;

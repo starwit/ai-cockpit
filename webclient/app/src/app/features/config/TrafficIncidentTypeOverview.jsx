@@ -9,6 +9,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TrafficIncidentTypeDetail from "./TrafficIncidentTypeDetail";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 
 function TrafficIncidentTypeOverview(props) {
@@ -18,7 +19,10 @@ function TrafficIncidentTypeOverview(props) {
     const [trafficIncidentTypes, setTrafficIncidentTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
     const [open, setOpen] = React.useState(false);
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const [openSaved, setOpenSaved] = React.useState(false);
     const [rowData, setRowData] = useState({});
+    const [deleteRow, setDeleteRow] = useState({});
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
@@ -119,14 +123,16 @@ function TrafficIncidentTypeOverview(props) {
     };
 
     function handleDeleteClick(row) {
-        trafficIncidentTypeRest.delete(row.id).then(function () {
-            reloadTrafficIncidentTypes();
-        });
+        setOpenDelete(true);
+        setDeleteRow(row);
     };
 
     // dialog functions
 
     function handleEditClick(row) {
+        if (!isSaved) {
+            //TO-DO   ERst speichern
+        }
         setOpen(true);
         setRowData(row);
     }
@@ -143,6 +149,26 @@ function TrafficIncidentTypeOverview(props) {
             open={open}
             handleClose={handleClose}
             rowData={rowData}
+        />;
+    }
+
+    function submitDelete() {
+        trafficIncidentTypeRest.delete(deleteRow.id).then(function () {
+            reloadTrafficIncidentTypes();
+        });
+        setDeleteRow({});
+        setOpenDelete(false);
+    }
+
+    function renderDeleteDialog() {
+        if (!openDelete) {
+            return null;
+        }
+        return <ConfirmationDialog
+            open={openDelete}
+            onClose={() => {setOpenDelete(false)}}
+            onSubmit={submitDelete}
+            message={t("trafficincidenttype.delete.message")}
         />;
     }
 
@@ -179,6 +205,7 @@ function TrafficIncidentTypeOverview(props) {
             onProcessRowUpdateError={handleProcessRowUpdateError}
         />
         {renderDialog()}
+        {renderDeleteDialog()}
     </>;
 }
 export default TrafficIncidentTypeOverview;
