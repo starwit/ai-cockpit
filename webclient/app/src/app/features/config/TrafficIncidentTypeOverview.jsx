@@ -15,7 +15,6 @@ import ConfirmationDialog from "./ConfirmationDialog";
 function TrafficIncidentTypeOverview(props) {
     const {t} = useTranslation();
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest, []);
-    const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const [trafficIncidentTypes, setTrafficIncidentTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
     const [open, setOpen] = React.useState(false);
@@ -123,8 +122,12 @@ function TrafficIncidentTypeOverview(props) {
     };
 
     function handleDeleteClick(row) {
-        setOpenDelete(true);
-        setDeleteRow(row);
+        if (row.id === "") {
+            window.location.reload();
+        } else {
+            setOpenDelete(true);
+            setDeleteRow(row);
+        }
     };
 
     // dialog functions

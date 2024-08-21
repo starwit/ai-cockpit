@@ -6,12 +6,15 @@ import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useState, useMemo} from "react";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
+import ConfirmationDialog from "./ConfirmationDialog";
 
 function MitigationActionTypeOverview(props) {
     const {t} = useTranslation();
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest, []);
     const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const [deleteRow, setDeleteRow] = useState({});
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
@@ -113,9 +116,20 @@ function MitigationActionTypeOverview(props) {
     };
 
     function handleDeleteClick(event, row) {
-        mitigationActionTypeRest.delete(row.id).then(function () {
+        if (row.id === "") {
+            window.location.reload();
+        } else {
+            setOpenDelete(true);
+            setDeleteRow(row);
+        }
+    };
+
+    function submitDelete() {
+        mitigationActionTypeRest.delete(deleteRow.id).then(function () {
             reloadMitigationActionTypes();
         });
+        setOpenDelete(false);
+        setDeleteRow({});
     };
 
     const DropdownMenu = ({row, updateRow}) => {
@@ -134,6 +148,19 @@ function MitigationActionTypeOverview(props) {
             </Select>
         );
     };
+
+    function renderDeleteDialog() {
+        if (!openDelete) {
+            return null;
+        }
+        return <ConfirmationDialog
+            open={openDelete}
+            onClose={() => {setOpenDelete(false)}}
+            onSubmit={submitDelete}
+            message={t("mitigationactiontype.delete.message")}
+            submitMessage={t("button.delete")}
+        />;
+    }
 
     return (
         <>
@@ -168,6 +195,7 @@ function MitigationActionTypeOverview(props) {
                 processRowUpdate={handleProcessRowUpdate}
                 onProcessRowUpdateError={handleProcessRowUpdateError}
             />
+            {renderDeleteDialog()}
         </>
     );
 }

@@ -105,6 +105,7 @@ const translationDeDE = {
     "mitigationactiontype.policy.manual": "Manuell",
     "mitigationactiontype.policy.withcheck": "Genehmigungsvorbehalt",
     "mitigationactiontype.policy.automated": "Automatisch",
+    "mitigationactiontype.delete.message": "Die Maßnahmentypenkonfiguration wird unwiderruflich gelöscht.",
     "trafficincidenttype.heading": "UnfallTypen",
     "trafficincidenttype.name": "Unfalltyp",
     "trafficincidenttype.addItem": "Neuen UnfallTyp hinzufügen",

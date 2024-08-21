@@ -105,6 +105,7 @@ const translationEnEN = {
     "mitigationactiontype.policy.manual": "Manual",
     "mitigationactiontype.policy.withcheck": "Approval",
     "mitigationactiontype.policy.automated": "Automated",
+    "mitigationactiontype.delete.message": "The configuration will be deleted",
     "trafficincidenttype.heading": "Incident Types",
     "trafficincidenttype.name": "Incident Name",
     "trafficincidenttype.addItem": "Add Incident Types",
