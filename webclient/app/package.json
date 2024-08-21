@@ -23,9 +23,10 @@
     "react-dom": "^18.0.0",
     "react-dropzone": "14.2.3",
     "react-i18next": "^15.0.1",
+    "react-player": "2.16.0",
     "react-router": "^6.25.1",
     "react-router-dom": "^6.25.1",
-    "react-player": "2.16.0",
+    "screenfull": "^6.0.2",
     "stream": "npm:stream-browserify@^3.0.0",
     "use-immer": "^0.10.0",
     "util": "npm:util@^0.12.5",
@@ -42,8 +43,9 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "@vitejs/plugin-react": "^4.3.1",
+    "@cyclonedx/cyclonedx-npm": "^1.19.3",
     "@mui/x-data-grid": "7.12.1",
+    "@vitejs/plugin-react": "^4.3.1",
     "buffer": "npm:buffer@^6.0.3",
     "crypto": "npm:crypto-browserify@^3.12.0",
     "eslint": "^9.9.0 || ^8 ",
@@ -61,7 +63,6 @@
     "util": "npm:util@^0.12.5",
     "vfile": "npm:vfile@^6.0.1",
     "vite": "^5.4.0",
-    "zlib": "npm:browserify-zlib@^0.2.0",
-    "@cyclonedx/cyclonedx-npm": "^1.19.3"
+    "zlib": "npm:browserify-zlib@^0.2.0"
   }
 }
