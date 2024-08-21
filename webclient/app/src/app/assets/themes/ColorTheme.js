@@ -38,9 +38,13 @@ const ColorTheme = createTheme({
             textTransform: "uppercase"
         },
         h2: {
-            fontSize: "2rem",
+            fontSize: "1.8rem",
             fontWeight: 400,
             textTransform: "uppercase"
+        },
+        h3: {
+            fontSize: "1.8rem",
+            fontWeight: 400
         },
         h5: {
             fontSize: "1.2rem"
@@ -57,7 +61,6 @@ const ColorTheme = createTheme({
 
     overrides: {}
 
-
-})
+});
 
 export default ColorTheme;

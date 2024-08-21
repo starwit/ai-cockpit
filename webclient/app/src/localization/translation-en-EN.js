@@ -15,6 +15,7 @@ const translationEnEN = {
     "trafficIncident.mitigationAction.header4standardvalues": "Add Standard Values for Mitigation Actions",
     "trafficIncident.button.acknowledged": "Acknowledged",
     "trafficIncident.button.reportmistake": "Report Mistake",
+    "trafficIncident.state":"State",
     "mitigationAction": "MitigationAction",
     "mitigationAction.title": "Mitigation Actions",
     "mitigationAction.create.title": "Create Mitigation Action",

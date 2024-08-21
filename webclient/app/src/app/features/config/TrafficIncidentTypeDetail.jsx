@@ -16,7 +16,6 @@ import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
 import {DataGrid, GridCloseIcon} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
 
-
 function TrafficIncidentTypeDetail(props) {
     const {t} = useTranslation();
     const {open, rowData, handleClose} = props;
@@ -24,7 +23,6 @@ function TrafficIncidentTypeDetail(props) {
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const [isSaved, setIsSaved] = useState([true]);
     const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
-    const [unsafedDataFeedback, setUnsafedDataFeedback] = useState("");
 
     // Mitigation Action Type List
     const columns = [
@@ -63,8 +61,8 @@ function TrafficIncidentTypeDetail(props) {
         function handleChange(e) {
             setChecked(e.target.checked);
 
-            let tmpActions = mitigationActionTypes;
-            tmpActions.forEach((action) => {
+            const tmpActions = mitigationActionTypes;
+            tmpActions.forEach(action => {
                 if (action.id === props.actionId) {
                     action.isSelected = e.target.checked;
                     setIsSaved(false);
@@ -76,7 +74,7 @@ function TrafficIncidentTypeDetail(props) {
         return <Checkbox
             checked={checked}
             onChange={handleChange}
-        />
+        />;
     }
 
     useEffect(() => {
@@ -89,10 +87,10 @@ function TrafficIncidentTypeDetail(props) {
                 return;
             } else {
                 response.data.forEach(mitigationType => {
-                    mitigationType['isSelected'] = false;
+                    mitigationType["isSelected"] = false;
                     mitigationType.trafficIncidentType.forEach(incidentType => {
                         if (incidentType.id === rowData.id) {
-                            mitigationType['isSelected'] = true;
+                            mitigationType["isSelected"] = true;
                         }
                     });
                 });
@@ -102,8 +100,8 @@ function TrafficIncidentTypeDetail(props) {
     }
 
     function saveSelection() {
-        let dataToSave = rowData;
-        let actionTypeIds = [];
+        const dataToSave = rowData;
+        const actionTypeIds = [];
         mitigationActionTypes.filter(actionType => {
             if (actionType.isSelected) {
                 actionTypeIds.push({id: actionType.id});
@@ -112,62 +110,49 @@ function TrafficIncidentTypeDetail(props) {
         });
         dataToSave.mitigationActionType = actionTypeIds;
         trafficIncidentTypeRest.update(dataToSave).then(response => {
-            //TODO error handling
+            // TODO error handling
             setIsSaved(true);
-            setUnsafedDataFeedback("");
         });
-    }
-
-    function checkClose() {
-        if (isSaved) {
-            handleClose();
-        } else {
-            console.log("not saved!");
-            setUnsafedDataFeedback(t("trafficincidenttype.makeselect.notsaved"))
-        }
+        handleClose();
     }
 
     return <>
         <Dialog
             open={open}
-            onClose={checkClose}
+            onClose={handleClose}
             aria-labelledby="traffic-incident-type-detail-dialog-title"
             aria-describedby="traffic-incident-type-detail-dialog-description"
             maxWidth="xl"
         >
             <DialogTitle id="traffic-incident-type-detail-dialog-title" >
-                <Typography component="span" variant="h4">
-                    {t("trafficincidenttype.selectaction")}
-                    {rowData.name}
+                <Typography component="p" variant="h2">
+                    {t("trafficincidenttype.selectaction")}{rowData.name}
                 </Typography>
             </DialogTitle>
             <IconButton
-                onClick={checkClose}
+                onClick={handleClose}
                 sx={{
-                    position: 'absolute',
+                    position: "absolute",
                     right: 8,
                     top: 8,
-                    color: (theme) => theme.palette.grey[500],
+                    color: theme => theme.palette.grey[500]
                 }}
             >
                 <GridCloseIcon />
             </IconButton>
             <DialogContent id="traffic-incident-type-detail-dialog-description">
                 <Grid>
-                    <Stack direction="row" spacing={1} sx={{marginBottom: 1}}>
-                        <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
-                            {t("trafficincidenttype.saveselect")}
-                            {isSaved ? "" : "*"}
-                        </Button>
-                        <Typography component="span">
-                            {unsafedDataFeedback}
-                        </Typography>
-                    </Stack>
                     <DataGrid
                         autoHeight
                         rows={mitigationActionTypes}
                         columns={columns}
                     />
+                    <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{marginTop: 1}}>
+                        <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
+                            {t("trafficincidenttype.saveselect")}
+                            {isSaved ? "" : "*"}
+                        </Button>
+                    </Stack>
                 </Grid>
             </DialogContent>
         </Dialog>

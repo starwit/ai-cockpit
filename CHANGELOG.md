@@ -4,6 +4,10 @@ Changelog of ai-cockpit.
 
 ## Current Version ()
 
+### Features
+
+-  ab#1199 provide default mitigation actions by incident type ([9c742](https://github.com/starwit/ai-cockpit/commit/9c7420774b29c7b) Anett)  
+
 ### Bug Fixes
 
 -  save traffic incident ([7c1d2](https://github.com/starwit/ai-cockpit/commit/7c1d24e13f04f7b) Anett)  
