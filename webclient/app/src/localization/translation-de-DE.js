@@ -62,7 +62,9 @@ const translationDeDE = {
     "button.create": "Hinzufügen",
     "button.update": "Bearbeiten",
     "button.close": "Schließen",
+    "button.cancel": "Abbrechen",
     "button.delete": "Löschen",
+    "button.save": "Speichern",
     "button.action.execute": "Ausführen",
     "select.none": "Keine",
     "error.inUse": "Mehr als eine Zeile mit der gegebenen Kennung wurde gefunden",
@@ -103,6 +105,7 @@ const translationDeDE = {
     "mitigationactiontype.policy.manual": "Manuell",
     "mitigationactiontype.policy.withcheck": "Genehmigungsvorbehalt",
     "mitigationactiontype.policy.automated": "Automatisch",
+    "mitigationactiontype.delete.message": "Die Maßnahmentypenkonfiguration wird unwiderruflich gelöscht.",
     "trafficincidenttype.heading": "UnfallTypen",
     "trafficincidenttype.name": "Unfalltyp",
     "trafficincidenttype.addItem": "Neuen UnfallTyp hinzufügen",
@@ -111,6 +114,8 @@ const translationDeDE = {
     "trafficincidenttype.selectaction": "Maßnahmen für den Gefahrentyp ",
     "trafficincidenttype.saveselect": "Zuordnung speichern",
     "trafficincidenttype.makeselect": "Aktionstyp zuordnen",
-    "trafficincidenttype.makeselect.notsaved": "Ungesicherte Änderungen!"
+    "trafficincidenttype.makeselect.notsaved": "Ungesicherte Änderungen!",
+    "trafficincidenttype.delete.message": "Die Gefahrentypkonfiguration wird unwiderruflich gelöscht.",
+    "trafficincidenttype.save.message": "Die Gefahrentypkonfigurationen müssen erst gespeichert werden, bevor sie bearbeitet werden können"
 };
 export default translationDeDE;
