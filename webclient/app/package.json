@@ -26,7 +26,6 @@
     "react-player": "2.16.0",
     "react-router": "^6.25.1",
     "react-router-dom": "^6.25.1",
-    "screenfull": "^6.0.2",
     "stream": "npm:stream-browserify@^3.0.0",
     "use-immer": "^0.10.0",
     "util": "npm:util@^0.12.5",
