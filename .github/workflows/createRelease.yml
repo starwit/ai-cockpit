@@ -56,6 +56,8 @@ jobs:
 
     - name: Maven release pepare
       run: | 
+        git config --global user.email "code@starwit.de"
+        git config --global user.name "Starwit"
         mvn generate-sources --file pom.xml
         git add .
         if [git status | grep -q modified]
