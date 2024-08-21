@@ -15,6 +15,7 @@ const translationDeDE = {
     "trafficIncident.mitigationAction.header4standardvalues": "Standardwerte für Maßnahmen festlegen",
     "trafficIncident.button.acknowledged": "Geprüft",
     "trafficIncident.button.reportmistake": "Fehler",
+    "trafficIncident.state":"Status",
     "mitigationAction": "Aktion",
     "mitigationAction.title": "Aktionen",
     "mitigationAction.create.title": "Aktion erfassen",
