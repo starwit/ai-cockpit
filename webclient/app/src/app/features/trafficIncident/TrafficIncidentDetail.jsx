@@ -30,8 +30,6 @@ import {formatDateFull} from "../../commons/formatter/DateFormatter";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
 import TrafficIncidentMap from "./TrafficIncidentMap";
-import screenfull from "screenfull";
-//screenfull.request(document.getElementById('button'));
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
@@ -192,13 +190,13 @@ function TrafficIncidentDetail(props) {
                             </FormControl>
                             <Box>
                                 <ReactPlayer
-                                    id='player'
                                     url='images/incidents/SampleScene01.mp4'
                                     width='100%'
                                     height='100%'
                                     controls={true}
                                     muted={true}
                                     playing={true}
+                                    playbackRate={2}
                                 />
                             </Box>
                         </Stack>
