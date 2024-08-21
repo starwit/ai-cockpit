@@ -8,7 +8,7 @@ import React, {useEffect, useState, useMemo} from "react";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import ConfirmationDialog from "./ConfirmationDialog";
 
-function MitigationActionTypeOverview(props) {
+function MitigationActionTypeOverview() {
     const {t} = useTranslation();
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest, []);
     const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
