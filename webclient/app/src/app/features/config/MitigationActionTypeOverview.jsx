@@ -117,7 +117,7 @@ function MitigationActionTypeOverview() {
 
     function handleDeleteClick(event, row) {
         if (row.id === "") {
-            window.location.reload();
+            reloadMitigationActionTypes();
         } else {
             setOpenDelete(true);
             setDeleteRow(row);

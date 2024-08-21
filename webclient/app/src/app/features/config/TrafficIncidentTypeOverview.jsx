@@ -123,7 +123,7 @@ function TrafficIncidentTypeOverview(props) {
 
     function handleDeleteClick(row) {
         if (row.id === "") {
-            window.location.reload();
+            reloadTrafficIncidentTypes();
         } else {
             setOpenDelete(true);
             setDeleteRow(row);
