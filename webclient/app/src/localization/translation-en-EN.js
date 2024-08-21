@@ -15,7 +15,7 @@ const translationEnEN = {
     "trafficIncident.mitigationAction.header4standardvalues": "Add Standard Values for Mitigation Actions",
     "trafficIncident.button.acknowledged": "Acknowledged",
     "trafficIncident.button.reportmistake": "Report Mistake",
-    "trafficIncident.state":"State",
+    "trafficIncident.state": "State",
     "mitigationAction": "MitigationAction",
     "mitigationAction.title": "Mitigation Actions",
     "mitigationAction.create.title": "Create Mitigation Action",
@@ -64,6 +64,7 @@ const translationEnEN = {
     "button.close": "Close",
     "button.cancel": "Cancel",
     "button.delete": "Delete",
+    "button.save": "Save",
     "button.action.execute": "Execute",
     "select.none": "None",
     "error.inUse": "More than one row with the given identifier was found",
@@ -113,6 +114,7 @@ const translationEnEN = {
     "trafficincidenttype.saveselect": "Save selection",
     "trafficincidenttype.makeselect": "Select Action Type",
     "trafficincidenttype.makeselect.notsaved": "Unsafed Changes!",
-    "trafficincidenttype.delete.message" :"The configuration will be deleted"
+    "trafficincidenttype.delete.message": "The configuration will be deleted",
+    "trafficincidenttype.save.message": "The trafficincidenttype configurations must be saved before they can be edited"
 };
 export default translationEnEN;

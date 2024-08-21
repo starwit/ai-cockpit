@@ -20,7 +20,7 @@ function TrafficIncidentTypeOverview(props) {
     const [isSaved, setIsSaved] = useState([true]);
     const [open, setOpen] = React.useState(false);
     const [openDelete, setOpenDelete] = React.useState(false);
-    const [openSaved, setOpenSaved] = React.useState(false);
+    const [openNotSaved, setOpenNotSaved] = React.useState(false);
     const [rowData, setRowData] = useState({});
     const [deleteRow, setDeleteRow] = useState({});
 
@@ -131,9 +131,8 @@ function TrafficIncidentTypeOverview(props) {
 
     function handleEditClick(row) {
         if (!isSaved) {
-            //TO-DO   ERst speichern
+            setOpenNotSaved(true);
         }
-        setOpen(true);
         setRowData(row);
     }
 
@@ -160,6 +159,12 @@ function TrafficIncidentTypeOverview(props) {
         setOpenDelete(false);
     }
 
+    function submitSave() {
+        setOpenNotSaved(false);
+        saveAll();
+        setOpen(true);
+    }
+
     function renderDeleteDialog() {
         if (!openDelete) {
             return null;
@@ -169,6 +174,20 @@ function TrafficIncidentTypeOverview(props) {
             onClose={() => {setOpenDelete(false)}}
             onSubmit={submitDelete}
             message={t("trafficincidenttype.delete.message")}
+            submitMessage={t("button.delete")}
+        />;
+    }
+
+    function renderSaveDialog() {
+        if (!openNotSaved) {
+            return null;
+        }
+        return <ConfirmationDialog
+            open={openNotSaved}
+            onClose={() => {setOpenNotSaved(false)}}
+            onSubmit={submitSave}
+            message={t("trafficincidenttype.save.message")}
+            submitMessage={t("button.save")}
         />;
     }
 
@@ -206,6 +225,7 @@ function TrafficIncidentTypeOverview(props) {
         />
         {renderDialog()}
         {renderDeleteDialog()}
+        {renderSaveDialog()}
     </>;
 }
 export default TrafficIncidentTypeOverview;

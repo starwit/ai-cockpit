@@ -7,7 +7,7 @@ import {DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import PropTypes from "prop-types";
 
 function ConfirmationDialog(props) {
-    const {open, onClose, onSubmit, title, message, confirmTitle} = props;
+    const {open, onClose, onSubmit, title, message, confirmTitle, submitMessage} = props;
     const {t} = useTranslation();
 
     return (
@@ -27,7 +27,7 @@ function ConfirmationDialog(props) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>{t("button.cancel")}</Button>
-                <Button onClick={onSubmit} autoFocus>{t("button.submit")}
+                <Button onClick={onSubmit} autoFocus>{submitMessage}
                 </Button>
             </DialogActions>
         </Dialog>
