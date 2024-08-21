@@ -9,7 +9,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TrafficIncidentTypeDetail from "./TrafficIncidentTypeDetail";
-import ConfirmationDialog from "./ConfirmationDialog";
+import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
 
 
 function TrafficIncidentTypeOverview(props) {

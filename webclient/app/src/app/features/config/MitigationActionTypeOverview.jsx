@@ -6,7 +6,7 @@ import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useState, useMemo} from "react";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
-import ConfirmationDialog from "./ConfirmationDialog";
+import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
 
 function MitigationActionTypeOverview() {
     const {t} = useTranslation();
