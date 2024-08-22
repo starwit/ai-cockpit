@@ -12,6 +12,6 @@ Hier finden Sie Informationen über unsere hochriskante KI-Anwendung gemäß den
 - [Benachrichtigungen](docs/notifications.md)
 ---
 
-© 2024, Starwit Technologies Gmbh
+© 2024, Starwit Technologies GmbH
 
 ! Hinweis: das ist ein Template/Beispiel für die Erfüllung des AI ACTs und enthält noch keine gültigen Daten
