@@ -115,9 +115,10 @@ const translationEnEN = {
     "transparency.components.title": "System Module Overview",
     "transparency.components.details.title": "Module Name",
     "transparency.components.details.description": "Description",
+    "transparency.components.details.isAI": "AI methods used?",
     "transparency.components.details.noAI": "This module does not use AI methods",
     "transparency.components.details.useAI": "This module uses AI methods",
-    "transparency.components.details.sbomlist.title": "Module's list of components",
+    "transparency.components.details.typeAI": "AI Type",
     "transparency.sbom.title": "Bill of Material"
 };
 export default translationEnEN;

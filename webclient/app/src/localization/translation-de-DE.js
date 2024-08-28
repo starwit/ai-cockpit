@@ -114,6 +114,12 @@ const translationDeDE = {
     "menu.info.componentbreakdown": "Modulübersicht",
     "menu.info.riskoverview": "Risikobewertung",
     "transparency.components.title": "Modulübersicht",
+    "transparency.components.details.title": "Modulename",
+    "transparency.components.details.description": "Beschreibung",
+    "transparency.components.details.isAI": "KI-Methoden verwendet?",
+    "transparency.components.details.noAI": "Dieses Modul nutzt keine KI-Methoden",
+    "transparency.components.details.useAI": "Dieses Modul nutzt KI-Methoden",
+    "transparency.components.details.typeAI": "KI-Typ",
     "transparency.sbom.title": "Bill of Material"
 };
 export default translationDeDE;

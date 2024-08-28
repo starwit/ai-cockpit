@@ -1,11 +1,12 @@
-
-import {Box, Button, Card, CardContent, Divider, List, ListItem, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
-import {useNavigate} from "react-router";
-import LoupeIcon from '@mui/icons-material/Loupe';
+import {Box, Button, Card, CardContent, Divider, IconButton, List, ListItem, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import React, {useEffect, useState, useMemo} from "react";
 import TransparencyFunctions from "../../services/TransparencyFunctions";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 function ComponentBreakDown() {
     const {t} = useTranslation();
@@ -42,24 +43,32 @@ function ComponentBreakDown() {
                                 <Table size="small" aria-label="a dense table">
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell align="left">description</TableCell>
+                                            <TableCell align="left">{t("transparency.components.details.description")}</TableCell>
                                             <TableCell align="left">{row.description}</TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell align="left">Contains AI?</TableCell>
-                                            <TableCell align="left">{row.useAI ? "Yes" : "No"}</TableCell>
+                                            <TableCell align="left">{t("transparency.components.details.isAI")}</TableCell>
+                                            <TableCell align="left">{row.useAI ? <CheckCircleIcon /> : <CancelIcon />}</TableCell>
                                         </TableRow>
-                                        <TableRow>
-                                            <TableCell align="left">AI Type</TableCell>
-                                            <TableCell align="left">{row.aiType}</TableCell>
-                                        </TableRow>
-                                        <TableRow>
-                                            <TableCell align="left">AI Model Version</TableCell>
-                                            <TableCell align="left">{row.modelVersion}</TableCell>
-                                        </TableRow>
+                                        {row.useAI ?
+                                            <>
+                                                <TableRow>
+                                                    <TableCell align="left">{t("transparency.components.details.typeAI")}</TableCell>
+                                                    <TableCell align="left">{row.aiType}</TableCell>
+                                                </TableRow>
+                                                <TableRow>
+                                                    <TableCell align="left">AI Model Version</TableCell>
+                                                    <TableCell align="left">{row.modelVersion}</TableCell>
+                                                </TableRow>
+                                            </>
+                                            : ""
+                                        }
                                         <TableRow>
                                             <TableCell align="left">Details</TableCell>
-                                            <TableCell align="left">TODO</TableCell>
+                                            <TableCell align="left">
+                                                <IconButton><VisibilityIcon /></IconButton>
+                                                <IconButton><PictureAsPdfIcon /></IconButton>
+                                            </TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
