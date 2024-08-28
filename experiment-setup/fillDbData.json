@@ -1,0 +1,114 @@
+[
+  {
+    "acquisitionTime": "2024-08-28T10:15:30Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.975163,
+    "cameraLongitude": -86.12691,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":1},
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "2024-08-28T10:20:00Z",
+
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.978309,
+    "cameraLongitude": -86.133787,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":2},
+    "mitigationAction": []
+
+  },
+  {
+    "acquisitionTime": "2024-08-28T10:25:00Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.985589,
+    "cameraLongitude": -86.131719,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":3},
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "2024-08-27T11:51:00Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.97078,
+    "cameraLongitude": -86.127168,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":3},
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "2024-08-27T11:32:00Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.980254,
+    "cameraLongitude": -86.143703,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":2},
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "2024-08-27T11:15:00Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.985796,
+    "cameraLongitude": -86.120485,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":1},
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "2024-08-27T12:28:00Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.971161,
+    "cameraLongitude": -86.118917,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":1},
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "2024-08-26T12:47:00Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.970734,
+    "cameraLongitude": -86.128939,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":2},
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "2024-08-26T12:05:00Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.974686,
+    "cameraLongitude": -86.141046,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":2},
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "2024-08-26T10:49:00Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.97227,
+    "cameraLongitude": -86.151024,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":3},
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "2024-08-26T11:15:30Z",
+    "mediaUrl": "images/incidents/SampleScene01.mp4",
+    "cameraLatitude": 39.975163,
+    "cameraLongitude": -86.12691,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {"id":3},
+    "mitigationAction": []
+  }
+]
