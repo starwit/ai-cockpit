@@ -1,13 +1,19 @@
-INSERT INTO "trafficincidenttype" ("name")
+INSERT INTO "trafficincidenttype" ("name", "description")
 VALUES 
-    ('Stau'),
-    ('Parken auf Sperrfläche'),
-    ('Gefahrensituation'),
-    ('Falschfahrer'),
-    ('hohe Geschwindigkeit');
+    ('dangerous driving behaviour', 'A road user involving reckless or unsafe driving behavior'),
+    ('accident', 'A traffic incident involving a collision or crash between vehicles or other obstacles'),
+    ('traffic jam', 'A situation where traffic is congested and vehicles are moving slowly or not at all'),
+    ('Stau', NULL),
+    ('Parken auf Sperrfläche', NULL),
+    ('Gefahrensituation', NULL),
+    ('Falschfahrer', NULL),
+    ('hohe Geschwindigkeit', NULL);
 
 INSERT INTO "mitigationactiontype" ("name", "description", "executionpolicy")
 VALUES 
+    ('notify police', 'Notify the police about the traffic incident', 'WITHCHECK'),
+    ('notify emergency services', 'Notify emergency services like ambulances or fire departments', 'DISABLED'),
+    ('notify public platform', 'Notify public platforms or apps about the traffic incident', 'MANUAL'),
     ('Polizei benachrichtigen', 'Polizei description', 'MANUAL'),
     ('an Verkehrsfunk melden', 'Verkehrsfunk description', 'MANUAL'),
     ('Straße Sperren', 'Sperren description', 'MANUAL'),
@@ -25,4 +31,10 @@ VALUES
 
 INSERT INTO "trafficincidenttype_mitigationactiontype"(
 	"trafficincidenttype_id", "mitigationactiontype_id")
-	VALUES (1, 1), (1, 2);
+	VALUES 
+    (1, 1),
+    (2, 1),
+    (2, 3),
+    (3, 3),
+    (4, 4), 
+    (4, 5);
