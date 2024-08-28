@@ -17,6 +17,8 @@ function TrafficIncidentOverview() {
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
     const mitigationActionRest = useMemo(() => new MitigationActionRest(), []);
     const [trafficIncidents, setTrafficIncidents] = useState([]);
+    const [trafficIncidents0, setTrafficIncidents0] = useState([]);
+    const [trafficIncidents1, setTrafficIncidents1] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
 
@@ -25,18 +27,21 @@ function TrafficIncidentOverview() {
     }, [open, tab]);
 
     function reloadTrafficIncidents() {
-        trafficIncidentRest.findAll().then(response => {
-            if (response.data == null) {
-                return;
-            }
-            setTrafficIncidents(response.data);
-            if (tab === 0) {
-                setTrafficIncidents(response.data.filter(incident => incident.state == null || incident.state == "NEW"));
-            }
-            if (tab === 1) {
-                setTrafficIncidents(response.data.filter(incident => incident.state == "ACCEPTED" || incident.state == "REJECTED"));
-            }
-        });
+        const interval = setInterval(() => {
+            trafficIncidentRest.findAll().then(response => {
+                if (response.data == null) {
+                    return;
+                }
+                setTrafficIncidents(response.data);
+                setTrafficIncidents0(response.data.filter(incident => incident.state == null || incident.state == "NEW"));  
+                setTrafficIncidents1(response.data.filter(incident => incident.state == "ACCEPTED" || incident.state == "REJECTED"));
+                
+            });
+        }, 5000); // Update alle 5 Sekunden
+
+        return () => clearInterval(interval);
+
+
     }
 
     const handleTabChange = (event, newValue) => {
@@ -187,7 +192,7 @@ function TrafficIncidentOverview() {
             <Box sx={{width: "100%"}}>
                 <DataGrid
                     autoHeight
-                    rows={trafficIncidents}
+                    rows={tab==0?trafficIncidents0:trafficIncidents1}
                     columns={headers}
                     pageSizeOptions={[10]}
                     isCellEditable={() => {false}}
