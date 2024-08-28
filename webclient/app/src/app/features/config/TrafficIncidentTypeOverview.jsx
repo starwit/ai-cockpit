@@ -9,16 +9,19 @@ import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from '@mui/icons-material/Edit';
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TrafficIncidentTypeDetail from "./TrafficIncidentTypeDetail";
+import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
 
 
 function TrafficIncidentTypeOverview(props) {
     const {t} = useTranslation();
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest, []);
-    const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const [trafficIncidentTypes, setTrafficIncidentTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
     const [open, setOpen] = React.useState(false);
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const [openNotSaved, setOpenNotSaved] = React.useState(false);
     const [rowData, setRowData] = useState({});
+    const [deleteRow, setDeleteRow] = useState({});
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
@@ -119,15 +122,20 @@ function TrafficIncidentTypeOverview(props) {
     };
 
     function handleDeleteClick(row) {
-        trafficIncidentTypeRest.delete(row.id).then(function () {
+        if (row.id === "") {
             reloadTrafficIncidentTypes();
-        });
+        } else {
+            setOpenDelete(true);
+            setDeleteRow(row);
+        }
     };
 
     // dialog functions
 
     function handleEditClick(row) {
-        setOpen(true);
+        if (!isSaved) {
+            setOpenNotSaved(true);
+        }
         setRowData(row);
     }
 
@@ -143,6 +151,46 @@ function TrafficIncidentTypeOverview(props) {
             open={open}
             handleClose={handleClose}
             rowData={rowData}
+        />;
+    }
+
+    function submitDelete() {
+        trafficIncidentTypeRest.delete(deleteRow.id).then(function () {
+            reloadTrafficIncidentTypes();
+        });
+        setDeleteRow({});
+        setOpenDelete(false);
+    }
+
+    function submitSave() {
+        setOpenNotSaved(false);
+        saveAll();
+        setOpen(true);
+    }
+
+    function renderDeleteDialog() {
+        if (!openDelete) {
+            return null;
+        }
+        return <ConfirmationDialog
+            open={openDelete}
+            onClose={() => {setOpenDelete(false)}}
+            onSubmit={submitDelete}
+            message={t("trafficincidenttype.delete.message")}
+            submitMessage={t("button.delete")}
+        />;
+    }
+
+    function renderSaveDialog() {
+        if (!openNotSaved) {
+            return null;
+        }
+        return <ConfirmationDialog
+            open={openNotSaved}
+            onClose={() => {setOpenNotSaved(false)}}
+            onSubmit={submitSave}
+            message={t("trafficincidenttype.save.message")}
+            submitMessage={t("button.save")}
         />;
     }
 
@@ -179,6 +227,8 @@ function TrafficIncidentTypeOverview(props) {
             onProcessRowUpdateError={handleProcessRowUpdateError}
         />
         {renderDialog()}
+        {renderDeleteDialog()}
+        {renderSaveDialog()}
     </>;
 }
 export default TrafficIncidentTypeOverview;
