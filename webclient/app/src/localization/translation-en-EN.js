@@ -113,6 +113,11 @@ const translationEnEN = {
     "menu.info.componentbreakdown": "Component Overview",
     "menu.info.riskoverview": "Risk Assesment",
     "transparency.components.title": "System Module Overview",
+    "transparency.components.details.title": "Module Name",
+    "transparency.components.details.description": "Description",
+    "transparency.components.details.noAI": "This module does not use AI methods",
+    "transparency.components.details.useAI": "This module uses AI methods",
+    "transparency.components.details.sbomlist.title": "Module's list of components",
     "transparency.sbom.title": "Bill of Material"
 };
 export default translationEnEN;

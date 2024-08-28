@@ -14,16 +14,12 @@ class TransparencyFunctions {
         return axios.get(this.baseUrl + '/sbom-backend.json');
     };
 
-    getComponentList = () => {
-        let testurl = window.location.pathname + '/transparencyModuleData.json';
-        //return axios.get(this.baseUrl + '/aicmodules');
-        return axios.get(testurl);
+    getModuleList = () => {
+        return axios.get(this.baseUrl + '/modules');
     };
 
-    getComponentList = () => {
-        let testurl = window.location.pathname + '/transparencyModuleData.json';
-        //return axios.get(this.baseUrl + '/aicmodules');
-        return axios.get(testurl);
+    getModuleDetails = (id) => {
+        return axios.get(this.baseUrl + '/modules/' + id);
     };
 
 }
