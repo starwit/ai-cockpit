@@ -6,14 +6,6 @@ class TransparencyFunctions {
         this.baseUrl = window.location.pathname + "api/transparency";
     }
 
-    aicockpitSbomFrontend = () => {
-        return axios.get(this.baseUrl + '/sbom-frontend.json');
-    };
-
-    aicockpitSbomBackend = () => {
-        return axios.get(this.baseUrl + '/sbom-backend.json');
-    };
-
     getModuleList = () => {
         return axios.get(this.baseUrl + '/modules');
     };
@@ -21,6 +13,10 @@ class TransparencyFunctions {
     getModuleDetails = (id) => {
         return axios.get(this.baseUrl + '/modules/' + id);
     };
+
+    loadSBOM = (url) => {
+        return axios.get(url);
+    }
 
 }
 

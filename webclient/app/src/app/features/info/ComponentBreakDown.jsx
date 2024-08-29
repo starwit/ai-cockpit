@@ -7,11 +7,14 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import ComponentDetailsDialog from "./ComponentDetailsDialog";
 
 function ComponentBreakDown() {
     const {t} = useTranslation();
     const transparencyFunctions = useMemo(() => new TransparencyFunctions(), []);
     const [moduleList, setModuleList] = useState([]);
+    const [open, setOpen] = React.useState(false);
+    const [moduleData, setModuleData] = React.useState({});
 
     useEffect(() => {
         reload();
@@ -26,6 +29,29 @@ function ComponentBreakDown() {
             }
 
         });
+    }
+
+    function handleOpen(row) {
+        setOpen(true);
+        setModuleData(row);
+    }
+
+    function handleClose() {
+        setOpen(false);
+    };
+
+    function renderModuleList() {
+        if (!open) {
+            return null;
+        }
+        return (<ComponentDetailsDialog
+            open={open}
+            handleClose={handleClose}
+            moduleData={moduleData}
+        />);
+    }
+
+    function showPDF() {
     }
 
     return <>
@@ -57,7 +83,7 @@ function ComponentBreakDown() {
                                                     <TableCell align="left">{row.aiType}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
-                                                    <TableCell align="left">AI Model Version</TableCell>
+                                                    <TableCell align="left">{t("transparency.components.details.modelVersion")}</TableCell>
                                                     <TableCell align="left">{row.modelVersion}</TableCell>
                                                 </TableRow>
                                             </>
@@ -66,8 +92,13 @@ function ComponentBreakDown() {
                                         <TableRow>
                                             <TableCell align="left">Details</TableCell>
                                             <TableCell align="left">
-                                                <IconButton><VisibilityIcon /></IconButton>
-                                                <IconButton><PictureAsPdfIcon /></IconButton>
+                                                <IconButton onClick={(e) => {
+                                                    handleOpen(row);
+                                                }}
+                                                >
+                                                    <VisibilityIcon />
+                                                </IconButton>
+                                                <IconButton onClick={showPDF}><PictureAsPdfIcon /></IconButton>
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>
@@ -78,6 +109,7 @@ function ComponentBreakDown() {
                 </Grid>
             ))}
         </Grid>
+        {renderModuleList()}
     </>;
 }
 

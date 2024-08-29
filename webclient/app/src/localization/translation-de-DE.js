@@ -120,6 +120,7 @@ const translationDeDE = {
     "transparency.components.details.noAI": "Dieses Modul nutzt keine KI-Methoden",
     "transparency.components.details.useAI": "Dieses Modul nutzt KI-Methoden",
     "transparency.components.details.typeAI": "KI-Typ",
+    "transparency.components.details.modelVersion": "Modelversion",
     "transparency.sbom.title": "Bill of Material"
 };
 export default translationDeDE;

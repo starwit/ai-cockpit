@@ -35,8 +35,8 @@ public class TransparencyFunctionsController {
         m.setAiType(ModelType.MISC);
         m.setModelVersion("1.0.0");
         HashMap<String, String> sbomURLs = new HashMap<>();
-        sbomURLs.put("backend", "dfgdfgdfg");
-        sbomURLs.put("frontend", "sdfsdfdfg");
+        sbomURLs.put("backend", "sbom-backend.json");
+        sbomURLs.put("frontend", "sbom-frontend.json");
         m.setsBOMLocation(sbomURLs);
         modules.add(m);
 
@@ -46,8 +46,8 @@ public class TransparencyFunctionsController {
         m1.setDescription("An AI act inspired cockpit to monitor AI apps");
         m1.setUseAI(false);
         HashMap<String, String> sbomURLs2 = new HashMap<>();
-        sbomURLs2.put("backend", "http://localhost:8081/sbom-backend.json");
-        sbomURLs2.put("frontend", "http://localhost:8081/sbom-frontend.json");
+        sbomURLs2.put("backend", "sbom-backend.json");
+        sbomURLs2.put("frontend", "sbom-frontend.json");
         m1.setsBOMLocation(sbomURLs2);
         modules.add(m1);
 
@@ -59,8 +59,8 @@ public class TransparencyFunctionsController {
         m2.setAiType(ModelType.MISC);
         m2.setModelVersion("1.0.0");
         HashMap<String, String> sbomURLs3 = new HashMap<>();
-        sbomURLs3.put("backend", "http://localhost:8082/sbom-backend.json");
-        sbomURLs3.put("frontend", "http://localhost:8082/sbom-frontend.json");
+        sbomURLs3.put("backend", "sbom-backend.json");
+        sbomURLs3.put("frontend", "sbom-frontend.json");
         m2.setsBOMLocation(sbomURLs3);
         modules.add(m2);
     }

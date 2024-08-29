@@ -119,6 +119,7 @@ const translationEnEN = {
     "transparency.components.details.noAI": "This module does not use AI methods",
     "transparency.components.details.useAI": "This module uses AI methods",
     "transparency.components.details.typeAI": "AI Type",
+    "transparency.components.details.modelVersion": "Model Version",
     "transparency.sbom.title": "Bill of Material"
 };
 export default translationEnEN;
