@@ -1,7 +1,6 @@
 package de.starwit.service;
 
 import java.net.UnknownHostException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,12 +45,10 @@ public class ServiceConfiguration {
 
     @Bean
     LettuceConnectionFactory lettuceConnectionFactory() {
-
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(redisHost, redisPort);
         ClientOptions options = ClientOptions.builder().autoReconnect(true)
                 .disconnectedBehavior(DisconnectedBehavior.REJECT_COMMANDS).build();
         LettuceClientConfiguration clientConfig = LettucePoolingClientConfiguration.builder().clientOptions(options)
-                .commandTimeout(Duration.ofDays(9999))
                 .build();
         LettuceConnectionFactory factory = new LettuceConnectionFactory(redisConfig,
                 clientConfig);
