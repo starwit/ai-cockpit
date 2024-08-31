@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringBootConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -24,8 +23,7 @@ import org.springframework.data.redis.stream.Subscription;
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.ClientOptions.DisconnectedBehavior;
 
-@SpringBootConfiguration
-@EnableAutoConfiguration
+@SpringBootApplication
 @ComponentScan(basePackages = "de.starwit.persistence")
 public class ServiceConfiguration {
 
