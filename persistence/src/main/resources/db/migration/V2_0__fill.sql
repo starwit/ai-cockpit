@@ -2,14 +2,14 @@ INSERT INTO "trafficincidenttype" ("name", "description")
 VALUES 
     ('dangerous driving behaviour', 'A road user involving reckless or unsafe driving behavior'),
     ('accident', 'A traffic incident involving a collision or crash between vehicles or other obstacles'),
-    ('traffic jam', 'A situation where traffic is congested and vehicles are moving slowly or not at all'),
+    ('traffic jam', 'A situation where traffic is congested and vehicles are moving slowly or not at all');
 
 
 INSERT INTO "mitigationactiontype" ("name", "description", "executionpolicy")
 VALUES 
     ('notify police', 'Notify the police about the traffic incident', 'WITHCHECK'),
     ('notify emergency services', 'Notify emergency services like ambulances or fire departments', 'MANUAL'),
-    ('notify public platform', 'Notify public platforms or apps about the traffic incident', 'AUTOMATIC'),
+    ('notify public platform', 'Notify public platforms or apps about the traffic incident', 'AUTOMATIC');
 
 INSERT INTO "trafficincident" ("acquisitiontime", "trafficincidenttype_id")
 VALUES 
