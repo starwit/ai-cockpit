@@ -190,7 +190,7 @@ function TrafficIncidentOverview() {
                     rows={trafficIncidents}
                     columns={headers}
                     pageSizeOptions={[10]}
-                    isCellEditable={false}
+                    isCellEditable={() => {false}}
                     slots={{toolbar: GridToolbar}}
                     slotProps={{
                         toolbar: {
