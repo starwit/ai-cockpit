@@ -4,7 +4,7 @@ export const renderActions = params => {
     return (
         <strong>
             {params.row.mitigationAction.map(action => (
-                <Chip key={action.id} label={action.mitigationActionType.name} variant="outlined" sx={{color: "green"}} />
+                <Chip key={action.mitigationActionType.id} label={action.mitigationActionType.name} variant="outlined" sx={{color: "green"}} />
             ))}
         </strong>
     );
@@ -27,9 +27,6 @@ function displayButton(params, title) {
                 color="primary"
                 size="small"
                 style={{marginLeft: 16}}
-                onClick={() => {
-                    console.log("button pressed");
-                }}
             >
                 {title}
             </Button>

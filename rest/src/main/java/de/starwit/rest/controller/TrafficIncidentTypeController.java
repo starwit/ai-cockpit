@@ -2,9 +2,6 @@ package de.starwit.rest.controller;
 
 import java.util.List;
 
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.starwit.persistence.entity.MitigationActionTypeEntity;
 import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
-import de.starwit.service.impl.TrafficIncidentTypeService;
 import de.starwit.persistence.exception.NotificationException;
 import de.starwit.rest.exception.NotificationDto;
+import de.starwit.service.impl.TrafficIncidentTypeService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 /**
  * TrafficIncidentType RestController
