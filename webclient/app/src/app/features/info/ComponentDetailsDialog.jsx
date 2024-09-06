@@ -1,6 +1,6 @@
-import {Box, Button, Dialog, DialogContent, DialogTitle, IconButton, Stack} from "@mui/material";
-import React, {useEffect, useMemo, useState} from "react";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
+import {Dialog, DialogContent, DialogTitle, IconButton} from "@mui/material";
+import React, {useEffect, useMemo} from "react";
 import TransparencyFunctions from "../../services/TransparencyFunctions";
 import CycloneDXViewer from "./CycloneDXViewer";
 
@@ -14,7 +14,7 @@ function ComponentDetailsDialog(props) {
     }, [open]);
 
     function reload() {
-        let sboms = {}
+        const sboms = {}
         Object.entries(moduleData.sBOMLocation).map((entry) => {
             transparencyFunctions.loadSBOM(entry[1]).then(response => {
                 if (response.data == null) {
@@ -25,10 +25,6 @@ function ComponentDetailsDialog(props) {
                 setSbomList(sboms);
             });
         });
-    }
-
-    function test() {
-        console.log(sbomList);
     }
 
     return (
@@ -42,7 +38,7 @@ function ComponentDetailsDialog(props) {
                     position: 'absolute',
                     right: 8,
                     top: 8,
-                    color: (theme) => theme.palette.grey[500],
+                    color: (theme) => theme.palette.grey[500]
                 }}
             >
                 <CloseIcon />

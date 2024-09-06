@@ -25,6 +25,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot-version>3.3.2</spring-boot-version>
         <openapi-version>2.6.0</openapi-version>
+        <transparencyapi-version>0.0.2</transparencyapi-version>
     </properties>
 
     <modules>
@@ -103,7 +104,7 @@
             <dependency>
                 <groupId>de.aicockpit</groupId>
                 <artifactId>transparencyapi</artifactId>
-                <version>0.0.2</version>
+                <version>${transparencyapi-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -1,12 +1,12 @@
-import {Box, Button, Card, CardContent, Divider, IconButton, List, ListItem, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
-import {useTranslation} from "react-i18next";
-import React, {useEffect, useState, useMemo} from "react";
-import TransparencyFunctions from "../../services/TransparencyFunctions";
+import CancelIcon from "@mui/icons-material/Cancel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import {Card, CardContent, Divider, IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import React, {useEffect, useMemo, useState} from "react";
+import {useTranslation} from "react-i18next";
+import TransparencyFunctions from "../../services/TransparencyFunctions";
 import ComponentDetailsDialog from "./ComponentDetailsDialog";
 
 function ComponentBreakDown() {
@@ -65,7 +65,7 @@ function ComponentBreakDown() {
                         <CardContent>
                             {row.name}
                             <Divider />
-                            <TableContainer  >
+                            <TableContainer >
                                 <Table size="small" aria-label="a dense table">
                                     <TableBody>
                                         <TableRow>

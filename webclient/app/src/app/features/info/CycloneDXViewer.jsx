@@ -1,12 +1,8 @@
-import {Card, Divider, List, ListItem, Stack, Typography} from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import React, {useEffect} from "react";
-
+import {Card, Divider, List, ListItem, Typography} from "@mui/material";
+import React from "react";
 
 function CycloneDXViewer(props) {
     const {cycloneData} = props;
-
-    console.log('Viewer ', props);
 
     return (
         <Card sx={{minWidth: 500}}>

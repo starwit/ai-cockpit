@@ -1,8 +1,8 @@
-import {ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Typography} from "@mui/material";
+import Info from "@mui/icons-material/Info";
+import {ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper} from "@mui/material";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
-import Info from "@mui/icons-material/Info";
 
 
 function ConfigMenu() {

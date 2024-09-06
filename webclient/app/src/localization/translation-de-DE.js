@@ -92,7 +92,6 @@ const translationDeDE = {
     "menu.config": "Konfiguration",
     "menu.config.mitigationactiontype": "Maßnahmenkonfiguration",
     "menu.config.trafficincidenttype": "Vorgangskonfiguration",
-    "menu.info": "Info",
     "mitigationactiontype.heading": "Konfiguration Maßnahmentypen",
     "mitigationactiontype.name": "Name Maßnahme",
     "mitigationactiontype.addItem": "Maßnahme hinzufügen",
