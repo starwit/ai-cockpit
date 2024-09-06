@@ -51,7 +51,7 @@ jobs:
         fi
 
     - name: Build with Maven
-      run: mvn clean -B package -P frontend --file pom.xml
+      run: mvn clean -B package -P frontend --settings .github/workflows/settings.xml --file pom.xml
       env:
          CI: false
 
