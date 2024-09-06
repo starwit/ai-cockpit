@@ -15,7 +15,7 @@ const translationDeDE = {
     "trafficIncident.mitigationAction.header4standardvalues": "Standardwerte für Maßnahmen festlegen",
     "trafficIncident.button.acknowledged": "Geprüft",
     "trafficIncident.button.reportmistake": "Fehler",
-    "trafficIncident.state":"Status",
+    "trafficIncident.state": "Status",
     "mitigationAction": "Aktion",
     "mitigationAction.title": "Aktionen",
     "mitigationAction.create.title": "Aktion erfassen",
@@ -95,7 +95,6 @@ const translationDeDE = {
     "menu.config": "Konfiguration",
     "menu.config.mitigationactiontype": "Maßnahmentyp",
     "menu.config.trafficincidenttype": "Gefahrentyp",
-    "menu.info": "Info",
     "mitigationactiontype.heading": "Konfiguration Maßnahmentypen",
     "mitigationactiontype.name": "Name Maßnahme",
     "mitigationactiontype.addItem": "Maßnahme hinzufügen",
@@ -116,6 +115,17 @@ const translationDeDE = {
     "trafficincidenttype.makeselect": "Aktionstyp zuordnen",
     "trafficincidenttype.makeselect.notsaved": "Ungesicherte Änderungen!",
     "trafficincidenttype.delete.message": "Die Gefahrentypkonfiguration wird unwiderruflich gelöscht.",
-    "trafficincidenttype.save.message": "Die Gefahrentypkonfigurationen müssen erst gespeichert werden, bevor sie bearbeitet werden können"
+    "trafficincidenttype.save.message": "Die Gefahrentypkonfigurationen müssen erst gespeichert werden, bevor sie bearbeitet werden können",
+    "menu.info.componentbreakdown": "Modulübersicht",
+    "menu.info.riskoverview": "Risikobewertung",
+    "transparency.components.title": "Modulübersicht",
+    "transparency.components.details.title": "Modulename",
+    "transparency.components.details.description": "Beschreibung",
+    "transparency.components.details.isAI": "KI-Methoden verwendet?",
+    "transparency.components.details.noAI": "Dieses Modul nutzt keine KI-Methoden",
+    "transparency.components.details.useAI": "Dieses Modul nutzt KI-Methoden",
+    "transparency.components.details.typeAI": "KI-Typ",
+    "transparency.components.details.modelVersion": "Modelversion",
+    "transparency.sbom.title": "Bill of Material"
 };
 export default translationDeDE;

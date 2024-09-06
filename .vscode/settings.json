@@ -48,7 +48,7 @@
     },
     "editor.tabSize": 4,
     "editor.defaultFormatter": "redhat.vscode-commons",
-    "editor.autoIndent": "none",
+    "editor.autoIndent": "keep",
     "[xml]": {
         "editor.defaultFormatter": "redhat.vscode-xml",
         "editor.tabSize": 4
