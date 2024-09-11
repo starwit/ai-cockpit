@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "name": "AnDe",
+        "description": "A fantastic AI module",
+        "useAI": true,
+        "aiType": "MISC",
+        "modelVersion": "1.0.0",
+        "sBOMLocation": {
+            "backend": "sbom-backend.json",
+            "frontend": "sbom-frontend.json"
+        }
+    },
+    {
+        "id": 2,
+        "name": "AI Cockpit",
+        "description": "An AI act inspired cockpit to monitor AI apps",
+        "useAI": false,
+        "aiType": null,
+        "modelVersion": null,
+        "sBOMLocation": {
+            "backend": "sbom-backend.json",
+            "frontend": "sbom-frontend.json"
+        }
+    },
+    {
+        "id": 3,
+        "name": "Sandy",
+        "description": "A super intepretation engine",
+        "useAI": true,
+        "aiType": "MISC",
+        "modelVersion": "1.0.0",
+        "sBOMLocation": {
+            "backend": "sbom-backend.json",
+            "frontend": "sbom-frontend.json"
+        }
+    }
+]

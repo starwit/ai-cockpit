@@ -2,7 +2,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import {AppBar, Container, IconButton, Toolbar, Typography} from "@mui/material";
 import React from "react";
 import ConfigMenu from "../features/config/ConfigMenu";
-import InfoMenu from "../features/config/InfoMenu";
+import InfoMenu from "../features/info/InfoMenu";
 
 function CockpitAppBar() {
     return (

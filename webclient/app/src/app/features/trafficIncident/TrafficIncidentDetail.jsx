@@ -39,7 +39,7 @@ function TrafficIncidentDetail(props) {
     const [trafficIncidentType, setTrafficIncidentType] = useState([""]);
     const [allMitigationActionTypes, setAllMitigationActionTypes] = useState([""]);
     const [allTrafficIncidentType, setAllTrafficIncidentType] = useState([""]);
-    const [description, setDescription] = useState(rowData.description);
+    const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
     const {t} = useTranslation();
 
     useEffect(() => {
@@ -127,9 +127,13 @@ function TrafficIncidentDetail(props) {
             aria-describedby="traffic-incident-detail-dialog-description"
             maxWidth="xl"
         >
-            <DialogTitle id="traffic-incident-detail-dialog-title" >
-                <Typography variant="h4">{rowData.trafficIncidentType.name}</Typography>
-                <Typography variant="subtitle1">{formatDateFull(rowData.acquisitionTime)}</Typography>
+            <DialogTitle id="traffic-incident-detail-dialog-title" component="div">
+                <Typography variant="h2">
+                    {rowData.trafficIncidentType.name}
+                </Typography>
+                <Typography variant="h6">
+                    {formatDateFull(rowData.acquisitionTime)}
+                </Typography>
             </DialogTitle>
             <IconButton
                 onClick={handleClose}
@@ -174,12 +178,12 @@ function TrafficIncidentDetail(props) {
                                     renderValue={selected => (<ListItemText>{selected.name}</ListItemText>)}
 
                                 >
-                                    {allTrafficIncidentType.map(incidentType => (
+                                    {allTrafficIncidentType.map((incidentType, index) => (
                                         <MenuItem
-                                            key={incidentType.id}
+                                            key={index}
                                             value={incidentType}
                                         >
-                                            <ListItemText>{incidentType.name}</ListItemText>
+                                            <ListItemText key={index}>{incidentType.name}</ListItemText>
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -192,6 +196,7 @@ function TrafficIncidentDetail(props) {
                                     controls={true}
                                     muted={true}
                                     playing={true}
+                                    playbackRate={2}
                                 />
                             </Box>
                         </Stack>
@@ -212,16 +217,16 @@ function TrafficIncidentDetail(props) {
                                     />}
                                     renderValue={selected => (
                                         <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
-                                            {selected.map(value => (
-                                                <Chip key={value.id} label={value.name} variant="outlined" sx={{color: "green"}} />
+                                            {selected.map((value, index) => (
+                                                <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
 
                                             ))}
                                         </Box>
                                     )}
                                 >
-                                    {allMitigationActionTypes.map(value => (
+                                    {allMitigationActionTypes.map((value, index) => (
                                         <MenuItem
-                                            key={value.id}
+                                            key={index}
                                             value={value}
                                         >
                                             {value.name}
