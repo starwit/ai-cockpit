@@ -190,7 +190,7 @@ function TrafficIncidentDetail(props) {
                             </FormControl>
                             <Box>
                                 <ReactPlayer
-                                    url='http://localhost:9001/anomalies/SampleScene01.mp4'
+                                    url='http://localhost:8081/ai-cockpit/api/trafficincident/download/anomalies/test.mp4'
                                     width='100%'
                                     height='100%'
                                     controls={true}

@@ -23,6 +23,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot-version>3.3.2</spring-boot-version>
         <openapi-version>2.6.0</openapi-version>
+        <minio-version>8.5.12</minio-version>
     </properties>
 
     <modules>
@@ -97,6 +98,11 @@
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>3.6.0</version>
                 <type>maven-plugin</type>
+            </dependency>
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
