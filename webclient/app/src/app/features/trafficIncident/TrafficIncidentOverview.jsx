@@ -17,8 +17,8 @@ function TrafficIncidentOverview() {
     const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
     const mitigationActionRest = useMemo(() => new MitigationActionRest(), []);
     const [trafficIncidents, setTrafficIncidents] = useState([]);
-    const [trafficIncidents0, setTrafficIncidents0] = useState([]);
-    const [trafficIncidents1, setTrafficIncidents1] = useState([]);
+    const [newIncidents, setNewIncidents] = useState([]);
+    const [checkedIncidents, setCheckedIncidents] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
 
@@ -34,8 +34,8 @@ function TrafficIncidentOverview() {
                 return;
             }
             setTrafficIncidents(response.data);
-            setTrafficIncidents0(response.data.filter(incident => incident.state == null || incident.state == "NEW"));
-            setTrafficIncidents1(response.data.filter(incident => incident.state == "ACCEPTED" || incident.state == "REJECTED"));
+            setNewIncidents(response.data.filter(incident => incident.state == null || incident.state == "NEW"));
+            setCheckedIncidents(response.data.filter(incident => incident.state == "ACCEPTED" || incident.state == "REJECTED"));
 
         });
     }
@@ -188,7 +188,7 @@ function TrafficIncidentOverview() {
             <Box sx={{width: "100%"}}>
                 <DataGrid
                     autoHeight
-                    rows={tab == 0 ? trafficIncidents0 : trafficIncidents1}
+                    rows={tab == 0 ? newIncidents : checkedIncidents}
                     columns={headers}
                     pageSizeOptions={[10]}
                     isCellEditable={() => {false}}
