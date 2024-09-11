@@ -200,6 +200,11 @@ function TrafficIncidentOverview() {
                             csvOptions: {disableToolbarButton: true}
                         }
                     }}
+                    initialState={{
+                        sorting: {
+                            sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
+                        },
+                    }}
                 />
             </Box>
             {renderDialog()}
