@@ -13,7 +13,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>de.aicockpit</groupId>
+            <groupId>de.starwit</groupId>
             <artifactId>transparencyapi</artifactId>
         </dependency>
         <dependency>

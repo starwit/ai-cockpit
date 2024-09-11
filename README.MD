@@ -35,11 +35,11 @@ Project needs a library from an AI cockpit Github repo and thus you need to adap
           <url>https://repo1.maven.org/maven2</url>
         </repository>
         <repository>
-          <id>github</id>
-          <url>https://maven.pkg.github.com/ki-cockpit/ai-cockpit-api</url>
-          <snapshots>
-            <enabled>true</enabled>
-          </snapshots>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/starwit/vision-api</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
       </repositories>
     </profile>

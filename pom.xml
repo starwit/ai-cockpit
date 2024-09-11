@@ -120,7 +120,7 @@
                 <type>maven-plugin</type>
             </dependency>
             <dependency>
-                <groupId>de.aicockpit</groupId>
+                <groupId>de.starwit</groupId>
                 <artifactId>transparencyapi</artifactId>
                 <version>${transparencyapi-version}</version>
             </dependency>
