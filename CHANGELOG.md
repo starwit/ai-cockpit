@@ -6,6 +6,7 @@ Changelog of ai-cockpit.
 
 ### Features
 
+-  ab#1195: receive anomalies from redis ([88d65](https://github.com/starwit/ai-cockpit/commit/88d655e9e2c5e6c) Anett)  
 -  ab#1199 provide default mitigation actions by incident type ([9c742](https://github.com/starwit/ai-cockpit/commit/9c7420774b29c7b) Anett)  
 
 ### Bug Fixes

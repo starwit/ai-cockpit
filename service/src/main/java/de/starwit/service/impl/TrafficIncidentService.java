@@ -1,12 +1,23 @@
 package de.starwit.service.impl;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import de.starwit.persistence.entity.IncidentState;
+import de.starwit.persistence.entity.MitigationActionEntity;
+import de.starwit.persistence.entity.MitigationActionTypeEntity;
 import de.starwit.persistence.entity.TrafficIncidentEntity;
+import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
+import de.starwit.persistence.repository.MitigationActionTypeRepository;
 import de.starwit.persistence.repository.TrafficIncidentRepository;
+import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
+import de.starwit.visionapi.Reporting.IncidentMessage;
 
 /**
  * 
@@ -16,12 +27,45 @@ import de.starwit.persistence.repository.TrafficIncidentRepository;
 @Service
 public class TrafficIncidentService implements ServiceInterface<TrafficIncidentEntity, TrafficIncidentRepository> {
 
+    @Value("${incident.type.default:Gefahrensituation}")
+    private String defaultIncidentType;
+
     @Autowired
     private TrafficIncidentRepository trafficincidentRepository;
+
+    @Autowired
+    private TrafficIncidentTypeRepository trafficIncidentTypeRepository;
+
+    @Autowired
+    private MitigationActionTypeRepository mitigationActionTypeRepository;
 
     @Override
     public TrafficIncidentRepository getRepository() {
         return trafficincidentRepository;
+    }
+
+    public TrafficIncidentEntity createNewIncidentWithMitigationActions(IncidentMessage incidentMessage) {
+        TrafficIncidentEntity entity = new TrafficIncidentEntity();
+        entity.setMediaUrl(incidentMessage.getMediaUrl());
+        ZonedDateTime dateTime = Instant.ofEpochMilli(incidentMessage.getTimestampUtcMs())
+                .atZone(ZoneId.systemDefault());
+        entity.setAcquisitionTime(dateTime);
+        entity.setState(IncidentState.NEW);
+        TrafficIncidentTypeEntity incidentType = findIncidentTypeByName(defaultIncidentType);
+        entity.setTrafficIncidentType(incidentType);
+        if (incidentType != null) {
+            List<MitigationActionTypeEntity> actionTypes = mitigationActionTypeRepository
+                    .findByTrafficIncidentType(incidentType.getId());
+            if (actionTypes != null && !actionTypes.isEmpty()) {
+                for (MitigationActionTypeEntity actionType : actionTypes) {
+                    MitigationActionEntity action = new MitigationActionEntity();
+                    action.setCreationTime(dateTime);
+                    action.setMitigationActionType(actionType);
+                    entity.addToMitigationAction(action);
+                }
+            }
+        }
+        return saveOrUpdate(entity);
     }
 
     public List<TrafficIncidentEntity> findAllWithoutTrafficIncidentType() {
@@ -30,5 +74,14 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
 
     public List<TrafficIncidentEntity> findAllWithoutOtherTrafficIncidentType(Long id) {
         return trafficincidentRepository.findAllWithoutOtherTrafficIncidentType(id);
+    }
+
+    public TrafficIncidentTypeEntity findIncidentTypeByName(String name) {
+        TrafficIncidentTypeEntity incidentType = null;
+        List<TrafficIncidentTypeEntity> result = trafficIncidentTypeRepository.findByName(name);
+        if (result != null && !result.isEmpty()) {
+            incidentType = result.getFirst();
+        }
+        return incidentType;
     }
 }
