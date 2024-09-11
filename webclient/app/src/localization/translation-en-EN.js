@@ -95,7 +95,6 @@ const translationEnEN = {
     "menu.config": "Configuration",
     "menu.config.mitigationactiontype": "Mitigation Action Config",
     "menu.config.trafficincidenttype": "Incidend Type Config",
-    "menu.info": "Info",
     "mitigationactiontype.heading": "Mitigation Action Type Definition",
     "mitigationactiontype.name": "Action Type Name",
     "mitigationactiontype.addItem": "Add Action Type",
@@ -116,6 +115,17 @@ const translationEnEN = {
     "trafficincidenttype.makeselect": "Select Action Type",
     "trafficincidenttype.makeselect.notsaved": "Unsafed Changes!",
     "trafficincidenttype.delete.message": "The configuration will be deleted",
-    "trafficincidenttype.save.message": "The trafficincidenttype configurations must be saved before they can be edited"
+    "trafficincidenttype.save.message": "The trafficincidenttype configurations must be saved before they can be edited",
+    "menu.info.componentbreakdown": "Component Overview",
+    "menu.info.riskoverview": "Risk Assesment",
+    "transparency.components.title": "System Module Overview",
+    "transparency.components.details.title": "Module Name",
+    "transparency.components.details.description": "Description",
+    "transparency.components.details.isAI": "AI methods used?",
+    "transparency.components.details.noAI": "This module does not use AI methods",
+    "transparency.components.details.useAI": "This module uses AI methods",
+    "transparency.components.details.typeAI": "AI Type",
+    "transparency.components.details.modelVersion": "Model Version",
+    "transparency.sbom.title": "Bill of Material"
 };
 export default translationEnEN;
