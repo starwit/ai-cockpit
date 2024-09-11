@@ -16,7 +16,7 @@
                 </repository>
                 <repository>
                     <id>github</id>
-                    <url>https://maven.pkg.github.com/ki-cockpit/ai-cockpit-api</url>
+                    <url>https://maven.pkg.github.com/starwit/vision-api</url>
                     <snapshots>
                         <enabled>true</enabled>
                     </snapshots>
