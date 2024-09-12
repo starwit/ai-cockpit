@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -42,11 +43,13 @@ public class ServiceConfiguration {
     private Boolean activateRedis;
 
     @Bean
+    @ConditionalOnProperty(value = "spring.data.redis.active", havingValue = "true", matchIfMissing = false)
     StreamMessageListenerContainer<String, MapRecord<String, String, String>> streamMessageListenerContainer() {
         return StreamMessageListenerContainer.create(lettuceConnectionFactory());
     }
 
     @Bean
+    @ConditionalOnProperty(value = "spring.data.redis.active", havingValue = "true", matchIfMissing = false)
     LettuceConnectionFactory lettuceConnectionFactory() {
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(redisHost, redisPort);
         ClientOptions options = ClientOptions.builder().autoReconnect(true)
@@ -60,23 +63,23 @@ public class ServiceConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(value = "spring.data.redis.active", havingValue = "true", matchIfMissing = false)
     AnomalyMessageListener anomalyMessageListener() {
         return new AnomalyMessageListener();
     }
 
     @Bean
+    @ConditionalOnProperty(value = "spring.data.redis.active", havingValue = "true", matchIfMissing = false)
     public List<Subscription> subscription(RedisConnectionFactory redisConnectionFactory) throws UnknownHostException {
         List<Subscription> subscriptions = new ArrayList<>();
-        if (activateRedis) {
-            for (String stream : streamIds) {
-                StreamOffset<String> streamOffset = StreamOffset.create(redisStreamPrefix + ":" + stream,
-                        ReadOffset.lastConsumed());
-                Subscription subscription = streamMessageListenerContainer().receive(streamOffset,
-                        anomalyMessageListener());
-                subscriptions.add(subscription);
-            }
-            streamMessageListenerContainer().start();
+        for (String stream : streamIds) {
+            StreamOffset<String> streamOffset = StreamOffset.create(redisStreamPrefix + ":" + stream,
+                    ReadOffset.lastConsumed());
+            Subscription subscription = streamMessageListenerContainer().receive(streamOffset,
+                    anomalyMessageListener());
+            subscriptions.add(subscription);
         }
+        streamMessageListenerContainer().start();
         return subscriptions;
     }
 }
