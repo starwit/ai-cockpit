@@ -38,6 +38,9 @@ public class ServiceConfiguration {
     @Value("${spring.data.stream.prefix:reportingaicockpit}")
     private String redisStreamPrefix;
 
+    @Value("${spring.data.redis.active:false}")
+    private Boolean activateRedis;
+
     @Bean
     StreamMessageListenerContainer<String, MapRecord<String, String, String>> streamMessageListenerContainer() {
         return StreamMessageListenerContainer.create(lettuceConnectionFactory());
@@ -64,14 +67,16 @@ public class ServiceConfiguration {
     @Bean
     public List<Subscription> subscription(RedisConnectionFactory redisConnectionFactory) throws UnknownHostException {
         List<Subscription> subscriptions = new ArrayList<>();
-        for (String stream : streamIds) {
-            StreamOffset<String> streamOffset = StreamOffset.create(redisStreamPrefix + ":" + stream,
-                    ReadOffset.lastConsumed());
-            Subscription subscription = streamMessageListenerContainer().receive(streamOffset,
-                    anomalyMessageListener());
-            subscriptions.add(subscription);
+        if (activateRedis) {
+            for (String stream : streamIds) {
+                StreamOffset<String> streamOffset = StreamOffset.create(redisStreamPrefix + ":" + stream,
+                        ReadOffset.lastConsumed());
+                Subscription subscription = streamMessageListenerContainer().receive(streamOffset,
+                        anomalyMessageListener());
+                subscriptions.add(subscription);
+            }
+            streamMessageListenerContainer().start();
         }
-        streamMessageListenerContainer().start();
         return subscriptions;
     }
 }
