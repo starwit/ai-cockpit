@@ -1,6 +1,7 @@
 import {Button, Chip} from "@mui/material";
 
 export const renderActions = params => {
+    params.row.mitigationAction.sort((a, b) => a.mitigationActionType.name.localeCompare(b.mitigationActionType.name));
     return (
         <strong>
             {params.row.mitigationAction.map(action => (
