@@ -7,7 +7,7 @@ import InfoMenu from "../features/info/InfoMenu";
 function CockpitAppBar() {
     return (
         <>
-            <Container sx={{margin: "1em"}} >
+            <Container >
                 <AppBar>
                     <Toolbar>
                         <IconButton
