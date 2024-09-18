@@ -103,6 +103,8 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
             e.printStackTrace();
             return null;
         }
+    }
+
     public TrafficIncidentTypeEntity findIncidentTypeByName(String name) {
         TrafficIncidentTypeEntity incidentType = null;
         List<TrafficIncidentTypeEntity> result = trafficIncidentTypeRepository.findByName(name);
