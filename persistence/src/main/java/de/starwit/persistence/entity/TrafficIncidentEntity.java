@@ -2,6 +2,7 @@ package de.starwit.persistence.entity;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
@@ -122,6 +123,14 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
 
     public void setMitigationAction(Set<MitigationActionEntity> mitigationAction) {
         this.mitigationAction = mitigationAction;
+    }
+
+    public void addToMitigationAction(MitigationActionEntity mitigationAction) {
+        mitigationAction.setTrafficIncident(this);
+        if (this.mitigationAction == null) {
+            this.mitigationAction = new HashSet<>();
+        }
+        this.mitigationAction.add(mitigationAction);
     }
 
 }

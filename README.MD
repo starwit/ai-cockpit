@@ -1,4 +1,11 @@
-### Prerequisites
+# Introduction
+AI cockpit aims at building a human control interface to AI systems. It is supposed to cover requirements from EU's AI act. More details can be found at https://www.kicockpit.eu/. All shared components necessary for this repo can be found [here](https://github.com/KI-Cockpit/ai-cockpit-api). There you also can find more info about all other activities & results of this project.
+
+# Development Setup
+This section describes how to run this software on your machine. 
+
+## Prerequisites
+The following components and tools are necessary to build & run AICockpit in your dev environment.
 
 * Java JDK 21 or later
 * Maven 3
@@ -6,8 +13,49 @@
 * Postgres (available for development via docker-compose scripts)
 * using Keycloak is optional
 
-### Version update
+### Maven Dependency
+Project needs a library from an AI cockpit Github repo and thus you need to adapt your Maven settings (usually located here ~/.m2/settings.xml). Following example of a complete settings.xml shows you necessary additions. Please note, that you need username/Github token replaced by values, from your user.
 
+```XML
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <activeProfiles>
+    <activeProfile>github</activeProfile>
+  </activeProfiles>
+
+  <profiles>
+    <profile>
+      <id>github</id>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>https://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/starwit/vision-api</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+  <servers>
+    <server>
+      <id>github</id>
+      <username>username</username>
+      <password>TOKEN</password>
+    </server>
+  </servers>
+</settings>
+```
+
+## Version update
 
 * mvn -B build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.\0\${parsedVersion.qualifier?} versions:commit
 * mvn -B release:clean release:prepare -Darguments="-DskipTests"
@@ -16,7 +64,7 @@
 * mvn versions:set -DremoveSnapshot
 * changelog convetions: https://www.conventionalcommits.org/en/v1.0.0/
 
-### Installation Steps
+## Installation Steps
 
 :exclamation: Each step is executed from the project home directory.
 
@@ -54,9 +102,9 @@
     * **default user/password is admin/admin**
     * **keycloak can be reached under http://localost:8081/auth**
 
-### Debugging
+## Debugging
 
-#### Frontend Debugging
+### Frontend Debugging
 
 For debugging, you can start the frontend separately.
 
@@ -68,11 +116,11 @@ NPM server starts under localhost:3000/starwit/ by default
 
 ! If you are using the installation with keycloak, make sure you are logged in before first usage - just go to localhost:8081/starwit in your browser.
 
-#### Backend Debugging
+### Backend Debugging
 
 You can start the spring boot application in debug mode. See Spring Boot documentation for further details. The easiest way is, to use debug functionality integrated with your IDE like VS Code.
 
-### Postgres Client
+## Postgres Client
 
 The database is available under localhost:3006
 
@@ -83,7 +131,7 @@ Password:starwit
 ```
 PGAdmin is recommended to access database for development purpose. It can be deployed via docker-compose file.
 
-### Starting without keycloak
+## Starting without keycloak
 
 If you want to start your application without keycloak, you need to change spring boot profile to dev in application\src\main\resources\application.properties.
 

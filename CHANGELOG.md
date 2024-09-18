@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## refs/tags/0.0.6 (2024-09-11)
+
+### Features
+
+-  ab#1195: receive anomalies from redis ([88d65](https://github.com/starwit/ai-cockpit/commit/88d655e9e2c5e6c) Anett)  
+
 ## refs/tags/0.0.5 (2024-08-21)
 
 ### Features
