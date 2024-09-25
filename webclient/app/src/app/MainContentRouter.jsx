@@ -13,7 +13,7 @@ function MainContentRouter() {
     return (
         <>
             <CockpitAppBar />
-            <Container sx={{margin: "1em", marginTop: "4em"}} >
+            <Container sx={{paddingTop:"4em"}}>
                 <Routes>
                     <Route path="/" element={<TrafficIncidentOverview />} />
                     <Route path="/1" element={<TrafficIncidentOverview />} />
