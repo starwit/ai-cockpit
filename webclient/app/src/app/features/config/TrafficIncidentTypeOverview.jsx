@@ -135,6 +135,8 @@ function TrafficIncidentTypeOverview(props) {
     function handleEditClick(row) {
         if (!isSaved) {
             setOpenNotSaved(true);
+        }else {
+            setOpen(true);
         }
         setRowData(row);
     }
