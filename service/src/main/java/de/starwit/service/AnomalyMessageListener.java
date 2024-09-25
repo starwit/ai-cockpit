@@ -35,7 +35,7 @@ public class AnomalyMessageListener implements StreamListener<String, MapRecord<
 
         try {
             incidentMessage = IncidentMessage.parseFrom(Base64.getDecoder().decode(b64Proto));
-            incidentService.createNewIncidentWithMitigationActions(incidentMessage);
+            incidentService.createNewIncidentWithMitigationActionsMessage(incidentMessage);
         } catch (InvalidProtocolBufferException e) {
             log.warn("Received invalid proto");
             return;
