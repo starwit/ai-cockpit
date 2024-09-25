@@ -188,6 +188,11 @@ function TrafficIncidentOverview() {
             <Box sx={{width: "100%"}}>
                 <DataGrid
                     autoHeight
+                    initialState={{
+                        sorting: {
+                            sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
+                        },
+                    }}
                     rows={tab == 0 ? newIncidents : checkedIncidents}
                     columns={headers}
                     pageSizeOptions={[10]}
