@@ -20,9 +20,10 @@ import {
     Select,
     Stack,
     TextField,
-    Typography
+    Typography,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
+import SaveIcon from '@mui/icons-material/Save';
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ReactPlayer from "react-player";
@@ -30,6 +31,8 @@ import {formatDateFull} from "../../commons/formatter/DateFormatter";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
 import TrafficIncidentMap from "./TrafficIncidentMap";
+import TrafficIncidentDetailStyles from "../../assets/themes/TrafficIncidentDetailStyles";
+
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
@@ -146,7 +149,7 @@ function TrafficIncidentDetail(props) {
             >
                 <CloseIcon />
             </IconButton>
-            <DialogContent id="traffic-incident-detail-dialog-description" sx={{paddingTop: "0px"}}>
+            <DialogContent id="traffic-incident-detail-dialog-description" sx={TrafficIncidentDetailStyles.dialogContent}>
                 <Grid container spacing={2} sx={{width: "70vw", overflow: "hidden"}}>
                     <Grid item xs={12} sx={{paddingTop: "0px"}}>
                         <TextField
@@ -239,22 +242,31 @@ function TrafficIncidentDetail(props) {
                     </Grid>
                 </Grid>
             </DialogContent>
-            <DialogActions>
+            <DialogActions sx={TrafficIncidentDetailStyles.dialogAction}>
                 <Button
-                    onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "REJECTED")}
+                    onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "NEW")}
                     variant="contained"
-                    color="error"
-                    startIcon={<ErrorIcon />}>
-                    {t("trafficIncident.button.reportmistake")}
+                    startIcon={<SaveIcon/>}>
+                    {t("button.save")}
                 </Button>
-                <Button
-                    onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "ACCEPTED")}
-                    variant="contained"
-                    color="success"
-                    startIcon={<CheckIcon />}
-                    autoFocus>
-                    {t("trafficIncident.button.acknowledged")}
-                </Button>
+                <Box>
+                    <Button
+                        sx={[TrafficIncidentDetailStyles.button]}
+                        onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "REJECTED")}
+                        variant="contained"
+                        color="error"
+                        startIcon={<ErrorIcon />}>
+                        {t("trafficIncident.button.reportmistake")}
+                    </Button>
+                    <Button
+                        onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "ACCEPTED")}
+                        variant="contained"
+                        color="success"
+                        startIcon={<CheckIcon />}
+                        autoFocus>
+                        {t("trafficIncident.button.acknowledged")}
+                    </Button>
+                </Box>
             </DialogActions>
         </Dialog >
     );
