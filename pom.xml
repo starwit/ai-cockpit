@@ -122,6 +122,11 @@
                 <artifactId>transparencyapi</artifactId>
                 <version>${transparencyapi-version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>3.0.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
