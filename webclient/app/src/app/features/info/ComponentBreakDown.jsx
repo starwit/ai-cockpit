@@ -3,7 +3,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {Card, CardContent, Divider, IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from "@mui/material";
-import Grid from "@mui/material/Grid";
+import Grid from "@mui/material/Grid2";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TransparencyFunctions from "../../services/TransparencyFunctions";
