@@ -74,7 +74,7 @@ public class TrafficIncidentController {
     @Operation(summary = "Create trafficincident")
     @PostMapping
     public TrafficIncidentEntity save(@Valid @RequestBody TrafficIncidentEntity entity) {
-        return update(entity);
+        return trafficincidentService.addMitigationActionsToIncidentEntity(entity);
     }
 
     @Operation(summary = "Update trafficincident")

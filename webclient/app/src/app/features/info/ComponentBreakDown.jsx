@@ -76,18 +76,17 @@ function ComponentBreakDown() {
                                             <TableCell align="left">{t("transparency.components.details.isAI")}</TableCell>
                                             <TableCell align="left">{row.useAI ? <CheckCircleIcon /> : <CancelIcon />}</TableCell>
                                         </TableRow>
-                                        {row.useAI ?
+                                        {
                                             <>
                                                 <TableRow>
                                                     <TableCell align="left">{t("transparency.components.details.typeAI")}</TableCell>
-                                                    <TableCell align="left">{row.aiType}</TableCell>
+                                                    <TableCell align="left">{row.aiType?row.aiType:""}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left">{t("transparency.components.details.modelVersion")}</TableCell>
-                                                    <TableCell align="left">{row.modelVersion}</TableCell>
+                                                    <TableCell align="left">{row.modelVersion?row.modelVersion:""}</TableCell>
                                                 </TableRow>
                                             </>
-                                            : ""
                                         }
                                         <TableRow>
                                             <TableCell align="left">Details</TableCell>
