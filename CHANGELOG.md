@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Features
+
+-  ab#1222 - corrected incident type configuration ([9a5af](https://github.com/starwit/ai-cockpit/commit/9a5af2318165989) Anett)  
+
 ## refs/tags/0.0.6 (2024-09-11)
 
 ### Features
