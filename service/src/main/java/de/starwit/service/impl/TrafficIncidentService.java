@@ -34,6 +34,12 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
     @Value("${incident.type.default:Gefahrensituation}")
     private String defaultIncidentType;
 
+    @Value("${minio.user:minioadmin}")
+    private String minioAccesskey;
+
+    @Value("${minio.password:minioadmin}")
+    private String minioSecretkey;
+
     @Autowired
     private TrafficIncidentRepository trafficincidentRepository;
 
@@ -89,7 +95,7 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
         try {
             MinioClient minioClient = MinioClient.builder()
                     .endpoint("http://localhost:9000")
-                    .credentials("g55RANQWfPEdza3QDTck", "l0XQF9CZ3tr9TpLv9R3Uckeru4ZXVKAcKyDXRPHu")
+                    .credentials(minioAccesskey, minioSecretkey)
                     .build();
 
             // Fetch the object from Minio
