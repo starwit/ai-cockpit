@@ -6,16 +6,15 @@ name: Create release
 on:
   workflow_dispatch:
     inputs:
-      release-type: # id of input
+      release-version: # id of input
         description: "prerelease, patch, minor or major"
-        required: true
-        default: "prerelease"
+        required: false
 
 permissions:
   contents: write
 
 env:
-  release-type: ${{ github.event.inputs.release-type }}
+  RELEASE_VERSION: ${{ github.event.inputs.release-version }}
   IMAGE_NAME: ai-cockpit
   DOCKERHUB_USERNAME: starwit
   DOCKERHUB_ORG: starwitorg  
@@ -58,6 +57,9 @@ jobs:
       run: | 
         git config --global user.email "code@starwit.de"
         git config --global user.name "Starwit"
+        if [! -z ${{ env.RELEASE_VERSION }} ]{
+          mvn -B build-helper:parse-version versions:set -DnewVersion=${{ env.RELEASE_VERSION }}-SNAPSHOT versions:commit --settings .github/workflows/settings.xml --file pom.xml
+        }
         mvn generate-sources --file pom.xml
         git add .
         if [git status | grep -q modified]

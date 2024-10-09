@@ -7,7 +7,6 @@ env:
   IMAGE_NAME: ai-cockpit
   DOCKERHUB_USERNAME: starwit
   DOCKERHUB_ORG: starwitorg   
-  release-type: ${{ github.event.inputs.release-type }}
 
 jobs:
   build:
