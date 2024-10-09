@@ -57,13 +57,14 @@ jobs:
       run: | 
         git config --global user.email "code@starwit.de"
         git config --global user.name "Starwit"
-        if [! -z "${{ env.RELEASE_VERSION }}" ]
+        if [ ! -z "${{ env.RELEASE_VERSION }}" ]
         then
+          echo "inside ! -z"
           mvn -B build-helper:parse-version versions:set -DnewVersion=${{ env.RELEASE_VERSION }}-SNAPSHOT versions:commit --settings .github/workflows/settings.xml --file pom.xml
         fi
         mvn generate-sources --file pom.xml
         git add .
-        if [git status | grep -q modified]
+        if [ git status | grep -q modified ]
         then
           git commit -m "modified changelog"
           git push
