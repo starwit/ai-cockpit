@@ -1,5 +1,7 @@
 package de.starwit.service.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -16,6 +18,8 @@ import de.starwit.persistence.entity.TrafficIncidentEntity;
 import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
 import de.starwit.persistence.repository.MitigationActionTypeRepository;
 import de.starwit.persistence.repository.TrafficIncidentRepository;
+import io.minio.GetObjectArgs;
+import io.minio.MinioClient;
 import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
 import de.starwit.visionapi.Reporting.IncidentMessage;
 
@@ -29,6 +33,12 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
 
     @Value("${incident.type.default:Gefahrensituation}")
     private String defaultIncidentType;
+
+    @Value("${minio.user:minioadmin}")
+    private String minioAccesskey;
+
+    @Value("${minio.password:minioadmin}")
+    private String minioSecretkey;
 
     @Autowired
     private TrafficIncidentRepository trafficincidentRepository;
@@ -79,6 +89,31 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
 
     public List<TrafficIncidentEntity> findAllWithoutOtherTrafficIncidentType(Long id) {
         return trafficincidentRepository.findAllWithoutOtherTrafficIncidentType(id);
+    }
+
+    public byte[] getFileFromMinio(String bucketName, String objectName) {
+        try {
+            MinioClient minioClient = MinioClient.builder()
+                    .endpoint("http://localhost:9000")
+                    .credentials(minioAccesskey, minioSecretkey)
+                    .build();
+
+            // Fetch the object from Minio
+            InputStream objectStream = minioClient
+                    .getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+
+            // Convert the InputStream to a Base64-encoded Byte[]
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = objectStream.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesRead);
+            }
+            return baos.toByteArray();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public TrafficIncidentTypeEntity findIncidentTypeByName(String name) {

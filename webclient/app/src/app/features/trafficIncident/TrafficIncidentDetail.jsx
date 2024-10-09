@@ -193,7 +193,7 @@ function TrafficIncidentDetail(props) {
                             </FormControl>
                             <Box>
                                 <ReactPlayer
-                                    url='images/incidents/SampleScene01.mp4'
+                                    url={rowData.mediaUrl}
                                     width='100%'
                                     height='100%'
                                     controls={true}
