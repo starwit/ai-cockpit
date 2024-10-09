@@ -58,6 +58,7 @@ jobs:
         git config --global user.email "code@starwit.de"
         git config --global user.name "Starwit"
         if [! -z ${{ env.RELEASE_VERSION }} ]
+        then
           mvn -B build-helper:parse-version versions:set -DnewVersion=${{ env.RELEASE_VERSION }}-SNAPSHOT versions:commit --settings .github/workflows/settings.xml --file pom.xml
         fi
         mvn generate-sources --file pom.xml
