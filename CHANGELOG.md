@@ -2,7 +2,7 @@
 
 Changelog of ai-cockpit.
 
-## Current Version ()
+## 1 (2024-10-09)
 
 ### Features
 
