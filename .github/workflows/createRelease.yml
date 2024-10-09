@@ -59,13 +59,15 @@ jobs:
         git config --global user.name "Starwit"
         if [ ! -z "${{ env.RELEASE_VERSION }}" ]
         then
-          echo "inside ! -z"
+          echo "new version manually set to ${{ env.RELEASE_VERSION }}"
           mvn -B build-helper:parse-version versions:set -DnewVersion=${{ env.RELEASE_VERSION }}-SNAPSHOT versions:commit --settings .github/workflows/settings.xml --file pom.xml
         fi
         mvn generate-sources --file pom.xml
         git add .
-        if [ git status | grep -q modified ]
+        modifications=$(git status | grep "modified")
+        if [ ! -z "modifications" ]
         then
+          echo "modifications found: $modifications"
           git commit -m "modified changelog"
           git push
         fi
