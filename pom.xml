@@ -9,7 +9,7 @@
 
     <groupId>de.starwit</groupId>
     <artifactId>ai-cockpit</artifactId>
-    <version>0.0.11-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <description>App template from test @ spring</description>
     <packaging>pom</packaging>
 
