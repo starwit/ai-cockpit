@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       release-version: # id of input
-        description: "prerelease, patch, minor or major"
+        description: "override default release version e.g. with 0.1.0-1"
         required: false
 
 permissions:
