@@ -109,7 +109,7 @@ jobs:
     name: "Build and push docker"
     needs: build
     env:
-      TAG: ${{ needs.build.env.TAG }}
+      TAG_DOCKER: ${{ needs.build.env.TAG }}
     runs-on: [self-hosted, linux, X64]
     
     steps:
@@ -128,7 +128,7 @@ jobs:
         context: .
         file: ./dockerfile
         push: true
-        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
+        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DOCKER }}
 
   publish_helm:
     name: "Publish helm chart"
