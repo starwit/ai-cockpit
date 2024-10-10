@@ -50,6 +50,7 @@ jobs:
   
   build:
     name: "Creating maven and github release"
+    needs: install    
     runs-on: [self-hosted, linux, X64]
     
     steps:
@@ -112,6 +113,7 @@ jobs:
 
   publish_docker:
     name: "Build and push docker"
+    needs: build
     runs-on: [self-hosted, linux, X64]
     
     steps:
@@ -134,6 +136,7 @@ jobs:
 
   publish_helm:
     name: "Publish helm chart"
+    needs: publish_docker
     runs-on: [self-hosted, linux, X64]
     steps:
 
