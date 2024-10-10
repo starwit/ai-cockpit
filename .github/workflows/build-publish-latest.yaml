@@ -72,26 +72,3 @@ jobs:
         file: ./dockerfile
         push: true
         tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.VERSION_BUILD }}
-
-    - name: get helm
-      uses: azure/setup-helm@v3  
-
-    - name: login to Helm registry
-      run: helm registry login registry-1.docker.io -u starwit -p ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: run helm update
-      working-directory: application/target/helm/ai-cockpit
-      run: helm dep update
-
-    - name: run helm package
-      working-directory: application/target/helm
-      run: helm package ai-cockpit
-
-    - name: get version number
-      working-directory: application/target/helm/ai-cockpit
-      run: |
-        echo "HELM_VERSION=$(grep version: Chart.yaml | head -1 | awk '{print $2}')" >> $GITHUB_ENV
-
-    - name: run helm push
-      working-directory: application/target/helm
-      run: helm push ai-cockpit-chart-${{ env.HELM_VERSION }}.tgz oci://registry-1.docker.io/starwitorg
