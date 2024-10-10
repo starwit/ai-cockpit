@@ -20,10 +20,10 @@ env:
   DOCKERHUB_ORG: starwitorg  
 
 jobs:
-  install:
-    name: "Install software"
+  build:
+    name: "Creating maven and github release"
     runs-on: [self-hosted, linux, X64]
-
+    
     steps:
     - name: Install GH CLI
       uses: dev-hanz-ops/install-gh-cli-action@v0.2.0
@@ -47,13 +47,7 @@ jobs:
     - run: npm --version
     - run: node --version
     - run: mvn --version
-  
-  build:
-    name: "Creating maven and github release"
-    needs: install    
-    runs-on: [self-hosted, linux, X64]
-    
-    steps:
+
     - name: checkout
       uses: actions/checkout@v4
       with:
@@ -136,7 +130,7 @@ jobs:
 
   publish_helm:
     name: "Publish helm chart"
-    needs: publish_docker
+    needs: build
     runs-on: [self-hosted, linux, X64]
     steps:
 
