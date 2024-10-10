@@ -6,7 +6,7 @@ Workflows for software quality check, build, packaging, and release creation wer
 
 Build and publish latest image to test docker builds and pushes on your own branch. Includes a build number that can be used to force Helm installation with specific build
 
-## createRelease.yml (Create release and tag)
+## createRelease.yml
 
 Creates a new release for jar (pom), github release documentation, docker image and helm chart.
 
