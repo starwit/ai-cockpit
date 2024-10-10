@@ -107,7 +107,7 @@ jobs:
 
   publish_docker:
     name: "Build and push docker"
-    needs: build
+    needs: [build]
     env:
       TAG_DOCKER: ${{ needs.build.env.TAG }}
     runs-on: [self-hosted, linux, X64]
