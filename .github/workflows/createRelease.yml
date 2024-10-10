@@ -126,7 +126,7 @@ jobs:
         context: .
         file: ./dockerfile
         push: true
-        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ build.env.TAG }}
+        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ needs.build.env.TAG }}
 
   publish_helm:
     name: "Publish helm chart"
