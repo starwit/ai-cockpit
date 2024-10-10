@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Features
+
+-  possibility to use a individual version number in build process ([558a3](https://github.com/starwit/ai-cockpit/commit/558a383dfed2628) Anett Hübner)  
+
 ## 1 (2024-10-09)
 
 ### Features
