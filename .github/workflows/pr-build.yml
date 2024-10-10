@@ -9,14 +9,12 @@ on:
 
 
 # just runs Maven, NPM and Docker build
-
 jobs:
-  build:
-    name: "PR build"
+  install:
+    name: "Install software"
     runs-on: [self-hosted, linux, X64]
 
     steps:
-
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
@@ -42,6 +40,11 @@ jobs:
     - run: node --version
     - run: mvn --version
 
+  build:
+    name: "PR build"
+    runs-on: [self-hosted, linux, X64]
+
+    steps:
     - name: get version from pom.xml
       run: |
         echo "VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV
@@ -60,6 +63,11 @@ jobs:
          PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
          MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
 
+  checks:
+    name: "Checks"
+    runs-on: [self-hosted, linux, X64]
+
+    steps:
     - name: get helm
       uses: azure/setup-helm@v3  
 
