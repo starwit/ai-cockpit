@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.starwit</groupId>
         <artifactId>ai-cockpit</artifactId>
-        <version>0.1.0-4-SNAPSHOT</version>
+        <version>0.1.0-4</version>
     </parent>
 
     <artifactId>service</artifactId>
