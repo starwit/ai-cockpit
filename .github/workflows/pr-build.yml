@@ -10,7 +10,7 @@ on:
 
 # just runs Maven, NPM and Docker build
 jobs:
-  install:
+  build:
     name: "Install software"
     runs-on: [self-hosted, linux, X64]
 
@@ -40,12 +40,6 @@ jobs:
     - run: node --version
     - run: mvn --version
 
-  build:
-    name: "PR build"
-    needs: install
-    runs-on: [self-hosted, linux, X64]
-
-    steps:
     - name: get version from pom.xml
       run: |
         echo "VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV
