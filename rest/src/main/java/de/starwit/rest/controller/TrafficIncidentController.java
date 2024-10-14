@@ -9,6 +9,7 @@ import java.util.List;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
+import java.security.InvalidKeyException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.io.IOException;
 
 import de.starwit.persistence.entity.TrafficIncidentEntity;
+import de.starwit.service.impl.MinioException;
 import de.starwit.service.impl.TrafficIncidentService;
 import de.starwit.persistence.exception.NotificationException;
 import de.starwit.rest.exception.NotificationDto;
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
 import io.swagger.v3.oas.annotations.Operation;
 
 /**
@@ -91,7 +92,7 @@ public class TrafficIncidentController {
 
     @GetMapping("/download/{bucketName}/{objectName}")
     public ResponseEntity<byte[]> download(@PathVariable("bucketName") String bucketName,
-            @PathVariable("objectName") String objectName) {
+            @PathVariable("objectName") String objectName) throws InvalidKeyException, IOException, MinioException{
         byte[] file = trafficincidentService.getFileFromMinio(bucketName, objectName);
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + objectName);
