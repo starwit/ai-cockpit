@@ -13,13 +13,13 @@ VALUES
 
 INSERT INTO "trafficincident" ("acquisitiontime", "trafficincidenttype_id", "mediaurl")
 VALUES 
-    ('2016-01-04 10:34:23', 1, 'http://localhost:8081/ai-cockpit/api/trafficincident/download/anomalies/SampleScene01.mp4'),
-    ('2016-01-04 11:34:23', 2, 'http://localhost:8081/ai-cockpit/api/trafficincident/download/anomalies/SampleScene01.mp4'),
-    ('2016-01-04 12:34:23', 3, 'http://localhost:8081/ai-cockpit/api/trafficincident/download/anomalies/SampleScene01.mp4'),
-    ('2016-01-04 10:34:23', 1, 'http://localhost:8081/ai-cockpit/api/trafficincident/download/anomalies/SampleScene01.mp4'),
-    ('2016-01-04 10:34:23', 2, 'http://localhost:8081/ai-cockpit/api/trafficincident/download/anomalies/SampleScene01.mp4'),
-    ('2016-01-04 10:34:23', 3, 'http://localhost:8081/ai-cockpit/api/trafficincident/download/anomalies/SampleScene01.mp4'),
-    ('2016-01-04 10:34:23', 2, 'http://localhost:8081/ai-cockpit/api/trafficincident/download/anomalies/SampleScene01.mp4');
+    ('2016-01-04 10:34:23', 1, 'anomalies/SampleScene01.mp4'),
+    ('2016-01-04 11:34:23', 2, 'anomalies/SampleScene01.mp4'),
+    ('2016-01-04 12:34:23', 3, 'anomalies/SampleScene01.mp4'),
+    ('2016-01-04 10:34:23', 1, 'anomalies/SampleScene01.mp4'),
+    ('2016-01-04 10:34:23', 2, 'anomalies/SampleScene01.mp4'),
+    ('2016-01-04 10:34:23', 3, 'anomalies/SampleScene01.mp4'),
+    ('2016-01-04 10:34:23', 2, 'anomalies/SampleScene01.mp4');
 
 INSERT INTO "trafficincidenttype_mitigationactiontype"(
 	"trafficincidenttype_id", "mitigationactiontype_id")
