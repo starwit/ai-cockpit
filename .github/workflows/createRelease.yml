@@ -65,8 +65,8 @@ jobs:
         mvn generate-sources --file pom.xml
         echo "git add ."
         git add .
-        modifications=$(git status | grep "modified")
-        if [ ! -z "modifications" ]
+        modifications=$(git status | grep "modified" || "")
+        if [ ! -z "$modifications" ]
         then
           echo "modifications found: $modifications"
           git commit -m "modified changelog"
