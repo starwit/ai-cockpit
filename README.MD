@@ -101,6 +101,15 @@ Project needs a library from an AI cockpit Github repo and thus you need to adap
 * **If you are using keycloak:**
     * **default user/password is admin/admin**
     * **keycloak can be reached under http://localost:8081/auth**
+  
+### Minio
+If you want to start the Application with Minio then you need to run 
+    ```bash
+      cd deployment
+      docker compose -f docker-compoae-minio up
+    ```
+The Minio WebApp is available under localhost:9001 and the shell Application is available under localhost:9000.
+You need to upload a video in the anomalies Bucket and name it SampleScene01
 
 ## Debugging
 
