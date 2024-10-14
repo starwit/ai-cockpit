@@ -1,4 +1,3 @@
-
 name: Create release
 
 # Creating maven and github release
@@ -105,14 +104,6 @@ jobs:
          PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
          MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
 
-  publish_docker:
-    name: "Build and push docker"
-    needs: [build]
-    env:
-      TAG_DOCKER: ${{ needs.build.env.TAG }}
-    runs-on: [self-hosted, linux, X64]
-    
-    steps:
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
