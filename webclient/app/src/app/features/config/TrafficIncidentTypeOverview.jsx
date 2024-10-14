@@ -6,11 +6,10 @@ import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import {Button, Stack, Typography} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import TrafficIncidentTypeDetail from "./TrafficIncidentTypeDetail";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
-
 
 function TrafficIncidentTypeOverview(props) {
     const {t} = useTranslation();
@@ -135,6 +134,8 @@ function TrafficIncidentTypeOverview(props) {
     function handleEditClick(row) {
         if (!isSaved) {
             setOpenNotSaved(true);
+        } else {
+            setOpen(true);
         }
         setRowData(row);
     }
@@ -174,7 +175,7 @@ function TrafficIncidentTypeOverview(props) {
         }
         return <ConfirmationDialog
             open={openDelete}
-            onClose={() => {setOpenDelete(false)}}
+            onClose={() => {setOpenDelete(false);}}
             onSubmit={submitDelete}
             message={t("trafficincidenttype.delete.message")}
             submitMessage={t("button.delete")}
@@ -187,7 +188,7 @@ function TrafficIncidentTypeOverview(props) {
         }
         return <ConfirmationDialog
             open={openNotSaved}
-            onClose={() => {setOpenNotSaved(false)}}
+            onClose={() => {setOpenNotSaved(false);}}
             onSubmit={submitSave}
             message={t("trafficincidenttype.save.message")}
             submitMessage={t("button.save")}
@@ -196,14 +197,14 @@ function TrafficIncidentTypeOverview(props) {
 
     return <>
         <Typography variant="h2" gutterBottom>
-            {t("mitigationactiontype.heading")}
+            {t("trafficincidenttype.heading")}
         </Typography>
         <Stack direction="row" spacing={1} sx={{marginBottom: 1}}>
             <Button variant="contained" color="primary" onClick={addRow} startIcon={<AddCircleOutlineIcon />}>
-                {t("mitigationactiontype.addItem")}
+                {t("trafficincidenttype.addItem")}
             </Button>
             <Button variant="contained" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
-                {t("mitigationactiontype.saveItem")}
+                {t("trafficincidenttype.saveItem")}
                 {isSaved ? "" : "*"}
             </Button>
         </Stack>

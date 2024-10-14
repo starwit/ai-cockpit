@@ -9,13 +9,13 @@
 
     <groupId>de.starwit</groupId>
     <artifactId>ai-cockpit</artifactId>
-    <version>0.0.10-SNAPSHOT</version>
+    <version>0.1.0-5-SNAPSHOT</version>
     <description>App template from test @ spring</description>
     <packaging>pom</packaging>
 
     <scm>
         <connection>scm:git:https://github.com/starwit/ai-cockpit.git</connection>
-        <tag>0.0.1</tag>
+        <tag>0.0.10</tag>
     </scm>
 
     <properties>
@@ -127,6 +127,11 @@
                 <artifactId>testcontainers</artifactId>
                 <version>1.20.1</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>4.28.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -246,7 +251,7 @@
                 <plugin>
                     <groupId>se.bjurr.gitchangelog</groupId>
                     <artifactId>git-changelog-maven-plugin</artifactId>
-                    <version>2.1.0</version>
+                    <version>2.2.0</version>
                     <dependencies>
                         <dependency>
                             <groupId>org.openjdk.nashorn</groupId>

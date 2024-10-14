@@ -95,7 +95,7 @@ const translationEnEN = {
     "menu.config": "Configuration",
     "menu.config.mitigationactiontype": "Mitigation Action Config",
     "menu.config.trafficincidenttype": "Incidend Type Config",
-    "mitigationactiontype.heading": "Mitigation Action Type Definition",
+    "mitigationactiontype.heading": "Mitigation Action Types",
     "mitigationactiontype.name": "Action Type Name",
     "mitigationactiontype.addItem": "Add Action Type",
     "mitigationactiontype.saveItem": "Save All",

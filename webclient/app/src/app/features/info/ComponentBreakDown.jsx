@@ -3,7 +3,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import {Card, CardContent, Divider, IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import Grid from "@mui/material/Grid2";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TransparencyFunctions from "../../services/TransparencyFunctions";
@@ -27,7 +27,6 @@ function ComponentBreakDown() {
             } else {
                 setModuleList(response.data);
             }
-
         });
     }
 
@@ -59,7 +58,7 @@ function ComponentBreakDown() {
             {t("transparency.components.title")}
         </Typography>
         <Grid container spacing={4}>
-            {moduleList.map((row) => (
+            {moduleList.map(row => (
                 <Grid key={row.id}>
                     <Card >
                         <CardContent>
@@ -76,23 +75,22 @@ function ComponentBreakDown() {
                                             <TableCell align="left">{t("transparency.components.details.isAI")}</TableCell>
                                             <TableCell align="left">{row.useAI ? <CheckCircleIcon /> : <CancelIcon />}</TableCell>
                                         </TableRow>
-                                        {row.useAI ?
+                                        {
                                             <>
                                                 <TableRow>
                                                     <TableCell align="left">{t("transparency.components.details.typeAI")}</TableCell>
-                                                    <TableCell align="left">{row.aiType}</TableCell>
+                                                    <TableCell align="left">{row.aiType ? row.aiType : ""}</TableCell>
                                                 </TableRow>
                                                 <TableRow>
                                                     <TableCell align="left">{t("transparency.components.details.modelVersion")}</TableCell>
-                                                    <TableCell align="left">{row.modelVersion}</TableCell>
+                                                    <TableCell align="left">{row.modelVersion ? row.modelVersion : ""}</TableCell>
                                                 </TableRow>
                                             </>
-                                            : ""
                                         }
                                         <TableRow>
                                             <TableCell align="left">Details</TableCell>
                                             <TableCell align="left">
-                                                <IconButton onClick={(e) => {
+                                                <IconButton onClick={e => {
                                                     handleOpen(row);
                                                 }}
                                                 >

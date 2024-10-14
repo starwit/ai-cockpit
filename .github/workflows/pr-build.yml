@@ -9,14 +9,12 @@ on:
 
 
 # just runs Maven, NPM and Docker build
-
 jobs:
   build:
-    name: "PR build"
+    name: "Install software"
     runs-on: [self-hosted, linux, X64]
 
     steps:
-
     - name: Set up JDK 21
       uses: actions/setup-java@v4
       with:
@@ -60,16 +58,22 @@ jobs:
          PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
          MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
 
+  checks:
+    name: "Checks"
+    needs: build
+    runs-on: [self-hosted, linux, X64]
+
+    steps:
     - name: get helm
-      uses: azure/setup-helm@v3  
+      uses: azure/setup-helm@v4
 
     - name: run helm dependency update
       working-directory: application/target/helm/ai-cockpit
       run: helm dep update
 
-#    - name: run helm template
-#      working-directory: application/target/helm
-#      run: helm template ai-cockpit
+    - name: run helm template
+      working-directory: application/target/helm
+      run: helm template ai-cockpit
 
 
 
