@@ -72,82 +72,82 @@ jobs:
           git commit -m "modified changelog"
           git push
         fi
-#        mvn -B release:clean release:prepare -Darguments="-DskipTests" --settings .github/workflows/settings.xml --file pom.xml
-#        mvn -B release:clean --settings .github/workflows/settings.xml --file pom.xml
+        mvn -B release:clean release:prepare -Darguments="-DskipTests" --settings .github/workflows/settings.xml --file pom.xml
+        mvn -B release:clean --settings .github/workflows/settings.xml --file pom.xml
       env:
          CI: false
          PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
          MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
 
-  #   - name: Get tag name
-  #     run: |
-  #       echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
+    - name: Get tag name
+      run: |
+        echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
 
-  #   - name: Create github release
-  #     run: gh release create ${{ env.TAG }} -F CHANGELOG.md
-  #     env:
-  #         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create github release
+      run: gh release create ${{ env.TAG }} -F CHANGELOG.md
+      env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  #   - name: Checkout tag
-  #     run: |
-  #       git checkout ${{ env.TAG }}
+    - name: Checkout tag
+      run: |
+        git checkout ${{ env.TAG }}
 
-  #   - name: npm install
-  #     run: |
-  #       if [ -d "webclient/app" ]; then
-  #         cd webclient/app
-  #         npm install
-  #       fi
+    - name: npm install
+      run: |
+        if [ -d "webclient/app" ]; then
+          cd webclient/app
+          npm install
+        fi
 
-  #   - name: Build with Maven
-  #     run: mvn clean -B package -P frontend --settings .github/workflows/settings.xml --file pom.xml
-  #     env:
-  #        CI: false
-  #        PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
-  #        MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
+    - name: Build with Maven
+      run: mvn clean -B package -P frontend --settings .github/workflows/settings.xml --file pom.xml
+      env:
+         CI: false
+         PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
+         MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
 
-  #   - name: Login to Docker Hub
-  #     uses: docker/login-action@v3
-  #     with:
-  #       username: ${{ env.DOCKERHUB_USERNAME }}
-  #       password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ env.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
    
-  #   - name: Set up Docker Buildx
-  #     uses: docker/setup-buildx-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
       
-  #   - name: Build and push
-  #     uses: docker/build-push-action@v5
-  #     with:
-  #       context: .
-  #       file: ./dockerfile
-  #       push: true
-  #       tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DOCKER }}
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./dockerfile
+        push: true
+        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DOCKER }}
 
-  # publish_helm:
-  #   name: "Publish helm chart"
-  #   needs: build
-  #   runs-on: [self-hosted, linux, X64]
-  #   steps:
+  publish_helm:
+    name: "Publish helm chart"
+    needs: build
+    runs-on: [self-hosted, linux, X64]
+    steps:
 
-  #   - name: get helm
-  #     uses: azure/setup-helm@v3  
+    - name: get helm
+      uses: azure/setup-helm@v3  
 
-  #   - name: login to Helm registry
-  #     run: helm registry login registry-1.docker.io -u starwit -p ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: login to Helm registry
+      run: helm registry login registry-1.docker.io -u starwit -p ${{ secrets.DOCKERHUB_TOKEN }}
 
-  #   - name: run helm update
-  #     working-directory: application/target/helm/ai-cockpit
-  #     run: helm dep update
+    - name: run helm update
+      working-directory: application/target/helm/ai-cockpit
+      run: helm dep update
 
-  #   - name: run helm package
-  #     working-directory: application/target/helm
-  #     run: helm package ai-cockpit
+    - name: run helm package
+      working-directory: application/target/helm
+      run: helm package ai-cockpit
 
-  #   - name: get version number
-  #     working-directory: application/target/helm/ai-cockpit
-  #     run: |
-  #       echo "HELM_VERSION=$(grep version: Chart.yaml | head -1 | awk '{print $2}')" >> $GITHUB_ENV
+    - name: get version number
+      working-directory: application/target/helm/ai-cockpit
+      run: |
+        echo "HELM_VERSION=$(grep version: Chart.yaml | head -1 | awk '{print $2}')" >> $GITHUB_ENV
 
-  #   - name: run helm push
-  #     working-directory: application/target/helm
-  #     run: helm push ai-cockpit-chart-${{ env.HELM_VERSION }}.tgz oci://registry-1.docker.io/starwitorg
+    - name: run helm push
+      working-directory: application/target/helm
+      run: helm push ai-cockpit-chart-${{ env.HELM_VERSION }}.tgz oci://registry-1.docker.io/starwitorg
