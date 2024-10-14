@@ -1,10 +1,13 @@
 # Introduction
-AI cockpit aims at building a human control interface to AI systems. It is supposed to cover requirements from EU's AI act. More details can be found at https://www.kicockpit.eu/. All shared components necessary for this repo can be found [here](https://github.com/KI-Cockpit/ai-cockpit-api). There you also can find more info about all other activities & results of this project.
+
+AI cockpit aims at building a human control interface to AI systems. It is supposed to cover requirements from EU's AI act. More details can be found at <https://www.kicockpit.eu/>. All shared components necessary for this repo can be found [here](https://github.com/KI-Cockpit/ai-cockpit-api). There you also can find more info about all other activities & results of this project.
 
 # Development Setup
-This section describes how to run this software on your machine. 
+
+This section describes how to run this software on your machine.
 
 ## Prerequisites
+
 The following components and tools are necessary to build & run AICockpit in your dev environment.
 
 * Java JDK 21 or later
@@ -14,6 +17,7 @@ The following components and tools are necessary to build & run AICockpit in you
 * using Keycloak is optional
 
 ### Maven Dependency
+
 Project needs a library from an AI cockpit Github repo and thus you need to adapt your Maven settings (usually located here ~/.m2/settings.xml). Following example of a complete settings.xml shows you necessary additions. Please note, that you need username/Github token replaced by values, from your user.
 
 ```XML
@@ -62,7 +66,7 @@ Project needs a library from an AI cockpit Github repo and thus you need to adap
 * mvn -B release:clean
 * mvn -B release:update-versions
 * mvn versions:set -DremoveSnapshot
-* changelog convetions: https://www.conventionalcommits.org/en/v1.0.0/
+* changelog convetions: <https://www.conventionalcommits.org/en/v1.0.0/>
 
 ## Installation Steps
 
@@ -93,11 +97,11 @@ Project needs a library from an AI cockpit Github repo and thus you need to adap
     ```bash
     java -jar application/target/application-0.0.1-SNAPSHOT.jar
     ```
+
    You can also run the main-class via Visual Studio Code.
 
-
-* **application can be reached under http://localhost:8081/ai-cockpit/**
-* **swagger under http://localhost:8081/ai-cockpit/swagger-ui/**
+* **application can be reached under <http://localhost:8081/ai-cockpit/>**
+* **swagger under <http://localhost:8081/ai-cockpit/swagger-ui/>**
 * **If you are using keycloak:**
     * **default user/password is admin/admin**
     * **keycloak can be reached under http://localost:8081/auth**
@@ -121,6 +125,7 @@ For debugging, you can start the frontend separately.
 cd webclient/app
 npm start
 ```
+
 NPM server starts under localhost:3000/starwit/ by default
 
 ! If you are using the installation with keycloak, make sure you are logged in before first usage - just go to localhost:8081/starwit in your browser.
@@ -138,6 +143,7 @@ Username:starwit
 Database:starwit
 Password:starwit
 ```
+
 PGAdmin is recommended to access database for development purpose. It can be deployed via docker-compose file.
 
 ## Starting without keycloak
@@ -163,7 +169,7 @@ docker compose up
 
 # Deployment
 
-see https://github.com/starwit/ai-cockpit-deployment
+see <https://github.com/starwit/ai-cockpit-deployment>
 
 # Architecture & Concepts
 
