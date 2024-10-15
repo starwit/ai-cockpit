@@ -109,11 +109,12 @@ jobs:
   publish_docker:
     name: "Build and publish docker"
     needs: build
-    env:
-      TAG_DOCKER: ${{ needs.build.env.TAG }}
     runs-on: [self-hosted, linux, X64]
 
     steps:
+    - name: Get tag name
+      run: |
+        echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3
@@ -130,7 +131,7 @@ jobs:
         context: .
         file: ./dockerfile
         push: true
-        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG_DOCKER }}
+        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
 
   publish_helm:
     name: "Publish helm chart"
