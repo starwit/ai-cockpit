@@ -140,7 +140,7 @@ jobs:
     steps:
 
     - name: get helm
-      uses: azure/setup-helm@v3  
+      uses: azure/setup-helm@v4
 
     - name: login to Helm registry
       run: helm registry login registry-1.docker.io -u starwit -p ${{ secrets.DOCKERHUB_TOKEN }}
