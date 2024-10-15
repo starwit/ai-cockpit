@@ -55,8 +55,13 @@ jobs:
     name: "Build and publish docker"
     needs: build
     runs-on: [self-hosted, linux, X64]
-  
+
     steps:
+    - name: Set up Maven
+      uses: stCarolas/setup-maven@v4.5
+      with:
+        maven-version: 3.9.2
+
     - name: get version from pom.xml
       run: |      
         echo "VERSION_BUILD=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )-${{ github.run_number }}" >> $GITHUB_ENV
