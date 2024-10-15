@@ -137,8 +137,8 @@ jobs:
     name: "Publish helm chart"
     needs: build
     runs-on: [self-hosted, linux, X64]
+    
     steps:
-
     - name: get helm
       uses: azure/setup-helm@v4
 
