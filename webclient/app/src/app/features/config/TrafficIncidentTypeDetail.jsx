@@ -4,7 +4,7 @@ import {
     Dialog,
     DialogContent,
     DialogTitle,
-    Grid,
+    Grid2,
     IconButton,
     Stack,
     Typography
@@ -141,7 +141,7 @@ function TrafficIncidentTypeDetail(props) {
                 <GridCloseIcon />
             </IconButton>
             <DialogContent id="traffic-incident-type-detail-dialog-description">
-                <Grid>
+                <Grid2>
                     <DataGrid
                         autoHeight
                         rows={mitigationActionTypes}
@@ -153,7 +153,7 @@ function TrafficIncidentTypeDetail(props) {
                             {isSaved ? "" : "*"}
                         </Button>
                     </Stack>
-                </Grid>
+                </Grid2>
             </DialogContent>
         </Dialog>
     </>;

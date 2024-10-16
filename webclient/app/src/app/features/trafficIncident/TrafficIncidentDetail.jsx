@@ -11,7 +11,7 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    Grid,
+    Grid2,
     InputLabel,
     ListItemIcon,
     ListItemText,
@@ -33,6 +33,7 @@ import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
 import TrafficIncidentMap from "./TrafficIncidentMap";
 import TrafficIncidentDetailStyles from "../../assets/themes/TrafficIncidentDetailStyles";
 
+import { useTheme, useMediaQuery } from "@mui/material"; // Neue Importe
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
@@ -44,6 +45,9 @@ function TrafficIncidentDetail(props) {
     const [allTrafficIncidentType, setAllTrafficIncidentType] = useState([""]);
     const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
     const {t} = useTranslation();
+
+    const theme = useTheme();
+    const isLargeScreen = useMediaQuery(theme.breakpoints.up('xl'));
 
     useEffect(() => {
         reload();
@@ -129,12 +133,13 @@ function TrafficIncidentDetail(props) {
             aria-labelledby="traffic-incident-detail-dialog-title"
             aria-describedby="traffic-incident-detail-dialog-description"
             maxWidth="xl"
+            fullWidth
         >
             <DialogTitle id="traffic-incident-detail-dialog-title" component="div">
-                <Typography variant="h2">
+                <Typography variant="h4">
                     {rowData.trafficIncidentType.name}
                 </Typography>
-                <Typography variant="h6">
+                <Typography variant="subtitle1">
                     {formatDateFull(rowData.acquisitionTime)}
                 </Typography>
             </DialogTitle>
@@ -149,9 +154,15 @@ function TrafficIncidentDetail(props) {
             >
                 <CloseIcon />
             </IconButton>
-            <DialogContent id="traffic-incident-detail-dialog-description" sx={TrafficIncidentDetailStyles.dialogContent}>
-                <Grid container spacing={2} sx={{width: "70vw", overflow: "hidden"}}>
-                    <Grid item xs={12} sx={{paddingTop: "0px"}}>
+            <DialogContent id="traffic-incident-detail-dialog-description"
+            sx={{
+                ...TrafficIncidentDetailStyles.dialogContent,
+                width: isLargeScreen ? '80vw' : '100%',
+                maxHeight: '80vh',
+                overflow: 'auto'
+            }}>
+                <Grid2 container spacing={3}>
+                    <Grid2 xs={12}>
                         <TextField
                             autoFocus
                             required
@@ -161,37 +172,33 @@ function TrafficIncidentDetail(props) {
                             label={t("trafficIncident.description")}
                             type="text"
                             fullWidth
-                            variant="standard"
+                            variant="outlined"
                             value={description}
-                            onChange={e => {
-                                setDescription(e.target.value);
-                            }}
+                            onChange={e => setDescription(e.target.value)}
                         />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Stack>
-                            <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
-                                <InputLabel id="trafficIncident.trafficIncidentType.label">{t("trafficIncident.trafficIncidentType")}</InputLabel>
+                    </Grid2>
+                    <Grid2 xs={12} md={6}>
+                        <Stack spacing={2}>
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel id="trafficIncident.trafficIncidentType.label">
+                                    {t("trafficIncident.trafficIncidentType")}
+                                </InputLabel>
                                 <Select
                                     labelId="trafficIncident.trafficIncidentType.label"
                                     id="trafficIncident.trafficIncidentType"
                                     value={trafficIncidentType}
                                     onChange={handleChangeTrafficIncidentType}
-                                    label="incidentTypetrafficIncident.trafficIncidentType.select"
+                                    label={t("trafficIncident.trafficIncidentType")}
                                     renderValue={selected => (<ListItemText>{selected.name}</ListItemText>)}
-
                                 >
                                     {allTrafficIncidentType.map((incidentType, index) => (
-                                        <MenuItem
-                                            key={index}
-                                            value={incidentType}
-                                        >
-                                            <ListItemText key={index}>{incidentType.name}</ListItemText>
+                                        <MenuItem key={index} value={incidentType}>
+                                            <ListItemText>{incidentType.name}</ListItemText>
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
-                            <Box>
+                            <Box sx={{ width: '100%', aspectRatio: '16/9', overflow: 'hidden' }}>
                                 <ReactPlayer
                                     url='images/incidents/SampleScene01.mp4'
                                     width='100%'
@@ -203,44 +210,41 @@ function TrafficIncidentDetail(props) {
                                 />
                             </Box>
                         </Stack>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Stack direction="column">
-                            <FormControl>
-                                <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
+                    </Grid2>
+                    <Grid2 xs={12} md={6}>
+                        <Stack spacing={2}>
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel id="trafficIncident.mitigationAction.label">
+                                    {t("trafficIncident.mitigationAction")}
+                                </InputLabel>
                                 <Select
                                     labelId="trafficIncident.mitigationAction.label"
                                     id="trafficIncident.mitigationAction.select"
                                     multiple
                                     value={mitigationActionTypes}
                                     onChange={handleChangeAction}
-                                    input={<OutlinedInput
-                                        id="trafficIncident.mitigationAction.mitigationActionType.select.chip"
-                                        label="trafficIncident.mitigationAction.mitigationActionType.select.chip.label"
-                                    />}
+                                    input={<OutlinedInput label={t("trafficIncident.mitigationAction")} />}
                                     renderValue={selected => (
                                         <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                                             {selected.map((value, index) => (
                                                 <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
-
                                             ))}
                                         </Box>
                                     )}
                                 >
                                     {allMitigationActionTypes.map((value, index) => (
-                                        <MenuItem
-                                            key={index}
-                                            value={value}
-                                        >
+                                        <MenuItem key={index} value={value}>
                                             {value.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
-                            {renderTrafficIncidentMap()}
+                            <Box sx={{ width: '100%', aspectRatio: '16/9' }}>
+                                {renderTrafficIncidentMap()}
+                            </Box>
                         </Stack>
-                    </Grid>
-                </Grid>
+                    </Grid2>
+                </Grid2>
             </DialogContent>
             <DialogActions sx={TrafficIncidentDetailStyles.dialogAction}>
                 <Button
@@ -273,4 +277,3 @@ function TrafficIncidentDetail(props) {
 }
 
 export default TrafficIncidentDetail;
-
