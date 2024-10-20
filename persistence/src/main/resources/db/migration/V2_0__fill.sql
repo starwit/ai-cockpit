@@ -11,15 +11,15 @@ VALUES
     ('notify emergency services', 'Notify emergency services like ambulances or fire departments', 'MANUAL'),
     ('notify public platform', 'Notify public platforms or apps about the traffic incident', 'AUTOMATIC');
 
-INSERT INTO "trafficincident" ("acquisitiontime", "trafficincidenttype_id", "mediaurl")
+INSERT INTO "trafficincident" ("acquisitiontime", "trafficincidenttype_id", "mediaurl", "cameralatitude", "cameralongitude")
 VALUES 
-    ('2016-01-04 10:34:23', 1, 'anomalies/SampleScene01.mp4'),
-    ('2016-01-04 11:34:23', 2, 'anomalies/SampleScene01.mp4'),
-    ('2016-01-04 12:34:23', 3, 'anomalies/SampleScene01.mp4'),
-    ('2016-01-04 10:34:23', 1, 'anomalies/SampleScene01.mp4'),
-    ('2016-01-04 10:34:23', 2, 'anomalies/SampleScene01.mp4'),
-    ('2016-01-04 10:34:23', 3, 'anomalies/SampleScene01.mp4'),
-    ('2016-01-04 10:34:23', 2, 'anomalies/SampleScene01.mp4');
+    ('2016-01-04 10:34:23', 1, 'anomalies/SampleScene01.mp4','39.975163', '-86.12691'),
+    ('2016-01-04 11:34:23', 2, 'anomalies/SampleScene01.mp4','39.975163', '-86.12691'),
+    ('2016-01-04 12:34:23', 3, 'anomalies/SampleScene01.mp4','39.975163', '-86.12691'),
+    ('2016-01-04 10:34:23', 1, 'anomalies/SampleScene01.mp4','39.975163', '-86.12691'),
+    ('2016-01-04 10:34:23', 2, 'anomalies/SampleScene01.mp4','39.975163', '-86.12691'),
+    ('2016-01-04 10:34:23', 3, 'anomalies/SampleScene01.mp4','39.975163', '-86.12691'),
+    ('2016-01-04 10:34:23', 2, 'anomalies/SampleScene01.mp4','39.975163', '-86.12691');
 
 INSERT INTO "trafficincidenttype_mitigationactiontype"(
 	"trafficincidenttype_id", "mitigationactiontype_id")
