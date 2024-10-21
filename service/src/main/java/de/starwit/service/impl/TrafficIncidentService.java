@@ -128,7 +128,6 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
         } catch (ErrorResponseException | InsufficientDataException | InternalException
                 | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
                 | IllegalArgumentException e) {
-            // TODO Auto-generated catch block
             throw new MinioException(e.getMessage());
         }
     }
