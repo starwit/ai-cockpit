@@ -193,7 +193,7 @@ function TrafficIncidentDetail(props) {
                             </FormControl>
                             <Box>
                                 <ReactPlayer
-                                    url={"http://localhost:8081/ai-cockpit/api/trafficincident/download/"+rowData.mediaUrl}
+                                    url={window.location.pathname + "api/trafficincident/download/"+rowData.mediaUrl}
                                     width='100%'
                                     height='100%'
                                     controls={true}
