@@ -177,7 +177,7 @@ function TrafficIncidentDetail(props) {
                 }}
             >
                 <Grid2 container spacing={2}>
-                    <Grid2 item xs={12} sx={{paddingTop: "0px", width: "80vw", overflow: "hidden"}}>
+                    <Grid2 item xs={12} sx={{paddingTop: "0px", width: "73vw", overflow: "hidden"}}>
                         <TextField
                             autoFocus
                             required

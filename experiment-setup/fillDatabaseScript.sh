@@ -2,7 +2,7 @@
 
 # Konfiguration
 JSON_FILE="fillDbData.json"
-URL="http://localhost:5173/ai-cockpit/api/trafficincident"
+URL="http://localhost:8081/ai-cockpit/api/trafficincident"
 INTERVAL=5  # Intervall in Sekunden
 
 # Funktion zum Senden eines JSON-Objekts
