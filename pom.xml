@@ -150,16 +150,8 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot-version}</version>
                     <configuration>
-                        <skip>false</skip>
-                        <mainClass>de.starwit.application.Application</mainClass>
+                        <skip>true</skip>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>build-info</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
