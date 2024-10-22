@@ -52,6 +52,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- needed for spring-boot:run -->
                 <configuration>
                     <skip>false</skip>
                     <mainClass>de.starwit.application.Application</mainClass>
