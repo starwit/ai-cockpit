@@ -177,20 +177,28 @@ function TrafficIncidentDetail(props) {
                 }}
             >
                 <Grid2 container spacing={2}>
-                    <Grid2 item xs={12} sx={{paddingTop: "0px", width: "73vw", overflow: "hidden"}}>
-                        <TextField
-                            autoFocus
-                            required
-                            margin="dense"
-                            id="description"
-                            name="description"
-                            label={t("trafficIncident.description")}
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={description}
-                            onChange={e => setDescription(e.target.value)}
-                        />
+                    <Grid2 item xs={12} sx={{paddingTop: "0px"}}>
+                    <Box sx={{ 
+                        width: 'calc(1203px * 0.9)',  // 90% of the dialog width
+                        '@media (max-width: 1200px)': {
+                            width: 'calc(595px * 0.9)'
+                        }
+
+                    }}>
+                            <TextField
+                                autoFocus
+                                required
+                                margin="dense"
+                                id="description"
+                                name="description"
+                                label={t("trafficIncident.description")}
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
+                            />
+                        </Box>
                     </Grid2>
                     <Grid2 container xs={12} spacing={2}>
                         <Grid2 xs={12} md={6}>
