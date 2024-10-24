@@ -147,13 +147,17 @@ function TrafficIncidentDetail(props) {
             }}
         >
             <DialogTitle id="traffic-incident-detail-dialog-title" component="div">
-                <Typography variant="h6" noWrap>
-                    {rowData.trafficIncidentType.name}
-                </Typography>
-                <Typography variant="subtitle2" noWrap>
-                    {formatDateFull(rowData.acquisitionTime)}
-                </Typography>
-            </DialogTitle>
+                <Box sx={{ marginLeft: '32px' }}>
+                    <Typography variant="h6" noWrap>    {/* HEADER FOR ACCIDENT | TRAFFIC JAM | DANGEROUS DRIVING BEHAVIOUR */}
+                        {rowData.trafficIncidentType.name}      
+                    </Typography> 
+
+                    <Typography variant="subtitle2" noWrap>     {/* HEADER FOR DATE XX. MONTH YYYY um HH:MM:SS */}
+                        {formatDateFull(rowData.acquisitionTime)}
+                    </Typography>
+                </Box>
+            </DialogTitle> 
+            
             <IconButton
                 onClick={handleClose}
                 sx={{
@@ -165,6 +169,7 @@ function TrafficIncidentDetail(props) {
             >
                 <CloseIcon />
             </IconButton>
+
             <DialogContent 
                 id="traffic-incident-detail-dialog-description"
                 sx={{
@@ -173,33 +178,35 @@ function TrafficIncidentDetail(props) {
                     maxHeight: 'calc(90vh - 130px)',
                     overflow: 'hidden',
                     px: 3, //horizontal padding
-                    py: 2 //vertical padding
+                    py: 2, //vertical padding
+                    ml: 4  //margin left for "Details" field, Video element, Map and "MitigationActions" filter
                 }}
             >
                 <Grid2 container spacing={2}>
                     <Grid2 item xs={12} sx={{paddingTop: "0px"}}>
-                    <Box sx={{ 
-                        width: 'calc(1203px * 0.9)',  // 90% of the dialog width
-                        '@media (max-width: 1200px)': {
-                            width: 'calc(595px * 0.9)'
-                        }
+                        <Box sx={{ 
+                            width: 'calc(1203px * 0.9)',  // 90% of the dialog width
+                            '@media (max-width: 1200px)': {
+                                width: 'calc(595px * 0.9)'
+                            }
+                        }}>
 
-                    }}>
-                            <TextField
-                                autoFocus
-                                required
-                                margin="dense"
-                                id="description"
-                                name="description"
-                                label={t("trafficIncident.description")}
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                value={description}
-                                onChange={e => setDescription(e.target.value)}
+                        <TextField
+                            autoFocus
+                            required
+                            margin="dense"
+                            id="description"
+                            name="description"
+                            label={t("trafficIncident.description")}
+                            type="text"
+                            fullWidth
+                            variant="standard"
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
                             />
                         </Box>
                     </Grid2>
+
                     <Grid2 container xs={12} spacing={2}>
                         <Grid2 xs={12} md={6}>
                             <Stack spacing={2}>
@@ -211,6 +218,7 @@ function TrafficIncidentDetail(props) {
                                     <InputLabel id="trafficIncident.trafficIncidentType.label">
                                         {t("trafficIncident.trafficIncidentType")}
                                     </InputLabel>
+
                                     <Select
                                         labelId="trafficIncident.trafficIncidentType.label"
                                         id="trafficIncident.trafficIncidentType"
@@ -226,6 +234,7 @@ function TrafficIncidentDetail(props) {
                                         ))}
                                     </Select>
                                 </FormControl>
+
                                 <Box sx={{ width: '100%', height: '300px', position: 'relative' }}>
                                     <ReactPlayer
                                         url='images/incidents/SampleScene01.mp4'
@@ -239,12 +248,14 @@ function TrafficIncidentDetail(props) {
                                 </Box>
                             </Stack>
                         </Grid2>
+
                         <Grid2 xs={12} md={6}>
                             <Stack spacing={2}>
                                 <FormControl fullWidth variant="outlined">
                                     <InputLabel id="trafficIncident.mitigationAction.label">
                                         {t("trafficIncident.mitigationAction")}
                                     </InputLabel>
+
                                     <Select
                                         labelId="trafficIncident.mitigationAction.label"
                                         id="trafficIncident.mitigationAction.select"
@@ -267,6 +278,7 @@ function TrafficIncidentDetail(props) {
                                         ))}
                                     </Select>
                                 </FormControl>
+
                                 <Box sx={{ width: '100%', height: '300px', position: 'relative' }}>
                                     {renderTrafficIncidentMap()}
                                 </Box>
@@ -275,19 +287,22 @@ function TrafficIncidentDetail(props) {
                     </Grid2>
                 </Grid2>
             </DialogContent>
+
             <DialogActions sx={{...TrafficIncidentDetailStyles.dialogAction, 
                                 px: 3, 
                                 py: 2, 
                                 display: 'flex', 
                                 justifyContent: 'space-between'
                                 }}>
+            <Box sx={{ marginLeft: '32px'}}> {/* MOVE SAVE BUTTON */}
                 <Button
                     onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "NEW")}
                     variant="contained"
                     startIcon={<SaveIcon/>}>
                     {t("button.save")}
                 </Button>
-                <Box sx={{ marginRight: '70px' }}>
+            </Box>
+                <Box sx={{ marginRight: '38px' }}> {/* MOVE REPORT & AKNOWLEDGED BUTTON */}
                     <Button
                         sx={[TrafficIncidentDetailStyles.button, { mr: 1 }]}
                         onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "REJECTED")}
@@ -296,6 +311,7 @@ function TrafficIncidentDetail(props) {
                         startIcon={<ErrorIcon />}>
                         {t("trafficIncident.button.reportmistake")}
                     </Button>
+
                     <Button
                         onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "ACCEPTED")}
                         variant="contained"
