@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>de.starwit</groupId>
         <artifactId>ai-cockpit</artifactId>
-        <version>0.1.0-5-SNAPSHOT</version>
+        <version>0.1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>application</artifactId>
@@ -50,6 +52,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- needed for spring-boot:run -->
+                <configuration>
+                    <skip>false</skip>
+                    <mainClass>de.starwit.application.Application</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.cyclonedx</groupId>
@@ -102,7 +116,6 @@
                 <plugins>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
-                        <version>3.4.0</version>
                         <configuration>
                             <filesets>
                                 <fileset>

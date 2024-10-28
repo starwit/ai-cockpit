@@ -12,6 +12,9 @@ jobs:
   build:
     name: "Build and publish with build number"
     runs-on: [self-hosted, linux, X64]
+    outputs:
+      VERSION_BUILD: ${{ steps.get-version.outputs.VERSION_BUILD }}
+
 
     steps:
     - name: checkout
@@ -37,11 +40,6 @@ jobs:
     - run: node --version
     - run: mvn --version
 
-    - name: get version from pom.xml
-      run: |      
-        echo "VERSION_BUILD=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )-${{ github.run_number }}" >> $GITHUB_ENV
-        echo "VERSION_JAR=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV
-
     - name: npm install
       run: |
         if [ -d "webclient/app" ]; then
@@ -56,6 +54,19 @@ jobs:
          PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
          MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
 
+    - name: get version from pom.xml
+      id: get-version
+      run: |      
+        echo "VERSION_BUILD=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )"  >> "$GITHUB_OUTPUT"
+
+  publish_docker:
+    name: "Build and publish docker"
+    needs: build
+    runs-on: [self-hosted, linux, X64]
+    env:
+      VERSION_BUILD: ${{ needs.build.outputs.VERSION_BUILD }}
+
+    steps:
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
@@ -71,4 +82,4 @@ jobs:
         context: .
         file: ./dockerfile
         push: true
-        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.VERSION_BUILD }}
+        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.VERSION_BUILD }}-${{ github.run_number }}

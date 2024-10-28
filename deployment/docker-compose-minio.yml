@@ -1,0 +1,44 @@
+# Settings and configurations that are common for all containers
+x-minio-common: &minio-common
+  image: quay.io/minio/minio:RELEASE.2024-08-29T01-40-52Z
+  command: server --console-address ":9001" http://minio1/data{1...2}
+  expose:
+    - "9000"
+    - "9001"
+  ports:
+      - "9000:9000"
+      - "9001:9001"
+  environment:
+    MINIO_ROOT_USER: minioadmin
+    MINIO_ROOT_PASSWORD: minioadmin
+  healthcheck:
+    test: ["CMD", "mc", "ready", "local"]
+    interval: 5s
+    timeout: 5s
+    retries: 5
+
+services:
+  minio1:
+    <<: *minio-common
+    hostname: minio1
+    volumes:
+      - data1-1:/data1
+      - data1-2:/data2
+
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio1
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio1:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/anomalies;
+      /usr/bin/mc policy set public myminio/anomalies;
+      exit 0;
+      "
+
+## By default this config uses default local driver,
+## For custom volumes replace with volume driver configuration.
+volumes:
+  data1-1:
+  data1-2:

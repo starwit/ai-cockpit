@@ -4,7 +4,7 @@
     <parent>
         <groupId>de.starwit</groupId>
         <artifactId>ai-cockpit</artifactId>
-        <version>0.1.0-5-SNAPSHOT</version>
+        <version>0.1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>service</artifactId>
@@ -63,6 +63,10 @@
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
