@@ -33,7 +33,7 @@ public class ServiceConfiguration {
     @Value("${spring.data.redis.port:6379}")
     private int redisPort;
 
-    @Value("${spring.data.redis.stream.ids}")
+    @Value("${spring.data.redis.stream.ids:stream1}")
     private String[] streamIds;
 
     @Value("${spring.data.stream.prefix:reportingaicockpit}")
