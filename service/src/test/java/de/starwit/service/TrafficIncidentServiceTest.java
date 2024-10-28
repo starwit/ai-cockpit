@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.testcontainers.shaded.com.google.common.base.Verify;
 
 import de.starwit.persistence.entity.MitigationActionEntity;
@@ -28,7 +29,8 @@ import de.starwit.visionapi.Reporting.IncidentMessage;
 
 @Import(TestServiceConfiguration.class)
 @SpringBootTest
-@AutoConfigureTestDatabase
+// @AutoConfigureTestDatabase 
+@PropertySource(value = "classpath:application.properties")
 public class TrafficIncidentServiceTest {
 
     @Autowired
@@ -73,7 +75,7 @@ public class TrafficIncidentServiceTest {
 
     @Test
     void testFindByName() {
-        TrafficIncidentTypeEntity entity = trafficIncidentService.findIncidentTypeByName("test");
-        assertTrue(entity == null);
+        TrafficIncidentTypeEntity entity = trafficIncidentService.findIncidentTypeByName("dangerous driving behaviour");
+        assertTrue(entity.getName().equals("dangerous driving behaviour"));
     }
 }
