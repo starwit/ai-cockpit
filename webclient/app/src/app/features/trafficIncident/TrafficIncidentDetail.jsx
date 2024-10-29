@@ -1,7 +1,7 @@
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/Delete";
 import ErrorIcon from "@mui/icons-material/Error";
+import SaveIcon from '@mui/icons-material/Save';
 import {
     Box,
     Button,
@@ -11,28 +11,27 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    Grid,
+    Grid2,
     InputLabel,
-    ListItemIcon,
     ListItemText,
     MenuItem,
     OutlinedInput,
     Select,
     Stack,
     TextField,
-    Typography,
+    Typography
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-import SaveIcon from '@mui/icons-material/Save';
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ReactPlayer from "react-player";
+import TrafficIncidentDetailStyles from "../../assets/themes/TrafficIncidentDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
 import TrafficIncidentMap from "./TrafficIncidentMap";
-import TrafficIncidentDetailStyles from "../../assets/themes/TrafficIncidentDetailStyles";
 
+import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
@@ -44,6 +43,9 @@ function TrafficIncidentDetail(props) {
     const [allTrafficIncidentType, setAllTrafficIncidentType] = useState([""]);
     const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
     const {t} = useTranslation();
+
+    const theme = useTheme();
+    const isLargeScreen = useMediaQuery(theme.breakpoints.up('xl'));
 
     useEffect(() => {
         reload();
@@ -97,14 +99,10 @@ function TrafficIncidentDetail(props) {
             target: {value}
         } = event;
         setMitigationActionTypes(value);
-    };
+    }
 
     function handleChangeTrafficIncidentType(event) {
         setTrafficIncidentType(event.target.value);
-    };
-
-    if (!open) {
-        return null;
     }
 
     function renderTrafficIncidentMap() {
@@ -116,10 +114,18 @@ function TrafficIncidentDetail(props) {
             );
         }
         return (
-            <Box sx={{width: "100%", position: "relative"}}>
-                <TrafficIncidentMap sx={{zIndex: "-1"}} latitude={rowData.cameraLatitude} longitude={rowData.cameraLongitude} />
+            <Box sx={{width: "100%", height: "100%", position: "relative"}}>
+                <TrafficIncidentMap
+                    sx={{position: "absolute", top: 0, left: 0, right: 0, bottom: 0}}
+                    latitude={rowData.cameraLatitude}
+                    longitude={rowData.cameraLongitude}
+                />
             </Box>
         );
+    }
+
+    if (!open) {
+        return null;
     }
 
     return (
@@ -128,16 +134,28 @@ function TrafficIncidentDetail(props) {
             onClose={handleClose}
             aria-labelledby="traffic-incident-detail-dialog-title"
             aria-describedby="traffic-incident-detail-dialog-description"
-            maxWidth="xl"
+            maxWidth={false}
+            PaperProps={{
+                sx: {
+                    width: '1200px',
+                    maxWidth: '95vw',
+                    height: 'auto',
+                    maxHeight: '90vh',
+                }
+            }}
         >
             <DialogTitle id="traffic-incident-detail-dialog-title" component="div">
-                <Typography variant="h2">
-                    {rowData.trafficIncidentType.name}
-                </Typography>
-                <Typography variant="h6">
-                    {formatDateFull(rowData.acquisitionTime)}
-                </Typography>
+                <Box sx={{marginLeft: '32px'}}>
+                    <Typography variant="h6" noWrap>    {/* HEADER FOR ACCIDENT | TRAFFIC JAM | DANGEROUS DRIVING BEHAVIOUR */}
+                        {rowData.trafficIncidentType.name}
+                    </Typography>
+
+                    <Typography variant="subtitle2" noWrap>     {/* HEADER FOR DATE XX. MONTH YYYY um HH:MM:SS */}
+                        {formatDateFull(rowData.acquisitionTime)}
+                    </Typography>
+                </Box>
             </DialogTitle>
+
             <IconButton
                 onClick={handleClose}
                 sx={{
@@ -149,115 +167,150 @@ function TrafficIncidentDetail(props) {
             >
                 <CloseIcon />
             </IconButton>
-            <DialogContent id="traffic-incident-detail-dialog-description" sx={TrafficIncidentDetailStyles.dialogContent}>
-                <Grid container spacing={2} sx={{width: "70vw", overflow: "hidden"}}>
-                    <Grid item xs={12} sx={{paddingTop: "0px"}}>
-                        <TextField
-                            autoFocus
-                            required
-                            margin="dense"
-                            id="description"
-                            name="description"
-                            label={t("trafficIncident.description")}
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={description}
-                            onChange={e => {
-                                setDescription(e.target.value);
-                            }}
-                        />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Stack>
-                            <FormControl variant="standard" sx={{m: 1, minWidth: 120}}>
-                                <InputLabel id="trafficIncident.trafficIncidentType.label">{t("trafficIncident.trafficIncidentType")}</InputLabel>
-                                <Select
-                                    labelId="trafficIncident.trafficIncidentType.label"
-                                    id="trafficIncident.trafficIncidentType"
-                                    value={trafficIncidentType}
-                                    onChange={handleChangeTrafficIncidentType}
-                                    label="incidentTypetrafficIncident.trafficIncidentType.select"
-                                    renderValue={selected => (<ListItemText>{selected.name}</ListItemText>)}
 
-                                >
-                                    {allTrafficIncidentType.map((incidentType, index) => (
-                                        <MenuItem
-                                            key={index}
-                                            value={incidentType}
-                                        >
-                                            <ListItemText key={index}>{incidentType.name}</ListItemText>
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <Box>
-                                <ReactPlayer
-                                    url={window.location.pathname + "api/trafficincident/download/"+rowData.mediaUrl}
-                                    width='100%'
-                                    height='100%'
-                                    controls={true}
-                                    muted={true}
-                                    playing={true}
-                                    playbackRate={2}
-                                />
-                            </Box>
-                        </Stack>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Stack direction="column">
-                            <FormControl>
-                                <InputLabel id="trafficIncident.mitigationAction.label">{t("trafficIncident.mitigationAction")}</InputLabel>
-                                <Select
-                                    labelId="trafficIncident.mitigationAction.label"
-                                    id="trafficIncident.mitigationAction.select"
-                                    multiple
-                                    value={mitigationActionTypes}
-                                    onChange={handleChangeAction}
-                                    input={<OutlinedInput
-                                        id="trafficIncident.mitigationAction.mitigationActionType.select.chip"
-                                        label="trafficIncident.mitigationAction.mitigationActionType.select.chip.label"
-                                    />}
-                                    renderValue={selected => (
-                                        <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
-                                            {selected.map((value, index) => (
-                                                <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
+            <DialogContent
+                id="traffic-incident-detail-dialog-description"
+                sx={{
+                    ...TrafficIncidentDetailStyles.dialogContent,
+                    height: 'auto',
+                    maxHeight: 'calc(90vh - 130px)',
+                    overflow: 'hidden',
+                    px: 3, //horizontal padding
+                    py: 2, //vertical padding
+                    ml: 4  //margin left for "Details" field, Video element, Map and "MitigationActions" filter
+                }}
+            >
+                <Grid2 container spacing={2}>
+                    <Grid2 item xs={12} sx={{paddingTop: "0px"}}>
+                        <Box sx={{
+                            width: 'calc(1203px * 0.9)',  // 90% of the dialog width
+                            '@media (max-width: 1200px)': {
+                                width: 'calc(595px * 0.9)'
+                            }
+                        }}>
 
-                                            ))}
-                                        </Box>
-                                    )}
+                            <TextField
+                                autoFocus
+                                required
+                                margin="dense"
+                                id="description"
+                                name="description"
+                                label={t("trafficIncident.description")}
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
+                            />
+                        </Box>
+                    </Grid2>
+
+                    <Grid2 container xs={12} spacing={2}>
+                        <Grid2 xs={12} md={6}>
+                            <Stack spacing={2}>
+                                <FormControl
+                                    fullWidth
+                                    variant="outlined"
                                 >
-                                    {allMitigationActionTypes.map((value, index) => (
-                                        <MenuItem
-                                            key={index}
-                                            value={value}
-                                        >
-                                            {value.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            {renderTrafficIncidentMap()}
-                        </Stack>
-                    </Grid>
-                </Grid>
+
+                                    <InputLabel id="trafficIncident.trafficIncidentType.label">
+                                        {t("trafficIncident.trafficIncidentType")}
+                                    </InputLabel>
+
+                                    <Select
+                                        labelId="trafficIncident.trafficIncidentType.label"
+                                        id="trafficIncident.trafficIncidentType"
+                                        value={trafficIncidentType}
+                                        onChange={handleChangeTrafficIncidentType}
+                                        label={t("trafficIncident.trafficIncidentType")}
+                                        renderValue={selected => (<ListItemText>{selected.name}</ListItemText>)}
+                                    >
+                                        {allTrafficIncidentType.map((incidentType, index) => (
+                                            <MenuItem key={index} value={incidentType}>
+                                                <ListItemText>{incidentType.name}</ListItemText>
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
+                                <Box sx={{width: '100%', height: '300px', position: 'relative'}}>
+                                    <ReactPlayer
+                                        url='images/incidents/SampleScene01.mp4'
+                                        width='100%'
+                                        height='100%'
+                                        controls={true}
+                                        muted={true}
+                                        playing={true}
+                                        playbackRate={2}
+                                    />
+                                </Box>
+                            </Stack>
+                        </Grid2>
+
+                        <Grid2 xs={12} md={6}>
+                            <Stack spacing={2}>
+                                <FormControl fullWidth variant="outlined">
+                                    <InputLabel id="trafficIncident.mitigationAction.label">
+                                        {t("trafficIncident.mitigationAction")}
+                                    </InputLabel>
+
+                                    <Select
+                                        labelId="trafficIncident.mitigationAction.label"
+                                        id="trafficIncident.mitigationAction.select"
+                                        multiple
+                                        value={mitigationActionTypes}
+                                        onChange={handleChangeAction}
+                                        input={<OutlinedInput label={t("trafficIncident.mitigationAction")} />}
+                                        renderValue={selected => (
+                                            <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
+                                                {selected.map((value, index) => (
+                                                    <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
+                                                ))}
+                                            </Box>
+                                        )}
+                                    >
+                                        {allMitigationActionTypes.map((value, index) => (
+                                            <MenuItem key={index} value={value}>
+                                                {value.name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
+                                <Box sx={{width: '100%', height: '300px', position: 'relative'}}>
+                                    {renderTrafficIncidentMap()}
+                                </Box>
+                            </Stack>
+                        </Grid2>
+                    </Grid2>
+                </Grid2>
             </DialogContent>
-            <DialogActions sx={TrafficIncidentDetailStyles.dialogAction}>
-                <Button
-                    onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "NEW")}
-                    variant="contained"
-                    startIcon={<SaveIcon/>}>
-                    {t("button.save")}
-                </Button>
-                <Box>
+
+            <DialogActions sx={{
+                ...TrafficIncidentDetailStyles.dialogAction,
+                px: 3,
+                py: 2,
+                display: 'flex',
+                justifyContent: 'space-between'
+            }}>
+                <Box sx={{marginLeft: '32px'}}> {/* MOVE SAVE BUTTON */}
                     <Button
-                        sx={[TrafficIncidentDetailStyles.button]}
+                        onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "NEW")}
+                        variant="contained"
+                        startIcon={<SaveIcon />}>
+                        {t("button.save")}
+                    </Button>
+                </Box>
+                <Box sx={{marginRight: '38px'}}> {/* MOVE REPORT & AKNOWLEDGED BUTTON */}
+                    <Button
+                        sx={[TrafficIncidentDetailStyles.button, {mr: 1}]}
                         onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "REJECTED")}
                         variant="contained"
                         color="error"
                         startIcon={<ErrorIcon />}>
                         {t("trafficIncident.button.reportmistake")}
                     </Button>
+
                     <Button
                         onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "ACCEPTED")}
                         variant="contained"
@@ -268,9 +321,8 @@ function TrafficIncidentDetail(props) {
                     </Button>
                 </Box>
             </DialogActions>
-        </Dialog >
+        </Dialog>
     );
 }
 
 export default TrafficIncidentDetail;
-
