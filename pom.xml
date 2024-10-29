@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -9,7 +11,7 @@
 
     <groupId>de.starwit</groupId>
     <artifactId>ai-cockpit</artifactId>
-    <version>0.1.0-6-SNAPSHOT</version>
+    <version>0.1.2-SNAPSHOT</version>
     <description>App template from test @ spring</description>
     <packaging>pom</packaging>
 
@@ -23,6 +25,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-boot-version>3.3.4</spring-boot-version>
         <openapi-version>2.6.0</openapi-version>
+        <minio-version>8.5.12</minio-version>
         <vision-api.version>3.0.0</vision-api.version>
         <lettuce.version>6.4.0.RELEASE</lettuce.version>
         <java.version>21</java.version>
@@ -118,6 +121,11 @@
                 <type>maven-plugin</type>
             </dependency>
             <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio-version}</version>
+            </dependency>
+            <dependency>
                 <groupId>de.starwit</groupId>
                 <artifactId>transparencyapi</artifactId>
                 <version>${transparencyapi-version}</version>
@@ -125,7 +133,7 @@
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
-                <version>4.28.2</version>
+                <version>4.28.3</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -134,20 +142,16 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>3.4.0</version>
+                </plugin>
+                <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot-version}</version>
                     <configuration>
-                        <skip>false</skip>
-                        <mainClass>de.starwit.application.Application</mainClass>
+                        <skip>true</skip>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>build-info</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -202,11 +206,15 @@
                             <phase>prepare-package</phase>
                             <configuration>
                                 <target>
-                                    <concat destfile="${project.build.outputDirectory}/static/info.txt">
-                                        <fileset file="${project.build.outputDirectory}/META-INF/build-info.properties" />
-                                        <fileset file="${project.build.outputDirectory}/git.properties" />
+                                    <concat
+                                        destfile="${project.build.outputDirectory}/static/info.txt">
+                                        <fileset
+                                            file="${project.build.outputDirectory}/META-INF/build-info.properties" />
+                                        <fileset
+                                            file="${project.build.outputDirectory}/git.properties" />
                                         <filterchain>
-                                            <filterreader classname="org.apache.tools.ant.filters.LineContains">
+                                            <filterreader
+                                                classname="org.apache.tools.ant.filters.LineContains">
                                                 <param type="negate" value="true" />
                                                 <param type="contains" value="#" />
                                             </filterreader>
@@ -284,7 +292,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>3.7.0</version>
+                    <version>3.8.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

@@ -8,6 +8,8 @@ import jakarta.persistence.EntityNotFoundException;
 
 import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 
+import java.security.InvalidKeyException;
+import java.io.IOException;
 import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import de.starwit.persistence.exception.NotificationException;
+import de.starwit.service.impl.MinioException;
 
 @ControllerAdvice(basePackages = "de.starwit.rest")
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
@@ -129,6 +132,27 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
             output.setMessageKey("error.unique");
         }
         return new ResponseEntity<>(output, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = { InvalidKeyException.class })
+    public ResponseEntity<Object> handleException(InvalidKeyException ex) {
+        LOG.info("Minio credentials are incorrect", ex.getMessage());
+        NotificationDto output = new NotificationDto("error.trafficincident.notfound", "TrafficIncident not found.");
+        return new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = { IOException.class })
+    public ResponseEntity<Object> handleException(IOException ex) {
+        LOG.info("Minio Object not found", ex.getMessage());
+        NotificationDto output = new NotificationDto("error.minio.notfound", "Minio Object not found.");
+        return new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = { MinioException.class })
+    public ResponseEntity<Object> handleException(MinioException ex) {
+        LOG.info("Minio Error occurred", ex.getMessage());
+        NotificationDto output = new NotificationDto("error.minio", "Minio Error occurred.");
+        return new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
     }
 
     @Override

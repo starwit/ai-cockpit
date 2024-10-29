@@ -40,10 +40,6 @@ jobs:
     - run: node --version
     - run: mvn --version
 
-    - name: get version from pom.xml
-      run: |
-        echo "VERSION=$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )" >> $GITHUB_ENV
-
     - name: npm install
       run: |
         if [ -d "webclient/app" ]; then
