@@ -61,54 +61,69 @@ Project needs a library from an AI cockpit Github repo and thus you need to adap
 
 ## How to build
 
-In order to run a local development environment execute the following steps. 
+In order to run a local development environment execute the following steps.
 __Please note__: all steps need to be executed from base folder of repositories.
 
 1) go to the deployment folder and start the environment (database and keycloak) via docker-compose:
+
     ```bash
     cd deployment
     docker compose up
     ```
+
 2) go to `webclient/app` and install the frontend applications dependencies
+
     ```bash
     cd webclient/app
     npm install
     ```
+
 3) build the project
+
     ```bash
     mvn clean install -P frontend
     ```
+
 4) start project
+
     ```bash
     java -jar application/target/application-0.0.1-SNAPSHOT.jar
     ```
+
 Once all steps ran successfully application will be reachable with the following coordinates:
+
 * application can be reached under <http://localhost:8081/ai-cockpit/>
 * swagger under <http://localhost:8081/ai-cockpit/swagger-ui/>
 * If you are using keycloak:
-    * default user/password is admin/admin
-    * keycloak can be reached under http://localost:8081/auth
+  * default user/password is admin/admin
+  * keycloak can be reached under <http://localost:8081/auth>
 
 ### Optional Minio
+
 If you want to start the Application with Minio then you need to run:
+
   ```bash
     cd deployment
     docker compose -f docker-compoae-minio up
   ```
+
 The Minio WebApp is available under localhost:9001 and the shell Application is available under localhost:9000.
 You need to upload a video in the anomalies Bucket and name it SampleScene01
 
 ### Import Sample Data
-AI Cockpit inserts upon first start a set of incident and action types. If you want to insert actual 
-incidents you can use a script in folder experiment-setup. The following code snippet shows 
+
+AI Cockpit inserts upon first start a set of incident and action types. If you want to insert actual
+incidents you can use a script in folder experiment-setup. The following code snippet shows
 example usage:
+
   ```bash
     cd experiment-setup
     ./fillDatabaseScript.sh http://localhost:8081/ai-cockpit/api/trafficincident demo_setup.json 10
   ```
-Params are dev instance location (no auth), file with data to import and duration between inserts. 
-This script also allows you, to test how incidents are flowing into AI Cockpit. __Note__: you will 
-have to prepare video data on a Minio instance. 
+
+Params are dev instance location (no auth), file with data to import and duration between inserts.
+This script also allows you, to test how incidents are flowing into AI Cockpit. __Note__: you will
+have to prepare video data on a Minio instance.
 
 ## Debugging
 
@@ -161,15 +176,6 @@ Start the database without keycloak:
 cd deployment
 docker compose up
 ```
-
-## Version update
-
-* mvn -B build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.\0\${parsedVersion.qualifier?} versions:commit
-* mvn -B release:clean release:prepare -Darguments="-DskipTests"
-* mvn -B release:clean
-* mvn -B release:update-versions
-* mvn versions:set -DremoveSnapshot
-* changelog convetions: <https://www.conventionalcommits.org/en/v1.0.0/>
 
 # Deployment
 
