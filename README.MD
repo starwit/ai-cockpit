@@ -59,18 +59,10 @@ Project needs a library from an AI cockpit Github repo and thus you need to adap
 </settings>
 ```
 
-## Version update
+## How to build
 
-* mvn -B build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.\0\${parsedVersion.qualifier?} versions:commit
-* mvn -B release:clean release:prepare -Darguments="-DskipTests"
-* mvn -B release:clean
-* mvn -B release:update-versions
-* mvn versions:set -DremoveSnapshot
-* changelog convetions: <https://www.conventionalcommits.org/en/v1.0.0/>
-
-## Installation Steps
-
-:exclamation: Each step is executed from the project home directory.
+In order to run a local development environment execute the following steps.
+__Please note__: all steps need to be executed from base folder of repositories.
 
 1) go to the deployment folder and start the environment (database and keycloak) via docker-compose:
 
@@ -98,22 +90,40 @@ Project needs a library from an AI cockpit Github repo and thus you need to adap
     java -jar application/target/application-0.0.1-SNAPSHOT.jar
     ```
 
-   You can also run the main-class via Visual Studio Code.
+Once all steps ran successfully application will be reachable with the following coordinates:
 
-* **application can be reached under <http://localhost:8081/ai-cockpit/>**
-* **swagger under <http://localhost:8081/ai-cockpit/swagger-ui/>**
-* **If you are using keycloak:**
-    * **default user/password is admin/admin**
-    * **keycloak can be reached under http://localost:8081/auth**
-  
-### Minio
-If you want to start the Application with Minio then you need to run 
-    ```bash
-      cd deployment
-      docker compose -f docker-compoae-minio up
-    ```
+* application can be reached under <http://localhost:8081/ai-cockpit/>
+* swagger under <http://localhost:8081/ai-cockpit/swagger-ui/>
+* If you are using keycloak:
+  * default user/password is admin/admin
+  * keycloak can be reached under <http://localost:8081/auth>
+
+### Optional Minio
+
+If you want to start the Application with Minio then you need to run:
+
+  ```bash
+    cd deployment
+    docker compose -f docker-compoae-minio up
+  ```
+
 The Minio WebApp is available under localhost:9001 and the shell Application is available under localhost:9000.
 You need to upload a video in the anomalies Bucket and name it SampleScene01
+
+### Import Sample Data
+
+AI Cockpit inserts upon first start a set of incident and action types. If you want to insert actual
+incidents you can use a script in folder experiment-setup. The following code snippet shows
+example usage:
+
+  ```bash
+    cd experiment-setup
+    ./fillDatabaseScript.sh http://localhost:8081/ai-cockpit/api/trafficincident demo_setup.json 10
+  ```
+
+Params are dev instance location (no auth), file with data to import and duration between inserts.
+This script also allows you, to test how incidents are flowing into AI Cockpit. __Note__: you will
+have to prepare video data on a Minio instance.
 
 ## Debugging
 
@@ -146,7 +156,7 @@ Password:starwit
 
 PGAdmin is recommended to access database for development purpose. It can be deployed via docker-compose file.
 
-## Starting without keycloak
+## Starting without Keycloak/Authentication
 
 If you want to start your application without keycloak, you need to change spring boot profile to dev in application\src\main\resources\application.properties.
 
