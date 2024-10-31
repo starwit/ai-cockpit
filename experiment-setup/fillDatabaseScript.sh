@@ -6,17 +6,17 @@ URL="http://localhost:8081/ai-cockpit/api/trafficincident"
 INTERVAL=10  # post intervall
 
 function main {
-    if [ -n $1 ]; then
+    if [ -n "$1" ]; then
         echo "Param for target URL exists " $1
         URL=$1
     fi
 
-    if [ -n $2 ]; then
+    if [ -n "$2" ]; then
         echo "Param for input file exists " $2
         JSON_FILE=$2
     fi
 
-    if [ -n $3 ]; then
+    if [ -n "$3" ]; then
         echo "Param for interval exists " $3
         INTERVAL=$3
     fi
