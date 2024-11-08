@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Features
+
+-  update docker compose with keycloak ([8e4af](https://github.com/starwit/ai-cockpit/commit/8e4af07d2fc6585) Anett Hübner)  
+
 ## 3 (2024-10-10)
 
 ### Features
