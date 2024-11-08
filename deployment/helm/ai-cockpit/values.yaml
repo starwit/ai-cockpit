@@ -6,6 +6,9 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ${project.version}
 
+nameOverride: ""
+fullnameOverride: "observatory-config"
+
 app:
   context_path: "/ai-cockpit"
 
