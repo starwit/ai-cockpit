@@ -25,6 +25,11 @@ postgresql:
     username: ai-cockpit
     password: ai-cockpit
 
+minio:
+  user: minioadmin
+  password: minioadmin
+  endpoint: http://localhost:9000
+
 # extraEnv: |
 #   - name: JAVA_TOOL_OPTIONS
 #     value: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5000
