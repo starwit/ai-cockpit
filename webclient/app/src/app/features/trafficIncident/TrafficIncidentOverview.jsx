@@ -187,7 +187,6 @@ function TrafficIncidentOverview() {
             </Tabs>
             <Box sx={{width: "100%"}}>
                 <DataGrid
-                    autoHeight
                     initialState={{
                         sorting: {
                             sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
@@ -195,7 +194,6 @@ function TrafficIncidentOverview() {
                     }}
                     rows={tab == 0 ? newIncidents : checkedIncidents}
                     columns={headers}
-                    pageSizeOptions={[10]}
                     isCellEditable={() => {false}}
                     slots={{toolbar: GridToolbar}}
                     slotProps={{
