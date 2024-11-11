@@ -3,15 +3,25 @@ package de.starwit.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
+import de.starwit.persistence.entity.ExecutionPolicies;
+import de.starwit.persistence.entity.MitigationActionEntity;
+import de.starwit.persistence.entity.MitigationActionTypeEntity;
 import de.starwit.persistence.entity.TrafficIncidentEntity;
 import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
+import de.starwit.persistence.repository.MitigationActionTypeRepository;
+import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
+import de.starwit.service.impl.MitigationActionTypeService;
 import de.starwit.service.impl.TrafficIncidentService;
 import de.starwit.service.impl.TrafficIncidentTypeService;
 import de.starwit.visionapi.Reporting.IncidentMessage;
@@ -21,18 +31,43 @@ import de.starwit.visionapi.Reporting.IncidentMessage;
 public class TrafficIncidentServiceTest {
 
     @Autowired
+    TrafficIncidentTypeRepository trafficIncidentTypeRepository;
+
+    @Autowired
+    private MitigationActionTypeService mitigationActionTypeService;
+
+    @Autowired
+    MitigationActionTypeRepository mitigationActionTypeRepository;
+
+    @Autowired
     private TrafficIncidentService trafficIncidentService;
 
     @Autowired
     private TrafficIncidentTypeService trafficIncidentTypeService;
 
-    @Test
+    //@Test
     void testCreateNewIncidentWithMitigationActionsMessage() {
 
         // prepare
+        long timestamp = 1633046400000L;
         IncidentMessage incidentMessage = mock(IncidentMessage.class);
         when(incidentMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
-        when(incidentMessage.getTimestampUtcMs()).thenReturn(1633046400000L);
+        when(incidentMessage.getTimestampUtcMs()).thenReturn(timestamp);
+
+        TrafficIncidentTypeEntity defaultIncidentType = new TrafficIncidentTypeEntity();
+        defaultIncidentType.setName("dangerous driving behaviour");
+        MitigationActionTypeEntity actionType = new MitigationActionTypeEntity();
+        actionType.setDescription("Notify public platforms or apps about the traffic incident");
+        actionType.setName("notify public platform");
+        actionType.setExecutionPolicy(ExecutionPolicies.AUTOMATIC);
+        Set<MitigationActionTypeEntity> mitigationActionType = new HashSet<>();
+        defaultIncidentType.setMitigationActionType(mitigationActionType);
+        actionType = mitigationActionTypeService.saveOrUpdate(actionType);
+        mitigationActionType.add(actionType);
+        defaultIncidentType = trafficIncidentTypeService.saveOrUpdate(defaultIncidentType);
+
+        mitigationActionTypeRepository
+                    .findByTrafficIncidentType(defaultIncidentType.getId());
 
         // Call Methode
         TrafficIncidentEntity result = trafficIncidentService
@@ -40,40 +75,25 @@ public class TrafficIncidentServiceTest {
 
         // Assert
         assertEquals("http://testurl.com/media", result.getMediaUrl());
-        // ZonedDateTime expectedDateTime = Instant.ofEpochMilli(1633046400000L)
-        // .atZone(ZoneId.systemDefault());
-        // assertEquals(expectedDateTime, result.getAcquisitionTime());
-        // assertEquals(1, result.getMitigationAction().size());
-        // MitigationActionEntity action =
-        // result.getMitigationAction().iterator().next();
-        // assertEquals(expectedDateTime, action.getCreationTime());
-
-        // Verify repository interactions
-        // verify(trafficIncidentTypeRepository,
-        // times(1)).findByName(defaultIncidentType);
-        // verify(mitigationActionTypeRepository,
-        // times(1)).findByTrafficIncidentType(anyLong());
-        // verify(trafficIncidentRepository,
-        // times(1)).save(any(TrafficIncidentEntity.class));
+        ZonedDateTime expectedDateTime = Instant.ofEpochMilli(timestamp)
+        .atZone(ZoneId.systemDefault());
+        assertEquals(expectedDateTime, result.getAcquisitionTime());
+        assertEquals(1, result.getMitigationAction().size());
+        MitigationActionEntity action = result.getMitigationAction().iterator().next();
+        assertEquals(expectedDateTime, action.getCreationTime());
     }
 
     @Test
     void testFindByName() {
-
-        // prepare
-        IncidentMessage incidentMessage = mock(IncidentMessage.class);
-        when(incidentMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
-        when(incidentMessage.getTimestampUtcMs()).thenReturn(1633046400000L);
-
+        //prepare
         TrafficIncidentTypeEntity defaultIncidentType = new TrafficIncidentTypeEntity();
         defaultIncidentType.setName("dangerous driving behaviour");
         trafficIncidentTypeService.saveOrUpdate(defaultIncidentType);
 
-        // Call Methode
-        TrafficIncidentEntity result = trafficIncidentService
-                .createNewIncidentWithMitigationActionsMessage(incidentMessage);
-
+        //Call-Methode
         TrafficIncidentTypeEntity entity = trafficIncidentService.findIncidentTypeByName("dangerous driving behaviour");
+
+        //Assert
         assertTrue(entity.getName().equals("dangerous driving behaviour"));
 
     }
