@@ -10,11 +10,14 @@ import {
     Tooltip
 } from "@mui/material";
 
+import { useTranslation } from 'react-i18next';
+
 import React from "react";
 import ConfigMenu from "../features/config/ConfigMenu";
 import InfoMenu from "../features/info/InfoMenu";
 
 function CockpitAppBar() {
+    const {t} = useTranslation();
     return (
         <>
             <Container>
@@ -30,8 +33,8 @@ function CockpitAppBar() {
                         >
                             <HomeIcon />
                         </IconButton>
-                        <Typography variant="h1" component="div" sx={{flexGrow: 1}}>KI Cockpit</Typography>
-                        <Tooltip title="Incident Map">
+                        <Typography variant="h1" component="div" sx={{flexGrow: 1}}>{t('home.title')}</Typography>
+                        <Tooltip title={t('map.tooltip')}>
                             <IconButton
                                 onClick={() => {/*TODO*/}}
 

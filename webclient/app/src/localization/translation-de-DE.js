@@ -46,6 +46,7 @@ const translationDeDE = {
     "trafficIncidentType.id": "id",
     "trafficIncidentType.name": "name",
     "trafficIncidentType.name.hint": "",
+    "map.tooltip": "Auf der Karte anzeigen",
     "mitigationActionType": "MitigationActionType",
     "mitigationActionType.title": "MitigationActionType",
     "mitigationActionType.create.title": "Create MitigationActionType",
