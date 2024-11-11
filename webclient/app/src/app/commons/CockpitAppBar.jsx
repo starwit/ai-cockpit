@@ -1,13 +1,14 @@
 import HomeIcon from "@mui/icons-material/Home";
 import MapIcon from "@mui/icons-material/Map";
 
-import {AppBar, 
-        Container, 
-        IconButton, 
-        Toolbar, 
-        Typography, 
-        Button
-        } from "@mui/material";
+import {
+    AppBar,
+    Container,
+    IconButton,
+    Toolbar,
+    Typography,
+    Tooltip
+} from "@mui/material";
 
 import React from "react";
 import ConfigMenu from "../features/config/ConfigMenu";
@@ -30,29 +31,17 @@ function CockpitAppBar() {
                             <HomeIcon />
                         </IconButton>
                         <Typography variant="h1" component="div" sx={{flexGrow: 1}}>KI Cockpit</Typography>
-                        <>
-                            <Button             /* MAP BUTTON */                
-                                color="inherit"
-                                size="large"
-                                startIcon={<MapIcon />}
-                                href="./incident-map-view"
-                                sx={{ mr: 1,    /* margin-right: the more is the value the further away is button from ConfigMenu */ 
-                                      boxShadow: 2, 
-                                      '&:hover': {
+                        <Tooltip title="Incident Map">
+                            <IconButton
+                                onClick={() => {/*TODO*/}}
 
-                                        backgroundColor: "primary.dark"
-
-                                      }
-
-                                 }}          
-                                onClick={ () => {/*TODO*/} } 
-                                > 
-                                <Typography>Map of Incidents</Typography>
-                            </Button>
-                            
-                            <ConfigMenu />
-                            <InfoMenu />
-                        </>
+                                href="./#/incident-map-view"
+                                variant="outlined">
+                                <MapIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <ConfigMenu />
+                        <InfoMenu />
                     </Toolbar>
                 </AppBar>
             </Container >
