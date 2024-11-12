@@ -46,6 +46,7 @@ const translationEnEN = {
     "trafficIncident.button.details": "Check",
     "trafficIncidentType.name": "name",
     "trafficIncidentType.name.hint": "",
+    "map.tooltip": "Show on Map",
     "mitigationActionType": "MitigationActionType",
     "mitigationActionType.title": "MitigationActionType",
     "mitigationActionType.create.title": "Create MitigationActionType",

@@ -1,4 +1,4 @@
-import {Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper, Typography} from "@mui/material";
+import {Button, ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Tooltip, Typography} from "@mui/material";
 
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
@@ -44,13 +44,15 @@ function ConfigMenu() {
     }
 
     return <>
-        <Button variant="contained"
-            size="large"
-            onClick={handleToggle}
-            ref={anchorRef}
-            startIcon={<SettingsIcon />}>
-            <Typography>{t("menu.config")}</Typography>
-        </Button>
+        <Tooltip title={t("menu.config")}>
+            <IconButton
+                size="large"
+                onClick={handleToggle}
+                ref={anchorRef}
+                variant="outlined">
+                <SettingsIcon />
+            </IconButton>
+        </Tooltip>
         <Popper
             open={open}
             anchorEl={anchorRef.current}

@@ -8,6 +8,7 @@ import TrafficIncidentOverview from "./features/trafficIncident/TrafficIncidentO
 import ComponentBreakDown from "./features/info/ComponentBreakDown";
 import Level2 from "./features/trafficIncident/mock/Level2";
 import Level3 from "./features/trafficIncident/mock/Level3";
+import IncidentOverviewMap from "./features/trafficIncident/IncidentOverviewMap";
 
 function MainContentRouter() {
     return (
@@ -16,6 +17,7 @@ function MainContentRouter() {
             <Container sx={{paddingTop:"4em"}}>
                 <Routes>
                     <Route path="/" element={<TrafficIncidentOverview />} />
+                    <Route path="/incident-map-view" element={<IncidentOverviewMap />} />
                     <Route path="/1" element={<TrafficIncidentOverview />} />
                     <Route path="/2" element={<Level2 />} />
                     <Route path="/3" element={<Level3 />} />
