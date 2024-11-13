@@ -15,7 +15,7 @@ const ICON_MAPPING = {
         height: 128,    // Height of the icon
         mask: false     // Don't use mask effect
     }
-}; 
+};
 
 function IncidentOverviewMap() {
     // Set initial map position and zoom level
@@ -32,7 +32,7 @@ function IncidentOverviewMap() {
         // Creating base map layer using CartoDB light theme
         new TileLayer({
             // URL for map tiles
-            data: "https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
+            data: "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
             minZoom: 0,     // Minimum zoom level
             maxZoom: 19,    // Maximum zoom level
             tileSize: 256,  // Size of each map tile
@@ -56,14 +56,12 @@ function IncidentOverviewMap() {
 
     // Return the map component with minimum required styles
     return (
-        <div style={{ height: 'calc(100vh - 64px)', position: 'relative' }}>
-            <DeckGL
-                layers={layers}               // Add map layers
-                views={MAP_VIEW}              // Add map view settings
-                initialViewState={INITIAL_VIEW_STATE}  // Set initial position
-                controller={{dragRotate: false}}       // Disable rotation
-            />
-        </div>
+        <DeckGL
+            layers={layers}               // Add map layers
+            views={MAP_VIEW}              // Add map view settings
+            initialViewState={INITIAL_VIEW_STATE}  // Set initial position
+            controller={{dragRotate: false}}       // Disable rotation
+        />
     );
 }
 
