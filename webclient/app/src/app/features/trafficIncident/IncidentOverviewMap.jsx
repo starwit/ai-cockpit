@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
 import {BitmapLayer, IconLayer} from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import cameraicon from "./../../assets/images/camera3.png";
+import TrafficIncidentRest from '../../services/TrafficIncidentRest';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -15,9 +16,29 @@ const ICON_MAPPING = {
         height: 128,    // Height of the icon
         mask: false     // Don't use mask effect
     }
-}; 
+};
 
 function IncidentOverviewMap() {
+    // Add state to store incidents
+    const [trafficIncidents, setTrafficIncidents] = useState([]);
+    const trafficIncidentRest = new TrafficIncidentRest();
+
+    useEffect(() => {
+        reloadTrafficIncidents();
+        const interval = setInterval(reloadTrafficIncidents, 5000); // Update alle 5 Sekunden
+        return () => clearInterval(interval);
+    }, []);
+
+    //Load Incidents
+    function reloadTrafficIncidents() {
+        trafficIncidentRest.findAll().then(response => {
+            if (response.data) {
+                setTrafficIncidents(response.data);
+                console.log("Loaded incidents:", response.data);
+            }
+        });
+    }
+
     // Set initial map position and zoom level
     const INITIAL_VIEW_STATE = {
         longitude: 10.0,     // Initial longitude (X coordinate)
@@ -51,17 +72,40 @@ function IncidentOverviewMap() {
                     bounds: [west, south, east, north]
                 });
             }
+        }),
+        // Add layer with Incident Icons
+        new IconLayer({
+            id: 'icon-layer',
+            data: trafficIncidents,
+            pickable: true,
+            iconAtlas: cameraicon,
+            iconMapping: ICON_MAPPING,
+            getIcon: d => "marker",
+            sizeScale: 10,
+            getPosition: d => [
+                d.cameraLongitude,
+                d.cameraLatitude
+            ],
+            getSize: d => 5
         })
     ];
 
+
+
     // Return the map component with minimum required styles
     return (
-        <div style={{ height: 'calc(100vh - 64px)', position: 'relative' }}>
+        //There is a bug for Brave Browser v1.71.123 after removing `div` container with CSS-styling. 
+        //Otherwise this code works for other browsers without `div`. 
+        //<Container disableGutters> <DeckGL ... /> </Container> didn't help either.
+        <div style={{height: 'calc(100vh - 64px)', position: 'relative'}}>
             <DeckGL
                 layers={layers}               // Add map layers
                 views={MAP_VIEW}              // Add map view settings
                 initialViewState={INITIAL_VIEW_STATE}  // Set initial position
                 controller={{dragRotate: false}}       // Disable rotation
+                style={{width: '100%', height: '100%'}}
+                height="100%"
+                width="100%"
             />
         </div>
     );
