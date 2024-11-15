@@ -143,7 +143,7 @@ function TrafficIncidentDetail(props) {
                 sx={{paddingBottom: 0, marginBottom: 0}}
             >
                 <Box>
-                    <Typography variant="h6" noWrap>    {/* HEADER FOR ACCIDENT | TRAFFIC JAM | DANGEROUS DRIVING BEHAVIOUR */}
+                    <Typography variant="h2" noWrap>    {/* HEADER FOR ACCIDENT | TRAFFIC JAM | DANGEROUS DRIVING BEHAVIOUR */}
                         {rowData.trafficIncidentType.name}
                     </Typography>
 

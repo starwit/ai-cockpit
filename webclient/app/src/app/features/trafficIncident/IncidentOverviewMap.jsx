@@ -52,7 +52,7 @@ function IncidentOverviewMap() {
         // Creating base map layer using CartoDB light theme
         new TileLayer({
             // URL for map tiles
-            data: "https://cartodb-basemaps-a.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
+            data: "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
             minZoom: 0,     // Minimum zoom level
             maxZoom: 19,    // Maximum zoom level
             tileSize: 256,  // Size of each map tile
