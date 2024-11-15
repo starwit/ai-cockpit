@@ -34,7 +34,6 @@ function IncidentOverviewMap() {
         trafficIncidentRest.findAll().then(response => {
             if (response.data) {
                 setTrafficIncidents(response.data);
-                console.log("Loaded incidents:", response.data);
             }
         });
     }
