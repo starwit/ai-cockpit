@@ -103,9 +103,6 @@ function IncidentOverviewMap() {
                 views={MAP_VIEW}              // Add map view settings
                 initialViewState={INITIAL_VIEW_STATE}  // Set initial position
                 controller={{dragRotate: false}}       // Disable rotation
-                style={{width: '100%', height: '100%'}}
-                height="100%"
-                width="100%"
             />
         </div>
     );
