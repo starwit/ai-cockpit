@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 
-import de.starwit.persistence.FlywayCallback;
+import de.starwit.application.config.FlywayCallback;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.SpringApplication;
