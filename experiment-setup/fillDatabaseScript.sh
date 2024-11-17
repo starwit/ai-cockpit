@@ -20,8 +20,6 @@ function main {
         echo "Param for interval exists " $3
         INTERVAL=$3
     fi
-
-    send_json
 }
 
 send_json() {
