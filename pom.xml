@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.4</version>
+        <version>3.3.5</version>
     </parent>
 
     <groupId>de.starwit</groupId>
@@ -21,11 +21,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot-version>3.3.4</spring-boot-version>
+        <spring-boot-version>3.3.5</spring-boot-version>
         <openapi-version>2.6.0</openapi-version>
-        <minio-version>8.5.12</minio-version>
+        <minio-version>8.5.13</minio-version>
         <vision-api.version>3.0.0</vision-api.version>
-        <lettuce.version>6.4.0.RELEASE</lettuce.version>
+        <lettuce.version>6.5.0.RELEASE</lettuce.version>
         <java.version>21</java.version>
         <transparencyapi-version>0.0.2</transparencyapi-version>
     </properties>
