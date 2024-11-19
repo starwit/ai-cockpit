@@ -1,0 +1,146 @@
+[
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/2024-06-26_18-13-49_accident.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 2
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/2024-10-20_03-42-57-wreckless-driving.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 1
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/2024-06-26_18-15-00_accident2.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 2
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/2024-06-27_22-55-23_wrong_entry.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 1
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/2024-07-01_03-50-16_shortcut.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 1
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/2024-07-02_00-04-53_what_does_this_triangle_sign_mean_again.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 4
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/2024-07-02_16-00-58_wrong_way.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 1
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/2024-10-20_13-18-12-wrong-way.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 1
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/AD_disabled_vehicle.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 4
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/AD_Firefighters.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 6
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/AD_HelpNecessaryOrNot.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 5
+    },
+    "mitigationAction": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "demo-setup/RecklessDriving.mp4",
+    "cameraLatitude": 39.95841772807577,
+    "cameraLongitude": -86.12682180111628,
+    "state": "NEW",
+    "description": null,
+    "trafficIncidentType": {
+      "id": 1
+    },
+    "mitigationAction": []
+  }
+]

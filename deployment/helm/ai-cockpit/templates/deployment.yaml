@@ -52,6 +52,12 @@ spec:
                 secretKeyRef:
                   name: {{ include "postgresql.secretname" . }}
                   key: password
+            - name: MINIO_USER
+              value: {{ .Values.minio.user }}
+            - name: MINIO_PASSWORD
+              value: {{ .Values.minio.password }}
+            - name: MINIO_ENDPOINT
+              value: {{ .Values.minio.endpoint }}
             {{- if .Values.auth.enabled }}
             - name: SPRING_PROFILES_ACTIVE
               value: auth

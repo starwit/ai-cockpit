@@ -1,5 +1,5 @@
 import Info from "@mui/icons-material/Info";
-import {ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper} from "@mui/material";
+import {ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Tooltip} from "@mui/material";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
@@ -42,12 +42,15 @@ function ConfigMenu() {
     }
 
     return <>
-        <IconButton
-            onClick={handleToggle}
-            ref={anchorRef}
-            variant="outlined">
-            <Info />
-        </IconButton>
+        <Tooltip title={t("menu.info")}>
+            <IconButton
+                size="large"
+                onClick={handleToggle}
+                ref={anchorRef}
+                variant="outlined">
+                <Info />
+            </IconButton>
+        </Tooltip>
         <Popper
             open={open}
             anchorEl={anchorRef.current}

@@ -6,6 +6,9 @@ image:
   # Overrides the image tag whose default is the chart appVersion.
   tag: ${project.version}
 
+nameOverride: ""
+fullnameOverride: "ai-cockpit"
+
 app:
   context_path: "/ai-cockpit"
 
@@ -24,6 +27,11 @@ postgresql:
     database: ai-cockpit
     username: ai-cockpit
     password: ai-cockpit
+
+minio:
+  user: minioadmin
+  password: minioadmin
+  endpoint: http://localhost:9000
 
 # extraEnv: |
 #   - name: JAVA_TOOL_OPTIONS

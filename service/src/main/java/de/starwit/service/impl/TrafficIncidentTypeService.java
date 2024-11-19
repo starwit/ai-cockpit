@@ -1,18 +1,16 @@
 package de.starwit.service.impl;
 
-import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
-import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
-import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
-
-import de.starwit.persistence.entity.MitigationActionTypeEntity;
 import de.starwit.persistence.entity.TrafficIncidentEntity;
+import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
 import de.starwit.persistence.repository.TrafficIncidentRepository;
+import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
+import jakarta.validation.Valid;
 
 /**
  * 
