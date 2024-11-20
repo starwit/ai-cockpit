@@ -1,17 +1,14 @@
-package de.starwit.persistence;
+package de.starwit.service.impl;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.flywaydb.core.api.callback.Callback;
-import org.flywaydb.core.api.callback.Context;
-import org.flywaydb.core.api.callback.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,16 +19,17 @@ import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
 import de.starwit.persistence.repository.MitigationActionTypeRepository;
 import de.starwit.persistence.repository.TrafficIncidentRepository;
 import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
+import jakarta.annotation.PostConstruct;
 
-@Component
-public class FlywayCallback implements Callback {
+@Service
+public class FlywayService {
 
-    static final Logger LOG = LoggerFactory.getLogger(FlywayCallback.class);
+    static final Logger LOG = LoggerFactory.getLogger(FlywayService.class);
 
-    @Value("${scenario.setup}")
+    @Value("${scenario.setup:false}")
     private boolean setupScenario = true;
 
-    @Value("${scenario.importFolder}")
+    @Value("${scenario.importFolder:/scenariodata/traffic/}")
     private String scenarioImportFolder;
 
     @Autowired
@@ -45,19 +43,9 @@ public class FlywayCallback implements Callback {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    @Override
-    public boolean canHandleInTransaction(Event event, Context context) {
-        return event == Event.AFTER_MIGRATE_OPERATION_FINISH;
-    }
-
-    @Override
-    public String getCallbackName() {
-        return "scenario setup";
-    }
-
-    @Override
-    public void handle(Event event, Context context) {
-        LOG.info("Importing sample data after event: " + event + " " + setupScenario);
+    @PostConstruct
+    public void init() {
+        LOG.info("Importing sample data: " + setupScenario);
         if (setupScenario) {
             LOG.info("Importing sample data structure from folder " + scenarioImportFolder);
             if (importMitigationTypes(scenarioImportFolder)) {
@@ -67,11 +55,6 @@ public class FlywayCallback implements Callback {
                 }
             }
         }
-    }
-
-    @Override
-    public boolean supports(Event event, Context context) {
-        return event == Event.AFTER_MIGRATE_OPERATION_FINISH;
     }
 
     private boolean importMitigationTypes(String folder) {
@@ -125,7 +108,8 @@ public class FlywayCallback implements Callback {
         if (file.exists()) {
             LOG.info("Importing demo data from file " + file.getAbsolutePath());
             try {
-                List<TrafficIncidentEntity> trafficIncidentTypes = mapper.readValue(file,
+                List<TrafficIncidentEntity> trafficIncidentTypes = mapper.readValue(
+                        file,
                         new TypeReference<List<TrafficIncidentEntity>>() {
                         });
                 incidentRepository.saveAll(trafficIncidentTypes);

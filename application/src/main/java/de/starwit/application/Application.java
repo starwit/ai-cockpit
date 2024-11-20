@@ -1,16 +1,12 @@
 package de.starwit.application;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-
-import de.starwit.persistence.FlywayCallback;
-
-import org.flywaydb.core.Flyway;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication(scanBasePackages = {
         "de.starwit.rest",
@@ -35,16 +31,5 @@ public class Application {
         filterProvider.addFilter("filterIdName", SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "title"));
         mapper.setFilterProvider(filterProvider);
         return mapper;
-    }
-
-    @Bean
-    public FlywayMigrationStrategy flywayMigrationStrategy() {
-        return (flywayOld) -> {
-            Flyway flyway = Flyway.configure()
-                    .configuration(flywayOld.getConfiguration())
-                    .callbacks(new FlywayCallback())
-                    .load();
-            flyway.migrate();
-        };
     }
 }
