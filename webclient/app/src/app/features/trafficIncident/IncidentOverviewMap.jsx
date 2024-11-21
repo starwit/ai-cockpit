@@ -1,10 +1,20 @@
 import React, {useState, useEffect} from 'react';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
-import {BitmapLayer, IconLayer} from "@deck.gl/layers";
+
+import {
+    BitmapLayer,
+    IconLayer,
+    TextLayer,
+    ScatterplotLayer
+} from "@deck.gl/layers";
+
 import DeckGL from "@deck.gl/react";
 import cameraicon from "./../../assets/images/camera3.png";
 import TrafficIncidentRest from '../../services/TrafficIncidentRest';
+import {Tooltip, Paper, Typography, Box, IconButton} from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -21,7 +31,9 @@ const ICON_MAPPING = {
 function IncidentOverviewMap() {
     // Add state to store incidents
     const [trafficIncidents, setTrafficIncidents] = useState([]);
+    const [hoveredIncidents, setHoveredIncidents] = useState(null); // To track a hover
     const trafficIncidentRest = new TrafficIncidentRest();
+    const [showPanel, setShowPanel] = useState(true);
 
     useEffect(() => {
         reloadTrafficIncidents();
@@ -38,14 +50,33 @@ function IncidentOverviewMap() {
         });
     }
 
+    const groupedIncidents = trafficIncidents.reduce((acc, incident) => {
+        const key = `${incident.cameraLatitude}-${incident.cameraLongitude}`;
+        if (!acc[key]) {
+            acc[key] = [];
+        }
+        acc[key].push(incident);
+        return acc;
+    }, {});
+
     // Set initial map position and zoom level
     const INITIAL_VIEW_STATE = {
-        longitude: 10.0,     // Initial longitude (X coordinate)
-        latitude: 51.0,      // Initial latitude (Y coordinate)
-        zoom: 5,            // Initial zoom level
+        longitude: -86.13470,     // Initial longitude (X coordinate)
+        latitude: 39.91,      // Initial latitude (Y coordinate)
+        zoom: 10,            // Initial zoom level
         pitch: 0,           // No tilt
         bearing: 0          // No rotation
     };
+
+    function getIconColor(incidentCount) {
+        if (incidentCount > 5) {
+            return [255, 0, 0, 255]; // Red
+        } else if (incidentCount === 5) {
+            return [255, 255, 0, 255] // Yellow 
+        } else {
+            return [0, 128, 0, 255] // Green - default
+        }
+    }
 
     // Define map layers
     const layers = [
@@ -73,22 +104,66 @@ function IncidentOverviewMap() {
             }
         }),
         // Add layer with Incident Icons
-        new IconLayer({
-            id: 'icon-layer',
-            data: trafficIncidents,
-            pickable: true,
-            iconAtlas: cameraicon,
-            iconMapping: ICON_MAPPING,
-            getIcon: d => "marker",
-            sizeScale: 10,
+        new ScatterplotLayer({
+            id: 'scatterplot-layer',
+            data: Object.entries(groupedIncidents),     // Using Object.entries to convert object to array of [key, value] pairs
+
+            pickable: true,     // Enable hover interactions with the icons
+            opacity: 0.8,       // 80% opacity for icons
+            stroked: true,      // Show border around icons
+            filled: true,       // Fill icons with color
+
+            // Size settings for markers
+            radiusScale: 15,
+            radiusMinPixels: 5,
+            radiusMaxPixels: 100,
+            lineWidthMinPixels: 1,
+
+            // Function to determine icon position
+            // d[1][0] contains the first incident in the group (all have same coordinates)
             getPosition: d => [
-                d.cameraLongitude,
-                d.cameraLatitude
+                d[1][0].cameraLongitude,
+                d[1][0].cameraLatitude
             ],
-            getSize: d => 5
+            getRadius: d => Math.sqrt(d[1].length) * 5,
+            getFillColor: d => getIconColor(d[1].length),
+            getLineColor: [0, 0, 0, 255],
+            onHover: info => {
+                if (info.object) {
+                    setHoveredIncidents(info.object[1]);
+                }
+            }
+        }),
+        new TextLayer({
+            id: 'text-layer',
+            data: Object.entries(groupedIncidents),
+            pickable: true,
+            getPosition: d => [
+                d[1][0].cameraLongitude,
+                d[1][0].cameraLatitude
+            ],
+            getText: d => String(d[1].length),
+            getSize: 16,
+            getAngle: 0,
+            getTextAnchor: 'middle',
+            getAlignmentBaseline: 'center',
+            getColor: [255, 255, 255]
         })
     ];
 
+    // Use european format of date
+    function formatDateTime(date) {
+        const d = new Date(date);
+        return d.toLocaleDateString('de-DE', {
+            day: 'numeric',
+            month: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: false
+        });
+    }
 
 
     // Return the map component with minimum required styles
@@ -103,6 +178,81 @@ function IncidentOverviewMap() {
                 initialViewState={INITIAL_VIEW_STATE}  // Set initial position
                 controller={{dragRotate: false}}       // Disable rotation
             />
+
+            <IconButton
+                onClick={() => setShowPanel(!showPanel)}
+                style={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: showPanel ? '320px' : '10px',
+                    backgroundColor: 'white'
+                }}
+                size="small"
+            >
+                {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+
+            {showPanel && (
+                <Paper
+                    elevation={3}
+                    style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        bottom: '10px',
+                        width: '300px',
+                        overflowY: 'auto',
+                        padding: '16px',
+                        background: 'rgba(255, 255, 255, 0.9)'
+                    }}
+                >
+
+                    <Typography variant="h6" gutterBottom>
+                        Incidents List
+                    </Typography>
+                    {hoveredIncidents ? (
+                        <>
+                            <Typography variant="subtitle1" gutterBottom>
+                                Found {hoveredIncidents.length} incidents at this location
+                            </Typography>
+                            <Box sx={{flex: 1, overflowY: 'auto'}}>
+                                {hoveredIncidents.map((incident, index) => (
+                                    <Paper
+                                        key={incident.id}
+                                        elevation={1}
+                                        sx={{
+                                            p: 2,
+                                            mb: 1,
+                                            background: 'white'
+                                        }}
+                                    >
+                                        <Typography variant="h6">
+                                            {incident.trafficIncidentType?.name}
+                                        </Typography>
+                                        <Typography>
+                                            Time: {formatDateTime(incident.acquisitionTime)}
+                                        </Typography>
+                                        <Typography>
+                                            State: {incident.state || 'NEW'}
+                                        </Typography>
+                                        {incident.description && (
+                                            <Typography>
+                                                Description: {incident.description}
+                                            </Typography>
+                                        )}
+                                    </Paper>
+                                ))}
+                            </Box>
+                        </>
+                    ) : (
+                        <Typography>
+                            Hover over a camera to see incidents
+                        </Typography>
+                    )}
+                </Paper>
+
+            )}  {/* showPanel && ...*/}
+
         </div>
     );
 }
