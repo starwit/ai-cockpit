@@ -40,7 +40,7 @@ import io.minio.errors.XmlParserException;
 @Service
 public class TrafficIncidentService implements ServiceInterface<TrafficIncidentEntity, TrafficIncidentRepository> {
 
-    @Value("${incident.type.default:Gefahrensituation}")
+    @Value("${incident.type.default:dangerous driving behaviour}")
     private String defaultIncidentType;
 
     @Value("${minio.user:minioadmin}")
