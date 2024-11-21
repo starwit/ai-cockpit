@@ -2,6 +2,10 @@ package de.starwit.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -21,6 +25,11 @@ import de.starwit.persistence.repository.TrafficIncidentRepository;
 import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
 import jakarta.annotation.PostConstruct;
 
+/**
+ * Service class for importing sample data. Will only be executed,
+ * if flag in application properties is set.
+ */
+
 @Service
 public class FlywayService {
 
@@ -31,6 +40,12 @@ public class FlywayService {
 
     @Value("${scenario.importFolder:/scenariodata/traffic/}")
     private String scenarioImportFolder;
+
+    private String mititgationTypeFileName = "mitigationtypes.json";
+
+    private String incidentTypeFileName = "incidenttypes.json";
+
+    private String demoDataFileName = "demodata.json";
 
     @Autowired
     private TrafficIncidentTypeRepository ttRepository;
@@ -61,7 +76,7 @@ public class FlywayService {
         if (mtRepository.findAll().size() > 0) {
             LOG.info("Mitigation types already imported. Skipping import.");
         } else {
-            File file = new File(folder + "/mitigationtypes.json");
+            File file = new File(folder + "/" + mititgationTypeFileName);
             if (file.exists()) {
                 LOG.info("Importing mitigation types from file " + file.getAbsolutePath());
                 try {
@@ -84,7 +99,7 @@ public class FlywayService {
         if (ttRepository.findAll().size() > 0) {
             LOG.info("Incident types already imported. Skipping import.");
         } else {
-            File file = new File(folder + "/incidenttypes.json");
+            File file = new File(folder + "/" + incidentTypeFileName);
             if (file.exists()) {
                 LOG.info("Importing Incident types from file " + file.getAbsolutePath());
                 try {
@@ -104,12 +119,20 @@ public class FlywayService {
     }
 
     private boolean importDemoData(String folder) {
-        File file = new File(folder + "/demodata.json");
+        File file = new File(folder + "/" + demoDataFileName);
         if (file.exists()) {
             LOG.info("Importing demo data from file " + file.getAbsolutePath());
             try {
+                Path path = Path.of(folder + "/" + demoDataFileName);
+                String content = Files.readString(path, StandardCharsets.UTF_8);
+                int timeOffset = 13;
+                while (content.indexOf("DATETIME") != -1) {
+                    ZonedDateTime zd = ZonedDateTime.now().minusHours(timeOffset);
+                    content = content.replaceFirst("DATETIME", zd.toString());
+                    timeOffset -= 1;
+                }
                 List<TrafficIncidentEntity> trafficIncidentTypes = mapper.readValue(
-                        file,
+                        content,
                         new TypeReference<List<TrafficIncidentEntity>>() {
                         });
                 incidentRepository.saveAll(trafficIncidentTypes);
