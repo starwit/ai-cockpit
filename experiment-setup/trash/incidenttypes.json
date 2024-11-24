@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Verunreinigte Verkehrsschilder",
+    "description": "Verkehrsschild kann nicht mehr erkannt werden und Säuberung muss veranlasst werden",
+    "mitigationActionType": [
+      {
+        "id": 5
+      }
+    ]
+  },
+  {
+    "name": "Wildkrautbewuchs",
+    "description": "Wildkaut auf Gehweg oder am Straßenrand",
+    "mitigationActionType": [
+      {
+        "id": 4
+      }
+    ]
+  },
+  {
+    "name": "Überfüllter Müllbehälter",
+    "description": "Müll liegt bereits neben den Müllbehälter",
+    "mitigationActionType": [
+      {
+        "id": 5
+      }
+    ]
+  },
+  {
+    "name": "Müllablagerung",
+    "description": "unbefugte Ablagerung von Sperrmüll oder anderer Müllhaufen",
+    "mitigationActionType": [
+      {
+        "id": 5
+      }
+    ]
+  },
+  {
+    "name": "Falschparker",
+    "description": "Falschparker behindert die Müllabfuhr und muss abgeschleppt werden",
+    "mitigationActionType": [
+      {
+        "id": 1
+      },
+      {
+        "id": 3
+      }
+    ]
+  }
+]

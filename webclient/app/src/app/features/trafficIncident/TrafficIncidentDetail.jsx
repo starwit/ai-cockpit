@@ -224,6 +224,7 @@ function TrafficIncidentDetail(props) {
                             <Box sx={{aspectRatio: "16/9"}}>
                                 <ReactPlayer
                                     url={window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl}
+                                    light={rowData.mediaUrl.endsWith('jpg') ? window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl : null}
                                     width='100%'
                                     height='100%'
                                     controls={true}

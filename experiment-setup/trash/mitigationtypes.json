@@ -10,7 +10,7 @@
     "executionPolicy": "WITHCHECK"
   },
   {
-    "name": "notify towing service",
+    "name": "Abschleppdienst benachrichtigen",
     "description": "",
     "executionPolicy": "WITHCHECK"
   },
