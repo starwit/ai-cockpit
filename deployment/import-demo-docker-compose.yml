@@ -1,0 +1,44 @@
+include: 
+  - ./docker-compose-minio.yml
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ai-cockpit
+      POSTGRES_USER: ai-cockpit
+      POSTGRES_PASSWORD: ai-cockpit
+      PGDATA: /var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ai-cockpit']
+      interval: 5s
+      timeout: 60s
+      retries: 30
+    volumes:
+      - db:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  aicockpit:
+    image: starwitorg/ai-cockpit:0.1.2
+    environment:
+      - name: SPRING_DATASOURCE_URL
+        value: "jdbc:postgresql://postgres:5432/ai-cockpit"
+      - name: SPRING_DATASOURCE_USERNAME
+        value: ai-cockpit
+      - name: SPRING_DATASOURCE_PASSWORD
+        value: ai-cockpit
+      - name: MINIO_USER
+        value: minioadmin
+      - name: MINIO_PASSWORD
+        value: minioadmin
+      - name: MINIO_ENDPOINT
+        value: http://minio1:9000
+      - name: SCENARIO.SETUP
+        value: true
+    volumes:
+      - demodata:/scenariodata
+
+volumes:
+    # demo data to import
+    - demodata:../experiment-setup/traffic

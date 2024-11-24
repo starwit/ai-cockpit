@@ -1,30 +1,35 @@
-Example customValues.yaml
+Example for customValues.yaml
+
+
 
 ```yaml
+# Define an ingress to application
 ingress:
   enabled: true
+  annotations: 
+    cert-manager.io/cluster-issuer: letsencrypt-prod
   hosts:
-    - host: <HOSTNAME>
-      paths: 
-        - /ai-cockpit
-  tls: 
-   - secretName: <TLS-SECRET>
-     hosts:
-       - <HOSTNAME>
+    - host: aic.starwit-infra.de # hostname
+      paths:
+        - path: /ai-cockpit # this is the path your app will be running under
+          pathType: ImplementationSpecific
+  tls: # if set, TLS will be activated
+    - secretName: aic.starwit-infra.de
+      hosts:
+        - aic.starwit-infra.de
 
-mariadb:
-  image:
-    registry: <CUSTOM-REGISTRY-IF-NEEDED>
-    pullSecrets: 
-      - <PULL-SECRETS-FOR-THE-CUSTOM-REGISTRY>
-  auth:
-    rootPassword: root #change
-    database: ai-cockpit #change
-    username: ai-cockpit #change
-    password: ai-cockpit #change
+# Configuration to protect application by Keycloak login
+auth:
+  enabled: false
+  keycloakRealmUrlInternal: http://internal-hostname/realms/aicockpit
+  keycloakRealmUrlExternal: https://external-hostname/realms/aicockpit
+  clientId: aicockpit
+  clientSecret: aicockpit 
 
-github:
-  registry:
-    username: <GITHUB-USERNAME>
-    pat: <GENERATED-IN-GITHUB> #you only need to be able to read packages 
+# MinIO that serves binary data, to explain incidents
+minio:
+  user: minioadmin
+  password: minioadmin
+  endpoint: http://localhost:9000 # MinIO's API endpoint
+
 ```

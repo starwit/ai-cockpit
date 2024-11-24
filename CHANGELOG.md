@@ -8,6 +8,12 @@ Changelog of ai-cockpit.
 
 - add incident map ([ff12a](https://github.com/starwit/ai-cockpit/commit/ff12a2150a755f7) Anett Hübner)  
 
+## refs/tags/0.1.2 (2024-11-08)
+
+### Features
+
+- update docker compose with keycloak ([8e4af](https://github.com/starwit/ai-cockpit/commit/8e4af07d2fc6585) Anett Hübner)  
+
 ## 3 (2024-10-10)
 
 ### Features
