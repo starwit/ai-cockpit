@@ -31,9 +31,9 @@ import jakarta.annotation.PostConstruct;
  */
 
 @Service
-public class FlywayService {
+public class PostFlywayService {
 
-    static final Logger LOG = LoggerFactory.getLogger(FlywayService.class);
+    static final Logger LOG = LoggerFactory.getLogger(PostFlywayService.class);
 
     @Value("${scenario.setup:false}")
     private boolean setupScenario = true;
