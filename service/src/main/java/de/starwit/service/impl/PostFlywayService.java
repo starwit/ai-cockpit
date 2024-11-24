@@ -48,10 +48,10 @@ public class PostFlywayService {
     private String demoDataFileName = "demodata.json";
 
     @Autowired
-    private TrafficIncidentTypeRepository ttRepository;
+    private TrafficIncidentTypeRepository incidentTypeRepository;
 
     @Autowired
-    private MitigationActionTypeRepository mtRepository;
+    private MitigationActionTypeRepository actionRepository;
 
     @Autowired
     private TrafficIncidentRepository incidentRepository;
@@ -73,8 +73,9 @@ public class PostFlywayService {
     }
 
     private boolean importMitigationTypes(String folder) {
-        if (mtRepository.findAll().size() > 0) {
+        if (actionRepository.findAll().size() > 0) {
             LOG.info("Mitigation types already imported. Skipping import.");
+            return false;
         } else {
             File file = new File(folder + "/" + mititgationTypeFileName);
             if (file.exists()) {
@@ -83,7 +84,7 @@ public class PostFlywayService {
                     List<MitigationActionTypeEntity> mitigationTypes = mapper.readValue(file,
                             new TypeReference<List<MitigationActionTypeEntity>>() {
                             });
-                    mtRepository.saveAll(mitigationTypes);
+                    actionRepository.saveAll(mitigationTypes);
                 } catch (IOException e) {
                     LOG.error("Can't parse mitigation types, aborting import " + e.getMessage());
                 }
@@ -96,8 +97,9 @@ public class PostFlywayService {
     }
 
     private boolean importIncidentTypes(String folder) {
-        if (ttRepository.findAll().size() > 0) {
+        if (incidentTypeRepository.findAll().size() > 0) {
             LOG.info("Incident types already imported. Skipping import.");
+            return false;
         } else {
             File file = new File(folder + "/" + incidentTypeFileName);
             if (file.exists()) {
@@ -106,7 +108,7 @@ public class PostFlywayService {
                     List<TrafficIncidentTypeEntity> trafficIncidentTypes = mapper.readValue(file,
                             new TypeReference<List<TrafficIncidentTypeEntity>>() {
                             });
-                    ttRepository.saveAll(trafficIncidentTypes);
+                    incidentTypeRepository.saveAll(trafficIncidentTypes);
                 } catch (IOException e) {
                     LOG.error("Can't parse Incident types, aborting import " + e.getMessage());
                 }
@@ -124,8 +126,12 @@ public class PostFlywayService {
             LOG.info("Importing demo data from file " + file.getAbsolutePath());
             try {
                 Path path = Path.of(folder + "/" + demoDataFileName);
+                /*
+                 * Incidents are displayed best, when timestamps are ordered.
+                 * Here demo data are checked for marker DATETIME
+                 */
                 String content = Files.readString(path, StandardCharsets.UTF_8);
-                int timeOffset = 13;
+                int timeOffset = 13; // Incident timestamps are moved 13 hours in the past.
                 while (content.indexOf("DATETIME") != -1) {
                     ZonedDateTime zd = ZonedDateTime.now().minusHours(timeOffset);
                     content = content.replaceFirst("DATETIME", zd.toString());
