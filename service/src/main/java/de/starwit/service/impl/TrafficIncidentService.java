@@ -21,6 +21,8 @@ import de.starwit.persistence.entity.TrafficIncidentEntity;
 import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
 import de.starwit.persistence.repository.MitigationActionTypeRepository;
 import de.starwit.persistence.repository.TrafficIncidentRepository;
+import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
+import de.starwit.visionapi.Reporting.IncidentMessage;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.errors.ErrorResponseException;
@@ -29,9 +31,6 @@ import io.minio.errors.InternalException;
 import io.minio.errors.InvalidResponseException;
 import io.minio.errors.ServerException;
 import io.minio.errors.XmlParserException;
-import jakarta.validation.constraints.Min;
-import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
-import de.starwit.visionapi.Reporting.IncidentMessage;
 
 /**
  * 
@@ -41,7 +40,7 @@ import de.starwit.visionapi.Reporting.IncidentMessage;
 @Service
 public class TrafficIncidentService implements ServiceInterface<TrafficIncidentEntity, TrafficIncidentRepository> {
 
-    @Value("${incident.type.default:Gefahrensituation}")
+    @Value("${incident.type.default:dangerous driving behaviour}")
     private String defaultIncidentType;
 
     @Value("${minio.user:minioadmin}")
@@ -104,7 +103,8 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
         return trafficincidentRepository.findAllWithoutOtherTrafficIncidentType(id);
     }
 
-    public byte[] getFileFromMinio(String bucketName, String objectName) throws InvalidKeyException, IOException, MinioException {
+    public byte[] getFileFromMinio(String bucketName, String objectName)
+            throws InvalidKeyException, IOException, MinioException {
         try {
             MinioClient minioClient = MinioClient.builder()
                     .endpoint(endpoint)
