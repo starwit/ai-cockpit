@@ -65,32 +65,17 @@ function TrafficIncidentDetail(props) {
         });
     }
 
-    function findExistingMitigationActions(defaultMitigationActionTypes) {
-        const actions = [];
-        rowData.mitigationAction.forEach(action => {
-            const found = defaultMitigationActionTypes.find(value => value.id == action.mitigationActionType.id);
-            if (found != undefined) {
-                actions.push(found);
-            }
-        });
-        return actions;
-    }
 
     function reloadMitigationActionTypes() {
         if (trafficIncidentType == undefined || trafficIncidentType.id == undefined) {
             return null;
         }
 
-        mitigationActionTypeRest.findByTrafficIncidentType(trafficIncidentType.id).then(response => {
+        mitigationActionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
             }
             setAllMitigationActionTypes(response.data);
-            if (rowData.trafficIncidentType.id === trafficIncidentType.id) {
-                setMitigationActionTypes(findExistingMitigationActions(response.data));
-            } else {
-                setMitigationActionTypes(response.data);
-            }
         });
     }
 
