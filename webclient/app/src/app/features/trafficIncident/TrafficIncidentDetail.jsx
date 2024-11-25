@@ -222,16 +222,24 @@ function TrafficIncidentDetail(props) {
                             </FormControl>
 
                             <Box sx={{aspectRatio: "16/9"}}>
-                                <ReactPlayer
-                                    url={window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl}
-                                    light={rowData.mediaUrl.endsWith('jpg') ? window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl : null}
-                                    width='100%'
-                                    height='100%'
-                                    controls={true}
-                                    muted={true}
-                                    playing={true}
-                                    playbackRate={2}
-                                />
+                                {
+                                    rowData.mediaUrl.endsWith('mp4') ?
+                                        <ReactPlayer
+                                            url={window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl}
+                                            light={rowData.mediaUrl.endsWith('jpg') ? window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl : null}
+                                            width='100%'
+                                            height='100%'
+                                            controls={true}
+                                            muted={true}
+                                            playing={true}
+                                            playbackRate={2}
+                                        />
+                                        :
+                                        <img
+                                            src={window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl}
+                                        />
+                                }
+
                             </Box>
                         </Stack>
                         <Stack sx={{width: 1 / 2}}>
