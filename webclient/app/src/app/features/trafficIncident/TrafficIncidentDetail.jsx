@@ -37,7 +37,7 @@ function TrafficIncidentDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
-    const [mitigationActionTypes, setMitigationActionTypes] = useState([""]);
+    const [mitigationActionTypes, setMitigationActionTypes] = useState(rowData.mitigationAction);
     const [trafficIncidentType, setTrafficIncidentType] = useState([""]);
     const [allMitigationActionTypes, setAllMitigationActionTypes] = useState([""]);
     const [allTrafficIncidentType, setAllTrafficIncidentType] = useState([""]);
@@ -65,6 +65,16 @@ function TrafficIncidentDetail(props) {
         });
     }
 
+    function findExistingMitigationActions(defaultMitigationActionTypes) {
+        const actions = [];
+        rowData.mitigationAction.forEach(action => {
+            const found = defaultMitigationActionTypes.find(value => value.id == action.mitigationActionType.id);
+            if (found != undefined) {
+                actions.push(found);
+            }
+        });
+        return actions;
+    }
 
     function reloadMitigationActionTypes() {
         if (trafficIncidentType == undefined || trafficIncidentType.id == undefined) {
@@ -76,6 +86,14 @@ function TrafficIncidentDetail(props) {
                 return;
             }
             setAllMitigationActionTypes(response.data);
+            if (rowData.trafficIncidentType.id === trafficIncidentType.id && rowData.mitigationAction.length != 0) {
+                setMitigationActionTypes(findExistingMitigationActions(response.data));
+            } else {
+                mitigationActionTypeRest.findByTrafficIncidentType(trafficIncidentType.id).then(response => {
+                    setMitigationActionTypes(response.data);
+                })
+
+            }
         });
     }
 
@@ -224,7 +242,6 @@ function TrafficIncidentDetail(props) {
                                 <InputLabel id="trafficIncident.mitigationAction.label">
                                     {t("trafficIncident.mitigationAction")}
                                 </InputLabel>
-
                                 <Select
                                     labelId="trafficIncident.mitigationAction.label"
                                     id="trafficIncident.mitigationAction.select"
