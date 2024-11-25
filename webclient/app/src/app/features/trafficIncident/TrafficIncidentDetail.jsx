@@ -221,7 +221,7 @@ function TrafficIncidentDetail(props) {
                                 </Select>
                             </FormControl>
 
-                            <Box sx={{aspectRatio: "16/9"}}>
+                            <Box sx={{aspectRatio: "16/9", height: "85%"}}>
                                 {
                                     rowData.mediaUrl.endsWith('mp4') ?
                                         <ReactPlayer
@@ -237,6 +237,11 @@ function TrafficIncidentDetail(props) {
                                         :
                                         <img
                                             src={window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'contain'
+                                            }}
                                         />
                                 }
 
