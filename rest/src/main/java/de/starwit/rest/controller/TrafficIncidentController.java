@@ -70,7 +70,7 @@ public class TrafficIncidentController {
     @Operation(summary = "Create trafficincident")
     @PostMapping
     public TrafficIncidentEntity save(@Valid @RequestBody TrafficIncidentEntity entity) {
-        return trafficincidentService.addMitigationActionsToIncidentEntity(entity);
+        return trafficincidentService.createTrafficIncidentEntitywithMitigationAction(entity);
     }
 
     @Operation(summary = "Update trafficincident")

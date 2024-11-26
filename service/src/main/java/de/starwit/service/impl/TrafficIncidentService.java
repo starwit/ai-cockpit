@@ -66,7 +66,7 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
         return trafficincidentRepository;
     }
 
-    public TrafficIncidentEntity createNewIncidentWithMitigationActionsMessage(IncidentMessage incidentMessage) {
+    public TrafficIncidentEntity createNewIncidentBasedOnIncidentMessage(IncidentMessage incidentMessage) {
         TrafficIncidentEntity entity = new TrafficIncidentEntity();
         entity.setMediaUrl(incidentMessage.getMediaUrl());
         ZonedDateTime dateTime = Instant.ofEpochMilli(incidentMessage.getTimestampUtcMs())
@@ -75,10 +75,10 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
         entity.setState(IncidentState.NEW);
         TrafficIncidentTypeEntity incidentType = findIncidentTypeByName(defaultIncidentType);
         entity.setTrafficIncidentType(incidentType);
-        return addMitigationActionsToIncidentEntity(entity);
+        return createTrafficIncidentEntitywithMitigationAction(entity);
     }
 
-    public TrafficIncidentEntity addMitigationActionsToIncidentEntity(TrafficIncidentEntity entity) {
+    public TrafficIncidentEntity createTrafficIncidentEntitywithMitigationAction(TrafficIncidentEntity entity) {
         TrafficIncidentTypeEntity incidentType = entity.getTrafficIncidentType();
         if (incidentType != null) {
             List<MitigationActionTypeEntity> actionTypes = mitigationActionTypeRepository

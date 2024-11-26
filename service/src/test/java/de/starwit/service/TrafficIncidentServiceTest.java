@@ -77,7 +77,7 @@ public class TrafficIncidentServiceTest {
 
         // Call Methode
         TrafficIncidentEntity result = trafficIncidentService
-                .createNewIncidentWithMitigationActionsMessage(incidentMessage);
+                .createNewIncidentBasedOnIncidentMessage(incidentMessage);
 
         // Assert
         assertEquals("http://testurl.com/media", result.getMediaUrl());

@@ -54,7 +54,7 @@ public class PostFlywayService {
     private MitigationActionTypeRepository actionRepository;
 
     @Autowired
-    private TrafficIncidentRepository incidentRepository;
+    private TrafficIncidentService trafficIncidentService;
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -141,7 +141,10 @@ public class PostFlywayService {
                         content,
                         new TypeReference<List<TrafficIncidentEntity>>() {
                         });
-                incidentRepository.saveAll(trafficIncidentTypes);
+                    for (TrafficIncidentEntity entity : trafficIncidentTypes) {
+                        trafficIncidentService.createTrafficIncidentEntitywithMitigationAction(entity);
+                    }
+
             } catch (IOException e) {
                 LOG.error("Can't parse demo data, aborting import " + e.getMessage());
             }

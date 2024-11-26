@@ -1,6 +1,5 @@
 [
     {
-        "id": 11,
         "acquisitionTime": "2024-11-12T11:16:47Z",
         "mediaUrl": "anomalies/weed01.jpg",
         "cameraLatitude": 39.985589,
@@ -14,7 +13,6 @@
         "mitigationAction": []
     },
     {
-        "id": 10,
         "acquisitionTime": "2024-11-12T11:16:36Z",
         "mediaUrl": "anomalies/trafficSign01.jpg",
         "cameraLatitude": 39.978309,
@@ -28,7 +26,6 @@
         "mitigationAction": []
     },
     {
-        "id": 7,
         "acquisitionTime": "2024-11-11T18:42:47Z",
         "mediaUrl": "anomalies/illegalParking01.jpg",
         "cameraLatitude": 39.985589,
@@ -42,7 +39,6 @@
         "mitigationAction": []
     },
     {
-        "id": 13,
         "acquisitionTime": "2024-11-12T11:17:07Z",
         "mediaUrl": "anomalies/illegalParking03.jpg",
         "cameraLatitude": 39.980254,
@@ -56,7 +52,6 @@
         "mitigationAction": []
     },
     {
-        "id": 16,
         "acquisitionTime": "2024-11-12T11:17:37Z",
         "mediaUrl": "anomalies/trash03.jpg",
         "cameraLatitude": 39.970734,
@@ -70,7 +65,6 @@
         "mitigationAction": []
     },
     {
-        "id": 17,
         "acquisitionTime": "2024-11-12T11:17:47Z",
         "mediaUrl": "anomalies/weed02.jpg",
         "cameraLatitude": 39.974686,
@@ -84,7 +78,6 @@
         "mitigationAction": []
     },
     {
-        "id": 2,
         "acquisitionTime": "2024-10-31T14:59:57Z",
         "mediaUrl": "anomalies/weed03.jpg",
         "cameraLatitude": 39.978309,
@@ -98,7 +91,6 @@
         "mitigationAction": []
     },
     {
-        "id": 3,
         "acquisitionTime": "2024-10-31T15:00:08Z",
         "mediaUrl": "anomalies/weed04.jpg",
         "cameraLatitude": 39.985589,
@@ -112,7 +104,6 @@
         "mitigationAction": []
     },
     {
-        "id": 12,
         "acquisitionTime": "2024-11-12T11:16:57Z",
         "mediaUrl": "anomalies/trash01.mp4",
         "cameraLatitude": 39.97078,
@@ -126,7 +117,6 @@
         "mitigationAction": []
     },
     {
-        "id": 19,
         "acquisitionTime": "2024-11-12T11:18:07Z",
         "mediaUrl": "anomalies/trash02.jpg",
         "cameraLatitude": 39.975163,
@@ -140,7 +130,6 @@
         "mitigationAction": []
     },
     {
-        "id": 18,
         "acquisitionTime": "2024-11-12T11:17:57Z",
         "mediaUrl": "anomalies/trashContainer01.jpg",
         "cameraLatitude": 39.97227,
@@ -154,7 +143,6 @@
         "mitigationAction": []
     },
     {
-        "id": 4,
         "acquisitionTime": "2024-10-31T15:00:18Z",
         "mediaUrl": "anomalies/illegalParking02.jpg",
         "cameraLatitude": 39.97078,
@@ -168,7 +156,6 @@
         "mitigationAction": []
     },
     {
-        "id": 6,
         "acquisitionTime": "2024-11-11T18:42:37Z",
         "mediaUrl": "anomalies/trashContainer02.mp4",
         "cameraLatitude": 39.978309,
