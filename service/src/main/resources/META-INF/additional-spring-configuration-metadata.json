@@ -19,6 +19,41 @@
             "name": "spring.data.redis.active",
             "type": "java.lang.Boolean",
             "description": "Activate or deactivate redis."
+        },
+        {
+            "name": "rest.base-path",
+            "type": "java.lang.String",
+            "description": "path to rest api'"
+        },
+        {
+            "name": "incident.type.default",
+            "type": "java.lang.String",
+            "description": "default decision type for valkey messages'"
+        },
+        {
+            "name": "scenario.setup",
+            "type": "java.lang.String",
+            "description": "flag to setup application with demo data'"
+        },
+        {
+            "name": "scenario.importFolder",
+            "type": "java.lang.String",
+            "description": "define a folder location demo data import"
+        },
+        {
+            "name": "minio.password",
+            "type": "java.lang.String",
+            "description": "Minio password'"
+        },
+        {
+            "name": "minio.user",
+            "type": "java.lang.String",
+            "description": "User for minio"
+        },
+        {
+            "name": "minio.endpoint",
+            "type": "java.lang.String",
+            "description": "endpoint for minio"
         }
     ]
 }

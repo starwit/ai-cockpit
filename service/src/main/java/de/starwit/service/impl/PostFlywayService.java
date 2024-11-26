@@ -21,7 +21,6 @@ import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.repository.ActionTypeRepository;
-import de.starwit.persistence.repository.DecisionRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import jakarta.annotation.PostConstruct;
 
