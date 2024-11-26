@@ -11,7 +11,6 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    Grid2,
     InputLabel,
     ListItemText,
     MenuItem,
@@ -24,14 +23,14 @@ import {
 import IconButton from "@mui/material/IconButton";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
-import ReactPlayer from "react-player";
 import TrafficIncidentDetailStyles from "../../assets/themes/TrafficIncidentDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
-import TrafficIncidentMap from "./TrafficIncidentMap";
 
 import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
+import MediaContent from "../../commons/MediaContent";
+import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
 function TrafficIncidentDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
@@ -45,7 +44,6 @@ function TrafficIncidentDetail(props) {
     const {t} = useTranslation();
 
     const theme = useTheme();
-    const isLargeScreen = useMediaQuery(theme.breakpoints.up('xl'));
 
     useEffect(() => {
         reload();
@@ -114,8 +112,8 @@ function TrafficIncidentDetail(props) {
             );
         }
         return (
-            <Box sx={{width: "100%", height: "100%", position: "relative"}}>
-                <TrafficIncidentMap
+            <Box sx={{aspectRatio: "16/9", objectFit: "contain"}}>
+                <IconLayerMap
                     sx={{position: "absolute", top: 0, left: 0, right: 0, bottom: 0}}
                     latitude={rowData.cameraLatitude}
                     longitude={rowData.cameraLongitude}
@@ -136,6 +134,7 @@ function TrafficIncidentDetail(props) {
             aria-describedby="traffic-incident-detail-dialog-description"
             maxWidth={false}
             fullWidth
+            sx={{aspectRatio: "16/9", alignSelf: "center"}}
         >
             <DialogTitle
                 id="traffic-incident-detail-dialog-title"
@@ -211,7 +210,9 @@ function TrafficIncidentDetail(props) {
                                     value={trafficIncidentType}
                                     onChange={handleChangeTrafficIncidentType}
                                     label={t("trafficIncident.trafficIncidentType")}
-                                    renderValue={selected => (<ListItemText>{selected.name}</ListItemText>)}
+                                    renderValue={selected => (
+                                        <Chip label={selected.name} variant="outlined" sx={{border: "none"}} />
+                                    )}
                                 >
                                     {allTrafficIncidentType.map((incidentType, index) => (
                                         <MenuItem key={index} value={incidentType}>
@@ -220,39 +221,16 @@ function TrafficIncidentDetail(props) {
                                     ))}
                                 </Select>
                             </FormControl>
+                            <MediaContent
+                                sx={{aspectRatio: "16/9", objectFit: "contain"}}
+                                src={window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl} />
 
-                            <Box sx={{aspectRatio: "16/9", height: "85%"}}>
-                                {
-                                    rowData.mediaUrl.endsWith('mp4') ?
-                                        <ReactPlayer
-                                            url={window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl}
-                                            light={rowData.mediaUrl.endsWith('jpg') ? window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl : null}
-                                            width='100%'
-                                            height='100%'
-                                            controls={true}
-                                            muted={true}
-                                            playing={true}
-                                            playbackRate={2}
-                                        />
-                                        :
-                                        <img
-                                            src={window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl}
-                                            style={{
-                                                width: '100%',
-                                                height: '100%',
-                                                objectFit: 'contain'
-                                            }}
-                                        />
-                                }
-
-                            </Box>
                         </Stack>
                         <Stack sx={{width: 1 / 2}}>
                             <FormControl fullWidth variant="outlined">
                                 <InputLabel id="trafficIncident.mitigationAction.label">
                                     {t("trafficIncident.mitigationAction")}
                                 </InputLabel>
-
                                 <Select
                                     labelId="trafficIncident.mitigationAction.label"
                                     id="trafficIncident.mitigationAction.select"
