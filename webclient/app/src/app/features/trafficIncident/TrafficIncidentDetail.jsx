@@ -37,7 +37,7 @@ function TrafficIncidentDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
-    const [mitigationActionTypes, setMitigationActionTypes] = useState([""]);
+    const [mitigationActionTypes, setMitigationActionTypes] = useState(rowData.mitigationAction);
     const [trafficIncidentType, setTrafficIncidentType] = useState([""]);
     const [allMitigationActionTypes, setAllMitigationActionTypes] = useState([""]);
     const [allTrafficIncidentType, setAllTrafficIncidentType] = useState([""]);
@@ -81,15 +81,18 @@ function TrafficIncidentDetail(props) {
             return null;
         }
 
-        mitigationActionTypeRest.findByTrafficIncidentType(trafficIncidentType.id).then(response => {
+        mitigationActionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
             }
             setAllMitigationActionTypes(response.data);
-            if (rowData.trafficIncidentType.id === trafficIncidentType.id) {
+            if (rowData.trafficIncidentType.id === trafficIncidentType.id && rowData.mitigationAction.length != 0) {
                 setMitigationActionTypes(findExistingMitigationActions(response.data));
             } else {
-                setMitigationActionTypes(response.data);
+                mitigationActionTypeRest.findByTrafficIncidentType(trafficIncidentType.id).then(response => {
+                    setMitigationActionTypes(response.data);
+                })
+
             }
         });
     }
@@ -239,7 +242,6 @@ function TrafficIncidentDetail(props) {
                                 <InputLabel id="trafficIncident.mitigationAction.label">
                                     {t("trafficIncident.mitigationAction")}
                                 </InputLabel>
-
                                 <Select
                                     labelId="trafficIncident.mitigationAction.label"
                                     id="trafficIncident.mitigationAction.select"
