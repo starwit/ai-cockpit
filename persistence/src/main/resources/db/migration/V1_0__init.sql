@@ -26,16 +26,6 @@ CREATE TABLE "action"
     CONSTRAINT "action_pkey" PRIMARY KEY ("id")
 );
 
-CREATE SEQUENCE IF NOT EXISTS "autonomylevel_id_seq";
-
-CREATE TABLE "autonomylevel"
-(
-    "name" VARCHAR(255),
-    "description" VARCHAR(255),
-    "id" BIGINT NOT NULL DEFAULT nextval('autonomylevel_id_seq'),
-    CONSTRAINT "autonomylevel_pkey" PRIMARY KEY ("id")
-);
-
 CREATE SEQUENCE IF NOT EXISTS "decisiontype_id_seq";
 
 CREATE TABLE "decisiontype"
