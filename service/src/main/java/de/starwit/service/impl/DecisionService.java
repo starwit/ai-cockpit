@@ -95,14 +95,6 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         return saveOrUpdate(entity);
     }
 
-    public List<DecisionEntity> findAllWithoutDecisionType() {
-        return decisionRepository.findAllWithoutDecisionType();
-    }
-
-    public List<DecisionEntity> findAllWithoutOtherDecisionType(Long id) {
-        return decisionRepository.findAllWithoutOtherDecisionType(id);
-    }
-
     public byte[] getFileFromMinio(String bucketName, String objectName)
             throws InvalidKeyException, IOException, MinioException {
         try {

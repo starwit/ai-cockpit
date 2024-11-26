@@ -2,7 +2,7 @@ package de.starwit.rest.integration;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.rest.controller.ActionTypeController;
@@ -19,7 +19,7 @@ import de.starwit.service.impl.ActionTypeService;
 @WebMvcTest(controllers = ActionTypeController.class)
 public class ActionTypeControllerIntegrationTest extends AbstractControllerIntegrationTest<ActionTypeEntity> {
 
-    @MockBean
+    @MockitoBean
     private ActionTypeService actiontypeService;
 
     private static final String restpath = "/api/actiontypes/";

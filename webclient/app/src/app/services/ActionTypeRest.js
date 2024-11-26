@@ -7,7 +7,7 @@ class ActionTypeRest extends CrudRest {
     }
 
     updateList = list => {
-        return axios.put(this.baseUrl + "/updateList", list);
+        return axios.put(this.baseUrl + "/update-list", list);
     };
 
     findByDecisionType(decisionTypeId) {

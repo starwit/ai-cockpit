@@ -51,24 +51,6 @@ public class ActionController {
         return actionService.findAllWithoutDecision();
     }
 
-    @Operation(summary = "Get all action without other decision")
-    @GetMapping(value = "/find-without-other-decision/{id}")
-    public List<ActionEntity> findAllWithoutOtherDecision(@PathVariable("id") Long id) {
-        return actionService.findAllWithoutOtherDecision(id);
-    }
-
-    @Operation(summary = "Get all action without actionType")
-    @GetMapping(value = "/find-without-actionType")
-    public List<ActionEntity> findAllWithoutActionType() {
-        return actionService.findAllWithoutActionType();
-    }
-
-    @Operation(summary = "Get all action without other actionType")
-    @GetMapping(value = "/find-without-other-actionType/{id}")
-    public List<ActionEntity> findAllWithoutOtherActionType(@PathVariable("id") Long id) {
-        return actionService.findAllWithoutOtherActionType(id);
-    }
-
     @Operation(summary = "Get action with id")
     @GetMapping(value = "/{id}")
     public ActionEntity findById(@PathVariable("id") Long id) {

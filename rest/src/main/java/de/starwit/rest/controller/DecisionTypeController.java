@@ -62,8 +62,8 @@ public class DecisionTypeController {
         return decisiontypeService.saveOrUpdate(entity);
     }
 
-    @Operation(summary = "Update a list of Traffic Decision Type")
-    @PutMapping(value = "/updateList")
+    @Operation(summary = "Update a list of Decision Types")
+    @PutMapping(value = "/update-list")
     public void updateList(@Valid @RequestBody List<DecisionTypeEntity> entityList) {
         decisiontypeService.saveOrUpdateList(entityList);
     }

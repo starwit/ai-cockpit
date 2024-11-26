@@ -49,18 +49,6 @@ public class DecisionController {
         return this.decisionService.findAll();
     }
 
-    @Operation(summary = "Get all decision without decisionType")
-    @GetMapping(value = "/find-without-decisionType")
-    public List<DecisionEntity> findAllWithoutDecisionType() {
-        return decisionService.findAllWithoutDecisionType();
-    }
-
-    @Operation(summary = "Get all decision without other decisionType")
-    @GetMapping(value = "/find-without-other-decisionType/{id}")
-    public List<DecisionEntity> findAllWithoutOtherDecisionType(@PathVariable("id") Long id) {
-        return decisionService.findAllWithoutOtherDecisionType(id);
-    }
-
     @Operation(summary = "Get decision with id")
     @GetMapping(value = "/{id}")
     public DecisionEntity findById(@PathVariable("id") Long id) {

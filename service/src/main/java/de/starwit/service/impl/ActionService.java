@@ -27,17 +27,4 @@ public class ActionService implements ServiceInterface<ActionEntity, ActionRepos
     public List<ActionEntity> findAllWithoutDecision() {
         return actionRepository.findAllWithoutDecision();
     }
-
-    public List<ActionEntity> findAllWithoutOtherDecision(Long id) {
-        return actionRepository.findAllWithoutOtherDecision(id);
-    }
-
-    public List<ActionEntity> findAllWithoutActionType() {
-        return actionRepository.findAllWithoutActionType();
-    }
-
-    public List<ActionEntity> findAllWithoutOtherActionType(Long id) {
-        return actionRepository.findAllWithoutOtherActionType(id);
-    }
-
 }

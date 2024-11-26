@@ -72,7 +72,7 @@ public class ActionTypeController {
     }
 
     @Operation(summary = "Update a list of actiontype")
-    @PutMapping(value = "/updateList")
+    @PutMapping(value = "/update-list")
     public void updateList(@Valid @RequestBody List<ActionTypeEntity> entityList) {
         actiontypeService.saveOrUpdateList(entityList);
     }
