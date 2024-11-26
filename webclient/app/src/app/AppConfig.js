@@ -1,9 +1,9 @@
 const appItems = [
     {title: "decision.title", link: "/decision/"},
-    {title: "mitigationAction.title", link: "/mitigationaction/"},
+    {title: "action.title", link: "/action/"},
     {title: "autonomyLevel.title", link: "/autonomylevel/"},
     {title: "decisionType.title", link: "/decisiontype/"},
-    {title: "mitigationActionType.title", link: "/mitigationactiontype/"}
+    {title: "actionType.title", link: "/actiontype/"}
 ];
 
 export {appItems};

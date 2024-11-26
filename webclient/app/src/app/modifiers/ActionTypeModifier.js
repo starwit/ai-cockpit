@@ -19,7 +19,7 @@ const entityFields = [
     },
 ];
 
-const mitigationActionTypeOverviewFields = [
+const actionTypeOverviewFields = [
     {name: "name", type: "string", regex: null},
     {name: "description", type: "string", regex: null}
 ];
@@ -27,5 +27,5 @@ const mitigationActionTypeOverviewFields = [
 export {
     entityDefault,
     entityFields,
-    mitigationActionTypeOverviewFields
+    actionTypeOverviewFields
 };

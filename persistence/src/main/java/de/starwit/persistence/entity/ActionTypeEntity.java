@@ -13,8 +13,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "mitigationactiontype")
-public class MitigationActionTypeEntity extends AbstractEntity<Long> {
+@Table(name = "actiontype")
+public class ActionTypeEntity extends AbstractEntity<Long> {
 
     // entity fields
     @Column(name = "name")
@@ -29,11 +29,11 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
 
     // entity relations
     @JsonFilter("filterId")
-    @OneToMany(mappedBy = "mitigationActionType")
-    private Set<MitigationActionEntity> mitigationAction;
+    @OneToMany(mappedBy = "actionType")
+    private Set<ActionEntity> action;
 
     @JsonFilter("filterId")
-    @ManyToMany(mappedBy = "mitigationActionType")
+    @ManyToMany(mappedBy = "actionType")
     private Set<DecisionTypeEntity> decisionType;
 
     // entity fields getters and setters
@@ -54,12 +54,12 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
     }
 
     // entity relations getters and setters
-    public Set<MitigationActionEntity> getMitigationAction() {
-        return mitigationAction;
+    public Set<ActionEntity> getAction() {
+        return action;
     }
 
-    public void setMitigationAction(Set<MitigationActionEntity> mitigationAction) {
-        this.mitigationAction = mitigationAction;
+    public void setAction(Set<ActionEntity> action) {
+        this.action = action;
     }
 
     public ExecutionPolicies getExecutionPolicy() {

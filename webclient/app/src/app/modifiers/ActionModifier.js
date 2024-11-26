@@ -25,7 +25,7 @@ const entityFields = [
         notNull: false
     },
     {
-        name: "mitigationActionType",
+        name: "actionType",
         type: "ManyToOne",
         regex: null,
         selectList: [],
@@ -37,7 +37,7 @@ const entityFields = [
     }
 ];
 
-const mitigationActionOverviewFields = [
+const actionOverviewFields = [
     {name: "creationTime", type: "timestamp", regex: null},
     {name: "name", type: "string", regex: null},
     {name: "description", type: "string", regex: null}
@@ -46,5 +46,5 @@ const mitigationActionOverviewFields = [
 export {
     entityDefault,
     entityFields,
-    mitigationActionOverviewFields
+    actionOverviewFields
 };

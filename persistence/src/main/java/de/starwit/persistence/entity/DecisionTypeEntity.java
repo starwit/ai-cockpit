@@ -30,8 +30,8 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
 
     @JsonFilter("filterId")
     @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(name = "decisiontype_mitigationactiontype", joinColumns = @JoinColumn(name = "decisiontype_id"), inverseJoinColumns = @JoinColumn(name = "mitigationactiontype_id"))
-    private Set<MitigationActionTypeEntity> mitigationActionType;
+    @JoinTable(name = "decisiontype_actiontype", joinColumns = @JoinColumn(name = "decisiontype_id"), inverseJoinColumns = @JoinColumn(name = "actiontype_id"))
+    private Set<ActionTypeEntity> actionType;
 
     // entity fields getters and setters
     public String getName() {
@@ -59,12 +59,12 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
         this.decision = decision;
     }
 
-    public Set<MitigationActionTypeEntity> getMitigationActionType() {
-        return mitigationActionType;
+    public Set<ActionTypeEntity> getActionType() {
+        return actionType;
     }
 
-    public void setMitigationActionType(Set<MitigationActionTypeEntity> mitigationActionType) {
-        this.mitigationActionType = mitigationActionType;
+    public void setActionType(Set<ActionTypeEntity> actionType) {
+        this.actionType = actionType;
     }
 
 }

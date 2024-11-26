@@ -21,7 +21,7 @@ const entityFields = [
         selectedIds: []
     },
     {
-        name: "mitigationAction",
+        name: "action",
         type: "OneToMany",
         regex: null,
         selectList: [],

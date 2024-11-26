@@ -3,30 +3,30 @@
         "name": "notify police",
         "description": "Notify the police about the traffic decision",
         "executionPolicy": "WITHCHECK",
-        "mitigationAction": []
+        "action": []
     },
     {
         "name": "notify emergency services",
         "description": "Notify emergency services like ambulances or fire departments",
         "executionPolicy": "MANUAL",
-        "mitigationAction": []
+        "action": []
     },
     {
         "name": "notify public alarm services",
         "description": "Notify public platforms or apps about the traffic decision",
         "executionPolicy": "AUTOMATIC",
-        "mitigationAction": []
+        "action": []
     },
     {
         "name": "I2X notification",
         "description": "Issue an infrastructure to X message",
         "executionPolicy": "WITHCHECK",
-        "mitigationAction": []
+        "action": []
     },
     {
         "name": "notify towing service",
         "description": "Get disabled vehicles or obstacles removed",
         "executionPolicy": "AUTOMATIC",
-        "mitigationAction": []
+        "action": []
     }
 ]

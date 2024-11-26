@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import React, {useEffect, useState, useMemo} from "react";
-import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
+import ActionTypeRest from "../../services/ActionTypeRest";
 import DecisionTypeRest from "../../services/DecisionTypeRest";
 import {DataGrid, GridCloseIcon} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
@@ -20,28 +20,28 @@ function DecisionTypeDetail(props) {
     const {t} = useTranslation();
     const {open, rowData, handleClose} = props;
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
-    const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
+    const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const [isSaved, setIsSaved] = useState([true]);
-    const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
+    const [actionTypes, setActionTypes] = useState([]);
 
-    // Mitigation Action Type List
+    // action Action Type List
     const columns = [
         {field: "id", headerName: "ID", width: 90},
         {
             field: "name",
-            headerName: t("mitigationactiontype.name"),
+            headerName: t("actiontype.name"),
             width: 150,
             editable: false
         },
         {
             field: "description",
-            headerName: t("mitigationactiontype.description"),
+            headerName: t("actiontype.description"),
             width: 350,
             editable: false
         },
         {
             field: "executionPolicy",
-            headerName: t("mitigationactiontype.policy"),
+            headerName: t("actiontype.policy"),
             width: 220,
             editable: false
         },
@@ -61,14 +61,14 @@ function DecisionTypeDetail(props) {
         function handleChange(e) {
             setChecked(e.target.checked);
 
-            const tmpActions = mitigationActionTypes;
+            const tmpActions = actionTypes;
             tmpActions.forEach(action => {
                 if (action.id === props.actionId) {
                     action.isSelected = e.target.checked;
                     setIsSaved(false);
                 }
             });
-            setMitigationActionTypes(tmpActions);
+            setActionTypes(tmpActions);
         }
 
         return <Checkbox
@@ -82,33 +82,33 @@ function DecisionTypeDetail(props) {
     }, [open]);
 
     function reload() {
-        mitigationActionTypeRest.findAll().then(response => {
+        actionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
             } else {
-                response.data.forEach(mitigationType => {
-                    mitigationType["isSelected"] = false;
-                    mitigationType.decisionType.forEach(decisionType => {
+                response.data.forEach(actionType => {
+                    actionType["isSelected"] = false;
+                    actionType.decisionType.forEach(decisionType => {
                         if (decisionType.id === rowData.id) {
-                            mitigationType["isSelected"] = true;
+                            actionType["isSelected"] = true;
                         }
                     });
                 });
             }
-            setMitigationActionTypes(response.data);
+            setActionTypes(response.data);
         });
     }
 
     function saveSelection() {
         const dataToSave = rowData;
         const actionTypeIds = [];
-        mitigationActionTypes.filter(actionType => {
+        actionTypes.filter(actionType => {
             if (actionType.isSelected) {
                 actionTypeIds.push({id: actionType.id});
                 return actionType;
             }
         });
-        dataToSave.mitigationActionType = actionTypeIds;
+        dataToSave.actionType = actionTypeIds;
         decisionTypeRest.update(dataToSave).then(response => {
             // TODO error handling
             setIsSaved(true);
@@ -144,7 +144,7 @@ function DecisionTypeDetail(props) {
                 <Grid2>
                     <DataGrid
                         autoHeight
-                        rows={mitigationActionTypes}
+                        rows={actionTypes}
                         columns={columns}
                     />
                     <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{marginTop: 1}}>

@@ -6,7 +6,7 @@ import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {formatDateShort} from "../../commons/formatter/DateFormatter";
-import MitigationActionRest from "../../services/MitigationActionRest";
+import ActionRest from "../../services/ActionRest";
 import DecisionRest from "../../services/DecisionRest";
 import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
@@ -15,7 +15,7 @@ function DecisionOverview() {
     const {t} = useTranslation();
     const [tab, setTab] = React.useState(0);
     const decisionRest = useMemo(() => new DecisionRest(), []);
-    const mitigationActionRest = useMemo(() => new MitigationActionRest(), []);
+    const actionRest = useMemo(() => new ActionRest(), []);
     const [decisions, setDecisions] = useState([]);
     const [newDecisions, setNewDecisions] = useState([]);
     const [checkedDecisions, setCheckedDecisions] = useState([]);
@@ -48,22 +48,22 @@ function DecisionOverview() {
         setOpen(false);
     };
 
-    function handleSave(mitigationActionTypes, decisionType, description, state) {
+    function handleSave(actionTypes, decisionType, description, state) {
         const foundDecision = decisions.find(value => value.id == rowData.id);
         foundDecision.decisionType = decisionType;
         foundDecision.description = description;
         foundDecision.state = state;
         const remoteFunctions = [];
 
-        const newActions = mitigationActionTypes;
+        const newActions = actionTypes;
 
-        let newActionTypes = mitigationActionTypes;
-        rowData.mitigationAction.forEach(action => {
-            const found = mitigationActionTypes.find(value => value.id == action.mitigationActionType.id);
+        let newActionTypes = actionTypes;
+        rowData.action.forEach(action => {
+            const found = actionTypes.find(value => value.id == action.actionType.id);
             if (found === undefined) {
-                remoteFunctions.push(mitigationActionRest.delete(action.id));
+                remoteFunctions.push(actionRest.delete(action.id));
             } else {
-                newActionTypes = newActionTypes.filter(value => value.id !== action.mitigationActionType.id);
+                newActionTypes = newActionTypes.filter(value => value.id !== action.actionType.id);
                 newActions.push(action);
             }
         });
@@ -73,9 +73,9 @@ function DecisionOverview() {
                 name: "",
                 description: "",
                 decision: {id: rowData.id},
-                mitigationActionType: mActiontype
+                actionType: mActiontype
             };
-            remoteFunctions.push(mitigationActionRest.create(entity));
+            remoteFunctions.push(actionRest.create(entity));
         });
 
         decisionRest.update(foundDecision).then(response => {
@@ -128,8 +128,8 @@ function DecisionOverview() {
             valueGetter: value => value.name
         },
         {
-            field: "mitigationAction",
-            headerName: t("decision.mitigationAction"),
+            field: "action",
+            headerName: t("decision.action"),
             description: "",
             renderCell: renderActions,
             disableClickEventBubbling: true,

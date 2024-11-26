@@ -57,7 +57,7 @@ public class DecisionEntity extends AbstractEntity<Long> {
     private DecisionTypeEntity decisionType;
 
     @OneToMany(mappedBy = "decision", cascade = { CascadeType.ALL })
-    private Set<MitigationActionEntity> mitigationAction;
+    private Set<ActionEntity> action;
 
     // entity fields getters and setters
     public ZonedDateTime getAcquisitionTime() {
@@ -117,20 +117,20 @@ public class DecisionEntity extends AbstractEntity<Long> {
         this.decisionType = decisionType;
     }
 
-    public Set<MitigationActionEntity> getMitigationAction() {
-        return mitigationAction;
+    public Set<ActionEntity> getAction() {
+        return action;
     }
 
-    public void setMitigationAction(Set<MitigationActionEntity> mitigationAction) {
-        this.mitigationAction = mitigationAction;
+    public void setAction(Set<ActionEntity> action) {
+        this.action = action;
     }
 
-    public void addToMitigationAction(MitigationActionEntity mitigationAction) {
-        mitigationAction.setDecision(this);
-        if (this.mitigationAction == null) {
-            this.mitigationAction = new HashSet<>();
+    public void addToAction(ActionEntity action) {
+        action.setDecision(this);
+        if (this.action == null) {
+            this.action = new HashSet<>();
         }
-        this.mitigationAction.add(mitigationAction);
+        this.action.add(action);
     }
 
 }

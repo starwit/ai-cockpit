@@ -25,7 +25,7 @@ import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import DecisionDetailStyles from "../../assets/themes/DecisionDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";
-import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
+import ActionTypeRest from "../../services/ActionTypeRest";
 import DecisionTypeRest from "../../services/DecisionTypeRest";
 
 import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
@@ -34,11 +34,11 @@ import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
 function DecisionDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
-    const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
+    const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
-    const [mitigationActionTypes, setMitigationActionTypes] = useState(rowData.mitigationAction);
+    const [actionTypes, setActionTypes] = useState(rowData.action);
     const [decisionType, setDecisionType] = useState([""]);
-    const [allMitigationActionTypes, setAllMitigationActionTypes] = useState([""]);
+    const [allActionTypes, setAllActionTypes] = useState([""]);
     const [allDecisionType, setAllDecisionType] = useState([""]);
     const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
     const {t} = useTranslation();
@@ -50,7 +50,7 @@ function DecisionDetail(props) {
     }, [open]);
 
     useEffect(() => {
-        reloadMitigationActionTypes();
+        reloadActionTypes();
     }, [decisionType]);
 
     function reload() {
@@ -63,10 +63,10 @@ function DecisionDetail(props) {
         });
     }
 
-    function findExistingMitigationActions(defaultMitigationActionTypes) {
+    function findExistingActions(defaultActionTypes) {
         const actions = [];
-        rowData.mitigationAction.forEach(action => {
-            const found = defaultMitigationActionTypes.find(value => value.id == action.mitigationActionType.id);
+        rowData.action.forEach(action => {
+            const found = defaultActionTypes.find(value => value.id == action.actionType.id);
             if (found != undefined) {
                 actions.push(found);
             }
@@ -74,21 +74,21 @@ function DecisionDetail(props) {
         return actions;
     }
 
-    function reloadMitigationActionTypes() {
+    function reloadActionTypes() {
         if (decisionType == undefined || decisionType.id == undefined) {
             return null;
         }
 
-        mitigationActionTypeRest.findAll().then(response => {
+        actionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
             }
-            setAllMitigationActionTypes(response.data);
-            if (rowData.decisionType.id === decisionType.id && rowData.mitigationAction.length != 0) {
-                setMitigationActionTypes(findExistingMitigationActions(response.data));
+            setAllActionTypes(response.data);
+            if (rowData.decisionType.id === decisionType.id && rowData.action.length != 0) {
+                setActionTypes(findExistingActions(response.data));
             } else {
-                mitigationActionTypeRest.findByDecisionType(decisionType.id).then(response => {
-                    setMitigationActionTypes(response.data);
+                actionTypeRest.findByDecisionType(decisionType.id).then(response => {
+                    setActionTypes(response.data);
                 })
 
             }
@@ -99,7 +99,7 @@ function DecisionDetail(props) {
         const {
             target: {value}
         } = event;
-        setMitigationActionTypes(value);
+        setActionTypes(value);
     }
 
     function handleChangeDecisionType(event) {
@@ -175,7 +175,7 @@ function DecisionDetail(props) {
                     overflow: 'hidden',
                     px: 3, //horizontal padding
                     py: 2, //vertical padding
-                    ml: 0  //margin left for "Details" field, Video element, Map and "MitigationActions" filter
+                    ml: 0  //margin left for "Details" field, Video element, Map and "Actions" filter
                 }}
             >
                 <Stack direction="column">
@@ -231,16 +231,16 @@ function DecisionDetail(props) {
                         </Stack>
                         <Stack sx={{width: 1 / 2}}>
                             <FormControl fullWidth variant="outlined">
-                                <InputLabel id="decision.mitigationAction.label">
-                                    {t("decision.mitigationAction")}
+                                <InputLabel id="decision.action.label">
+                                    {t("decision.action")}
                                 </InputLabel>
                                 <Select
-                                    labelId="decision.mitigationAction.label"
-                                    id="decision.mitigationAction.select"
+                                    labelId="decision.action.label"
+                                    id="decision.action.select"
                                     multiple
-                                    value={mitigationActionTypes}
+                                    value={actionTypes}
                                     onChange={handleChangeAction}
-                                    input={<OutlinedInput label={t("decision.mitigationAction")} />}
+                                    input={<OutlinedInput label={t("decision.action")} />}
                                     renderValue={selected => (
                                         <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                                             {selected.map((value, index) => (
@@ -249,7 +249,7 @@ function DecisionDetail(props) {
                                         </Box>
                                     )}
                                 >
-                                    {allMitigationActionTypes.map((value, index) => (
+                                    {allActionTypes.map((value, index) => (
                                         <MenuItem key={index} value={value}>
                                             {value.name}
                                         </MenuItem>
@@ -273,10 +273,10 @@ function DecisionDetail(props) {
                 <Box sx={{
                     paddingBottom: 2,
                     px: 2, //horizontal padding
-                    ml: 0  //margin left for "Details" field, Video element, Map and "MitigationActions" filter
+                    ml: 0  //margin left for "Details" field, Video element, Map and "Actions" filter
                 }}> {/* MOVE SAVE BUTTON */}
                     <Button
-                        onClick={() => handleSave(mitigationActionTypes, decisionType, description, "NEW")}
+                        onClick={() => handleSave(actionTypes, decisionType, description, "NEW")}
                         variant="contained"
                         startIcon={<SaveIcon />}>
                         {t("button.save")}
@@ -285,11 +285,11 @@ function DecisionDetail(props) {
                 <Box sx={{
                     paddingBottom: 2,
                     px: 2, //horizontal padding
-                    ml: 0  //margin left for "Details" field, Video element, Map and "MitigationActions" filter
+                    ml: 0  //margin left for "Details" field, Video element, Map and "Actions" filter
                 }}> {/* MOVE REPORT & AKNOWLEDGED BUTTON */}
                     <Button
                         sx={[DecisionDetailStyles.button, {mr: 5}]}
-                        onClick={() => handleSave(mitigationActionTypes, decisionType, description, "REJECTED")}
+                        onClick={() => handleSave(actionTypes, decisionType, description, "REJECTED")}
                         variant="contained"
                         color="error"
                         startIcon={<ErrorIcon />}>
@@ -297,7 +297,7 @@ function DecisionDetail(props) {
                     </Button>
 
                     <Button
-                        onClick={() => handleSave(mitigationActionTypes, decisionType, description, "ACCEPTED")}
+                        onClick={() => handleSave(actionTypes, decisionType, description, "ACCEPTED")}
                         variant="contained"
                         color="success"
                         startIcon={<CheckIcon />}

@@ -2,7 +2,7 @@
   {
     "name": "Verunreinigte Verkehrsschilder",
     "description": "Verkehrsschild kann nicht mehr erkannt werden und Säuberung muss veranlasst werden",
-    "mitigationActionType": [
+    "actionType": [
       {
         "id": 5
       }
@@ -11,7 +11,7 @@
   {
     "name": "Wildkrautbewuchs",
     "description": "Wildkaut auf Gehweg oder am Straßenrand",
-    "mitigationActionType": [
+    "actionType": [
       {
         "id": 4
       }
@@ -20,7 +20,7 @@
   {
     "name": "Überfüllter Müllbehälter",
     "description": "Müll liegt bereits neben den Müllbehälter",
-    "mitigationActionType": [
+    "actionType": [
       {
         "id": 5
       }
@@ -29,7 +29,7 @@
   {
     "name": "Müllablagerung",
     "description": "unbefugte Ablagerung von Sperrmüll oder anderer Müllhaufen",
-    "mitigationActionType": [
+    "actionType": [
       {
         "id": 5
       }
@@ -38,7 +38,7 @@
   {
     "name": "Falschparker",
     "description": "Falschparker behindert die Müllabfuhr und muss abgeschleppt werden",
-    "mitigationActionType": [
+    "actionType": [
       {
         "id": 1
       },

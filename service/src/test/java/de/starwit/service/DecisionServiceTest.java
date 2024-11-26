@@ -18,11 +18,11 @@ import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.starwit.persistence.entity.ExecutionPolicies;
-import de.starwit.persistence.entity.MitigationActionEntity;
-import de.starwit.persistence.entity.MitigationActionTypeEntity;
+import de.starwit.persistence.entity.ActionEntity;
+import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionTypeEntity;
-import de.starwit.persistence.repository.MitigationActionTypeRepository;
+import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import de.starwit.service.impl.DecisionService;
 import de.starwit.service.impl.DecisionTypeService;
@@ -37,7 +37,7 @@ public class DecisionServiceTest {
     DecisionTypeRepository decisionTypeRepository;
 
     @Autowired
-    MitigationActionTypeRepository mitigationActionTypeRepository;
+    ActionTypeRepository actionTypeRepository;
 
     @Autowired
     private DecisionService decisionService;
@@ -51,15 +51,15 @@ public class DecisionServiceTest {
     void testCreateTypes() {
         DecisionTypeEntity defaultDecisionType = new DecisionTypeEntity();
         defaultDecisionType.setName("dangerous driving behaviour");
-        MitigationActionTypeEntity actionType = new MitigationActionTypeEntity();
+        ActionTypeEntity actionType = new ActionTypeEntity();
         actionType.setDescription("Notify public platforms or apps about the traffic decision");
         actionType.setName("notify public platform");
         actionType.setExecutionPolicy(ExecutionPolicies.AUTOMATIC);
-        actionType = mitigationActionTypeRepository.save(actionType);
+        actionType = actionTypeRepository.save(actionType);
 
-        Set<MitigationActionTypeEntity> mitigationActionTypes = new HashSet<>();
-        defaultDecisionType.setMitigationActionType(mitigationActionTypes);
-        mitigationActionTypes.add(actionType);
+        Set<ActionTypeEntity> actionTypes = new HashSet<>();
+        defaultDecisionType.setActionType(actionTypes);
+        actionTypes.add(actionType);
         defaultDecisionType = decisionTypeService.saveOrUpdate(defaultDecisionType);
 
     }
@@ -67,7 +67,7 @@ public class DecisionServiceTest {
     @Test
     @Commit
     @Order(2)
-    void testCreateNewDecisionWithMitigationActionsMessage() {
+    void testCreateNewDecisionWithActionsMessage() {
 
         // prepare
         long timestamp = 1633046400000L;
@@ -85,8 +85,8 @@ public class DecisionServiceTest {
                 .atZone(ZoneId.systemDefault());
         assertTrue(expectedDateTime.isEqual(result.getAcquisitionTime()));
         assertEquals(expectedDateTime, result.getAcquisitionTime());
-        assertEquals(1, result.getMitigationAction().size());
-        MitigationActionEntity action = result.getMitigationAction().iterator().next();
+        assertEquals(1, result.getAction().size());
+        ActionEntity action = result.getAction().iterator().next();
         assertTrue(expectedDateTime.isEqual(action.getCreationTime()));
     }
 

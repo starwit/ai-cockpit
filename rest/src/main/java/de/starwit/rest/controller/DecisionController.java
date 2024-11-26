@@ -70,7 +70,7 @@ public class DecisionController {
     @Operation(summary = "Create decision")
     @PostMapping
     public DecisionEntity save(@Valid @RequestBody DecisionEntity entity) {
-        return decisionService.createDecisionEntitywithMitigationAction(entity);
+        return decisionService.createDecisionEntitywithAction(entity);
     }
 
     @Operation(summary = "Update decision")

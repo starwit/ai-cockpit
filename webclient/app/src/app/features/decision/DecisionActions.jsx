@@ -1,11 +1,11 @@
 import {Button, Chip} from "@mui/material";
 
 export const renderActions = params => {
-    params.row.mitigationAction.sort((a, b) => a.mitigationActionType.name.localeCompare(b.mitigationActionType.name));
+    params.row.action.sort((a, b) => a.actionType.name.localeCompare(b.actionType.name));
     return (
         <strong>
-            {params.row.mitigationAction.map(action => (
-                <Chip key={action.mitigationActionType.id} label={action.mitigationActionType.name} variant="outlined" sx={{color: "green"}} />
+            {params.row.action.map(action => (
+                <Chip key={action.actionType.id} label={action.actionType.name} variant="outlined" sx={{color: "green"}} />
             ))}
         </strong>
     );

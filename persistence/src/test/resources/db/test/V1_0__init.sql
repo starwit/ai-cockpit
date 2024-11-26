@@ -13,17 +13,17 @@ CREATE TABLE "decision"
     CONSTRAINT "decision_pkey" PRIMARY KEY ("id")
 );
 
-CREATE SEQUENCE IF NOT EXISTS "mitigationaction_id_seq";
+CREATE SEQUENCE IF NOT EXISTS "action_id_seq";
 
-CREATE TABLE "mitigationaction"
+CREATE TABLE "action"
 (
     "creationtime" TIMESTAMP WITH TIME ZONE,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
     "decision_id" BIGINT,
-    "mitigationactiontype_id" BIGINT,
-    "id" BIGINT NOT NULL DEFAULT nextval('mitigationaction_id_seq'),
-    CONSTRAINT "mitigationaction_pkey" PRIMARY KEY ("id")
+    "actiontype_id" BIGINT,
+    "id" BIGINT NOT NULL DEFAULT nextval('action_id_seq'),
+    CONSTRAINT "action_pkey" PRIMARY KEY ("id")
 );
 
 CREATE SEQUENCE IF NOT EXISTS "autonomylevel_id_seq";
@@ -46,15 +46,15 @@ CREATE TABLE "decisiontype"
     CONSTRAINT "decisiontype_pkey" PRIMARY KEY ("id")
 );
 
-CREATE SEQUENCE IF NOT EXISTS "mitigationactiontype_id_seq";
+CREATE SEQUENCE IF NOT EXISTS "actiontype_id_seq";
 
-CREATE TABLE "mitigationactiontype"
+CREATE TABLE "actiontype"
 (
     "name" VARCHAR(255),
     "description" VARCHAR(255),
     "executionpolicy" VARCHAR(255),
-    "id" BIGINT NOT NULL DEFAULT nextval('mitigationactiontype_id_seq'),
-    CONSTRAINT "mitigationactiontype_pkey" PRIMARY KEY ("id")
+    "id" BIGINT NOT NULL DEFAULT nextval('actiontype_id_seq'),
+    CONSTRAINT "actiontype_pkey" PRIMARY KEY ("id")
 );
 
 ALTER TABLE "decision"
@@ -62,28 +62,28 @@ ALTER TABLE "decision"
     FOREIGN KEY ("decisiontype_id")
     REFERENCES "decisiontype" ("id");
 
-ALTER TABLE "mitigationaction"
-    ADD CONSTRAINT "fk_mitigationaction_decision"
+ALTER TABLE "action"
+    ADD CONSTRAINT "fk_action_decision"
     FOREIGN KEY ("decision_id")
     REFERENCES "decision" ("id");
 
-ALTER TABLE "mitigationaction"
-    ADD CONSTRAINT "fk_mitigationaction_mitigationactiontype"
-    FOREIGN KEY ("mitigationactiontype_id")
-    REFERENCES "mitigationactiontype" ("id");
+ALTER TABLE "action"
+    ADD CONSTRAINT "fk_action_actiontype"
+    FOREIGN KEY ("actiontype_id")
+    REFERENCES "actiontype" ("id");
 
-CREATE TABLE "decisiontype_mitigationactiontype" (
+CREATE TABLE "decisiontype_actiontype" (
     "decisiontype_id" BIGINT NOT NULL,
-    "mitigationactiontype_id" BIGINT NOT NULL,
-    PRIMARY KEY ("decisiontype_id", "mitigationactiontype_id")
+    "actiontype_id" BIGINT NOT NULL,
+    PRIMARY KEY ("decisiontype_id", "actiontype_id")
 );
 
-ALTER TABLE "decisiontype_mitigationactiontype"
-    ADD CONSTRAINT "fk_decisiontype_mitigationactiontype"
+ALTER TABLE "decisiontype_actiontype"
+    ADD CONSTRAINT "fk_decisiontype_actiontype"
     FOREIGN KEY ("decisiontype_id")
     REFERENCES "decisiontype" ("id");
 
-ALTER TABLE "decisiontype_mitigationactiontype"
-    ADD CONSTRAINT "fk_mitigationactiontype_mitigationactiontype"
-    FOREIGN KEY ("mitigationactiontype_id")
-    REFERENCES "mitigationactiontype" ("id");
+ALTER TABLE "decisiontype_actiontype"
+    ADD CONSTRAINT "fk_actiontype_actiontype"
+    FOREIGN KEY ("actiontype_id")
+    REFERENCES "actiontype" ("id");

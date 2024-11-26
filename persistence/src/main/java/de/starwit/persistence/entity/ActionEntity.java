@@ -15,11 +15,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 /**
- * MitigationAction Entity class
+ * Action Entity class
  */
 @Entity
-@Table(name = "mitigationaction")
-public class MitigationActionEntity extends AbstractEntity<Long> {
+@Table(name = "action")
+public class ActionEntity extends AbstractEntity<Long> {
 
     // entity fields
     @Column(name = "creationtime")
@@ -40,8 +40,8 @@ public class MitigationActionEntity extends AbstractEntity<Long> {
     private DecisionEntity decision;
 
     @ManyToOne
-    @JoinColumn(name = "mitigationactiontype_id")
-    private MitigationActionTypeEntity mitigationActionType;
+    @JoinColumn(name = "actiontype_id")
+    private ActionTypeEntity actionType;
 
     // entity fields getters and setters
     public ZonedDateTime getCreationTime() {
@@ -77,12 +77,12 @@ public class MitigationActionEntity extends AbstractEntity<Long> {
         this.decision = decision;
     }
 
-    public MitigationActionTypeEntity getMitigationActionType() {
-        return mitigationActionType;
+    public ActionTypeEntity getActionType() {
+        return actionType;
     }
 
-    public void setMitigationActionType(MitigationActionTypeEntity mitigationActionType) {
-        this.mitigationActionType = mitigationActionType;
+    public void setActionType(ActionTypeEntity actionType) {
+        this.actionType = actionType;
     }
 
 }

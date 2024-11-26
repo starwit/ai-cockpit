@@ -1,9 +1,9 @@
 import CrudRest from "./CrudRest";
 import axios from "axios";
 
-class MitigationActionRest extends CrudRest {
+class ActionRest extends CrudRest {
     constructor() {
-        super(window.location.pathname + "api/mitigationaction");
+        super(window.location.pathname + "api/action");
     }
 
     findAllWithoutDecision(selected) {
@@ -14,12 +14,12 @@ class MitigationActionRest extends CrudRest {
         }
     }
 
-    findAllWithoutMitigationActionType(selected) {
+    findAllWithoutActionType(selected) {
         if (isNaN(selected)) {
-            return axios.get(this.baseUrl + "/find-without-mitigationActionType");
+            return axios.get(this.baseUrl + "/find-without-actionType");
         } else {
-            return axios.get(this.baseUrl + "/find-without-other-mitigationActionType/" + selected);
+            return axios.get(this.baseUrl + "/find-without-other-actionType/" + selected);
         }
     }
 }
-export default MitigationActionRest;
+export default ActionRest;

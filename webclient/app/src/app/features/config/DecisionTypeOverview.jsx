@@ -2,7 +2,7 @@ import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import React, {useEffect, useState, useMemo} from "react";
 import {useTranslation} from "react-i18next";
 import DecisionTypeRest from "../../services/DecisionTypeRest";
-import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
+import ActionTypeRest from "../../services/ActionTypeRest";
 import {Button, Stack, Typography} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";

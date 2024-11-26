@@ -1,9 +1,9 @@
 import CrudRest from "./CrudRest";
 import axios from "axios";
 
-class MitigationActionTypeRest extends CrudRest {
+class ActionTypeRest extends CrudRest {
     constructor() {
-        super(window.location.pathname + "api/mitigationactiontype");
+        super(window.location.pathname + "api/actiontype");
     }
 
     updateList = list => {
@@ -14,4 +14,4 @@ class MitigationActionTypeRest extends CrudRest {
         return axios.get(this.baseUrl + "/by-decision-type/" + decisionTypeId);
     }
 }
-export default MitigationActionTypeRest;
+export default ActionTypeRest;

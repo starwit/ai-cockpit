@@ -2,7 +2,7 @@ import {Container} from "@mui/material";
 import React from "react";
 import {Route, Routes} from "react-router-dom";
 import CockpitAppBar from "./commons/CockpitAppBar";
-import MitigationActionTypeOverview from "./features/config/MitigationActionTypeOverview";
+import ActionTypeOverview from "./features/config/ActionTypeOverview";
 import DecisionTypeOverview from "./features/config/DecisionTypeOverview";
 import DecisionOverview from "./features/decision/DecisionOverview";
 import ComponentBreakDown from "./features/info/ComponentBreakDown";
@@ -16,7 +16,7 @@ function MainContentRouter() {
                 <Routes>
                     <Route path="/" element={<DecisionOverview />} />
                     <Route path="/decision-map-view" element={<DecisionOverviewMap />} />
-                    <Route path="/mitigation-action-type" element={<MitigationActionTypeOverview />} />
+                    <Route path="/action-type" element={<ActionTypeOverview />} />
                     <Route path="/decision-type" element={<DecisionTypeOverview />} />
                     <Route path="/info/component-breakdown" element={<ComponentBreakDown />} />
                     <Route path="/logout" component={() => {

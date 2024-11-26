@@ -8,20 +8,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import de.starwit.persistence.entity.MitigationActionTypeEntity;
+import de.starwit.persistence.entity.ActionTypeEntity;
 
 /**
- * Tests for MitigationActionTypeRepository
+ * Tests for ActionTypeRepository
  */
 @DataJpaTest
-public class MitigationActionTypeRepositoryTest {
+public class ActionTypeRepositoryTest {
 
     @Autowired
-    private MitigationActionTypeRepository repository;
+    private ActionTypeRepository repository;
 
     @Test
     public void testFindAll() {
-        List<MitigationActionTypeEntity> mitigationactiontypes = repository.findAll();
-        assertTrue(mitigationactiontypes.isEmpty());
+        List<ActionTypeEntity> actiontypes = repository.findAll();
+        assertTrue(actiontypes.isEmpty());
     }
 }

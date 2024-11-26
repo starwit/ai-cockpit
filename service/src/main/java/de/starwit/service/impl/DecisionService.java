@@ -15,11 +15,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import de.starwit.persistence.entity.DecisionState;
-import de.starwit.persistence.entity.MitigationActionEntity;
-import de.starwit.persistence.entity.MitigationActionTypeEntity;
+import de.starwit.persistence.entity.ActionEntity;
+import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionTypeEntity;
-import de.starwit.persistence.repository.MitigationActionTypeRepository;
+import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import de.starwit.visionapi.Reporting.IncidentMessage;
@@ -59,7 +59,7 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
     private DecisionTypeRepository decisionTypeRepository;
 
     @Autowired
-    private MitigationActionTypeRepository mitigationActionTypeRepository;
+    private ActionTypeRepository actionTypeRepository;
 
     @Override
     public DecisionRepository getRepository() {
@@ -75,20 +75,20 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         entity.setState(DecisionState.NEW);
         DecisionTypeEntity decisionType = findDecisionTypeByName(defaultDecisionType);
         entity.setDecisionType(decisionType);
-        return createDecisionEntitywithMitigationAction(entity);
+        return createDecisionEntitywithAction(entity);
     }
 
-    public DecisionEntity createDecisionEntitywithMitigationAction(DecisionEntity entity) {
+    public DecisionEntity createDecisionEntitywithAction(DecisionEntity entity) {
         DecisionTypeEntity decisionType = entity.getDecisionType();
         if (decisionType != null) {
-            List<MitigationActionTypeEntity> actionTypes = mitigationActionTypeRepository
+            List<ActionTypeEntity> actionTypes = actionTypeRepository
                     .findByDecisionType(decisionType.getId());
             if (actionTypes != null && !actionTypes.isEmpty()) {
-                for (MitigationActionTypeEntity actionType : actionTypes) {
-                    MitigationActionEntity action = new MitigationActionEntity();
+                for (ActionTypeEntity actionType : actionTypes) {
+                    ActionEntity action = new ActionEntity();
                     action.setCreationTime(entity.getAcquisitionTime());
-                    action.setMitigationActionType(actionType);
-                    entity.addToMitigationAction(action);
+                    action.setActionType(actionType);
+                    entity.addToAction(action);
                 }
             }
         }
