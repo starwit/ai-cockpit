@@ -17,7 +17,7 @@ function MainContentRouter() {
                     <Route path="/" element={<DecisionOverview />} />
                     <Route path="/decision-map-view" element={<DecisionOverviewMap />} />
                     <Route path="/mitigation-action-type" element={<MitigationActionTypeOverview />} />
-                    <Route path="/traffic-decision-type" element={<DecisionTypeOverview />} />
+                    <Route path="/decision-type" element={<DecisionTypeOverview />} />
                     <Route path="/info/component-breakdown" element={<ComponentBreakDown />} />
                     <Route path="/logout" component={() => {
                         window.location.href = window.location.pathname + "api/user/logout";

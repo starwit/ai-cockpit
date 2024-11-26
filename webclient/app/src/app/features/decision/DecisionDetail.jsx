@@ -133,14 +133,14 @@ function DecisionDetail(props) {
         <Dialog
             open={open}
             onClose={handleClose}
-            aria-labelledby="traffic-decision-detail-dialog-title"
-            aria-describedby="traffic-decision-detail-dialog-description"
+            aria-labelledby="decision-detail-dialog-title"
+            aria-describedby="decision-detail-dialog-description"
             maxWidth={false}
             fullWidth
             sx={{aspectRatio: "16/9", alignSelf: "center"}}
         >
             <DialogTitle
-                id="traffic-decision-detail-dialog-title"
+                id="decision-detail-dialog-title"
                 component="div"
                 sx={{paddingBottom: 0, marginBottom: 0}}
             >
@@ -168,7 +168,7 @@ function DecisionDetail(props) {
             </IconButton>
 
             <DialogContent
-                id="traffic-decision-detail-dialog-description"
+                id="decision-detail-dialog-description"
                 sx={{
                     ...DecisionDetailStyles.dialogContent,
                     height: 'auto',

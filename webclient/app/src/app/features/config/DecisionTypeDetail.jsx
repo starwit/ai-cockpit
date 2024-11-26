@@ -120,11 +120,11 @@ function DecisionTypeDetail(props) {
         <Dialog
             open={open}
             onClose={handleClose}
-            aria-labelledby="traffic-decision-type-detail-dialog-title"
-            aria-describedby="traffic-decision-type-detail-dialog-description"
+            aria-labelledby="decision-type-detail-dialog-title"
+            aria-describedby="decision-type-detail-dialog-description"
             maxWidth="xl"
         >
-            <DialogTitle id="traffic-decision-type-detail-dialog-title" >
+            <DialogTitle id="decision-type-detail-dialog-title" >
                 <Typography component="p" variant="h2">
                     {t("decisiontype.selectaction")}{rowData.name}
                 </Typography>
@@ -140,7 +140,7 @@ function DecisionTypeDetail(props) {
             >
                 <GridCloseIcon />
             </IconButton>
-            <DialogContent id="traffic-decision-type-detail-dialog-description">
+            <DialogContent id="decision-type-detail-dialog-description">
                 <Grid2>
                     <DataGrid
                         autoHeight
