@@ -137,7 +137,7 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = { InvalidKeyException.class })
     public ResponseEntity<Object> handleException(InvalidKeyException ex) {
         LOG.info("Minio credentials are incorrect", ex.getMessage());
-        NotificationDto output = new NotificationDto("error.trafficincident.notfound", "TrafficIncident not found.");
+        NotificationDto output = new NotificationDto("error.decision.notfound", "Decision not found.");
         return new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
     }
 

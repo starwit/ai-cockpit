@@ -26,7 +26,7 @@ auth:
   clientId: aicockpit
   clientSecret: aicockpit 
 
-# MinIO that serves binary data, to explain incidents
+# MinIO that serves binary data, to explain decisions
 minio:
   user: minioadmin
   password: minioadmin

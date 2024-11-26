@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Features
+
+-  ab#1281 rename trafficincident and mitigationaction to decision and action ([888b9](https://github.com/starwit/ai-cockpit/commit/888b9f546ea5da7) Anett Hübner)  
+
 ## refs/tags/0.1.4 (2024-11-24)
 
 ### Features

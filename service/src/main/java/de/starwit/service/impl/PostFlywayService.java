@@ -17,12 +17,11 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.starwit.persistence.entity.MitigationActionTypeEntity;
-import de.starwit.persistence.entity.TrafficIncidentEntity;
-import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
-import de.starwit.persistence.repository.MitigationActionTypeRepository;
-import de.starwit.persistence.repository.TrafficIncidentRepository;
-import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
+import de.starwit.persistence.entity.ActionTypeEntity;
+import de.starwit.persistence.entity.DecisionEntity;
+import de.starwit.persistence.entity.DecisionTypeEntity;
+import de.starwit.persistence.repository.ActionTypeRepository;
+import de.starwit.persistence.repository.DecisionTypeRepository;
 import jakarta.annotation.PostConstruct;
 
 /**
@@ -41,20 +40,20 @@ public class PostFlywayService {
     @Value("${scenario.importFolder:/scenariodata/traffic/}")
     private String scenarioImportFolder;
 
-    private String mititgationTypeFileName = "mitigationtypes.json";
+    private String mititgationTypeFileName = "actiontypes.json";
 
-    private String incidentTypeFileName = "incidenttypes.json";
+    private String decisionTypeFileName = "decisiontypes.json";
 
     private String demoDataFileName = "demodata.json";
 
     @Autowired
-    private TrafficIncidentTypeRepository incidentTypeRepository;
+    private DecisionTypeRepository decisionTypeRepository;
 
     @Autowired
-    private MitigationActionTypeRepository actionRepository;
+    private ActionTypeRepository actionRepository;
 
     @Autowired
-    private TrafficIncidentService trafficIncidentService;
+    private DecisionService decisionService;
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -63,58 +62,58 @@ public class PostFlywayService {
         LOG.info("Importing sample data: " + setupScenario);
         if (setupScenario) {
             LOG.info("Importing sample data structure from folder " + scenarioImportFolder);
-            if (importMitigationTypes(scenarioImportFolder)) {
-                LOG.info("Import of mitigation types successful, importing incident types");
-                if (importIncidentTypes(scenarioImportFolder)) {
+            if (importactionTypes(scenarioImportFolder)) {
+                LOG.info("Import of action types successful, importing decision types");
+                if (importDecisionTypes(scenarioImportFolder)) {
                     importDemoData(scenarioImportFolder);
                 }
             }
         }
     }
 
-    private boolean importMitigationTypes(String folder) {
+    private boolean importactionTypes(String folder) {
         if (actionRepository.findAll().size() > 0) {
-            LOG.info("Mitigation types already imported. Skipping import.");
+            LOG.info("action types already imported. Skipping import.");
             return false;
         } else {
             File file = new File(folder + "/" + mititgationTypeFileName);
             if (file.exists()) {
-                LOG.info("Importing mitigation types from file " + file.getAbsolutePath());
+                LOG.info("Importing action types from file " + file.getAbsolutePath());
                 try {
-                    List<MitigationActionTypeEntity> mitigationTypes = mapper.readValue(file,
-                            new TypeReference<List<MitigationActionTypeEntity>>() {
+                    List<ActionTypeEntity> actionTypes = mapper.readValue(file,
+                            new TypeReference<List<ActionTypeEntity>>() {
                             });
-                    actionRepository.saveAll(mitigationTypes);
+                    actionRepository.saveAll(actionTypes);
                 } catch (IOException e) {
-                    LOG.error("Can't parse mitigation types, aborting import " + e.getMessage());
+                    LOG.error("Can't parse action types, aborting import " + e.getMessage());
                 }
                 return true;
             } else {
-                LOG.warn("Mitigation types file not found. Skipping import.");
+                LOG.warn("action types file not found. Skipping import.");
             }
         }
         return false;
     }
 
-    private boolean importIncidentTypes(String folder) {
-        if (incidentTypeRepository.findAll().size() > 0) {
-            LOG.info("Incident types already imported. Skipping import.");
+    private boolean importDecisionTypes(String folder) {
+        if (decisionTypeRepository.findAll().size() > 0) {
+            LOG.info("Decision types already imported. Skipping import.");
             return false;
         } else {
-            File file = new File(folder + "/" + incidentTypeFileName);
+            File file = new File(folder + "/" + decisionTypeFileName);
             if (file.exists()) {
-                LOG.info("Importing Incident types from file " + file.getAbsolutePath());
+                LOG.info("Importing Decision types from file " + file.getAbsolutePath());
                 try {
-                    List<TrafficIncidentTypeEntity> trafficIncidentTypes = mapper.readValue(file,
-                            new TypeReference<List<TrafficIncidentTypeEntity>>() {
+                    List<DecisionTypeEntity> decisionTypes = mapper.readValue(file,
+                            new TypeReference<List<DecisionTypeEntity>>() {
                             });
-                    incidentTypeRepository.saveAll(trafficIncidentTypes);
+                    decisionTypeRepository.saveAll(decisionTypes);
                 } catch (IOException e) {
-                    LOG.error("Can't parse Incident types, aborting import " + e.getMessage());
+                    LOG.error("Can't parse Decision types, aborting import " + e.getMessage());
                 }
                 return true;
             } else {
-                LOG.warn("Incident types file not found. Skipping import.");
+                LOG.warn("Decision types file not found. Skipping import.");
             }
         }
         return false;
@@ -127,23 +126,23 @@ public class PostFlywayService {
             try {
                 Path path = Path.of(folder + "/" + demoDataFileName);
                 /*
-                 * Incidents are displayed best, when timestamps are ordered.
+                 * Decisions are displayed best, when timestamps are ordered.
                  * Here demo data are checked for marker DATETIME
                  */
                 String content = Files.readString(path, StandardCharsets.UTF_8);
-                int timeOffset = 13; // Incident timestamps are moved 13 hours in the past.
+                int timeOffset = 13; // Decision timestamps are moved 13 hours in the past.
                 while (content.indexOf("DATETIME") != -1) {
                     ZonedDateTime zd = ZonedDateTime.now().minusHours(timeOffset);
                     content = content.replaceFirst("DATETIME", zd.toString());
                     timeOffset -= 1;
                 }
-                List<TrafficIncidentEntity> trafficIncidentTypes = mapper.readValue(
+                List<DecisionEntity> decisionTypes = mapper.readValue(
                         content,
-                        new TypeReference<List<TrafficIncidentEntity>>() {
+                        new TypeReference<List<DecisionEntity>>() {
                         });
-                    for (TrafficIncidentEntity entity : trafficIncidentTypes) {
-                        trafficIncidentService.createTrafficIncidentEntitywithMitigationAction(entity);
-                    }
+                for (DecisionEntity entity : decisionTypes) {
+                    decisionService.createDecisionEntitywithAction(entity);
+                }
 
             } catch (IOException e) {
                 LOG.error("Can't parse demo data, aborting import " + e.getMessage());

@@ -1,0 +1,95 @@
+[
+    {
+        "name": "dangerous driving behaviour",
+        "description": "A road user involving reckless or unsafe driving behavior",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 1
+            },
+            {
+                "id": 4
+            }
+        ]
+    },
+    {
+        "name": "accident",
+        "description": "A traffic decision involving a collision or crash between vehicles or other obstacles",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 2
+            },
+            {
+                "id": 3
+            },
+            {
+                "id": 1
+            },
+            {
+                "id": 5
+            }
+        ]
+    },
+    {
+        "name": "traffic jam",
+        "description": "A situation where traffic is congested and vehicles are moving slowly or not at all",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 3
+            },
+            {
+                "id": 1
+            },
+            {
+                "id": 4
+            }
+        ]
+    },
+    {
+        "name": "disabled vehicle",
+        "description": "A vehicle is blocking traffic",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 1
+            },
+            {
+                "id": 5
+            },
+            {
+                "id": 4
+            }
+        ]
+    },
+    {
+        "name": "helpless person",
+        "description": "A human in need of assistance",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 2
+            },
+            {
+                "id": 3
+            },
+            {
+                "id": 1
+            }
+        ]
+    },
+    {
+        "name": "first responder ops",
+        "description": "First responders operating in an area",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 3
+            },
+            {
+                "id": 4
+            }
+        ]
+    }
+]

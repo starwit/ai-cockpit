@@ -77,11 +77,11 @@ function ConfigMenu() {
                                 aria-labelledby="composition-button"
                                 onKeyDown={handleListKeyDown}
                             >
-                                <MenuItem component={Link} to={"/mitigation-action-type"}>
-                                    {t("menu.config.mitigationactiontype")}
+                                <MenuItem component={Link} to={"/action-type"}>
+                                    {t("menu.config.actiontype")}
                                 </MenuItem>
-                                <MenuItem component={Link} to={"/traffic-incident-type"}>
-                                    {t("menu.config.trafficincidenttype")}
+                                <MenuItem component={Link} to={"/decision-type"}>
+                                    {t("menu.config.decisiontype")}
                                 </MenuItem>
                             </MenuList>
                         </ClickAwayListener>

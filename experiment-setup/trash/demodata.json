@@ -6,11 +6,11 @@
         "cameraLongitude": -86.131719,
         "state": "NEW",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 2,
             "name": "Wildkrautbewuchs"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-11-12T11:16:36Z",
@@ -19,11 +19,11 @@
         "cameraLongitude": -86.133787,
         "state": "NEW",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 1,
             "name": "Verunreinigte Verkehrsschilder"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-11-11T18:42:47Z",
@@ -32,11 +32,11 @@
         "cameraLongitude": -86.131719,
         "state": "NEW",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 5,
             "name": "Falschparker"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-11-12T11:17:07Z",
@@ -45,11 +45,11 @@
         "cameraLongitude": -86.143703,
         "state": "NEW",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 5,
             "name": "Falschparker"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-11-12T11:17:37Z",
@@ -58,11 +58,11 @@
         "cameraLongitude": -86.128939,
         "state": "NEW",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 4,
             "name": "Müllablagerung"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-11-12T11:17:47Z",
@@ -71,11 +71,11 @@
         "cameraLongitude": -86.141046,
         "state": "NEW",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 2,
             "name": "Wildkrautbewuchs"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-10-31T14:59:57Z",
@@ -84,11 +84,11 @@
         "cameraLongitude": -86.133787,
         "state": "NEW",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 2,
             "name": "Wildkrautbewuchs"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-10-31T15:00:08Z",
@@ -97,11 +97,11 @@
         "cameraLongitude": -86.131719,
         "state": "NEW",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 2,
             "name": "Wildkrautbewuchs"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-11-12T11:16:57Z",
@@ -110,11 +110,11 @@
         "cameraLongitude": -86.127168,
         "state": "ACCEPTED",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 4,
             "name": "Müllablagerung"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-11-12T11:18:07Z",
@@ -123,11 +123,11 @@
         "cameraLongitude": -86.12691,
         "state": "ACCEPTED",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 4,
             "name": "Müllablagerung"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-11-12T11:17:57Z",
@@ -136,11 +136,11 @@
         "cameraLongitude": -86.151024,
         "state": "ACCEPTED",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 3,
             "name": "Überfüllter Müllbehälter"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-10-31T15:00:18Z",
@@ -149,11 +149,11 @@
         "cameraLongitude": -86.127168,
         "state": "REJECTED",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 5,
             "name": "Falschparker"
         },
-        "mitigationAction": []
+        "action": []
     },
     {
         "acquisitionTime": "2024-11-11T18:42:37Z",
@@ -162,10 +162,10 @@
         "cameraLongitude": -86.133787,
         "state": "NEW",
         "description": "",
-        "trafficIncidentType": {
+        "decisionType": {
             "id": 3,
             "name": "Überfüllter Müllbehälter"
         },
-        "mitigationAction": []
+        "action": []
     }
 ]

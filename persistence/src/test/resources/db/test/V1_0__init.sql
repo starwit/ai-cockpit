@@ -1,89 +1,80 @@
-CREATE SEQUENCE IF NOT EXISTS "trafficincident_id_seq";
+CREATE SEQUENCE IF NOT EXISTS "decision_id_seq";
 
-CREATE TABLE "trafficincident"
+CREATE TABLE "decision"
 (
     "acquisitiontime" TIMESTAMP WITH TIME ZONE,
-    "trafficincidenttype_id" BIGINT,
+    "decisiontype_id" BIGINT,
     "mediaurl" VARCHAR(500),
     "cameralatitude" DECIMAL(22,19),
     "cameralongitude" DECIMAL(22,19),
     "state" VARCHAR(255),
     "description" VARCHAR(255),
-    "id" BIGINT NOT NULL DEFAULT nextval('trafficincident_id_seq'),
-    CONSTRAINT "trafficincident_pkey" PRIMARY KEY ("id")
+    "id" BIGINT NOT NULL DEFAULT nextval('decision_id_seq'),
+    CONSTRAINT "decision_pkey" PRIMARY KEY ("id")
 );
 
-CREATE SEQUENCE IF NOT EXISTS "mitigationaction_id_seq";
+CREATE SEQUENCE IF NOT EXISTS "action_id_seq";
 
-CREATE TABLE "mitigationaction"
+CREATE TABLE "action"
 (
     "creationtime" TIMESTAMP WITH TIME ZONE,
     "name" VARCHAR(255),
     "description" VARCHAR(255),
-    "trafficincident_id" BIGINT,
-    "mitigationactiontype_id" BIGINT,
-    "id" BIGINT NOT NULL DEFAULT nextval('mitigationaction_id_seq'),
-    CONSTRAINT "mitigationaction_pkey" PRIMARY KEY ("id")
+    "decision_id" BIGINT,
+    "actiontype_id" BIGINT,
+    "id" BIGINT NOT NULL DEFAULT nextval('action_id_seq'),
+    CONSTRAINT "action_pkey" PRIMARY KEY ("id")
 );
 
-CREATE SEQUENCE IF NOT EXISTS "autonomylevel_id_seq";
 
-CREATE TABLE "autonomylevel"
+CREATE SEQUENCE IF NOT EXISTS "decisiontype_id_seq";
+
+CREATE TABLE "decisiontype"
 (
+    "id" BIGINT NOT NULL DEFAULT nextval('decisiontype_id_seq'),
     "name" VARCHAR(255),
     "description" VARCHAR(255),
-    "id" BIGINT NOT NULL DEFAULT nextval('autonomylevel_id_seq'),
-    CONSTRAINT "autonomylevel_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "decisiontype_pkey" PRIMARY KEY ("id")
 );
 
-CREATE SEQUENCE IF NOT EXISTS "trafficincidenttype_id_seq";
+CREATE SEQUENCE IF NOT EXISTS "actiontype_id_seq";
 
-CREATE TABLE "trafficincidenttype"
-(
-    "id" BIGINT NOT NULL DEFAULT nextval('trafficincidenttype_id_seq'),
-    "name" VARCHAR(255),
-    "description" VARCHAR(255),
-    CONSTRAINT "trafficincidenttype_pkey" PRIMARY KEY ("id")
-);
-
-CREATE SEQUENCE IF NOT EXISTS "mitigationactiontype_id_seq";
-
-CREATE TABLE "mitigationactiontype"
+CREATE TABLE "actiontype"
 (
     "name" VARCHAR(255),
     "description" VARCHAR(255),
     "executionpolicy" VARCHAR(255),
-    "id" BIGINT NOT NULL DEFAULT nextval('mitigationactiontype_id_seq'),
-    CONSTRAINT "mitigationactiontype_pkey" PRIMARY KEY ("id")
+    "id" BIGINT NOT NULL DEFAULT nextval('actiontype_id_seq'),
+    CONSTRAINT "actiontype_pkey" PRIMARY KEY ("id")
 );
 
-ALTER TABLE "trafficincident"
-    ADD CONSTRAINT "fk_trafficincident_trafficincidenttype"
-    FOREIGN KEY ("trafficincidenttype_id")
-    REFERENCES "trafficincidenttype" ("id");
+ALTER TABLE "decision"
+    ADD CONSTRAINT "fk_decision_decisiontype"
+    FOREIGN KEY ("decisiontype_id")
+    REFERENCES "decisiontype" ("id");
 
-ALTER TABLE "mitigationaction"
-    ADD CONSTRAINT "fk_mitigationaction_trafficincident"
-    FOREIGN KEY ("trafficincident_id")
-    REFERENCES "trafficincident" ("id");
+ALTER TABLE "action"
+    ADD CONSTRAINT "fk_action_decision"
+    FOREIGN KEY ("decision_id")
+    REFERENCES "decision" ("id");
 
-ALTER TABLE "mitigationaction"
-    ADD CONSTRAINT "fk_mitigationaction_mitigationactiontype"
-    FOREIGN KEY ("mitigationactiontype_id")
-    REFERENCES "mitigationactiontype" ("id");
+ALTER TABLE "action"
+    ADD CONSTRAINT "fk_action_actiontype"
+    FOREIGN KEY ("actiontype_id")
+    REFERENCES "actiontype" ("id");
 
-CREATE TABLE "trafficincidenttype_mitigationactiontype" (
-    "trafficincidenttype_id" BIGINT NOT NULL,
-    "mitigationactiontype_id" BIGINT NOT NULL,
-    PRIMARY KEY ("trafficincidenttype_id", "mitigationactiontype_id")
+CREATE TABLE "decisiontype_actiontype" (
+    "decisiontype_id" BIGINT NOT NULL,
+    "actiontype_id" BIGINT NOT NULL,
+    PRIMARY KEY ("decisiontype_id", "actiontype_id")
 );
 
-ALTER TABLE "trafficincidenttype_mitigationactiontype"
-    ADD CONSTRAINT "fk_trafficincidenttype_mitigationactiontype"
-    FOREIGN KEY ("trafficincidenttype_id")
-    REFERENCES "trafficincidenttype" ("id");
+ALTER TABLE "decisiontype_actiontype"
+    ADD CONSTRAINT "fk_decisiontype_actiontype"
+    FOREIGN KEY ("decisiontype_id")
+    REFERENCES "decisiontype" ("id");
 
-ALTER TABLE "trafficincidenttype_mitigationactiontype"
-    ADD CONSTRAINT "fk_mitigationactiontype_mitigationactiontype"
-    FOREIGN KEY ("mitigationactiontype_id")
-    REFERENCES "mitigationactiontype" ("id");
+ALTER TABLE "decisiontype_actiontype"
+    ADD CONSTRAINT "fk_actiontype_actiontype"
+    FOREIGN KEY ("actiontype_id")
+    REFERENCES "actiontype" ("id");

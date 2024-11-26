@@ -1,9 +1,8 @@
 const appItems = [
-    {title: "trafficIncident.title", link: "/trafficincident/"},
-    {title: "mitigationAction.title", link: "/mitigationaction/"},
-    {title: "autonomyLevel.title", link: "/autonomylevel/"},
-    {title: "trafficIncidentType.title", link: "/trafficincidenttype/"},
-    {title: "mitigationActionType.title", link: "/mitigationactiontype/"}
+    {title: "decision.title", link: "/decision/"},
+    {title: "action.title", link: "/action/"},
+    {title: "decisionType.title", link: "/decisiontype/"},
+    {title: "actionType.title", link: "/actiontype/"}
 ];
 
 export {appItems};

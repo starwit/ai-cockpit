@@ -2,7 +2,7 @@
 
 # default config
 JSON_FILE="import_dummy_data.json"
-URL="http://localhost:8081/ai-cockpit/api/trafficincident"
+URL="http://localhost:8081/ai-cockpit/api/decision"
 INTERVAL=10  # post intervall
 
 function main {

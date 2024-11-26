@@ -2,11 +2,11 @@
 
 AI cockpit aims at building a human control interface to AI systems. It is supposed to cover requirements from EU's AI act. More details can be found at <https://www.kicockpit.eu/>. All shared components necessary for this repo can be found [here](https://github.com/KI-Cockpit/ai-cockpit-api). There you also can find more info about all other activities & results of this project.
 
-# Development Setup
+## Development Setup
 
 This section describes how to run this software on your machine.
 
-## Prerequisites
+### Prerequisites
 
 The following components and tools are necessary to build & run AICockpit in your dev environment.
 
@@ -16,7 +16,7 @@ The following components and tools are necessary to build & run AICockpit in you
 * Postgres (available for development via docker-compose scripts)
 * using Keycloak is optional
 
-### Maven Dependency
+#### Maven Dependency
 
 Project needs a library from an AI cockpit Github repo and thus you need to adapt your Maven settings (usually located here ~/.m2/settings.xml). Following example of a complete settings.xml shows you necessary additions. Please note, that you need username/Github token replaced by values, from your user.
 
@@ -59,7 +59,7 @@ Project needs a library from an AI cockpit Github repo and thus you need to adap
 </settings>
 ```
 
-## How to build
+### How to build
 
 In order to run a local development environment execute the following steps.
 __Please note__: all steps need to be executed from base folder of repositories.
@@ -98,7 +98,7 @@ Once all steps ran successfully application will be reachable with the following
   * default user/password is admin/admin
   * keycloak can be reached under <http://localost:8081/auth>
 
-### Optional Minio
+#### Optional Minio
 
 If you want to start the Application with Minio then you need to run:
 
@@ -108,13 +108,13 @@ If you want to start the Application with Minio then you need to run:
   ```
 
 The Minio WebApp is available under localhost:9001 and the shell Application is available under localhost:9000.
-You need to upload a videos a bucket named __anomalies__ link video files in incident data accordingly.
+You need to upload a videos a bucket named __anomalies__ link video files in decision data accordingly.
 
-### Import Sample Data
+#### Import Sample Data
 
-#### Run demo setups
+##### Run demo setups
 
-AI cockpit is aimed to serve in as many application domains as possible. Thus cockpit can be started such that incident and action types can be imported. This is controlled by two fields in application properties:
+AI cockpit is aimed to serve in as many application domains as possible. Thus cockpit can be started such that decision and action types can be imported. This is controlled by two fields in application properties:
 
 ```bash
 # setup scenario & demo data
@@ -123,30 +123,32 @@ scenario.importFolder=experiment-setup/traffic/
 ```
 
 In folder [experiment-setup](experiment-setup/) you will find a growing number of demo data sets. Each folder can contain three files
+
 * miticationtypes.json - Definition of possible action types
-* incidenttypes.json - Definition of possible analysis results
+* decisiontypes.json - Definition of possible analysis results
 * demodata.json - actual samples for observed/analyzed situtions and proposed actions
 
-File with demo data can contain marker __DATETIME__ as value for incident creation time. This will then on import be replaced by a date time in the past relative to import time.
+File with demo data can contain marker __DATETIME__ as value for decision creation time. This will then on import be replaced by a date time in the past relative to import time.
 
-#### Timed incident import to local dev instances
-AI Cockpit inserts upon first start a set of incident and action types. If you want to insert actual
-incidents you can use a script in folder experiment-setup. The following code snippet shows
+##### Timed decision import to local dev instances
+
+AI Cockpit inserts upon first start a set of decision and action types. If you want to insert actual
+decisions you can use a script in folder experiment-setup. The following code snippet shows
 example usage:
 
   ```bash
     cd experiment-setup
-    ./fillDatabaseScript.sh http://localhost:8081/ai-cockpit/api/trafficincident demo_setup.json 10
+    ./fillDatabaseScript.sh http://localhost:8081/ai-cockpit/api/decision demo_setup.json 10
   ```
 
 Params are dev instance location (no auth), file with data to import and duration between inserts. Please note, that this will work only in a local development setup without authentication.
 
-This script also allows you, to test how incidents are flowing into AI Cockpit. __Note__: you will
+This script also allows you, to test how decisions are flowing into AI Cockpit. __Note__: you will
 have to prepare video data on a Minio instance.
 
-## Debugging
+### Debugging
 
-### Frontend Debugging
+#### Frontend Debugging
 
 For debugging, you can start the frontend separately.
 
@@ -159,15 +161,15 @@ NPM server starts under localhost:3000/starwit/ by default
 
 ! If you are using the installation with keycloak, make sure you are logged in before first usage - just go to localhost:8081/starwit in your browser.
 
-### Backend Debugging
+#### Backend Debugging
 
 You can start the spring boot application in debug mode. See Spring Boot documentation for further details. The easiest way is, to use debug functionality integrated with your IDE like VS Code.
 
-## Postgres Client
+### Postgres Client
 
 The database is available under localhost:3006
 
-```
+```properties
 Username:starwit
 Database:starwit
 Password:starwit
@@ -175,7 +177,7 @@ Password:starwit
 
 PGAdmin is recommended to access database for development purpose. It can be deployed via docker-compose file.
 
-## Starting without Keycloak/Authentication
+### Starting without Keycloak/Authentication
 
 If you want to start your application without keycloak, you need to change spring boot profile to dev in application\src\main\resources\application.properties.
 
@@ -196,12 +198,12 @@ cd deployment
 docker compose up
 ```
 
-# Deployment
+## Deployment
 
 see <https://github.com/starwit/ai-cockpit-deployment>
 
-# Architecture & Concepts
+## Architecture & Concepts
 
-## Data Model
+### Data Model
 
 ![architecture](./docs/imgs/architecture.drawio.svg)

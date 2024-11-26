@@ -265,7 +265,7 @@
                             <configuration>
                                 <customIssues>
                                     <customIssue>
-                                        <name>Incident</name>
+                                        <name>Decision</name>
                                         <pattern>^feat:|^fix:|^feat!:|^BREAKING
                                             CHANGE:|^fix!:|^BREAKING
                                             CHANGE!:</pattern>
