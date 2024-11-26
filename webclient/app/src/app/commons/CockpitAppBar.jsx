@@ -10,7 +10,7 @@ import {
     Tooltip
 } from "@mui/material";
 
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 import React from "react";
 import ConfigMenu from "../features/config/ConfigMenu";
@@ -38,7 +38,7 @@ function CockpitAppBar() {
                             <IconButton
                                 onClick={() => {/*TODO*/}}
 
-                                href="./#/incident-map-view"
+                                href="./#/decision-map-view"
                                 variant="outlined">
                                 <MapIcon />
                             </IconButton>

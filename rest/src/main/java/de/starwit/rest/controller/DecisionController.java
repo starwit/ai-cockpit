@@ -21,74 +21,74 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.starwit.persistence.entity.TrafficIncidentEntity;
+import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.exception.NotificationException;
 import de.starwit.rest.exception.NotificationDto;
 import de.starwit.service.impl.MinioException;
-import de.starwit.service.impl.TrafficIncidentService;
+import de.starwit.service.impl.DecisionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 /**
- * TrafficIncident RestController
+ * Decision RestController
  * Have a look at the RequestMapping!!!!!!
  */
 @RestController
-@RequestMapping(path = "${rest.base-path}/trafficincident")
-public class TrafficIncidentController {
+@RequestMapping(path = "${rest.base-path}/decision")
+public class DecisionController {
 
-    static final Logger LOG = LoggerFactory.getLogger(TrafficIncidentController.class);
+    static final Logger LOG = LoggerFactory.getLogger(DecisionController.class);
 
     @Autowired
-    private TrafficIncidentService trafficincidentService;
+    private DecisionService decisionService;
 
-    @Operation(summary = "Get all trafficincident")
+    @Operation(summary = "Get all decision")
     @GetMapping
-    public List<TrafficIncidentEntity> findAll() {
-        return this.trafficincidentService.findAll();
+    public List<DecisionEntity> findAll() {
+        return this.decisionService.findAll();
     }
 
-    @Operation(summary = "Get all trafficincident without trafficIncidentType")
-    @GetMapping(value = "/find-without-trafficIncidentType")
-    public List<TrafficIncidentEntity> findAllWithoutTrafficIncidentType() {
-        return trafficincidentService.findAllWithoutTrafficIncidentType();
+    @Operation(summary = "Get all decision without decisionType")
+    @GetMapping(value = "/find-without-decisionType")
+    public List<DecisionEntity> findAllWithoutDecisionType() {
+        return decisionService.findAllWithoutDecisionType();
     }
 
-    @Operation(summary = "Get all trafficincident without other trafficIncidentType")
-    @GetMapping(value = "/find-without-other-trafficIncidentType/{id}")
-    public List<TrafficIncidentEntity> findAllWithoutOtherTrafficIncidentType(@PathVariable("id") Long id) {
-        return trafficincidentService.findAllWithoutOtherTrafficIncidentType(id);
+    @Operation(summary = "Get all decision without other decisionType")
+    @GetMapping(value = "/find-without-other-decisionType/{id}")
+    public List<DecisionEntity> findAllWithoutOtherDecisionType(@PathVariable("id") Long id) {
+        return decisionService.findAllWithoutOtherDecisionType(id);
     }
 
-    @Operation(summary = "Get trafficincident with id")
+    @Operation(summary = "Get decision with id")
     @GetMapping(value = "/{id}")
-    public TrafficIncidentEntity findById(@PathVariable("id") Long id) {
-        return this.trafficincidentService.findById(id);
+    public DecisionEntity findById(@PathVariable("id") Long id) {
+        return this.decisionService.findById(id);
     }
 
-    @Operation(summary = "Create trafficincident")
+    @Operation(summary = "Create decision")
     @PostMapping
-    public TrafficIncidentEntity save(@Valid @RequestBody TrafficIncidentEntity entity) {
-        return trafficincidentService.createTrafficIncidentEntitywithMitigationAction(entity);
+    public DecisionEntity save(@Valid @RequestBody DecisionEntity entity) {
+        return decisionService.createDecisionEntitywithMitigationAction(entity);
     }
 
-    @Operation(summary = "Update trafficincident")
+    @Operation(summary = "Update decision")
     @PutMapping
-    public TrafficIncidentEntity update(@Valid @RequestBody TrafficIncidentEntity entity) {
-        return trafficincidentService.saveOrUpdate(entity);
+    public DecisionEntity update(@Valid @RequestBody DecisionEntity entity) {
+        return decisionService.saveOrUpdate(entity);
     }
 
-    @Operation(summary = "Delete trafficincident")
+    @Operation(summary = "Delete decision")
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable("id") Long id) throws NotificationException {
-        trafficincidentService.delete(id);
+        decisionService.delete(id);
     }
 
     @GetMapping("/download/{bucketName}/{objectName}")
     public ResponseEntity<byte[]> download(@PathVariable("bucketName") String bucketName,
             @PathVariable("objectName") String objectName) throws InvalidKeyException, IOException, MinioException {
-        byte[] file = trafficincidentService.getFileFromMinio(bucketName, objectName);
+        byte[] file = decisionService.getFileFromMinio(bucketName, objectName);
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + objectName);
         return ResponseEntity.ok()
@@ -100,8 +100,8 @@ public class TrafficIncidentController {
 
     @ExceptionHandler(value = { EntityNotFoundException.class })
     public ResponseEntity<Object> handleException(EntityNotFoundException ex) {
-        LOG.info("TrafficIncident not found. {}", ex.getMessage());
-        NotificationDto output = new NotificationDto("error.trafficincident.notfound", "TrafficIncident not found.");
+        LOG.info("Decision not found. {}", ex.getMessage());
+        NotificationDto output = new NotificationDto("error.decision.notfound", "Decision not found.");
         return new ResponseEntity<>(output, HttpStatus.NOT_FOUND);
     }
 }

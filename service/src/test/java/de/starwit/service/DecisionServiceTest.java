@@ -20,64 +20,64 @@ import org.springframework.transaction.annotation.Transactional;
 import de.starwit.persistence.entity.ExecutionPolicies;
 import de.starwit.persistence.entity.MitigationActionEntity;
 import de.starwit.persistence.entity.MitigationActionTypeEntity;
-import de.starwit.persistence.entity.TrafficIncidentEntity;
-import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
+import de.starwit.persistence.entity.DecisionEntity;
+import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.repository.MitigationActionTypeRepository;
-import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
-import de.starwit.service.impl.TrafficIncidentService;
-import de.starwit.service.impl.TrafficIncidentTypeService;
+import de.starwit.persistence.repository.DecisionTypeRepository;
+import de.starwit.service.impl.DecisionService;
+import de.starwit.service.impl.DecisionTypeService;
 import de.starwit.visionapi.Reporting.IncidentMessage;
 
 @Import(TestServiceConfiguration.class)
 @Transactional
 @SpringBootTest
-public class TrafficIncidentServiceTest {
+public class DecisionServiceTest {
 
     @Autowired
-    TrafficIncidentTypeRepository trafficIncidentTypeRepository;
+    DecisionTypeRepository decisionTypeRepository;
 
     @Autowired
     MitigationActionTypeRepository mitigationActionTypeRepository;
 
     @Autowired
-    private TrafficIncidentService trafficIncidentService;
+    private DecisionService decisionService;
 
     @Autowired
-    private TrafficIncidentTypeService trafficIncidentTypeService;
+    private DecisionTypeService decisionTypeService;
 
     @Test
     @Commit
     @Order(1)
     void testCreateTypes() {
-        TrafficIncidentTypeEntity defaultIncidentType = new TrafficIncidentTypeEntity();
-        defaultIncidentType.setName("dangerous driving behaviour");
+        DecisionTypeEntity defaultDecisionType = new DecisionTypeEntity();
+        defaultDecisionType.setName("dangerous driving behaviour");
         MitigationActionTypeEntity actionType = new MitigationActionTypeEntity();
-        actionType.setDescription("Notify public platforms or apps about the traffic incident");
+        actionType.setDescription("Notify public platforms or apps about the traffic decision");
         actionType.setName("notify public platform");
         actionType.setExecutionPolicy(ExecutionPolicies.AUTOMATIC);
         actionType = mitigationActionTypeRepository.save(actionType);
 
         Set<MitigationActionTypeEntity> mitigationActionTypes = new HashSet<>();
-        defaultIncidentType.setMitigationActionType(mitigationActionTypes);
+        defaultDecisionType.setMitigationActionType(mitigationActionTypes);
         mitigationActionTypes.add(actionType);
-        defaultIncidentType = trafficIncidentTypeService.saveOrUpdate(defaultIncidentType);
+        defaultDecisionType = decisionTypeService.saveOrUpdate(defaultDecisionType);
 
     }
 
     @Test
     @Commit
     @Order(2)
-    void testCreateNewIncidentWithMitigationActionsMessage() {
+    void testCreateNewDecisionWithMitigationActionsMessage() {
 
         // prepare
         long timestamp = 1633046400000L;
-        IncidentMessage incidentMessage = mock(IncidentMessage.class);
-        when(incidentMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
-        when(incidentMessage.getTimestampUtcMs()).thenReturn(timestamp);
+        IncidentMessage decisionMessage = mock(IncidentMessage.class);
+        when(decisionMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
+        when(decisionMessage.getTimestampUtcMs()).thenReturn(timestamp);
 
         // Call Methode
-        TrafficIncidentEntity result = trafficIncidentService
-                .createNewIncidentBasedOnIncidentMessage(incidentMessage);
+        DecisionEntity result = decisionService
+                .createNewDecisionBasedOnIncidentMessage(decisionMessage);
 
         // Assert
         assertEquals("http://testurl.com/media", result.getMediaUrl());
@@ -93,12 +93,12 @@ public class TrafficIncidentServiceTest {
     @Test
     void testFindByName() {
         // prepare
-        TrafficIncidentTypeEntity defaultIncidentType = new TrafficIncidentTypeEntity();
-        defaultIncidentType.setName("dangerous driving behaviour");
-        trafficIncidentTypeService.saveOrUpdate(defaultIncidentType);
+        DecisionTypeEntity defaultDecisionType = new DecisionTypeEntity();
+        defaultDecisionType.setName("dangerous driving behaviour");
+        decisionTypeService.saveOrUpdate(defaultDecisionType);
 
         // Call-Methode
-        TrafficIncidentTypeEntity entity = trafficIncidentService.findIncidentTypeByName("dangerous driving behaviour");
+        DecisionTypeEntity entity = decisionService.findDecisionTypeByName("dangerous driving behaviour");
 
         // Assert
         assertTrue(entity.getName().equals("dangerous driving behaviour"));

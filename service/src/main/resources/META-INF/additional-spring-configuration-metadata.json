@@ -11,9 +11,9 @@
             "description": "Redis stream prefix in order to receive or send data to redis"
         },
         {
-            "name": "incident.type.default",
+            "name": "decision.type.default",
             "type": "java.lang.String",
-            "description": "Default name of incident type"
+            "description": "Default name of decision type"
         },
         {
             "name": "spring.data.redis.active",

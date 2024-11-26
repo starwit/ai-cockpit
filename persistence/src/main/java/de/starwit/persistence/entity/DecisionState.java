@@ -1,5 +1,5 @@
 package de.starwit.persistence.entity;
 
-public enum IncidentState {
+public enum DecisionState {
     NEW, ACCEPTED, REJECTED;
 }

@@ -24,12 +24,12 @@ public class MitigationActionService implements ServiceInterface<MitigationActio
         return mitigationactionRepository;
     }
 
-    public List<MitigationActionEntity> findAllWithoutTrafficIncident() {
-        return mitigationactionRepository.findAllWithoutTrafficIncident();
+    public List<MitigationActionEntity> findAllWithoutDecision() {
+        return mitigationactionRepository.findAllWithoutDecision();
     }
 
-    public List<MitigationActionEntity> findAllWithoutOtherTrafficIncident(Long id) {
-        return mitigationactionRepository.findAllWithoutOtherTrafficIncident(id);
+    public List<MitigationActionEntity> findAllWithoutOtherDecision(Long id) {
+        return mitigationactionRepository.findAllWithoutOtherDecision(id);
     }
 
     public List<MitigationActionEntity> findAllWithoutMitigationActionType() {

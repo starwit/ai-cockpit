@@ -2,7 +2,7 @@
     {
         "name": "dangerous driving behaviour",
         "description": "A road user involving reckless or unsafe driving behavior",
-        "trafficIncident": [],
+        "decision": [],
         "mitigationActionType": [
             {
                 "id": 1
@@ -14,8 +14,8 @@
     },
     {
         "name": "accident",
-        "description": "A traffic incident involving a collision or crash between vehicles or other obstacles",
-        "trafficIncident": [],
+        "description": "A traffic decision involving a collision or crash between vehicles or other obstacles",
+        "decision": [],
         "mitigationActionType": [
             {
                 "id": 2
@@ -34,7 +34,7 @@
     {
         "name": "traffic jam",
         "description": "A situation where traffic is congested and vehicles are moving slowly or not at all",
-        "trafficIncident": [],
+        "decision": [],
         "mitigationActionType": [
             {
                 "id": 3
@@ -50,7 +50,7 @@
     {
         "name": "disabled vehicle",
         "description": "A vehicle is blocking traffic",
-        "trafficIncident": [],
+        "decision": [],
         "mitigationActionType": [
             {
                 "id": 1
@@ -66,7 +66,7 @@
     {
         "name": "helpless person",
         "description": "A human in need of assistance",
-        "trafficIncident": [],
+        "decision": [],
         "mitigationActionType": [
             {
                 "id": 2
@@ -82,7 +82,7 @@
     {
         "name": "first responder ops",
         "description": "First responders operating in an area",
-        "trafficIncident": [],
+        "decision": [],
         "mitigationActionType": [
             {
                 "id": 3

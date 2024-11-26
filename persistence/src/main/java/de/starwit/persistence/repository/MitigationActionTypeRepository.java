@@ -14,6 +14,6 @@ import de.starwit.persistence.entity.MitigationActionTypeEntity;
 @Repository
 public interface MitigationActionTypeRepository extends JpaRepository<MitigationActionTypeEntity, Long> {
 
-    @Query("SELECT e FROM MitigationActionTypeEntity e WHERE ?1 in (SELECT r.id FROM e.trafficIncidentType r)")
-    List<MitigationActionTypeEntity> findByTrafficIncidentType(Long trafficIncidentTypeId);
+    @Query("SELECT e FROM MitigationActionTypeEntity e WHERE ?1 in (SELECT r.id FROM e.decisionType r)")
+    List<MitigationActionTypeEntity> findByDecisionType(Long decisionTypeId);
 }

@@ -14,14 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import de.starwit.persistence.entity.IncidentState;
+import de.starwit.persistence.entity.DecisionState;
 import de.starwit.persistence.entity.MitigationActionEntity;
 import de.starwit.persistence.entity.MitigationActionTypeEntity;
-import de.starwit.persistence.entity.TrafficIncidentEntity;
-import de.starwit.persistence.entity.TrafficIncidentTypeEntity;
+import de.starwit.persistence.entity.DecisionEntity;
+import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.repository.MitigationActionTypeRepository;
-import de.starwit.persistence.repository.TrafficIncidentRepository;
-import de.starwit.persistence.repository.TrafficIncidentTypeRepository;
+import de.starwit.persistence.repository.DecisionRepository;
+import de.starwit.persistence.repository.DecisionTypeRepository;
 import de.starwit.visionapi.Reporting.IncidentMessage;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
@@ -34,14 +34,14 @@ import io.minio.errors.XmlParserException;
 
 /**
  * 
- * TrafficIncident Service class
+ * Decision Service class
  *
  */
 @Service
-public class TrafficIncidentService implements ServiceInterface<TrafficIncidentEntity, TrafficIncidentRepository> {
+public class DecisionService implements ServiceInterface<DecisionEntity, DecisionRepository> {
 
-    @Value("${incident.type.default:dangerous driving behaviour}")
-    private String defaultIncidentType;
+    @Value("${decision.type.default:dangerous driving behaviour}")
+    private String defaultDecisionType;
 
     @Value("${minio.user:minioadmin}")
     private String minioAccesskey;
@@ -53,36 +53,36 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
     private String endpoint;
 
     @Autowired
-    private TrafficIncidentRepository trafficincidentRepository;
+    private DecisionRepository decisionRepository;
 
     @Autowired
-    private TrafficIncidentTypeRepository trafficIncidentTypeRepository;
+    private DecisionTypeRepository decisionTypeRepository;
 
     @Autowired
     private MitigationActionTypeRepository mitigationActionTypeRepository;
 
     @Override
-    public TrafficIncidentRepository getRepository() {
-        return trafficincidentRepository;
+    public DecisionRepository getRepository() {
+        return decisionRepository;
     }
 
-    public TrafficIncidentEntity createNewIncidentBasedOnIncidentMessage(IncidentMessage incidentMessage) {
-        TrafficIncidentEntity entity = new TrafficIncidentEntity();
-        entity.setMediaUrl(incidentMessage.getMediaUrl());
-        ZonedDateTime dateTime = Instant.ofEpochMilli(incidentMessage.getTimestampUtcMs())
+    public DecisionEntity createNewDecisionBasedOnIncidentMessage(IncidentMessage decisionMessage) {
+        DecisionEntity entity = new DecisionEntity();
+        entity.setMediaUrl(decisionMessage.getMediaUrl());
+        ZonedDateTime dateTime = Instant.ofEpochMilli(decisionMessage.getTimestampUtcMs())
                 .atZone(ZoneId.systemDefault());
         entity.setAcquisitionTime(dateTime);
-        entity.setState(IncidentState.NEW);
-        TrafficIncidentTypeEntity incidentType = findIncidentTypeByName(defaultIncidentType);
-        entity.setTrafficIncidentType(incidentType);
-        return createTrafficIncidentEntitywithMitigationAction(entity);
+        entity.setState(DecisionState.NEW);
+        DecisionTypeEntity decisionType = findDecisionTypeByName(defaultDecisionType);
+        entity.setDecisionType(decisionType);
+        return createDecisionEntitywithMitigationAction(entity);
     }
 
-    public TrafficIncidentEntity createTrafficIncidentEntitywithMitigationAction(TrafficIncidentEntity entity) {
-        TrafficIncidentTypeEntity incidentType = entity.getTrafficIncidentType();
-        if (incidentType != null) {
+    public DecisionEntity createDecisionEntitywithMitigationAction(DecisionEntity entity) {
+        DecisionTypeEntity decisionType = entity.getDecisionType();
+        if (decisionType != null) {
             List<MitigationActionTypeEntity> actionTypes = mitigationActionTypeRepository
-                    .findByTrafficIncidentType(incidentType.getId());
+                    .findByDecisionType(decisionType.getId());
             if (actionTypes != null && !actionTypes.isEmpty()) {
                 for (MitigationActionTypeEntity actionType : actionTypes) {
                     MitigationActionEntity action = new MitigationActionEntity();
@@ -95,12 +95,12 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
         return saveOrUpdate(entity);
     }
 
-    public List<TrafficIncidentEntity> findAllWithoutTrafficIncidentType() {
-        return trafficincidentRepository.findAllWithoutTrafficIncidentType();
+    public List<DecisionEntity> findAllWithoutDecisionType() {
+        return decisionRepository.findAllWithoutDecisionType();
     }
 
-    public List<TrafficIncidentEntity> findAllWithoutOtherTrafficIncidentType(Long id) {
-        return trafficincidentRepository.findAllWithoutOtherTrafficIncidentType(id);
+    public List<DecisionEntity> findAllWithoutOtherDecisionType(Long id) {
+        return decisionRepository.findAllWithoutOtherDecisionType(id);
     }
 
     public byte[] getFileFromMinio(String bucketName, String objectName)
@@ -132,12 +132,12 @@ public class TrafficIncidentService implements ServiceInterface<TrafficIncidentE
         }
     }
 
-    public TrafficIncidentTypeEntity findIncidentTypeByName(String name) {
-        TrafficIncidentTypeEntity incidentType = null;
-        List<TrafficIncidentTypeEntity> result = trafficIncidentTypeRepository.findByName(name);
+    public DecisionTypeEntity findDecisionTypeByName(String name) {
+        DecisionTypeEntity decisionType = null;
+        List<DecisionTypeEntity> result = decisionTypeRepository.findByName(name);
         if (result != null && !result.isEmpty()) {
-            incidentType = result.getFirst();
+            decisionType = result.getFirst();
         }
-        return incidentType;
+        return decisionType;
     }
 }

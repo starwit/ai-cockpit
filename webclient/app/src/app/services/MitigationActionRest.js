@@ -6,11 +6,11 @@ class MitigationActionRest extends CrudRest {
         super(window.location.pathname + "api/mitigationaction");
     }
 
-    findAllWithoutTrafficIncident(selected) {
+    findAllWithoutDecision(selected) {
         if (isNaN(selected)) {
-            return axios.get(this.baseUrl + "/find-without-trafficIncident");
+            return axios.get(this.baseUrl + "/find-without-decision");
         } else {
-            return axios.get(this.baseUrl + "/find-without-other-trafficIncident/" + selected);
+            return axios.get(this.baseUrl + "/find-without-other-decision/" + selected);
         }
     }
 

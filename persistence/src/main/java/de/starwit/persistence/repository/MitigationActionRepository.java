@@ -12,11 +12,11 @@ import de.starwit.persistence.entity.MitigationActionEntity;
 @Repository
 public interface MitigationActionRepository extends JpaRepository<MitigationActionEntity, Long> {
 
-    @Query("SELECT e FROM MitigationActionEntity e WHERE NOT EXISTS (SELECT r FROM e.trafficIncident r)")
-    public List<MitigationActionEntity> findAllWithoutTrafficIncident();
+    @Query("SELECT e FROM MitigationActionEntity e WHERE NOT EXISTS (SELECT r FROM e.decision r)")
+    public List<MitigationActionEntity> findAllWithoutDecision();
 
-    @Query("SELECT e FROM MitigationActionEntity e WHERE NOT EXISTS (SELECT r FROM e.trafficIncident r WHERE r.id <> ?1)")
-    public List<MitigationActionEntity> findAllWithoutOtherTrafficIncident(Long id);
+    @Query("SELECT e FROM MitigationActionEntity e WHERE NOT EXISTS (SELECT r FROM e.decision r WHERE r.id <> ?1)")
+    public List<MitigationActionEntity> findAllWithoutOtherDecision(Long id);
 
     @Query("SELECT e FROM MitigationActionEntity e WHERE NOT EXISTS (SELECT r FROM e.mitigationActionType r)")
     public List<MitigationActionEntity> findAllWithoutMitigationActionType();

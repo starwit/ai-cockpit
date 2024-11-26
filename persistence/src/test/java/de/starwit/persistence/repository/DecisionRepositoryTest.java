@@ -8,20 +8,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import de.starwit.persistence.entity.TrafficIncidentEntity;
+import de.starwit.persistence.entity.DecisionEntity;
 
 /**
- * Tests for TrafficIncidentRepository
+ * Tests for DecisionRepository
  */
 @DataJpaTest
-public class TrafficIncidentRepositoryTest {
+public class DecisionRepositoryTest {
 
     @Autowired
-    private TrafficIncidentRepository repository;
+    private DecisionRepository repository;
 
     @Test
     public void testFindAll() {
-        List<TrafficIncidentEntity> trafficincidents = repository.findAll();
-        assertTrue(trafficincidents.isEmpty());
+        List<DecisionEntity> decisions = repository.findAll();
+        assertTrue(decisions.isEmpty());
     }
 }

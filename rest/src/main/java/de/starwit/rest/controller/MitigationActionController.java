@@ -45,17 +45,18 @@ public class MitigationActionController {
         return this.mitigationactionService.findAll();
     }
 
-    @Operation(summary = "Get all mitigationaction without trafficIncident")
-    @GetMapping(value = "/find-without-trafficIncident")
-    public List<MitigationActionEntity> findAllWithoutTrafficIncident() {
-        return mitigationactionService.findAllWithoutTrafficIncident();
+    @Operation(summary = "Get all mitigationaction without decision")
+    @GetMapping(value = "/find-without-decision")
+    public List<MitigationActionEntity> findAllWithoutDecision() {
+        return mitigationactionService.findAllWithoutDecision();
     }
 
-    @Operation(summary = "Get all mitigationaction without other trafficIncident")
-    @GetMapping(value = "/find-without-other-trafficIncident/{id}")
-    public List<MitigationActionEntity> findAllWithoutOtherTrafficIncident(@PathVariable("id") Long id) {
-        return mitigationactionService.findAllWithoutOtherTrafficIncident(id);
+    @Operation(summary = "Get all mitigationaction without other decision")
+    @GetMapping(value = "/find-without-other-decision/{id}")
+    public List<MitigationActionEntity> findAllWithoutOtherDecision(@PathVariable("id") Long id) {
+        return mitigationactionService.findAllWithoutOtherDecision(id);
     }
+
     @Operation(summary = "Get all mitigationaction without mitigationActionType")
     @GetMapping(value = "/find-without-mitigationActionType")
     public List<MitigationActionEntity> findAllWithoutMitigationActionType() {

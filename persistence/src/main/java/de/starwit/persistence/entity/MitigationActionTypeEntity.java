@@ -34,7 +34,7 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
 
     @JsonFilter("filterId")
     @ManyToMany(mappedBy = "mitigationActionType")
-    private Set<TrafficIncidentTypeEntity> trafficIncidentType;
+    private Set<DecisionTypeEntity> decisionType;
 
     // entity fields getters and setters
     public String getName() {
@@ -70,12 +70,12 @@ public class MitigationActionTypeEntity extends AbstractEntity<Long> {
         this.executionPolicy = executionPolicy;
     }
 
-    public Set<TrafficIncidentTypeEntity> getTrafficIncidentType() {
-        return trafficIncidentType;
+    public Set<DecisionTypeEntity> getDecisionType() {
+        return decisionType;
     }
 
-    public void setTrafficIncidentType(Set<TrafficIncidentTypeEntity> trafficIncidentType) {
-        this.trafficIncidentType = trafficIncidentType;
+    public void setDecisionType(Set<DecisionTypeEntity> decisionType) {
+        this.decisionType = decisionType;
     }
 
 }

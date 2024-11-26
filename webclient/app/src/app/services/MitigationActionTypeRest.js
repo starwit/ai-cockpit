@@ -10,8 +10,8 @@ class MitigationActionTypeRest extends CrudRest {
         return axios.put(this.baseUrl + "/updateList", list);
     };
 
-    findByTrafficIncidentType(incidentTypeId) {
-        return axios.get(this.baseUrl + "/by-incident-type/" + incidentTypeId);
+    findByDecisionType(decisionTypeId) {
+        return axios.get(this.baseUrl + "/by-decision-type/" + decisionTypeId);
     }
 }
 export default MitigationActionTypeRest;

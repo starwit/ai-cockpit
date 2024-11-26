@@ -23,23 +23,23 @@ import {
 import IconButton from "@mui/material/IconButton";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
-import TrafficIncidentDetailStyles from "../../assets/themes/TrafficIncidentDetailStyles";
+import DecisionDetailStyles from "../../assets/themes/DecisionDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
-import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
+import DecisionTypeRest from "../../services/DecisionTypeRest";
 
 import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
-function TrafficIncidentDetail(props) {
+function DecisionDetail(props) {
     const {open, rowData, handleClose, handleSave} = props;
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
-    const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
+    const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
     const [mitigationActionTypes, setMitigationActionTypes] = useState(rowData.mitigationAction);
-    const [trafficIncidentType, setTrafficIncidentType] = useState([""]);
+    const [decisionType, setDecisionType] = useState([""]);
     const [allMitigationActionTypes, setAllMitigationActionTypes] = useState([""]);
-    const [allTrafficIncidentType, setAllTrafficIncidentType] = useState([""]);
+    const [allDecisionType, setAllDecisionType] = useState([""]);
     const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
     const {t} = useTranslation();
 
@@ -51,15 +51,15 @@ function TrafficIncidentDetail(props) {
 
     useEffect(() => {
         reloadMitigationActionTypes();
-    }, [trafficIncidentType]);
+    }, [decisionType]);
 
     function reload() {
-        trafficIncidentTypeRest.findAll().then(response => {
+        decisionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
             }
-            setAllTrafficIncidentType(response.data);
-            setTrafficIncidentType(response.data.find(value => value.id == rowData.trafficIncidentType.id));
+            setAllDecisionType(response.data);
+            setDecisionType(response.data.find(value => value.id == rowData.decisionType.id));
         });
     }
 
@@ -75,7 +75,7 @@ function TrafficIncidentDetail(props) {
     }
 
     function reloadMitigationActionTypes() {
-        if (trafficIncidentType == undefined || trafficIncidentType.id == undefined) {
+        if (decisionType == undefined || decisionType.id == undefined) {
             return null;
         }
 
@@ -84,10 +84,10 @@ function TrafficIncidentDetail(props) {
                 return;
             }
             setAllMitigationActionTypes(response.data);
-            if (rowData.trafficIncidentType.id === trafficIncidentType.id && rowData.mitigationAction.length != 0) {
+            if (rowData.decisionType.id === decisionType.id && rowData.mitigationAction.length != 0) {
                 setMitigationActionTypes(findExistingMitigationActions(response.data));
             } else {
-                mitigationActionTypeRest.findByTrafficIncidentType(trafficIncidentType.id).then(response => {
+                mitigationActionTypeRest.findByDecisionType(decisionType.id).then(response => {
                     setMitigationActionTypes(response.data);
                 })
 
@@ -102,11 +102,11 @@ function TrafficIncidentDetail(props) {
         setMitigationActionTypes(value);
     }
 
-    function handleChangeTrafficIncidentType(event) {
-        setTrafficIncidentType(event.target.value);
+    function handleChangeDecisionType(event) {
+        setDecisionType(event.target.value);
     }
 
-    function renderTrafficIncidentMap() {
+    function renderDecisionMap() {
         if (rowData.cameraLatitude == undefined || rowData.cameraLongitude == undefined) {
             return (
                 <Typography align="center">
@@ -133,20 +133,20 @@ function TrafficIncidentDetail(props) {
         <Dialog
             open={open}
             onClose={handleClose}
-            aria-labelledby="traffic-incident-detail-dialog-title"
-            aria-describedby="traffic-incident-detail-dialog-description"
+            aria-labelledby="traffic-decision-detail-dialog-title"
+            aria-describedby="traffic-decision-detail-dialog-description"
             maxWidth={false}
             fullWidth
             sx={{aspectRatio: "16/9", alignSelf: "center"}}
         >
             <DialogTitle
-                id="traffic-incident-detail-dialog-title"
+                id="traffic-decision-detail-dialog-title"
                 component="div"
                 sx={{paddingBottom: 0, marginBottom: 0}}
             >
                 <Box>
                     <Typography variant="h2" noWrap>    {/* HEADER FOR ACCIDENT | TRAFFIC JAM | DANGEROUS DRIVING BEHAVIOUR */}
-                        {rowData.trafficIncidentType.name}
+                        {rowData.decisionType.name}
                     </Typography>
 
                     <Typography variant="subtitle2" noWrap>     {/* HEADER FOR DATE XX. MONTH YYYY um HH:MM:SS */}
@@ -168,9 +168,9 @@ function TrafficIncidentDetail(props) {
             </IconButton>
 
             <DialogContent
-                id="traffic-incident-detail-dialog-description"
+                id="traffic-decision-detail-dialog-description"
                 sx={{
-                    ...TrafficIncidentDetailStyles.dialogContent,
+                    ...DecisionDetailStyles.dialogContent,
                     height: 'auto',
                     overflow: 'hidden',
                     px: 3, //horizontal padding
@@ -187,7 +187,7 @@ function TrafficIncidentDetail(props) {
                             margin="dense"
                             id="description"
                             name="description"
-                            label={t("trafficIncident.description")}
+                            label={t("decision.description")}
                             type="text"
                             fullWidth
                             variant="standard"
@@ -203,44 +203,44 @@ function TrafficIncidentDetail(props) {
                                 variant="outlined"
                             >
 
-                                <InputLabel id="trafficIncident.trafficIncidentType.label">
-                                    {t("trafficIncident.trafficIncidentType")}
+                                <InputLabel id="decision.decisionType.label">
+                                    {t("decision.decisionType")}
                                 </InputLabel>
 
                                 <Select
-                                    labelId="trafficIncident.trafficIncidentType.label"
-                                    id="trafficIncident.trafficIncidentType"
-                                    value={trafficIncidentType}
-                                    onChange={handleChangeTrafficIncidentType}
-                                    label={t("trafficIncident.trafficIncidentType")}
+                                    labelId="decision.decisionType.label"
+                                    id="decision.decisionType"
+                                    value={decisionType}
+                                    onChange={handleChangeDecisionType}
+                                    label={t("decision.decisionType")}
                                     renderValue={selected => (
                                         <Chip label={selected.name} variant="outlined" sx={{border: "none"}} />
                                     )}
                                 >
-                                    {allTrafficIncidentType.map((incidentType, index) => (
-                                        <MenuItem key={index} value={incidentType}>
-                                            <ListItemText>{incidentType.name}</ListItemText>
+                                    {allDecisionType.map((decisionType, index) => (
+                                        <MenuItem key={index} value={decisionType}>
+                                            <ListItemText>{decisionType.name}</ListItemText>
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                             <MediaContent
                                 sx={{aspectRatio: "16/9", objectFit: "contain"}}
-                                src={window.location.pathname + "api/trafficincident/download/" + rowData.mediaUrl} />
+                                src={window.location.pathname + "api/decision/download/" + rowData.mediaUrl} />
 
                         </Stack>
                         <Stack sx={{width: 1 / 2}}>
                             <FormControl fullWidth variant="outlined">
-                                <InputLabel id="trafficIncident.mitigationAction.label">
-                                    {t("trafficIncident.mitigationAction")}
+                                <InputLabel id="decision.mitigationAction.label">
+                                    {t("decision.mitigationAction")}
                                 </InputLabel>
                                 <Select
-                                    labelId="trafficIncident.mitigationAction.label"
-                                    id="trafficIncident.mitigationAction.select"
+                                    labelId="decision.mitigationAction.label"
+                                    id="decision.mitigationAction.select"
                                     multiple
                                     value={mitigationActionTypes}
                                     onChange={handleChangeAction}
-                                    input={<OutlinedInput label={t("trafficIncident.mitigationAction")} />}
+                                    input={<OutlinedInput label={t("decision.mitigationAction")} />}
                                     renderValue={selected => (
                                         <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                                             {selected.map((value, index) => (
@@ -258,7 +258,7 @@ function TrafficIncidentDetail(props) {
                             </FormControl>
 
                             <Box sx={{aspectRatio: "inherit", position: 'relative'}}>
-                                {renderTrafficIncidentMap()}
+                                {renderDecisionMap()}
                             </Box>
                         </Stack>
                     </Stack>
@@ -266,7 +266,7 @@ function TrafficIncidentDetail(props) {
             </DialogContent>
 
             <DialogActions sx={{
-                ...TrafficIncidentDetailStyles.dialogAction,
+                ...DecisionDetailStyles.dialogAction,
                 display: 'flex',
                 justifyContent: 'space-between'
             }}>
@@ -276,7 +276,7 @@ function TrafficIncidentDetail(props) {
                     ml: 0  //margin left for "Details" field, Video element, Map and "MitigationActions" filter
                 }}> {/* MOVE SAVE BUTTON */}
                     <Button
-                        onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "NEW")}
+                        onClick={() => handleSave(mitigationActionTypes, decisionType, description, "NEW")}
                         variant="contained"
                         startIcon={<SaveIcon />}>
                         {t("button.save")}
@@ -288,21 +288,21 @@ function TrafficIncidentDetail(props) {
                     ml: 0  //margin left for "Details" field, Video element, Map and "MitigationActions" filter
                 }}> {/* MOVE REPORT & AKNOWLEDGED BUTTON */}
                     <Button
-                        sx={[TrafficIncidentDetailStyles.button, {mr: 5}]}
-                        onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "REJECTED")}
+                        sx={[DecisionDetailStyles.button, {mr: 5}]}
+                        onClick={() => handleSave(mitigationActionTypes, decisionType, description, "REJECTED")}
                         variant="contained"
                         color="error"
                         startIcon={<ErrorIcon />}>
-                        {t("trafficIncident.button.reportmistake")}
+                        {t("decision.button.reportmistake")}
                     </Button>
 
                     <Button
-                        onClick={() => handleSave(mitigationActionTypes, trafficIncidentType, description, "ACCEPTED")}
+                        onClick={() => handleSave(mitigationActionTypes, decisionType, description, "ACCEPTED")}
                         variant="contained"
                         color="success"
                         startIcon={<CheckIcon />}
                         autoFocus>
-                        {t("trafficIncident.button.acknowledged")}
+                        {t("decision.button.acknowledged")}
                     </Button>
                 </Box>
             </DialogActions>
@@ -310,4 +310,4 @@ function TrafficIncidentDetail(props) {
     );
 }
 
-export default TrafficIncidentDetail;
+export default DecisionDetail;

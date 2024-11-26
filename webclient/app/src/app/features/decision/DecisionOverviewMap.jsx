@@ -4,7 +4,7 @@ import {TileLayer} from "@deck.gl/geo-layers";
 import {BitmapLayer, IconLayer} from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import cameraicon from "./../../assets/images/camera3.png";
-import TrafficIncidentRest from '../../services/TrafficIncidentRest';
+import DecisionRest from '../../services/DecisionRest';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -18,22 +18,22 @@ const ICON_MAPPING = {
     }
 };
 
-function IncidentOverviewMap() {
-    // Add state to store incidents
-    const [trafficIncidents, setTrafficIncidents] = useState([]);
-    const trafficIncidentRest = new TrafficIncidentRest();
+function DecisionOverviewMap() {
+    // Add state to store decisions
+    const [decisions, setDecisions] = useState([]);
+    const decisionRest = new DecisionRest();
 
     useEffect(() => {
-        reloadTrafficIncidents();
-        const interval = setInterval(reloadTrafficIncidents, 5000); // Update alle 5 Sekunden
+        reloadDecisions();
+        const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
         return () => clearInterval(interval);
     }, []);
 
-    //Load Incidents
-    function reloadTrafficIncidents() {
-        trafficIncidentRest.findAll().then(response => {
+    //Load Decisions
+    function reloadDecisions() {
+        decisionRest.findAll().then(response => {
             if (response.data) {
-                setTrafficIncidents(response.data);
+                setDecisions(response.data);
             }
         });
     }
@@ -72,10 +72,10 @@ function IncidentOverviewMap() {
                 });
             }
         }),
-        // Add layer with Incident Icons
+        // Add layer with Decision Icons
         new IconLayer({
             id: 'icon-layer',
-            data: trafficIncidents,
+            data: decisions,
             pickable: true,
             iconAtlas: cameraicon,
             iconMapping: ICON_MAPPING,
@@ -107,4 +107,4 @@ function IncidentOverviewMap() {
     );
 }
 
-export default IncidentOverviewMap;
+export default DecisionOverviewMap;

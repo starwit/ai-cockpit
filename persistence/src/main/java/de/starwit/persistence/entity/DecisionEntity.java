@@ -22,11 +22,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 /**
- * TrafficIncident Entity class
+ * Decision Entity class
  */
 @Entity
-@Table(name = "trafficincident")
-public class TrafficIncidentEntity extends AbstractEntity<Long> {
+@Table(name = "decision")
+public class DecisionEntity extends AbstractEntity<Long> {
 
     // entity fields
     @Column(name = "acquisitiontime")
@@ -45,7 +45,7 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state")
-    private IncidentState state;
+    private DecisionState state;
 
     @Column(name = "description")
     private String description;
@@ -53,10 +53,10 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
     // entity relations
     @JsonFilter("filterIdName")
     @ManyToOne
-    @JoinColumn(name = "trafficincidenttype_id")
-    private TrafficIncidentTypeEntity trafficIncidentType;
+    @JoinColumn(name = "decisiontype_id")
+    private DecisionTypeEntity decisionType;
 
-    @OneToMany(mappedBy = "trafficIncident", cascade = { CascadeType.ALL })
+    @OneToMany(mappedBy = "decision", cascade = { CascadeType.ALL })
     private Set<MitigationActionEntity> mitigationAction;
 
     // entity fields getters and setters
@@ -92,11 +92,11 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
         this.cameraLongitude = cameraLongitude;
     }
 
-    public IncidentState getState() {
+    public DecisionState getState() {
         return state;
     }
 
-    public void setState(IncidentState state) {
+    public void setState(DecisionState state) {
         this.state = state;
     }
 
@@ -109,12 +109,12 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
     }
 
     // entity relations getters and setters
-    public TrafficIncidentTypeEntity getTrafficIncidentType() {
-        return trafficIncidentType;
+    public DecisionTypeEntity getDecisionType() {
+        return decisionType;
     }
 
-    public void setTrafficIncidentType(TrafficIncidentTypeEntity trafficIncidentType) {
-        this.trafficIncidentType = trafficIncidentType;
+    public void setDecisionType(DecisionTypeEntity decisionType) {
+        this.decisionType = decisionType;
     }
 
     public Set<MitigationActionEntity> getMitigationAction() {
@@ -126,7 +126,7 @@ public class TrafficIncidentEntity extends AbstractEntity<Long> {
     }
 
     public void addToMitigationAction(MitigationActionEntity mitigationAction) {
-        mitigationAction.setTrafficIncident(this);
+        mitigationAction.setDecision(this);
         if (this.mitigationAction == null) {
             this.mitigationAction = new HashSet<>();
         }

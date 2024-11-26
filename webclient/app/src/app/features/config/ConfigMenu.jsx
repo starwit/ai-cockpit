@@ -80,8 +80,8 @@ function ConfigMenu() {
                                 <MenuItem component={Link} to={"/mitigation-action-type"}>
                                     {t("menu.config.mitigationactiontype")}
                                 </MenuItem>
-                                <MenuItem component={Link} to={"/traffic-incident-type"}>
-                                    {t("menu.config.trafficincidenttype")}
+                                <MenuItem component={Link} to={"/traffic-decision-type"}>
+                                    {t("menu.config.decisiontype")}
                                 </MenuItem>
                             </MenuList>
                         </ClickAwayListener>

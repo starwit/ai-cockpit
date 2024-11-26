@@ -22,25 +22,22 @@ import jakarta.persistence.Table;
 public class MitigationActionEntity extends AbstractEntity<Long> {
 
     // entity fields
-    @Column(name="creationtime")
+    @Column(name = "creationtime")
     @JsonSerialize(using = ZonedDateTimeSerializer.class)
     @JsonDeserialize(using = ZonedDateTimeDeserializer.class)
     private ZonedDateTime creationTime;
 
-
     @Column(name = "name")
     private String name;
-
 
     @Column(name = "description")
     private String description;
 
-
     // entity relations
     @JsonFilter("filterId")
     @ManyToOne
-    @JoinColumn(name = "trafficincident_id")
-    private TrafficIncidentEntity trafficIncident;
+    @JoinColumn(name = "decision_id")
+    private DecisionEntity decision;
 
     @ManyToOne
     @JoinColumn(name = "mitigationactiontype_id")
@@ -72,12 +69,12 @@ public class MitigationActionEntity extends AbstractEntity<Long> {
     }
 
     // entity relations getters and setters
-    public TrafficIncidentEntity getTrafficIncident() {
-        return trafficIncident;
+    public DecisionEntity getDecision() {
+        return decision;
     }
 
-    public void setTrafficIncident(TrafficIncidentEntity trafficIncident) {
-        this.trafficIncident = trafficIncident;
+    public void setDecision(DecisionEntity decision) {
+        this.decision = decision;
     }
 
     public MitigationActionTypeEntity getMitigationActionType() {

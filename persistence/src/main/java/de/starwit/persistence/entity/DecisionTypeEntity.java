@@ -14,8 +14,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "trafficincidenttype")
-public class TrafficIncidentTypeEntity extends AbstractEntity<Long> {
+@Table(name = "decisiontype")
+public class DecisionTypeEntity extends AbstractEntity<Long> {
 
     // entity fields
     @Column(name = "name")
@@ -25,12 +25,12 @@ public class TrafficIncidentTypeEntity extends AbstractEntity<Long> {
     private String description;
 
     // entity relations
-    @OneToMany(mappedBy = "trafficIncidentType", cascade = { CascadeType.ALL })
-    private Set<TrafficIncidentEntity> trafficIncident;
+    @OneToMany(mappedBy = "decisionType", cascade = { CascadeType.ALL })
+    private Set<DecisionEntity> decision;
 
     @JsonFilter("filterId")
     @ManyToMany(cascade = CascadeType.REFRESH)
-    @JoinTable(name = "trafficincidenttype_mitigationactiontype", joinColumns = @JoinColumn(name = "trafficincidenttype_id"), inverseJoinColumns = @JoinColumn(name = "mitigationactiontype_id"))
+    @JoinTable(name = "decisiontype_mitigationactiontype", joinColumns = @JoinColumn(name = "decisiontype_id"), inverseJoinColumns = @JoinColumn(name = "mitigationactiontype_id"))
     private Set<MitigationActionTypeEntity> mitigationActionType;
 
     // entity fields getters and setters
@@ -51,12 +51,12 @@ public class TrafficIncidentTypeEntity extends AbstractEntity<Long> {
     }
 
     // entity relations getters and setters
-    public Set<TrafficIncidentEntity> getTrafficIncident() {
-        return trafficIncident;
+    public Set<DecisionEntity> getDecision() {
+        return decision;
     }
 
-    public void setTrafficIncident(Set<TrafficIncidentEntity> trafficIncident) {
-        this.trafficIncident = trafficIncident;
+    public void setDecision(Set<DecisionEntity> decision) {
+        this.decision = decision;
     }
 
     public Set<MitigationActionTypeEntity> getMitigationActionType() {

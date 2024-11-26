@@ -1,20 +1,20 @@
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import React, {useEffect, useState, useMemo} from "react";
 import {useTranslation} from "react-i18next";
-import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
+import DecisionTypeRest from "../../services/DecisionTypeRest";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
 import {Button, Stack, Typography} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import TrafficIncidentTypeDetail from "./TrafficIncidentTypeDetail";
+import DecisionTypeDetail from "./DecisionTypeDetail";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
 
-function TrafficIncidentTypeOverview(props) {
+function DecisionTypeOverview(props) {
     const {t} = useTranslation();
-    const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest, []);
-    const [trafficIncidentTypes, setTrafficIncidentTypes] = useState([]);
+    const decisionTypeRest = useMemo(() => new DecisionTypeRest, []);
+    const [decisionTypes, setDecisionTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
     const [open, setOpen] = React.useState(false);
     const [openDelete, setOpenDelete] = React.useState(false);
@@ -26,13 +26,13 @@ function TrafficIncidentTypeOverview(props) {
         {field: "id", headerName: "ID", width: 90},
         {
             field: "name",
-            headerName: t("trafficincidenttype.name"),
+            headerName: t("decisiontype.name"),
             width: 150,
             editable: true
         },
         {
             field: "description",
-            headerName: t("trafficincidenttype.description"),
+            headerName: t("decisiontype.description"),
             width: 350,
             editable: true
         },
@@ -61,23 +61,23 @@ function TrafficIncidentTypeOverview(props) {
     ];
 
     useEffect(function () {
-        reloadTrafficIncidentTypes();
+        reloadDecisionTypes();
     }, []);
 
-    function reloadTrafficIncidentTypes() {
-        trafficIncidentTypeRest.findAll().then(response => {
+    function reloadDecisionTypes() {
+        decisionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
             }
-            setTrafficIncidentTypes(response.data);
+            setDecisionTypes(response.data);
         });
     }
 
     function updateRow(id, newValue) {
-        const updatedRows = trafficIncidentTypes.map(row =>
+        const updatedRows = decisionTypes.map(row =>
             row.id === id ? {...row, executionPolicy: newValue} : row
         );
-        setTrafficIncidentTypes(updatedRows);
+        setDecisionTypes(updatedRows);
         setIsSaved(false);
     };
 
@@ -93,19 +93,19 @@ function TrafficIncidentTypeOverview(props) {
                 name: "NONE",
                 description: "NONE"
             };
-            setTrafficIncidentTypes([...trafficIncidentTypes, newRow]);
+            setDecisionTypes([...decisionTypes, newRow]);
             setIsSaved(false);
         }
     };
 
     function handleProcessRowUpdate(newRow) {
-        trafficIncidentTypes.forEach(row => {
+        decisionTypes.forEach(row => {
             if (row.id === newRow.id) {
                 row.name = newRow.name;
                 row.description = newRow.description;
             }
         });
-        setTrafficIncidentTypes(trafficIncidentTypes);
+        setDecisionTypes(decisionTypes);
         setIsSaved(false);
         return newRow;
     }
@@ -114,15 +114,15 @@ function TrafficIncidentTypeOverview(props) {
     }
 
     function saveAll() {
-        trafficIncidentTypeRest.updateList(trafficIncidentTypes).then(function () {
-            reloadTrafficIncidentTypes();
+        decisionTypeRest.updateList(decisionTypes).then(function () {
+            reloadDecisionTypes();
         });
         setIsSaved(true);
     };
 
     function handleDeleteClick(row) {
         if (row.id === "") {
-            reloadTrafficIncidentTypes();
+            reloadDecisionTypes();
         } else {
             setOpenDelete(true);
             setDeleteRow(row);
@@ -148,7 +148,7 @@ function TrafficIncidentTypeOverview(props) {
         if (!open) {
             return null;
         }
-        return <TrafficIncidentTypeDetail
+        return <DecisionTypeDetail
             open={open}
             handleClose={handleClose}
             rowData={rowData}
@@ -156,8 +156,8 @@ function TrafficIncidentTypeOverview(props) {
     }
 
     function submitDelete() {
-        trafficIncidentTypeRest.delete(deleteRow.id).then(function () {
-            reloadTrafficIncidentTypes();
+        decisionTypeRest.delete(deleteRow.id).then(function () {
+            reloadDecisionTypes();
         });
         setDeleteRow({});
         setOpenDelete(false);
@@ -177,7 +177,7 @@ function TrafficIncidentTypeOverview(props) {
             open={openDelete}
             onClose={() => {setOpenDelete(false);}}
             onSubmit={submitDelete}
-            message={t("trafficincidenttype.delete.message")}
+            message={t("decisiontype.delete.message")}
             submitMessage={t("button.delete")}
         />;
     }
@@ -190,27 +190,27 @@ function TrafficIncidentTypeOverview(props) {
             open={openNotSaved}
             onClose={() => {setOpenNotSaved(false);}}
             onSubmit={submitSave}
-            message={t("trafficincidenttype.save.message")}
+            message={t("decisiontype.save.message")}
             submitMessage={t("button.save")}
         />;
     }
 
     return <>
         <Typography variant="h2" gutterBottom>
-            {t("trafficincidenttype.heading")}
+            {t("decisiontype.heading")}
         </Typography>
         <Stack direction="row" spacing={1} sx={{marginBottom: 1}}>
             <Button variant="contained" color="primary" onClick={addRow} startIcon={<AddCircleOutlineIcon />}>
-                {t("trafficincidenttype.addItem")}
+                {t("decisiontype.addItem")}
             </Button>
             <Button variant="contained" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
-                {t("trafficincidenttype.saveItem")}
+                {t("decisiontype.saveItem")}
                 {isSaved ? "" : "*"}
             </Button>
         </Stack>
         <DataGrid
             autoHeight
-            rows={trafficIncidentTypes}
+            rows={decisionTypes}
             columns={columnsWithUpdateRow}
             initialState={{
                 pagination: {
@@ -232,4 +232,4 @@ function TrafficIncidentTypeOverview(props) {
         {renderSaveDialog()}
     </>;
 }
-export default TrafficIncidentTypeOverview;
+export default DecisionTypeOverview;

@@ -7,35 +7,35 @@ import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {formatDateShort} from "../../commons/formatter/DateFormatter";
 import MitigationActionRest from "../../services/MitigationActionRest";
-import TrafficIncidentRest from "../../services/TrafficIncidentRest";
-import {renderActions} from "./TrafficIncidentActions";
-import TrafficIncidentDetail from "./TrafficIncidentDetail";
+import DecisionRest from "../../services/DecisionRest";
+import {renderActions} from "./DecisionActions";
+import DecisionDetail from "./DecisionDetail";
 
-function TrafficIncidentOverview() {
+function DecisionOverview() {
     const {t} = useTranslation();
     const [tab, setTab] = React.useState(0);
-    const trafficIncidentRest = useMemo(() => new TrafficIncidentRest(), []);
+    const decisionRest = useMemo(() => new DecisionRest(), []);
     const mitigationActionRest = useMemo(() => new MitigationActionRest(), []);
-    const [trafficIncidents, setTrafficIncidents] = useState([]);
-    const [newIncidents, setNewIncidents] = useState([]);
-    const [checkedIncidents, setCheckedIncidents] = useState([]);
+    const [decisions, setDecisions] = useState([]);
+    const [newDecisions, setNewDecisions] = useState([]);
+    const [checkedDecisions, setCheckedDecisions] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
 
     useEffect(() => {
-        reloadTrafficIncidents();
-        const interval = setInterval(reloadTrafficIncidents, 5000); // Update alle 5 Sekunden
+        reloadDecisions();
+        const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
         return () => clearInterval(interval);
     }, [open, tab]);
 
-    function reloadTrafficIncidents() {
-        trafficIncidentRest.findAll().then(response => {
+    function reloadDecisions() {
+        decisionRest.findAll().then(response => {
             if (response.data == null) {
                 return;
             }
-            setTrafficIncidents(response.data);
-            setNewIncidents(response.data.filter(incident => incident.state == null || incident.state == "NEW"));
-            setCheckedIncidents(response.data.filter(incident => incident.state == "ACCEPTED" || incident.state == "REJECTED"));
+            setDecisions(response.data);
+            setNewDecisions(response.data.filter(decision => decision.state == null || decision.state == "NEW"));
+            setCheckedDecisions(response.data.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
 
         });
     }
@@ -48,11 +48,11 @@ function TrafficIncidentOverview() {
         setOpen(false);
     };
 
-    function handleSave(mitigationActionTypes, trafficIncidentType, description, state) {
-        const foundIncident = trafficIncidents.find(value => value.id == rowData.id);
-        foundIncident.trafficIncidentType = trafficIncidentType;
-        foundIncident.description = description;
-        foundIncident.state = state;
+    function handleSave(mitigationActionTypes, decisionType, description, state) {
+        const foundDecision = decisions.find(value => value.id == rowData.id);
+        foundDecision.decisionType = decisionType;
+        foundDecision.description = description;
+        foundDecision.state = state;
         const remoteFunctions = [];
 
         const newActions = mitigationActionTypes;
@@ -72,13 +72,13 @@ function TrafficIncidentOverview() {
             const entity = {
                 name: "",
                 description: "",
-                trafficIncident: {id: rowData.id},
+                decision: {id: rowData.id},
                 mitigationActionType: mActiontype
             };
             remoteFunctions.push(mitigationActionRest.create(entity));
         });
 
-        trafficIncidentRest.update(foundIncident).then(response => {
+        decisionRest.update(foundDecision).then(response => {
             Promise.all(remoteFunctions).then(() => {
                 setOpen(false);
             });
@@ -93,7 +93,7 @@ function TrafficIncidentOverview() {
     const headers = [
         {
             field: "state",
-            headerName: t("trafficIncident.state"),
+            headerName: t("decision.state"),
             width: 70,
             editable: false,
             renderCell: cellValues => {
@@ -115,21 +115,21 @@ function TrafficIncidentOverview() {
         {
             field: "acquisitionTime",
             type: "datetime",
-            headerName: t("trafficIncident.acquisitionTime"),
+            headerName: t("decision.acquisitionTime"),
             width: 200,
             editable: true,
             valueGetter: value => formatDateShort(value)
         },
         {
-            field: "trafficIncidentType",
-            headerName: t("trafficIncident.trafficIncidentType"),
+            field: "decisionType",
+            headerName: t("decision.decisionType"),
             flex: 0.7,
             editable: true,
             valueGetter: value => value.name
         },
         {
             field: "mitigationAction",
-            headerName: t("trafficIncident.mitigationAction"),
+            headerName: t("decision.mitigationAction"),
             description: "",
             renderCell: renderActions,
             disableClickEventBubbling: true,
@@ -137,7 +137,7 @@ function TrafficIncidentOverview() {
         },
         {
             field: "description",
-            headerName: t("trafficIncident.description"),
+            headerName: t("decision.description"),
             flex: 1.5,
             editable: true
         },
@@ -159,7 +159,7 @@ function TrafficIncidentOverview() {
                                 handleOpen(cellValues.row);
                             }}
                         >
-                            {t("trafficIncident.button.details")}
+                            {t("decision.button.details")}
                         </Button>
                     </strong >
                 );
@@ -171,7 +171,7 @@ function TrafficIncidentOverview() {
         if (!open) {
             return null;
         }
-        return <TrafficIncidentDetail
+        return <DecisionDetail
             open={open}
             handleClose={handleClose}
             handleSave={handleSave}
@@ -182,8 +182,8 @@ function TrafficIncidentOverview() {
     return (
         <>
             <Tabs onChange={handleTabChange} value={tab}>
-                <Tab label={t("home.incidentTab.title.open")} key="tab0" />
-                <Tab label={t("home.incidentTab.title.done")} key="tab1" />
+                <Tab label={t("home.decisionTab.title.open")} key="tab0" />
+                <Tab label={t("home.decisionTab.title.done")} key="tab1" />
             </Tabs>
             <Box sx={{width: "100%"}}>
                 <DataGrid
@@ -192,7 +192,7 @@ function TrafficIncidentOverview() {
                             sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
                         },
                     }}
-                    rows={tab == 0 ? newIncidents : checkedIncidents}
+                    rows={tab == 0 ? newDecisions : checkedDecisions}
                     columns={headers}
                     isCellEditable={() => {false}}
                     slots={{toolbar: GridToolbar}}
@@ -210,4 +210,4 @@ function TrafficIncidentOverview() {
     );
 }
 
-export default TrafficIncidentOverview;
+export default DecisionOverview;

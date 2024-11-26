@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import de.starwit.service.impl.TrafficIncidentService;
+import de.starwit.service.impl.DecisionService;
 import de.starwit.visionapi.Reporting.IncidentMessage;
 
 @Service
@@ -22,20 +22,20 @@ public class AnomalyMessageListener implements StreamListener<String, MapRecord<
     private AtomicInteger counter = new AtomicInteger();
 
     @Autowired
-    private TrafficIncidentService incidentService;
+    private DecisionService decisionService;
 
     @Override
     public void onMessage(MapRecord<String, String, String> message) {
-        log.info("Incident message received.");
+        log.info("Decision message received.");
         log.debug(String.format("execute thread: %s %s",
                 Thread.currentThread().getName(), Thread.currentThread().threadId()));
 
         String b64Proto = message.getValue().get("proto_data_b64");
-        IncidentMessage incidentMessage;
+        IncidentMessage decisionMessage;
 
         try {
-            incidentMessage = IncidentMessage.parseFrom(Base64.getDecoder().decode(b64Proto));
-            incidentService.createNewIncidentBasedOnIncidentMessage(incidentMessage);
+            decisionMessage = IncidentMessage.parseFrom(Base64.getDecoder().decode(b64Proto));
+            decisionService.createNewDecisionBasedOnIncidentMessage(decisionMessage);
         } catch (InvalidProtocolBufferException e) {
             log.warn("Received invalid proto");
             return;

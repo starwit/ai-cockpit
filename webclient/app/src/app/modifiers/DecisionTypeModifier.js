@@ -12,12 +12,12 @@ const entityFields = [
     },
 ];
 
-const trafficIncidentTypeOverviewFields = [
+const decisionTypeOverviewFields = [
     {name: "name", type: "string", regex: null}
 ];
 
 export {
     entityDefault,
     entityFields,
-    trafficIncidentTypeOverviewFields
+    decisionTypeOverviewFields
 };

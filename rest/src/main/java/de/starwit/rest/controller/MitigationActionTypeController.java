@@ -51,11 +51,11 @@ public class MitigationActionTypeController {
         return this.mitigationactiontypeService.findById(id);
     }
 
-    @Operation(summary = "Get mitigationactiontype by incident type")
-    @GetMapping(value = "/by-incident-type/{id}")
-    public List<MitigationActionTypeEntity> findByTrafficIncidentType(@PathVariable("id") Long trafficIncidentId) {
+    @Operation(summary = "Get mitigationactiontype by decision type")
+    @GetMapping(value = "/by-decision-type/{id}")
+    public List<MitigationActionTypeEntity> findByDecisionType(@PathVariable("id") Long decisionId) {
         List<MitigationActionTypeEntity> result = this.mitigationactiontypeService
-                .findByTrafficIncidentType(trafficIncidentId);
+                .findByDecisionType(decisionId);
         return result;
     }
 

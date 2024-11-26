@@ -108,13 +108,13 @@ If you want to start the Application with Minio then you need to run:
   ```
 
 The Minio WebApp is available under localhost:9001 and the shell Application is available under localhost:9000.
-You need to upload a videos a bucket named __anomalies__ link video files in incident data accordingly.
+You need to upload a videos a bucket named __anomalies__ link video files in decision data accordingly.
 
 ### Import Sample Data
 
 #### Run demo setups
 
-AI cockpit is aimed to serve in as many application domains as possible. Thus cockpit can be started such that incident and action types can be imported. This is controlled by two fields in application properties:
+AI cockpit is aimed to serve in as many application domains as possible. Thus cockpit can be started such that decision and action types can be imported. This is controlled by two fields in application properties:
 
 ```bash
 # setup scenario & demo data
@@ -124,24 +124,24 @@ scenario.importFolder=experiment-setup/traffic/
 
 In folder [experiment-setup](experiment-setup/) you will find a growing number of demo data sets. Each folder can contain three files
 * miticationtypes.json - Definition of possible action types
-* incidenttypes.json - Definition of possible analysis results
+* decisiontypes.json - Definition of possible analysis results
 * demodata.json - actual samples for observed/analyzed situtions and proposed actions
 
-File with demo data can contain marker __DATETIME__ as value for incident creation time. This will then on import be replaced by a date time in the past relative to import time.
+File with demo data can contain marker __DATETIME__ as value for decision creation time. This will then on import be replaced by a date time in the past relative to import time.
 
-#### Timed incident import to local dev instances
-AI Cockpit inserts upon first start a set of incident and action types. If you want to insert actual
-incidents you can use a script in folder experiment-setup. The following code snippet shows
+#### Timed decision import to local dev instances
+AI Cockpit inserts upon first start a set of decision and action types. If you want to insert actual
+decisions you can use a script in folder experiment-setup. The following code snippet shows
 example usage:
 
   ```bash
     cd experiment-setup
-    ./fillDatabaseScript.sh http://localhost:8081/ai-cockpit/api/trafficincident demo_setup.json 10
+    ./fillDatabaseScript.sh http://localhost:8081/ai-cockpit/api/decision demo_setup.json 10
   ```
 
 Params are dev instance location (no auth), file with data to import and duration between inserts. Please note, that this will work only in a local development setup without authentication.
 
-This script also allows you, to test how incidents are flowing into AI Cockpit. __Note__: you will
+This script also allows you, to test how decisions are flowing into AI Cockpit. __Note__: you will
 have to prepare video data on a Minio instance.
 
 ## Debugging

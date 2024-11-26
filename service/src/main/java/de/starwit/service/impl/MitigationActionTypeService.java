@@ -66,7 +66,7 @@ public class MitigationActionTypeService
         }
     }
 
-    public List<MitigationActionTypeEntity> findByTrafficIncidentType(Long trafficIncidentTypeId) {
-        return mitigationactiontypeRepository.findByTrafficIncidentType(trafficIncidentTypeId);
+    public List<MitigationActionTypeEntity> findByDecisionType(Long decisionTypeId) {
+        return mitigationactiontypeRepository.findByDecisionType(decisionTypeId);
     }
 }

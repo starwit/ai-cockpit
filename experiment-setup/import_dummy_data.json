@@ -6,7 +6,7 @@
     "cameraLongitude": -86.12691,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 1
     },
     "mitigationAction": []
@@ -18,7 +18,7 @@
     "cameraLongitude": -86.133787,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 2
     },
     "mitigationAction": []
@@ -30,7 +30,7 @@
     "cameraLongitude": -86.131719,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 3
     },
     "mitigationAction": []
@@ -42,7 +42,7 @@
     "cameraLongitude": -86.127168,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 3
     },
     "mitigationAction": []
@@ -54,7 +54,7 @@
     "cameraLongitude": -86.143703,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 2
     },
     "mitigationAction": []
@@ -66,7 +66,7 @@
     "cameraLongitude": -86.120485,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 1
     },
     "mitigationAction": []
@@ -78,7 +78,7 @@
     "cameraLongitude": -86.118917,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 1
     },
     "mitigationAction": []
@@ -90,7 +90,7 @@
     "cameraLongitude": -86.128939,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 2
     },
     "mitigationAction": []
@@ -102,7 +102,7 @@
     "cameraLongitude": -86.141046,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 2
     },
     "mitigationAction": []
@@ -114,7 +114,7 @@
     "cameraLongitude": -86.151024,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 3
     },
     "mitigationAction": []
@@ -126,7 +126,7 @@
     "cameraLongitude": -86.12691,
     "state": "NEW",
     "description": null,
-    "trafficIncidentType": {
+    "decisionType": {
       "id": 3
     },
     "mitigationAction": []

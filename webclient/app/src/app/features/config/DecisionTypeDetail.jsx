@@ -12,14 +12,14 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import React, {useEffect, useState, useMemo} from "react";
 import MitigationActionTypeRest from "../../services/MitigationActionTypeRest";
-import TrafficIncidentTypeRest from "../../services/TrafficIncidentTypeRest";
+import DecisionTypeRest from "../../services/DecisionTypeRest";
 import {DataGrid, GridCloseIcon} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
 
-function TrafficIncidentTypeDetail(props) {
+function DecisionTypeDetail(props) {
     const {t} = useTranslation();
     const {open, rowData, handleClose} = props;
-    const trafficIncidentTypeRest = useMemo(() => new TrafficIncidentTypeRest(), []);
+    const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
     const mitigationActionTypeRest = useMemo(() => new MitigationActionTypeRest(), []);
     const [isSaved, setIsSaved] = useState([true]);
     const [mitigationActionTypes, setMitigationActionTypes] = useState([]);
@@ -48,7 +48,7 @@ function TrafficIncidentTypeDetail(props) {
         {
             field: "actions2",
             type: "actions",
-            headerName: t("trafficincidenttype.makeselect"),
+            headerName: t("decisiontype.makeselect"),
             sortable: false,
             width: 160,
             renderCell: params => <MyRenderCheckBox isSelected={params.row.isSelected} actionId={params.row.id} />
@@ -88,8 +88,8 @@ function TrafficIncidentTypeDetail(props) {
             } else {
                 response.data.forEach(mitigationType => {
                     mitigationType["isSelected"] = false;
-                    mitigationType.trafficIncidentType.forEach(incidentType => {
-                        if (incidentType.id === rowData.id) {
+                    mitigationType.decisionType.forEach(decisionType => {
+                        if (decisionType.id === rowData.id) {
                             mitigationType["isSelected"] = true;
                         }
                     });
@@ -109,7 +109,7 @@ function TrafficIncidentTypeDetail(props) {
             }
         });
         dataToSave.mitigationActionType = actionTypeIds;
-        trafficIncidentTypeRest.update(dataToSave).then(response => {
+        decisionTypeRest.update(dataToSave).then(response => {
             // TODO error handling
             setIsSaved(true);
         });
@@ -120,13 +120,13 @@ function TrafficIncidentTypeDetail(props) {
         <Dialog
             open={open}
             onClose={handleClose}
-            aria-labelledby="traffic-incident-type-detail-dialog-title"
-            aria-describedby="traffic-incident-type-detail-dialog-description"
+            aria-labelledby="traffic-decision-type-detail-dialog-title"
+            aria-describedby="traffic-decision-type-detail-dialog-description"
             maxWidth="xl"
         >
-            <DialogTitle id="traffic-incident-type-detail-dialog-title" >
+            <DialogTitle id="traffic-decision-type-detail-dialog-title" >
                 <Typography component="p" variant="h2">
-                    {t("trafficincidenttype.selectaction")}{rowData.name}
+                    {t("decisiontype.selectaction")}{rowData.name}
                 </Typography>
             </DialogTitle>
             <IconButton
@@ -140,7 +140,7 @@ function TrafficIncidentTypeDetail(props) {
             >
                 <GridCloseIcon />
             </IconButton>
-            <DialogContent id="traffic-incident-type-detail-dialog-description">
+            <DialogContent id="traffic-decision-type-detail-dialog-description">
                 <Grid2>
                     <DataGrid
                         autoHeight
@@ -149,7 +149,7 @@ function TrafficIncidentTypeDetail(props) {
                     />
                     <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{marginTop: 1}}>
                         <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
-                            {t("trafficincidenttype.saveselect")}
+                            {t("decisiontype.saveselect")}
                             {isSaved ? "" : "*"}
                         </Button>
                     </Stack>
@@ -159,4 +159,4 @@ function TrafficIncidentTypeDetail(props) {
     </>;
 }
 
-export default TrafficIncidentTypeDetail;
+export default DecisionTypeDetail;

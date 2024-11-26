@@ -11,7 +11,7 @@ const entityFields = [
         notNull: false
     },
     {
-        name: "trafficIncidentType",
+        name: "decisionType",
         type: "ManyToOne",
         regex: null,
         selectList: [],
@@ -34,12 +34,12 @@ const entityFields = [
     }
 ];
 
-const trafficIncidentOverviewFields = [
+const decisionOverviewFields = [
     {name: "acquisitionTime", type: "timestamp", regex: null}
 ];
 
 export {
     entityDefault,
     entityFields,
-    trafficIncidentOverviewFields
+    decisionOverviewFields
 };
