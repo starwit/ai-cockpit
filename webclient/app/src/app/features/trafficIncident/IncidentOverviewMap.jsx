@@ -4,15 +4,21 @@ import {TileLayer} from "@deck.gl/geo-layers";
 
 import {
     BitmapLayer,
-    IconLayer,
     TextLayer,
     ScatterplotLayer
 } from "@deck.gl/layers";
 
 import DeckGL from "@deck.gl/react";
-import cameraicon from "./../../assets/images/camera3.png";
+//import cameraicon from "./../../assets/images/camera3.png";
 import TrafficIncidentRest from '../../services/TrafficIncidentRest';
-import {Tooltip, Paper, Typography, Box, IconButton} from '@mui/material';
+
+import {
+    Paper,
+    Typography,
+    Box,
+    IconButton
+} from '@mui/material';
+
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
@@ -49,13 +55,13 @@ function IncidentOverviewMap() {
             }
         });
     }
-
+    // This grouping is necessary to combine multiple incidents that occur at the same location (same coordinates)
     const groupedIncidents = trafficIncidents.reduce((acc, incident) => {
-        const key = `${incident.cameraLatitude}-${incident.cameraLongitude}`;
-        if (!acc[key]) {
+        const key = `${incident.cameraLatitude}-${incident.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
+        if (!acc[key]) {    // If this is the first incident at these coordinates, initialize an empty array for this location
             acc[key] = [];
         }
-        acc[key].push(incident);
+        acc[key].push(incident);    // Add the current incident to the array for this location
         return acc;
     }, {});
 
@@ -106,7 +112,7 @@ function IncidentOverviewMap() {
         // Add layer with Incident Icons
         new ScatterplotLayer({
             id: 'scatterplot-layer',
-            data: Object.entries(groupedIncidents),     // Using Object.entries to convert object to array of [key, value] pairs
+            data: Object.entries(groupedIncidents),     // Using Object.entries to convert the grouped object to array of [key, value] pairs.
 
             pickable: true,     // Enable hover interactions with the icons
             opacity: 0.8,       // 80% opacity for icons
@@ -129,14 +135,14 @@ function IncidentOverviewMap() {
             getFillColor: d => getIconColor(d[1].length),
             getLineColor: [0, 0, 0, 255],
             onHover: info => {
-                if (info.object) {
+                if (info.object) {      // Check whether the user has actually pointed the cursor at an object (marker) on the map.
                     setHoveredIncidents(info.object[1]);
                 }
             }
         }),
         new TextLayer({
             id: 'text-layer',
-            data: Object.entries(groupedIncidents),
+            data: Object.entries(groupedIncidents),      // Using Object.entries to convert the grouped object to array of [key, value] pairs.
             pickable: true,
             getPosition: d => [
                 d[1][0].cameraLongitude,
@@ -150,20 +156,6 @@ function IncidentOverviewMap() {
             getColor: [255, 255, 255]
         })
     ];
-
-    // Use european format of date
-    function formatDateTime(date) {
-        const d = new Date(date);
-        return d.toLocaleDateString('de-DE', {
-            day: 'numeric',
-            month: 'numeric',
-            year: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            second: 'numeric',
-            hour12: false
-        });
-    }
 
 
     // Return the map component with minimum required styles
@@ -230,7 +222,7 @@ function IncidentOverviewMap() {
                                             {incident.trafficIncidentType?.name}
                                         </Typography>
                                         <Typography>
-                                            Time: {formatDateTime(incident.acquisitionTime)}
+                                            Time: {new Date(incident.acquisitionTime).toLocaleString('us-US')}
                                         </Typography>
                                         <Typography>
                                             State: {incident.state || 'NEW'}
