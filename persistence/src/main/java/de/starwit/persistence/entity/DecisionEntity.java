@@ -131,6 +131,7 @@ public class DecisionEntity extends AbstractEntity<Long> {
             this.action = new HashSet<>();
         }
         this.action.add(action);
+        this.action.forEach(a -> a.setDecision(this));
     }
 
 }

@@ -14,10 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import de.starwit.persistence.entity.DecisionState;
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
+import de.starwit.persistence.entity.DecisionState;
 import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionRepository;
@@ -31,6 +31,7 @@ import io.minio.errors.InternalException;
 import io.minio.errors.InvalidResponseException;
 import io.minio.errors.ServerException;
 import io.minio.errors.XmlParserException;
+import jakarta.persistence.EntityManager;
 
 /**
  * 
@@ -52,6 +53,8 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
     @Value("${minio.endpoint:http://localhost:9000}")
     private String endpoint;
 
+    private final EntityManager entityManager;
+
     @Autowired
     private DecisionRepository decisionRepository;
 
@@ -64,6 +67,10 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
     @Override
     public DecisionRepository getRepository() {
         return decisionRepository;
+    }
+
+    public DecisionService(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     public DecisionEntity createNewDecisionBasedOnIncidentMessage(IncidentMessage decisionMessage) {
@@ -92,7 +99,9 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
                 }
             }
         }
-        return saveOrUpdate(entity);
+        entity = saveOrUpdate(entity);
+        entityManager.detach(entity);
+        return entity;
     }
 
     public byte[] getFileFromMinio(String bucketName, String objectName)
