@@ -15,7 +15,7 @@ const translationDeDE = {
     "decision.action.header4standardvalues": "Standardwerte für Maßnahmen festlegen",
     "decision.button.acknowledged": "Geprüft",
     "decision.button.reportmistake": "Fehler",
-    "decision.list": "Eintscheidungsliste",
+    "decision.list.title": "Entscheidungsliste",
     "decision.list.hover": "Über einer Kamera schweben, um Entscheidungen zu sehen",
     "decision.found": "Gefunden: {{count}} Entscheidungen an diesem Ort",
     "decision.state": "Status",
