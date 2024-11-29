@@ -1,27 +1,39 @@
 import React, {useState, useEffect} from 'react';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
-import {BitmapLayer, IconLayer} from "@deck.gl/layers";
+
+import {
+    BitmapLayer,
+    TextLayer,
+    ScatterplotLayer
+} from "@deck.gl/layers";
+
 import DeckGL from "@deck.gl/react";
-import cameraicon from "./../../assets/images/camera3.png";
 import DecisionRest from '../../services/DecisionRest';
+import {useTranslation} from 'react-i18next';
+
+import {
+    Paper,
+    Typography,
+    Box,
+    IconButton
+} from '@mui/material';
+
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import {formatDateShort} from '../../commons/formatter/DateFormatter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
-const ICON_MAPPING = {
-    marker: {
-        x: 0,           // X position in the icon image
-        y: 0,           // Y position in the icon image
-        width: 128,     // Width of the icon
-        height: 128,    // Height of the icon
-        mask: false     // Don't use mask effect
-    }
-};
 
 function DecisionOverviewMap() {
     // Add state to store decisions
+    const {t} = useTranslation();
+
     const [decisions, setDecisions] = useState([]);
+    const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
+    const [showPanel, setShowPanel] = useState(true);
 
     useEffect(() => {
         reloadDecisions();
@@ -37,20 +49,43 @@ function DecisionOverviewMap() {
             }
         });
     }
+    // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
+    function groupDecisionsByLocation() {
+        return decisions.reduce((acc, decision) => {
+            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
+            if (!acc[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
+                acc[key] = [];
+            }
+            acc[key].push(decision);    // Add the current decision to the array for this location
+            return acc;
+        }, {});
+    }
 
     // Set initial map position and zoom level
     const INITIAL_VIEW_STATE = {
-        longitude: 10.0,     // Initial longitude (X coordinate)
-        latitude: 51.0,      // Initial latitude (Y coordinate)
-        zoom: 5,            // Initial zoom level
+        longitude: -86.13470,     // Initial longitude (X coordinate)
+        latitude: 39.91,      // Initial latitude (Y coordinate)
+        zoom: 10,            // Initial zoom level
         pitch: 0,           // No tilt
         bearing: 0          // No rotation
     };
 
+    function getIconColor(decisionCount) {
+        if (decisionCount > 5) {
+            return [255, 0, 0, 255]; // Red
+        } else if (decisionCount === 5) {
+            return [255, 210, 0, 255] // Yellow 
+        } else {
+            return [0, 128, 0, 255] // Green - default
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
     // Define map layers
-    const layers = [
+    function createBaseMapLayer() {
         // Creating base map layer using CartoDB light theme
-        new TileLayer({
+        return new TileLayer({
             // URL for map tiles
             data: "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
             minZoom: 0,     // Minimum zoom level
@@ -71,39 +106,158 @@ function DecisionOverviewMap() {
                     bounds: [west, south, east, north]
                 });
             }
-        }),
-        // Add layer with Decision Icons
-        new IconLayer({
-            id: 'icon-layer',
-            data: decisions,
-            pickable: true,
-            iconAtlas: cameraicon,
-            iconMapping: ICON_MAPPING,
-            getIcon: d => "marker",
-            sizeScale: 10,
-            getPosition: d => [
-                d.cameraLongitude,
-                d.cameraLatitude
-            ],
-            getSize: d => 5
         })
-    ];
+    }
 
+    function createDecisionPointsLayer(groupedDecisions) {
+        // Add layer with Decision Icons
+        return new ScatterplotLayer({
+            id: 'scatterplot-layer',
+            data: Object.entries(groupedDecisions),     // Using Object.entries to convert the grouped object to array of [key, value] pairs.
+
+            pickable: true,     // Enable hover interactions with the icons
+            opacity: 0.8,       // 80% opacity for icons
+            stroked: true,      // Show border around icons
+            filled: true,       // Fill icons with color
+
+            // Size settings for markers
+            radiusScale: 15,
+            radiusMinPixels: 5,
+            radiusMaxPixels: 100,
+            lineWidthMinPixels: 1,
+
+            // Function to determine icon position
+            // d[1][0] contains the first decision in the group (all have same coordinates)
+            getPosition: d => [
+                d[1][0].cameraLongitude,
+                d[1][0].cameraLatitude
+            ],
+            getRadius: d => Math.sqrt(d[1].length) * 5,
+            getFillColor: d => getIconColor(d[1].length),
+            getLineColor: [0, 0, 0, 255],
+            onHover: info => {
+                if (info.object) {      // Check whether the user has actually pointed the cursor at an object (marker) on the map.
+                    setHoveredDecisions(info.object[1]);
+                }
+            }
+        })
+    }
+
+    function createTextLayer() {
+        return new TextLayer({
+            id: 'text-layer',
+            data: Object.entries(groupedDecisions),      // Using Object.entries to convert the grouped object to array of [key, value] pairs.
+            pickable: true,
+            getPosition: d => [
+                d[1][0].cameraLongitude,
+                d[1][0].cameraLatitude
+            ],
+            getText: d => String(d[1].length),
+            getSize: 16,
+            getAngle: 0,
+            getTextAnchor: 'middle',
+            getAlignmentBaseline: 'center',
+            getColor: [255, 255, 255]
+        })
+
+    }
+    /////////////////////////////////////////////////////////////////////////////
+
+    const groupedDecisions = groupDecisionsByLocation();
+
+    const layers = [
+        createBaseMapLayer(),
+        createDecisionPointsLayer(groupedDecisions),
+        createTextLayer(groupedDecisions)
+
+    ];
 
 
     // Return the map component with minimum required styles
     return (
-        //There is a bug for Brave Browser v1.71.123 after removing `div` container with CSS-styling. 
-        //Otherwise this code works for other browsers without `div`. 
-        //<Container disableGutters> <DeckGL ... /> </Container> didn't help either.
-        <div style={{height: 'calc(100vh - 64px)', position: 'relative'}}>
+        <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
             <DeckGL
                 layers={layers}               // Add map layers
                 views={MAP_VIEW}              // Add map view settings
                 initialViewState={INITIAL_VIEW_STATE}  // Set initial position
                 controller={{dragRotate: false}}       // Disable rotation
             />
-        </div>
+
+            <IconButton
+                onClick={() => setShowPanel(!showPanel)}
+                sx={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: showPanel ? '320px' : '10px',
+                    bgcolor: 'white'
+                }}
+                size="small"
+            >
+                {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+
+            {showPanel && (
+                <Paper
+                    elevation={3}
+                    sx={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        bottom: '10px',
+                        width: '300px',
+                        overflowY: 'auto',
+                        padding: '16px',
+                        bgcolor: 'rgba(255, 255, 255, 0.9)'
+                    }}
+                >
+
+                    <Typography variant="h6" gutterBottom>
+                        {t('decision.list.title')}
+                    </Typography>
+                    {hoveredDecisions ? (
+                        <Box>
+                            <Typography variant="subtitle1" gutterBottom>
+                                {t('decision.found', {count: hoveredDecisions.length})}
+                            </Typography>
+                            <Box sx={{flex: 1, overflowY: 'auto'}}>
+                                {hoveredDecisions.map((decision, index) => (
+                                    <Paper
+                                        key={decision.id}
+                                        elevation={1}
+                                        sx={{
+                                            p: 2,
+                                            mb: 1,
+                                            background: 'white'
+                                        }}
+                                    >
+                                        <Typography variant="h6">
+                                            {decision.decisionType?.name}
+                                        </Typography>
+                                        <Typography>
+                                            {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime)}
+                                        </Typography>
+                                        <Typography>
+                                            {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
+                                        </Typography>
+                                        {decision.description && (
+                                            <Typography>
+                                                {t('decision.description')}: {decision.description}
+                                            </Typography>
+                                        )}
+                                    </Paper>
+                                ))}
+                            </Box>
+                        </Box>
+                    ) : (
+                        <Typography>
+                            {t('decision.list.hover')}
+                        </Typography>
+                    )}
+                </Paper>
+
+            )}  {/* showPanel && ...*/}
+
+        </Box>
     );
 }
 
