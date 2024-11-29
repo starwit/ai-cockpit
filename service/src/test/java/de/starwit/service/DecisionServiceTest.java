@@ -57,11 +57,17 @@ public class DecisionServiceTest {
         actionType.setExecutionPolicy(ExecutionPolicies.AUTOMATIC);
         actionType = actionTypeRepository.save(actionType);
 
+        ActionTypeEntity actionType2 = new ActionTypeEntity();
+        actionType2.setDescription("Notify police");
+        actionType2.setName("notify police");
+        actionType2.setExecutionPolicy(ExecutionPolicies.WITHCHECK);
+        actionType2 = actionTypeRepository.save(actionType2);
+
         Set<ActionTypeEntity> actionTypes = new HashSet<>();
         defaultDecisionType.setActionType(actionTypes);
         actionTypes.add(actionType);
+        actionTypes.add(actionType2);
         defaultDecisionType = decisionTypeService.saveOrUpdate(defaultDecisionType);
-
     }
 
     @Test
@@ -85,7 +91,32 @@ public class DecisionServiceTest {
                 .atZone(ZoneId.systemDefault());
         assertTrue(expectedDateTime.isEqual(result.getAcquisitionTime()));
         assertEquals(expectedDateTime, result.getAcquisitionTime());
-        assertEquals(1, result.getAction().size());
+        assertEquals(2, result.getAction().size());
+        ActionEntity action = result.getAction().iterator().next();
+        assertTrue(expectedDateTime.isEqual(action.getCreationTime()));
+    }
+
+    @Test
+    @Commit
+    @Order(3)
+    void testCreateNewDecisionWithActions() {
+
+        // prepare
+        long timestamp = 1633046400000L;
+        DecisionEntity decision = new DecisionEntity();
+        ZonedDateTime expectedDateTime = Instant.ofEpochMilli(timestamp)
+                .atZone(ZoneId.systemDefault());
+        decision.setMediaUrl("http://testurl.com/media");
+        decision.setAcquisitionTime(expectedDateTime);
+        decision.setDecisionType(decisionTypeService.findAll().iterator().next());
+
+        // Call Methode
+        DecisionEntity result = decisionService
+                .createDecisionEntitywithAction(decision);
+
+        // Assert
+        assertEquals("http://testurl.com/media", result.getMediaUrl());
+        assertEquals(2, result.getAction().size());
         ActionEntity action = result.getAction().iterator().next();
         assertTrue(expectedDateTime.isEqual(action.getCreationTime()));
     }
