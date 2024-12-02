@@ -1,4 +1,4 @@
-const formatDateFull = (isoString) => {
+const formatDateFull = (isoString, i18n) => {
     const date = new Date(isoString);
 
     const options = {
@@ -10,10 +10,10 @@ const formatDateFull = (isoString) => {
         second: '2-digit'
     };
 
-    return date.toLocaleDateString('de-DE', options);
+    return date.toLocaleDateString(i18n.language, options);
 };
 
-const formatDateShort = (isoString) => {
+const formatDateShort = (isoString, i18n) => {
     const date = new Date(isoString);
 
     const day = String(date.getUTCDate()).padStart(2, '0');
@@ -24,6 +24,9 @@ const formatDateShort = (isoString) => {
     const minutes = String(date.getUTCMinutes()).padStart(2, '0');
     const seconds = String(date.getUTCSeconds()).padStart(2, '0');
 
+    if (i18n.language == "en-US") {
+        return `${month}.${day}.${year} ${hours}:${minutes}:${seconds}`;
+    }
     return `${day}.${month}.${year} ${hours}:${minutes}:${seconds}`;
 };
 
