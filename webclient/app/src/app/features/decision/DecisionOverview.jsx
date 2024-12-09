@@ -118,7 +118,8 @@ function DecisionOverview() {
             headerName: t("decision.acquisitionTime"),
             width: 200,
             editable: true,
-            valueGetter: value => formatDateShort(value, i18n)
+            valueGetter: value => value, 
+            valueFormatter: value => formatDateShort(value, i18n)
         },
         {
             field: "decisionType",
