@@ -21,6 +21,8 @@ function DecisionOverview() {
     const [checkedDecisions, setCheckedDecisions] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
+    const [automaticNext, setAutomaticNext] = React.useState(false);
+
 
     useEffect(() => {
         reloadDecisions();
@@ -63,6 +65,10 @@ function DecisionOverview() {
         }
     }
 
+    function toggleAutomaticNext(){
+        setAutomaticNext(!automaticNext);
+    }
+
     function handleClose() {
         setOpen(false);
     };
@@ -99,7 +105,11 @@ function DecisionOverview() {
 
         decisionRest.update(foundDecision).then(response => {
             Promise.all(remoteFunctions).then(() => {
+                if (automaticNext) {
+                    handleNext(getData(), getData().findIndex(value => value.id == rowData.id));
+                }else{
                 setOpen(false);
+                }
             });
         });
     };
@@ -202,7 +212,9 @@ function DecisionOverview() {
             handleNext={handleNext}
             handleBefore={handleBefore}
             rowData={rowData}
-            data={tab == 0 ? newDecisions : checkedDecisions}
+            automaticNext={automaticNext}
+            toggleAutomaticNext={toggleAutomaticNext}
+            data={getData()}
         />;
     }
 

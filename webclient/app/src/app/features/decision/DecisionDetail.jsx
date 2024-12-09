@@ -19,7 +19,8 @@ import {
     Stack,
     TextField,
     Typography,
-    IconButton
+    IconButton,
+    Tooltip
 } from "@mui/material";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -29,12 +30,14 @@ import ActionTypeRest from "../../services/ActionTypeRest";
 import DecisionTypeRest from "../../services/DecisionTypeRest";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
 function DecisionDetail(props) {
-    const {open, rowData, handleClose, handleSave, data, handleNext, handleBefore} = props;
+    const {open, rowData, handleClose, handleSave, data, handleNext, handleBefore, automaticNext, toggleAutomaticNext} = props;
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
     const [actionTypes, setActionTypes] = useState(rowData.action);
@@ -157,7 +160,19 @@ function DecisionDetail(props) {
                     </Typography>
                 </Box>
             </DialogTitle>
+            <Tooltip title={t('automatic.next.tooltip')}>
+                <IconButton
+                    onClick={toggleAutomaticNext}
 
+                    sx={{
+                        position: "absolute",
+                        right: 60,
+                        top: 8,
+                    }}
+                >{automaticNext ? <PauseIcon /> : <PlayArrowIcon />}
+
+                </IconButton>
+            </Tooltip>
             <IconButton
                 onClick={handleClose}
                 sx={{
@@ -303,7 +318,7 @@ function DecisionDetail(props) {
                         variant="contained">
                         <ArrowBackIosIcon />
                     </IconButton>
-                    {rowIndex+1}/{data.length}
+                    {rowIndex + 1}/{data.length}
                     <IconButton
                         onClick={() => handleNext(data, rowIndex)}
                         variant="contained">
