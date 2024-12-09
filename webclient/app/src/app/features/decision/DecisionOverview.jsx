@@ -33,10 +33,9 @@ function DecisionOverview() {
             if (response.data == null) {
                 return;
             }
-            const sortedData = response.data.sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime));
-            setDecisions(sortedData);
-            setNewDecisions(sortedData.filter(decision => decision.state == null || decision.state == "NEW"));
-            setCheckedDecisions(sortedData.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
+            setDecisions(response.data);
+            setNewDecisions(response.data.filter(decision => decision.state == null || decision.state == "NEW"));
+            setCheckedDecisions(response.data.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
 
         });
     }
@@ -119,7 +118,8 @@ function DecisionOverview() {
             headerName: t("decision.acquisitionTime"),
             width: 200,
             editable: true,
-            valueGetter: value => formatDateShort(value)
+            valueGetter: value => value, 
+            valueFormatter: value => formatDateShort(value)
         },
         {
             field: "decisionType",
@@ -188,6 +188,11 @@ function DecisionOverview() {
             </Tabs>
             <Box sx={{width: "100%"}}>
                 <DataGrid
+                    initialState={{
+                        sorting: {
+                            sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
+                        },
+                    }}
                     rows={tab == 0 ? newDecisions : checkedDecisions}
                     columns={headers}
                     isCellEditable={() => {false}}
