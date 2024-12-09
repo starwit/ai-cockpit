@@ -41,7 +41,7 @@ function DecisionDetail(props) {
     const [allActionTypes, setAllActionTypes] = useState([""]);
     const [allDecisionType, setAllDecisionType] = useState([""]);
     const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
 
     const theme = useTheme();
 
@@ -150,7 +150,7 @@ function DecisionDetail(props) {
                     </Typography>
 
                     <Typography variant="subtitle2" noWrap>     {/* HEADER FOR DATE XX. MONTH YYYY um HH:MM:SS */}
-                        {formatDateFull(rowData.acquisitionTime)}
+                        {formatDateFull(rowData.acquisitionTime, i18n)}
                     </Typography>
                 </Box>
             </DialogTitle>

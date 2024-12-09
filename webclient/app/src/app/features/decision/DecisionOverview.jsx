@@ -12,7 +12,7 @@ import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
 
 function DecisionOverview() {
-    const {t} = useTranslation();
+    const {t,i18n} = useTranslation();
     const [tab, setTab] = React.useState(0);
     const decisionRest = useMemo(() => new DecisionRest(), []);
     const actionRest = useMemo(() => new ActionRest(), []);
@@ -119,7 +119,7 @@ function DecisionOverview() {
             width: 200,
             editable: true,
             valueGetter: value => value, 
-            valueFormatter: value => formatDateShort(value)
+            valueFormatter: value => formatDateShort(value, i18n)
         },
         {
             field: "decisionType",
