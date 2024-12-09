@@ -18,22 +18,23 @@ import {
     Select,
     Stack,
     TextField,
-    Typography
+    Typography,
+    IconButton
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import DecisionDetailStyles from "../../assets/themes/DecisionDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";
 import ActionTypeRest from "../../services/ActionTypeRest";
 import DecisionTypeRest from "../../services/DecisionTypeRest";
-
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
 function DecisionDetail(props) {
-    const {open, rowData, handleClose, handleSave} = props;
+    const {open, rowData, handleClose, handleSave, data, handleNext, handleBefore} = props;
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
     const [actionTypes, setActionTypes] = useState(rowData.action);
@@ -42,12 +43,14 @@ function DecisionDetail(props) {
     const [allDecisionType, setAllDecisionType] = useState([""]);
     const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
     const {t, i18n} = useTranslation();
+    const [rowIndex, setRowIndex] = useState([""]);
 
     const theme = useTheme();
 
     useEffect(() => {
         reload();
-    }, [open]);
+        setRowIndex(data.indexOf(rowData));
+    }, [open, rowData]);
 
     useEffect(() => {
         reloadActionTypes();
@@ -268,13 +271,17 @@ function DecisionDetail(props) {
             <DialogActions sx={{
                 ...DecisionDetailStyles.dialogAction,
                 display: 'flex',
-                justifyContent: 'space-between'
+                justifyContent: 'center',
+                alignItems: 'center'
             }}>
                 <Box sx={{
                     paddingBottom: 2,
-                    px: 2, //horizontal padding
-                    ml: 0  //margin left for "Details" field, Video element, Map and "Actions" filter
-                }}> {/* MOVE SAVE BUTTON */}
+                    px: 2,
+                    ml: 0,
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'flex-start'
+                }}>
                     <Button
                         onClick={() => handleSave(actionTypes, decisionType, description, "NEW")}
                         variant="contained"
@@ -284,9 +291,33 @@ function DecisionDetail(props) {
                 </Box>
                 <Box sx={{
                     paddingBottom: 2,
-                    px: 2, //horizontal padding
-                    ml: 0  //margin left for "Details" field, Video element, Map and "Actions" filter
-                }}> {/* MOVE REPORT & AKNOWLEDGED BUTTON */}
+                    px: 2,
+                    ml: 0,
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <IconButton
+                        onClick={() => handleBefore(data, rowIndex)}
+                        variant="contained">
+                        <ArrowBackIosIcon />
+                    </IconButton>
+                    {rowIndex+1}/{data.length}
+                    <IconButton
+                        onClick={() => handleNext(data, rowIndex)}
+                        variant="contained">
+                        <ArrowForwardIosIcon />
+                    </IconButton>
+                </Box>
+                <Box sx={{
+                    paddingBottom: 2,
+                    px: 2,
+                    ml: 0,
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'flex-end'
+                }}>
                     <Button
                         sx={[DecisionDetailStyles.button, {mr: 5}]}
                         onClick={() => handleSave(actionTypes, decisionType, description, "REJECTED")}
