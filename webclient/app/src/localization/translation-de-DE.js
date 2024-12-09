@@ -40,6 +40,7 @@ const translationDeDE = {
     "decisionType.name": "name",
     "decisionType.name.hint": "",
     "map.tooltip": "Auf der Karte anzeigen",
+    "automatic.next.tooltip": "automatisch den nächsten Dialog öffnen",
     "actionType": "ActionType",
     "actionType.title": "ActionType",
     "actionType.create.title": "Create ActionType",

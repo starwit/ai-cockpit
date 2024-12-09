@@ -12,7 +12,7 @@ import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
 
 function DecisionOverview() {
-    const {t,i18n} = useTranslation();
+    const {t, i18n} = useTranslation();
     const [tab, setTab] = React.useState(0);
     const decisionRest = useMemo(() => new DecisionRest(), []);
     const actionRest = useMemo(() => new ActionRest(), []);
@@ -21,6 +21,8 @@ function DecisionOverview() {
     const [checkedDecisions, setCheckedDecisions] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
+    const [automaticNext, setAutomaticNext] = React.useState(false);
+
 
     useEffect(() => {
         reloadDecisions();
@@ -33,9 +35,10 @@ function DecisionOverview() {
             if (response.data == null) {
                 return;
             }
-            setDecisions(response.data);
-            setNewDecisions(response.data.filter(decision => decision.state == null || decision.state == "NEW"));
-            setCheckedDecisions(response.data.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
+            const sortedData = response.data.sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime));
+            setDecisions(sortedData);
+            setNewDecisions(sortedData.filter(decision => decision.state == null || decision.state == "NEW"));
+            setCheckedDecisions(sortedData.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
 
         });
     }
@@ -43,6 +46,28 @@ function DecisionOverview() {
     const handleTabChange = (event, newValue) => {
         setTab(newValue);
     };
+
+    function handleNext(data, index) {
+        const nextIndex = index + 1;
+        if (nextIndex < data.length) {
+            setRowData(data[nextIndex]);
+        } else {
+            setRowData(data[0]);
+        }
+    }
+
+    function handleBefore(data, index) {
+        const nextIndex = index - 1;
+        if (nextIndex >= 0) {
+            setRowData(data[nextIndex]);
+        } else {
+            setRowData(data[data.length - 1]);
+        }
+    }
+
+    function toggleAutomaticNext(){
+        setAutomaticNext(!automaticNext);
+    }
 
     function handleClose() {
         setOpen(false);
@@ -80,7 +105,11 @@ function DecisionOverview() {
 
         decisionRest.update(foundDecision).then(response => {
             Promise.all(remoteFunctions).then(() => {
+                if (automaticNext) {
+                    handleNext(getData(), getData().findIndex(value => value.id == rowData.id));
+                }else{
                 setOpen(false);
+                }
             });
         });
     };
@@ -88,6 +117,10 @@ function DecisionOverview() {
     function handleOpen(row) {
         setOpen(true);
         setRowData(row);
+    }
+
+    function getData() {
+        return tab == 0 ? newDecisions : checkedDecisions;
     }
 
     const headers = [
@@ -118,7 +151,7 @@ function DecisionOverview() {
             headerName: t("decision.acquisitionTime"),
             width: 200,
             editable: true,
-            valueGetter: value => value, 
+            valueGetter: value => value,
             valueFormatter: value => formatDateShort(value, i18n)
         },
         {
@@ -176,7 +209,12 @@ function DecisionOverview() {
             open={open}
             handleClose={handleClose}
             handleSave={handleSave}
+            handleNext={handleNext}
+            handleBefore={handleBefore}
             rowData={rowData}
+            automaticNext={automaticNext}
+            toggleAutomaticNext={toggleAutomaticNext}
+            data={getData()}
         />;
     }
 
