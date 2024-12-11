@@ -69,6 +69,10 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         return decisionRepository;
     }
 
+    public List<DecisionEntity> findAllOpenDecisions() {
+        return decisionRepository.findByState(DecisionState.NEW);
+    }
+
     public DecisionService(EntityManager entityManager) {
         this.entityManager = entityManager;
     }

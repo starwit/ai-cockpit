@@ -28,12 +28,13 @@ const MAP_VIEW = new MapView({repeat: true});
 
 function DecisionOverviewMap() {
     // Add state to store decisions
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
 
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
+    //const [showOnlyOpen, setShowOnlyOpen] = useState(false);
 
     useEffect(() => {
         reloadDecisions();
@@ -43,7 +44,8 @@ function DecisionOverviewMap() {
 
     //Load Decisions
     function reloadDecisions() {
-        decisionRest.findAll().then(response => {
+        //const request = showOnlyOpen ? decisionRest.findAllOpen() : decisionRest.findAll();
+        decisionRest.findAllOpen().then(response => {
             if (response.data) {
                 setDecisions(response.data);
             }
@@ -234,7 +236,7 @@ function DecisionOverviewMap() {
                                             {decision.decisionType?.name}
                                         </Typography>
                                         <Typography>
-                                            {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime)}
+                                            {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
                                         </Typography>
                                         <Typography>
                                             {t('decision.state')}: {decision.state || t('decision.decisionType.new')}

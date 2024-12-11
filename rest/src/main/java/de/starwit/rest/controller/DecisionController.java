@@ -49,6 +49,12 @@ public class DecisionController {
         return this.decisionService.findAll();
     }
 
+    @Operation(summary = "Get all open decisions")
+    @GetMapping("/open")
+    public List<DecisionEntity> findAllOpen() {
+        return this.decisionService.findAllOpenDecisions();
+    }
+
     @Operation(summary = "Get decision with id")
     @GetMapping(value = "/{id}")
     public DecisionEntity findById(@PathVariable("id") Long id) {
