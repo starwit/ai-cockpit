@@ -143,6 +143,7 @@ function DecisionDetail(props) {
             aria-describedby="decision-detail-dialog-description"
             maxWidth={false}
             fullWidth
+            PaperProps={{sx: {marginBottom: "10%", marginTop: "4%"}}}
             sx={{aspectRatio: "16/9", alignSelf: "center"}}
         >
             <DialogTitle
