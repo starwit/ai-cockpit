@@ -192,9 +192,9 @@ function DecisionDetail(props) {
                     ...DecisionDetailStyles.dialogContent,
                     height: 'auto',
                     overflow: 'hidden',
-                    px: 3, //horizontal padding
-                    py: 2, //vertical padding
-                    ml: 0  //margin left for "Details" field, Video element, Map and "Actions" filter
+                    paddingX: 3, //horizontal padding
+                    paddingY: 2, //vertical padding
+                    marginLeft: 0  //margin left for "Details" field, Video element, Map and "Actions" filter
                 }}
             >
                 <Stack direction="column">
@@ -292,8 +292,8 @@ function DecisionDetail(props) {
             }}>
                 <Box sx={{
                     paddingBottom: 2,
-                    px: 2,
-                    ml: 0,
+                    paddingX: 2,
+                    marginLeft: 0,
                     flex: 1,
                     display: 'flex',
                     justifyContent: 'flex-start'
@@ -307,8 +307,8 @@ function DecisionDetail(props) {
                 </Box>
                 <Box sx={{
                     paddingBottom: 2,
-                    px: 2,
-                    ml: 0,
+                    paddingX: 2,
+                    marginLeft: 0,
                     flex: 1,
                     display: 'flex',
                     justifyContent: 'center',
@@ -328,8 +328,8 @@ function DecisionDetail(props) {
                 </Box>
                 <Box sx={{
                     paddingBottom: 2,
-                    px: 2,
-                    ml: 0,
+                    paddingX: 2,
+                    marginLeft: 0,
                     flex: 1,
                     display: 'flex',
                     justifyContent: 'flex-end'
