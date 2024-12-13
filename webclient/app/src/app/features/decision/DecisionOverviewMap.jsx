@@ -43,7 +43,6 @@ function DecisionOverviewMap() {
 
     //Load Decisions
     function reloadDecisions() {
-        //const request = showOnlyOpen ? decisionRest.findAllOpen() : decisionRest.findAll();
         decisionRest.findAllOpen().then(response => {
             if (response.data) {
                 setDecisions(response.data);
