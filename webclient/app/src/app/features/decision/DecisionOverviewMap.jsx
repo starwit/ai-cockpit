@@ -34,7 +34,6 @@ function DecisionOverviewMap() {
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
-    //const [showOnlyOpen, setShowOnlyOpen] = useState(false);
 
     useEffect(() => {
         reloadDecisions();
