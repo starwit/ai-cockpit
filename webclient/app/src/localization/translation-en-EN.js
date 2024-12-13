@@ -40,6 +40,7 @@ const translationEnEN = {
     "decisionType.name": "name",
     "decisionType.name.hint": "",
     "map.tooltip": "Show on Map",
+    "automatic.next.tooltip": "automatically show next Decision",
     "actionType": "ActionType",
     "actionType.title": "ActionType",
     "actionType.create.title": "Create ActionType",
