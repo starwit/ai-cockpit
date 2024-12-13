@@ -7,7 +7,6 @@
         "@emotion/styled": "^11.13.5",
         "@mui/icons-material": "^6.1.8",
         "@mui/material": "^6.1.2",
-        "@starwit/react-image-annotate": "5.1.1",
         "axios": "1.7.7",
         "buffer": "npm:buffer@^6.0.3",
         "crypto": "npm:crypto-browserify@^3.12.0",
