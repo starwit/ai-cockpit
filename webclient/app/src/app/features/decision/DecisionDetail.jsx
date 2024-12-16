@@ -32,7 +32,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
-import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
@@ -47,8 +46,6 @@ function DecisionDetail(props) {
     const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
     const {t, i18n} = useTranslation();
     const [rowIndex, setRowIndex] = useState([""]);
-
-    const theme = useTheme();
 
     useEffect(() => {
         reload();
@@ -143,8 +140,16 @@ function DecisionDetail(props) {
             aria-describedby="decision-detail-dialog-description"
             maxWidth={false}
             fullWidth
-            PaperProps={{sx: {marginBottom: "10%", marginTop: "4%"}}}
-            sx={{aspectRatio: "16/9", alignSelf: "center"}}
+            PaperProps={{
+                sx: {
+                    position: "fixed",
+                    top: "40%", maxHeight: "80%",
+                    transform: `translate(-0%, -40%)`
+                }
+            }}
+            sx={{
+                aspectRatio: "16/9"
+            }}
         >
             <DialogTitle
                 id="decision-detail-dialog-title"
@@ -199,7 +204,6 @@ function DecisionDetail(props) {
             >
                 <Stack direction="column">
                     <Box>
-
                         <TextField
                             autoFocus
                             required
