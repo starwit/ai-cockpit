@@ -77,6 +77,7 @@ function DecisionDetail(props) {
                 actions.push(found);
             }
         });
+        console.log(actions);
         return actions;
     }
 
@@ -92,11 +93,6 @@ function DecisionDetail(props) {
             setAllActionTypes(response.data);
             if (rowData.decisionType.id === decisionType.id && rowData.action.length != 0) {
                 setActionTypes(findExistingActions(response.data));
-            } else {
-                actionTypeRest.findByDecisionType(decisionType.id).then(response => {
-                    setActionTypes(response.data);
-                })
-
             }
         });
     }
@@ -110,6 +106,10 @@ function DecisionDetail(props) {
 
     function handleChangeDecisionType(event) {
         setDecisionType(event.target.value);
+        console.log(event.target.value);
+        actionTypeRest.findByDecisionType(event.target.value.id).then(response => {
+            setActionTypes(response.data); 
+        })
     }
 
     function renderDecisionMap() {
@@ -262,14 +262,14 @@ function DecisionDetail(props) {
                                     input={<OutlinedInput label={t("decision.action")} />}
                                     renderValue={selected => (
                                         <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
-                                            {selected.map((value, index) => (
-                                                <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
+                                            {selected.map((value) => (
+                                                <Chip key={value.id} label={value.name} variant="outlined" sx={{color: "green"}} />
                                             ))}
                                         </Box>
                                     )}
                                 >
-                                    {allActionTypes.map((value, index) => (
-                                        <MenuItem key={index} value={value}>
+                                    {allActionTypes.map((value) => (
+                                        <MenuItem key={value.id} value={value}>
                                             {value.name}
                                         </MenuItem>
                                     ))}
