@@ -299,7 +299,7 @@ function DecisionDetail(props) {
                     justifyContent: 'flex-start'
                 }}>
                     <Button
-                        onClick={() => handleSave(actionTypes, decisionType, description, "NEW")}
+                        onClick={() => handleSave(actionTypes, decisionType, description, rowData.state)}
                         variant="contained"
                         startIcon={<SaveIcon />}>
                         {t("button.save")}
