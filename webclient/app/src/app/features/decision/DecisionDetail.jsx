@@ -53,7 +53,7 @@ function DecisionDetail(props) {
     useEffect(() => {
         reload();
         setRowIndex(searchIndex(data, rowData));    //set the index of the current decision
-    }, [open, rowData, handleClose, handleNext, handleBefore]);
+    }, [open, rowData]);
 
     useEffect(() => {
         reloadActionTypes();
