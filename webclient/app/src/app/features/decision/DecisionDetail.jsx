@@ -22,7 +22,7 @@ import {
     IconButton,
     Tooltip
 } from "@mui/material";
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState, useCallback} from "react";
 import {useTranslation} from "react-i18next";
 import DecisionDetailStyles from "../../assets/themes/DecisionDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";
@@ -52,14 +52,45 @@ function DecisionDetail(props) {
 
     useEffect(() => {
         reload();
-        setRowIndex(data.indexOf(rowData));
-    }, [open, rowData]);
+        setRowIndex(searchIndex(data, rowData));    //set the index of the current decision
+    }, [open, rowData, handleClose, handleNext, handleBefore]);
 
     useEffect(() => {
         reloadActionTypes();
     }, [decisionType]);
 
-    function reload() {
+    const handleKeyDown = useCallback((event) => {
+        if (event.key === 'Escape') {
+            handleClose();
+        } else if (event.key === 'ArrowRight') {
+            handleNext(data, rowIndex);
+        } else if (event.key === 'ArrowLeft') {
+            handleBefore(data, rowIndex);
+        }
+    }, [handleSave, handleClose, handleNext, handleBefore, data, rowIndex]);
+
+    useEffect(() => {
+        if (open) {
+            window.addEventListener('keydown', handleKeyDown);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [open, handleKeyDown]);
+
+
+
+    function searchIndex(data, rowData) {   //search the index of the current decision
+        for (let i = 0; i < data.length; i++) { 
+            if (data[i].id === rowData.id) {    
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function reload() { //reload the decision types
         decisionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
@@ -69,7 +100,7 @@ function DecisionDetail(props) {
         });
     }
 
-    function findExistingActions(defaultActionTypes) {
+    function findExistingActions(defaultActionTypes) {  //find the existing actions
         const actions = [];
         rowData.action.forEach(action => {
             const found = defaultActionTypes.find(value => value.id == action.actionType.id);
@@ -80,7 +111,7 @@ function DecisionDetail(props) {
         return actions;
     }
 
-    function reloadActionTypes() {
+    function reloadActionTypes() {  //reload the action types
         if (decisionType == undefined || decisionType.id == undefined) {
             return null;
         }
@@ -112,7 +143,7 @@ function DecisionDetail(props) {
         setDecisionType(event.target.value);
     }
 
-    function renderDecisionMap() {
+    function renderDecisionMap() {  //render the map
         if (rowData.cameraLatitude == undefined || rowData.cameraLongitude == undefined) {
             return (
                 <Typography align="center">
