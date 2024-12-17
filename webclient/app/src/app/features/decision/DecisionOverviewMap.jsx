@@ -16,7 +16,11 @@ import {
     Paper,
     Typography,
     Box,
-    IconButton
+    IconButton,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
 } from '@mui/material';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -29,7 +33,7 @@ const MAP_VIEW = new MapView({repeat: true});
 function DecisionOverviewMap() {
     // Add state to store decisions
     const {t, i18n} = useTranslation();
-
+    const [selectedType, setSelectedType] = useState('all');
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
@@ -39,16 +43,25 @@ function DecisionOverviewMap() {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
         return () => clearInterval(interval);
-    }, []);
+    }, [selectedType]);
 
     //Load Decisions
     function reloadDecisions() {
-        decisionRest.findAllOpen().then(response => {
-            if (response.data) {
-                setDecisions(response.data);
-            }
-        });
+        if (selectedType === 'all') {
+            decisionRest.findAllOpen().then(response => {
+                if (response.data) {
+                    setDecisions(response.data);
+                }
+            });
+        } else {
+            decisionRest.findAllOpenByType(selectedType).then(response => {
+                if (response.data) {
+                    setDecisions(response.data);
+                }
+            })
+        }
     }
+
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
         return decisions.reduce((acc, decision) => {
@@ -165,6 +178,11 @@ function DecisionOverviewMap() {
 
     const groupedDecisions = groupDecisionsByLocation();
 
+    const decisionTypes = Array.from(new Set(decisions
+        .filter(d => d.decisionType?.name)
+        .map(d => d.decisionType.name)
+    ));
+
     const layers = [
         createBaseMapLayer(),
         createDecisionPointsLayer(groupedDecisions),
@@ -210,6 +228,21 @@ function DecisionOverviewMap() {
                         bgcolor: 'rgba(255, 255, 255, 0.9)'
                     }}
                 >
+                    <Box sx={{mb: 2}}>
+                        <FormControl fullWidth>
+                            <InputLabel> {t('decision.type.filter')} </InputLabel>
+                            <Select
+                                value={selectedType}
+                                onChange={(e) => setSelectedType(e.target.value)}
+                                label={t('decision.type.filter')}
+                            >
+                                <MenuItem value="all"> {t('decision.type.all')} </MenuItem>
+
+                                {decisionTypes.map(type => (<MenuItem key={type} value={type}> {type} </MenuItem>))}
+
+                            </Select>
+                        </FormControl>
+                    </Box>
 
                     <Typography variant="h6" gutterBottom>
                         {t('decision.list.title')}

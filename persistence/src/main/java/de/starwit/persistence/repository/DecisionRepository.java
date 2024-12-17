@@ -14,4 +14,6 @@ import java.util.List;
 @Repository
 public interface DecisionRepository extends JpaRepository<DecisionEntity, Long> {
     List<DecisionEntity> findByState(DecisionState state);
+
+    List<DecisionEntity> findByStateAndDecisionType_Name(DecisionState state, String typeName);
 }
