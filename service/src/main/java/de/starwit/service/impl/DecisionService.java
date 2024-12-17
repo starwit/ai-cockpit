@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import de.starwit.persistence.entity.ActionEntity;
@@ -71,6 +72,13 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
     public List<DecisionEntity> findAllOpenDecisions() {
         return decisionRepository.findByState(DecisionState.NEW);
+    }
+
+    public List<DecisionEntity> findAllOpenDecisionsByType(String typeName) {
+        if ("all".equals(typeName)) {
+            return findAllOpenDecisions();
+        }
+        return decisionRepository.findByStateAndDecisionType_Name(DecisionState.NEW, typeName);
     }
 
     public DecisionService(EntityManager entityManager) {

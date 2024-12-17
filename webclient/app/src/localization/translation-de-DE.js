@@ -2,6 +2,8 @@
 const translationDeDE = {
     "decision": "Gefahrensituation",
     "decision.title": "Gefahrensituationen",
+    "decision.type.filter": "Nach Typ filtern",
+    "decision.type.all": "All typen",
     "decision.create.title": "Gefahrensituation erfassen",
     "decision.update.title": "Gefahrensituation bearbeiten",
     "decision.id": "id",
