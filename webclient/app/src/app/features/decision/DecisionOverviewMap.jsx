@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
 
@@ -9,7 +9,10 @@ import {
 } from "@deck.gl/layers";
 
 import DeckGL from "@deck.gl/react";
+
 import DecisionRest from '../../services/DecisionRest';
+import ActionTypeRest from '../../services/ActionTypeRest';
+
 import {useTranslation} from 'react-i18next';
 
 import {
@@ -20,12 +23,34 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Stack,
+    Button,
+    TextField,
+    Chip,
+    OutlinedInput,
 } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+
+
+import CheckIcon from "@mui/icons-material/Check";
+import ErrorIcon from "@mui/icons-material/Error";
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
+import MediaContent from "../../commons/MediaContent";
+
+import {ThemeProvider, createTheme} from '@mui/material/styles';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import {formatDateShort} from '../../commons/formatter/DateFormatter';
+import {formatDateShort, formatDateFull} from '../../commons/formatter/DateFormatter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -39,11 +64,31 @@ function DecisionOverviewMap() {
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
 
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [selectedDecisions, setSelectedDecisions] = useState(null);
+    const [currentDecisionIndex, setCurrentDecisionIndex] = useState(0);
+
     useEffect(() => {
         reloadDecisions();
-        const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
-        return () => clearInterval(interval);
-    }, [selectedType]);
+
+        let interval;
+
+        // Run interval only if the dialog is closed
+        if (!dialogOpen) {
+            interval = setInterval(reloadDecisions, 5000);
+        }  // Update every 5 seconds
+
+        // After loading the decisions immediately show them in the panel
+        if (decisions.length > 0) {
+            setHoveredDecisions(decisions);
+        }
+
+        return () => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        };
+    }, [selectedType, dialogOpen]);
 
     //Load Decisions
     function reloadDecisions() {
@@ -152,6 +197,13 @@ function DecisionOverviewMap() {
                 if (info.object) {      // Check whether the user has actually pointed the cursor at an object (marker) on the map.
                     setHoveredDecisions(info.object[1]);
                 }
+            },
+            onClick: info => {
+                if (info.object) {
+                    setSelectedDecisions(info.object[1]),
+                        setCurrentDecisionIndex(0),
+                        setDialogOpen(true);
+                }
             }
         })
     }
@@ -178,6 +230,7 @@ function DecisionOverviewMap() {
 
     const groupedDecisions = groupDecisionsByLocation();
 
+    //Filter decisions that have a type => retrieve type names => create Set to remove duplicates => convert Set back to an array
     const decisionTypes = Array.from(new Set(decisions
         .filter(d => d.decisionType?.name)
         .map(d => d.decisionType.name)
@@ -191,107 +244,307 @@ function DecisionOverviewMap() {
     ];
 
 
+
+    function DecisionDialog() {
+        const {t, i18n} = useTranslation();
+        const [actionTypes, setActionTypes] = useState([]); // For Mitigation Actions
+        const [description, setDescription] = useState('');
+        const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
+
+        if (!selectedDecisions || !dialogOpen || !selectedDecisions[currentDecisionIndex]) return null;
+
+        const currentDecision = selectedDecisions[currentDecisionIndex];
+
+        useEffect(() => {
+            if (dialogOpen && currentDecision?.decisionType?.id) {
+                actionTypeRest.findByDecisionType(currentDecision.decisionType.id)
+                    .then(response => {
+                        if (response.data) {
+                            setActionTypes(response.data);
+                        }
+                    });
+            }
+        }, [dialogOpen, currentDecision, actionTypeRest]);
+
+        return (
+            <Dialog
+                open={dialogOpen}
+                onClose={() => setDialogOpen(false)}
+                maxWidth={false}
+                fullWidth
+                PaperProps={{
+                    sx: {
+                        position: "fixed",
+                        top: "40%",
+                        maxHeight: "80%",
+                        transform: `translate(-0%, -40%)`
+                    }
+                }}
+            >
+                <DialogTitle component="div" sx={{paddingBottom: 0, marginBottom: 0}}>
+                    <Box>
+                        <Typography variant="h2" noWrap>
+                            {currentDecision.decisionType?.name}
+                        </Typography>
+                        <Typography variant="subtitle2" noWrap>
+                            {formatDateFull(currentDecision.acquisitionTime, i18n)}
+                        </Typography>
+                    </Box>
+                </DialogTitle>
+
+                <IconButton
+                    onClick={() => setDialogOpen(false)}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                        color: theme => theme.palette.grey[500]
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+
+                <DialogContent sx={{height: 'auto', overflow: 'hidden', padding: 3}}>
+                    <Stack direction="row" spacing={2}>
+                        <Stack sx={{width: 1 / 2}}>
+                            {/* Details Section */}
+                            <TextField
+                                autoFocus
+                                required
+                                margin="dense"
+                                id="description"
+                                name="description"
+                                label={t("decision.description")}
+                                type="text"
+                                fullWidth
+                                variant="standard"
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
+                            />
+
+                            <MediaContent
+                                sx={{aspectRatio: "16/9", objectFit: "contain", mt: 2}}
+                                src={window.location.pathname + "api/decision/download/" + currentDecision.mediaUrl}
+                            />
+                        </Stack>
+
+                        <Stack sx={{width: 1 / 2}}>
+                            {/* Mitigation Actions Section */}
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel id="decision.action.label">
+                                    {t("decision.action")}
+                                </InputLabel>
+                                <Select
+                                    labelId="decision.action.label"
+                                    id="decision.action.select"
+                                    multiple
+                                    value={actionTypes}
+                                    input={<OutlinedInput label={t("decision.action")} />}
+                                    renderValue={selected => (
+                                        <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
+                                            {selected.map((value, index) => (
+                                                <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
+                                            ))}
+                                        </Box>
+                                    )}
+                                >
+                                    {actionTypes.map((value, index) => (
+                                        <MenuItem key={index} value={value}>
+                                            {value.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Stack>
+                    </Stack>
+                </DialogContent>
+
+                <DialogActions sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: 2
+                }}>
+                    {/* Save Button */}
+                    <Button
+                        variant="contained"
+                        startIcon={<SaveIcon />}
+                        onClick={() => handleSave(actionTypes, currentDecision.decisionType, description, currentDecision.state)}
+                    >
+                        {t("button.save")}
+                    </Button>
+
+                    {/* Navigation Buttons */}
+                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
+                        <IconButton onClick={() => setCurrentDecisionIndex(prev =>
+                            prev > 0 ? prev - 1 : selectedDecisions.length - 1
+                        )}>
+                            <ArrowBackIosIcon />
+                        </IconButton>
+                        <Typography>{currentDecisionIndex + 1}/{selectedDecisions.length}</Typography>
+                        <IconButton onClick={() => setCurrentDecisionIndex(prev =>
+                            prev < selectedDecisions.length - 1 ? prev + 1 : 0
+                        )}>
+                            <ArrowForwardIosIcon />
+                        </IconButton>
+                    </Box>
+
+                    {/* Report Mistake and Acknowledge Buttons */}
+                    <Box>
+                        <Button
+                            variant="contained"
+                            color="error"
+                            startIcon={<ErrorIcon />}
+                            onClick={() => handleSave(actionTypes, currentDecision.decisionType, description, "REJECTED")}
+                            sx={{mr: 1}}
+                        >
+                            {t("decision.button.reportmistake")}
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            startIcon={<CheckIcon />}
+                            onClick={() => handleSave(actionTypes, currentDecision.decisionType, description, "ACCEPTED")}
+                        >
+                            {t("decision.button.acknowledged")}
+                        </Button>
+                    </Box>
+                </DialogActions>
+            </Dialog>
+        );
+    }
+
+    ////////////////////////////////////////////////////////
+    const theme = createTheme({
+        components: {
+            MuiCssBaseline: {
+                styleOverrides: {
+                    body: {
+                        overflow: 'hidden'
+                    },
+                    html: {
+                        overflow: 'hidden'
+                    }
+                }
+            }
+        }
+    });
+    ////////////////////////////////////////////////////////
+
     // Return the map component with minimum required styles
     return (
-        <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
-            <DeckGL
-                layers={layers}               // Add map layers
-                views={MAP_VIEW}              // Add map view settings
-                initialViewState={INITIAL_VIEW_STATE}  // Set initial position
-                controller={{dragRotate: false}}       // Disable rotation
-            />
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
+                <DeckGL
+                    layers={layers}               // Add map layers
+                    views={MAP_VIEW}              // Add map view settings
+                    initialViewState={INITIAL_VIEW_STATE}  // Set initial position
+                    controller={{dragRotate: false}}       // Disable rotation
+                />
 
-            <IconButton
-                onClick={() => setShowPanel(!showPanel)}
-                sx={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: showPanel ? '320px' : '10px',
-                    bgcolor: 'white'
-                }}
-                size="small"
-            >
-                {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
+                <DecisionDialog />
 
-            {showPanel && (
-                <Paper
-                    elevation={3}
+                <IconButton
+                    onClick={() => setShowPanel(!showPanel)}
                     sx={{
                         position: 'absolute',
                         top: '10px',
-                        right: '10px',
-                        bottom: '10px',
-                        width: '300px',
-                        overflowY: 'auto',
-                        padding: '16px',
-                        bgcolor: 'rgba(255, 255, 255, 0.9)'
+                        right: showPanel ? '320px' : '10px',
+                        bgcolor: 'white'
                     }}
+                    size="small"
                 >
-                    <Box sx={{mb: 2}}>
-                        <FormControl fullWidth>
-                            <InputLabel> {t('decision.type.filter')} </InputLabel>
-                            <Select
-                                value={selectedType}
-                                onChange={(e) => setSelectedType(e.target.value)}
-                                label={t('decision.type.filter')}
-                            >
-                                <MenuItem value="all"> {t('decision.type.all')} </MenuItem>
+                    {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                </IconButton>
 
-                                {decisionTypes.map(type => (<MenuItem key={type} value={type}> {type} </MenuItem>))}
+                {showPanel && (
+                    <Paper
+                        elevation={3}
+                        sx={{
+                            position: 'absolute',
+                            top: '10px',
+                            right: '10px',
+                            bottom: '10px',
+                            width: '300px',
+                            overflowY: 'auto',
+                            padding: '16px',
+                            bgcolor: 'rgba(255, 255, 255, 0.9)'
+                        }}
+                    >
+                        <Box sx={{mb: 2}}>
+                            <FormControl fullWidth>
+                                <InputLabel> {t('decision.type.filter')} </InputLabel>
+                                <Select
+                                    value={selectedType}
+                                    onChange={(e) => setSelectedType(e.target.value)}
+                                    label={t('decision.type.filter')}
+                                >
+                                    <MenuItem value="all"> {t('decision.type.all')} </MenuItem>
 
-                            </Select>
-                        </FormControl>
-                    </Box>
+                                    {decisionTypes.map(type => (<MenuItem key={type} value={type}> {type} </MenuItem>))}
 
-                    <Typography variant="h6" gutterBottom>
-                        {t('decision.list.title')}
-                    </Typography>
-                    {hoveredDecisions ? (
-                        <Box>
-                            <Typography variant="subtitle1" gutterBottom>
-                                {t('decision.found', {count: hoveredDecisions.length})}
-                            </Typography>
-                            <Box sx={{flex: 1, overflowY: 'auto'}}>
-                                {hoveredDecisions.map((decision, index) => (
-                                    <Paper
-                                        key={decision.id}
-                                        elevation={1}
-                                        sx={{
-                                            p: 2,
-                                            mb: 1,
-                                            background: 'white'
-                                        }}
-                                    >
-                                        <Typography variant="h6">
-                                            {decision.decisionType?.name}
-                                        </Typography>
-                                        <Typography>
-                                            {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
-                                        </Typography>
-                                        <Typography>
-                                            {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
-                                        </Typography>
-                                        {decision.description && (
-                                            <Typography>
-                                                {t('decision.description')}: {decision.description}
-                                            </Typography>
-                                        )}
-                                    </Paper>
-                                ))}
-                            </Box>
+                                </Select>
+                            </FormControl>
                         </Box>
-                    ) : (
-                        <Typography>
-                            {t('decision.list.hover')}
+
+                        <Typography variant="h6" gutterBottom>
+                            {t('decision.list.title')}
                         </Typography>
-                    )}
-                </Paper>
+                        {hoveredDecisions ? (
+                            <Box>
+                                <Typography variant="subtitle1" gutterBottom>
+                                    {t('decision.found', {
+                                        count: hoveredDecisions.filter(d =>
+                                            selectedType === 'all' || d.decisionType?.name === selectedType
+                                        ).length
+                                    })}
+                                </Typography>
+                                <Box sx={{flex: 1, overflowY: 'auto'}}>
+                                    {hoveredDecisions
+                                        .filter(d => selectedType === 'all' || d.decisionType?.name === selectedType)
+                                        .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime)) // Sort by Date
+                                        .map(decision => (
+                                            <Paper
+                                                key={decision.id}
+                                                elevation={1}
+                                                sx={{
+                                                    p: 2,
+                                                    mb: 1,
+                                                    background: 'white'
+                                                }}
+                                            >
+                                                <Typography variant="h6">
+                                                    {decision.decisionType?.name}
+                                                </Typography>
+                                                <Typography>
+                                                    {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
+                                                </Typography>
+                                                <Typography>
+                                                    {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
+                                                </Typography>
+                                                {decision.description && (
+                                                    <Typography>
+                                                        {t('decision.description')}: {decision.description}
+                                                    </Typography>
+                                                )}
+                                            </Paper>
+                                        ))}
+                                </Box>
+                            </Box>
+                        ) : (
+                            <Typography>
+                                {t('decision.list.hover')}
+                            </Typography>
+                        )}
+                    </Paper>
 
-            )}  {/* showPanel && ...*/}
+                )}  {/* showPanel && ...*/}
 
-        </Box>
+            </Box>
+        </ThemeProvider>
     );
 }
+
 
 export default DecisionOverviewMap;

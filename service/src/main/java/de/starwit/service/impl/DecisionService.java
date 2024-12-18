@@ -78,7 +78,7 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         if ("all".equals(typeName)) {
             return findAllOpenDecisions();
         }
-        return decisionRepository.findByStateAndDecisionType_Name(DecisionState.NEW, typeName);
+        return decisionRepository.findByStateAndDecisionTypeName(DecisionState.NEW, typeName);
     }
 
     public DecisionService(EntityManager entityManager) {
