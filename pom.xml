@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1</version>
     </parent>
 
     <groupId>de.starwit</groupId>
@@ -21,7 +21,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot-version>3.4.0</spring-boot-version>
+        <spring-boot-version>3.4.1</spring-boot-version>
         <openapi-version>2.7.0</openapi-version>
         <minio-version>8.5.14</minio-version>
         <vision-api.version>3.0.0</vision-api.version>
@@ -131,7 +131,7 @@
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
-                <version>4.29.1</version>
+                <version>4.29.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -252,7 +252,7 @@
                         <dependency>
                             <groupId>org.openjdk.nashorn</groupId>
                             <artifactId>nashorn-core</artifactId>
-                            <version>15.4</version>
+                            <version>15.5</version>
                         </dependency>
                     </dependencies>
                     <executions>
