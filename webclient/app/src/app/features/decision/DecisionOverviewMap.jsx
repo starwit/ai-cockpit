@@ -40,7 +40,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import SaveIcon from '@mui/icons-material/Save';
-import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
@@ -245,22 +244,33 @@ function DecisionOverviewMap() {
 
 
 
+    // Dialog component for displaying and managing decision details
+    // This component opens when a marker on the map is clicked
     function DecisionDialog() {
         const {t, i18n} = useTranslation();
-        const [actionTypes, setActionTypes] = useState([]); // For Mitigation Actions
-        const [description, setDescription] = useState('');
+        // States for form fields and data
+        const [description, setDescription] = useState('');         // For description text field
+        const [actionTypes, setActionTypes] = useState([]);        // For selected action types
+        const [availableActions, setAvailableActions] = useState([]);  // For available action options
+
+        // Initialize action type service
         const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
 
-        if (!selectedDecisions || !dialogOpen || !selectedDecisions[currentDecisionIndex]) return null;
+        // Early return if required data is not available
+        if (!selectedDecisions || !dialogOpen || !selectedDecisions[currentDecisionIndex]) {
+            return null;
+        }
 
+        // Get current decision after validation
         const currentDecision = selectedDecisions[currentDecisionIndex];
 
+        // Load available actions when dialog opens or decision changes
         useEffect(() => {
             if (dialogOpen && currentDecision?.decisionType?.id) {
                 actionTypeRest.findByDecisionType(currentDecision.decisionType.id)
                     .then(response => {
                         if (response.data) {
-                            setActionTypes(response.data);
+                            setAvailableActions(response.data);
                         }
                     });
             }
@@ -270,145 +280,136 @@ function DecisionOverviewMap() {
             <Dialog
                 open={dialogOpen}
                 onClose={() => setDialogOpen(false)}
-                maxWidth={false}
-                fullWidth
-                PaperProps={{
-                    sx: {
-                        position: "fixed",
-                        top: "40%",
-                        maxHeight: "80%",
-                        transform: `translate(-0%, -40%)`
-                    }
-                }}
+                maxWidth="lg"
             >
-                <DialogTitle component="div" sx={{paddingBottom: 0, marginBottom: 0}}>
-                    <Box>
-                        <Typography variant="h2" noWrap>
-                            {currentDecision.decisionType?.name}
+                {/* Header section with decision type and date */}
+                <DialogTitle sx={{pb: 3}}> {/* This tag by default creates h2 element, so <h2><h6></h6></h2> is not right. */}
+                    <Box> {/* Using a separate Box for headers to avoid nesting h-elements */}
+                        <Typography variant="h6" component="div">
+                            {currentDecision.decisionType?.name.toUpperCase()}
                         </Typography>
-                        <Typography variant="subtitle2" noWrap>
+                        <Typography variant="subtitle2" component="div">
                             {formatDateFull(currentDecision.acquisitionTime, i18n)}
                         </Typography>
+
+                        {/* Navigation Controls */}
+                        <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2}}>
+                            <IconButton onClick={() =>
+                                setCurrentDecisionIndex(prev => prev > 0 ? prev - 1 : selectedDecisions.length - 1)
+                            }>
+                                <ArrowBackIosIcon />
+                            </IconButton>
+                            <Typography>
+                                {currentDecisionIndex + 1} / {selectedDecisions.length}
+                            </Typography>
+                            <IconButton onClick={() =>
+                                setCurrentDecisionIndex(prev => prev < selectedDecisions.length - 1 ? prev + 1 : 0)
+                            }>
+                                <ArrowForwardIosIcon />
+                            </IconButton>
+                        </Box>
+                        {/* End Navigation Controls */}
                     </Box>
                 </DialogTitle>
 
-                <IconButton
-                    onClick={() => setDialogOpen(false)}
-                    sx={{
-                        position: "absolute",
-                        right: 8,
-                        top: 8,
-                        color: theme => theme.palette.grey[500]
-                    }}
-                >
-                    <CloseIcon />
-                </IconButton>
+                <DialogContent>
+                    <Stack spacing={3} sx={{mt: 1}}>
+                        {/* Decision Type Selection (disabled, display only) */}
+                        <FormControl fullWidth>
+                            <InputLabel sx={{backgroundColor: 'white', px: 1}}>
+                                {t("decision.decisionType")}
+                            </InputLabel>
+                            <Select
+                                value={currentDecision.decisionType?.id || ''}
+                                disabled
+                                label={t("decision.decisionType")}
+                            >
+                                <MenuItem value={currentDecision.decisionType?.id}>
+                                    {currentDecision.decisionType?.name}
+                                </MenuItem>
+                            </Select>
+                        </FormControl>
 
-                <DialogContent sx={{height: 'auto', overflow: 'hidden', padding: 3}}>
-                    <Stack direction="row" spacing={2}>
-                        <Stack sx={{width: 1 / 2}}>
-                            {/* Details Section */}
-                            <TextField
-                                autoFocus
-                                required
-                                margin="dense"
-                                id="description"
-                                name="description"
-                                label={t("decision.description")}
-                                type="text"
-                                fullWidth
-                                variant="standard"
-                                value={description}
-                                onChange={e => setDescription(e.target.value)}
-                            />
+                        {/* Description Input Field */}
+                        <TextField
+                            label={t("decision.description")}
+                            fullWidth
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            slotProps={{
+                                inputLabel: {
+                                    sx: {backgroundColor: 'white', px: 1}
+                                }
+                            }}
+                        />
 
+                        {/* "action Actions" Multi-Select */}
+                        <FormControl fullWidth>
+                            <InputLabel sx={{backgroundColor: 'white', px: 1}}>
+                                {t("decision.action")}
+                            </InputLabel>
+                            <Select
+                                multiple
+                                value={actionTypes}
+                                onChange={(e) => setActionTypes(e.target.value)}
+                                input={<OutlinedInput label={t("decision.action")} />}
+                                renderValue={(selected) => (
+                                    <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                                        {selected.map((value) => (
+                                            <Chip key={value.id} label={value.name} />
+                                        ))}
+                                    </Box>
+                                )}
+                            >
+                                {availableActions.map((action) => (
+                                    <MenuItem key={action.id} value={action}>
+                                        {action.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
+                        {/* Media Display Section */}
+                        <Box>
                             <MediaContent
-                                sx={{aspectRatio: "16/9", objectFit: "contain", mt: 2}}
+                                sx={{width: '100%', aspectRatio: '16/9'}}
                                 src={window.location.pathname + "api/decision/download/" + currentDecision.mediaUrl}
                             />
-                        </Stack>
-
-                        <Stack sx={{width: 1 / 2}}>
-                            {/* Mitigation Actions Section */}
-                            <FormControl fullWidth variant="outlined">
-                                <InputLabel id="decision.action.label">
-                                    {t("decision.action")}
-                                </InputLabel>
-                                <Select
-                                    labelId="decision.action.label"
-                                    id="decision.action.select"
-                                    multiple
-                                    value={actionTypes}
-                                    input={<OutlinedInput label={t("decision.action")} />}
-                                    renderValue={selected => (
-                                        <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
-                                            {selected.map((value, index) => (
-                                                <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
-                                            ))}
-                                        </Box>
-                                    )}
-                                >
-                                    {actionTypes.map((value, index) => (
-                                        <MenuItem key={index} value={value}>
-                                            {value.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Stack>
+                        </Box>
                     </Stack>
                 </DialogContent>
 
-                <DialogActions sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: 2
-                }}>
-                    {/* Save Button */}
+                {/* Action Buttons */}
+                <DialogActions>
+                    {/* Save button */}
                     <Button
                         variant="contained"
                         startIcon={<SaveIcon />}
-                        onClick={() => handleSave(actionTypes, currentDecision.decisionType, description, currentDecision.state)}
+                        onClick={() => setDialogOpen(false)}
                     >
                         {t("button.save")}
                     </Button>
 
-                    {/* Navigation Buttons */}
-                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1}}>
-                        <IconButton onClick={() => setCurrentDecisionIndex(prev =>
-                            prev > 0 ? prev - 1 : selectedDecisions.length - 1
-                        )}>
-                            <ArrowBackIosIcon />
-                        </IconButton>
-                        <Typography>{currentDecisionIndex + 1}/{selectedDecisions.length}</Typography>
-                        <IconButton onClick={() => setCurrentDecisionIndex(prev =>
-                            prev < selectedDecisions.length - 1 ? prev + 1 : 0
-                        )}>
-                            <ArrowForwardIosIcon />
-                        </IconButton>
-                    </Box>
 
-                    {/* Report Mistake and Acknowledge Buttons */}
-                    <Box>
-                        <Button
-                            variant="contained"
-                            color="error"
-                            startIcon={<ErrorIcon />}
-                            onClick={() => handleSave(actionTypes, currentDecision.decisionType, description, "REJECTED")}
-                            sx={{mr: 1}}
-                        >
-                            {t("decision.button.reportmistake")}
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="success"
-                            startIcon={<CheckIcon />}
-                            onClick={() => handleSave(actionTypes, currentDecision.decisionType, description, "ACCEPTED")}
-                        >
-                            {t("decision.button.acknowledged")}
-                        </Button>
-                    </Box>
+                    {/* Aknowledged and Report buttons */}
+                    <Button
+                        variant="contained"
+                        color="error"
+                        startIcon={<ErrorIcon />}
+                        onClick={() => setDialogOpen(false)}
+                    >
+                        {t("decision.button.reportmistake")}
+                    </Button>
+
+
+                    <Button
+                        variant="contained"
+                        color="success"
+                        startIcon={<CheckIcon />}
+                        onClick={() => setDialogOpen(false)}
+                    >
+                        {t("decision.button.acknowledged")}
+                    </Button>
                 </DialogActions>
             </Dialog>
         );
