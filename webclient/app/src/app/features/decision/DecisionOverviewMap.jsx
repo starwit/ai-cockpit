@@ -9,6 +9,7 @@ import {
 } from "@deck.gl/layers";
 
 import DeckGL from "@deck.gl/react";
+import {HeatmapLayer} from '@deck.gl/aggregation-layers';
 
 import DecisionRest from '../../services/DecisionRest';
 import ActionTypeRest from '../../services/ActionTypeRest';
@@ -33,6 +34,8 @@ import {
     TextField,
     Chip,
     OutlinedInput,
+    FormControlLabel,
+    Checkbox
 } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -67,19 +70,33 @@ function DecisionOverviewMap() {
     const [selectedDecisions, setSelectedDecisions] = useState(null);
     const [currentDecisionIndex, setCurrentDecisionIndex] = useState(0);
 
+    const [viewMode, setViewMode] = useState('normal'); // 'normal' or 'heatmap'
+
+
     useEffect(() => {
-        reloadDecisions();
+        const loadData = () => {
+            const request = selectedType === 'all'
+                ? decisionRest.findAllOpen()
+                : decisionRest.findAllOpenByType(selectedType);
 
+            request.then(response => {
+                if (response.data) {
+                    setDecisions(response.data);
+                    // If not hovered, show all decisions
+                    if (!hoveredDecisions) {
+                        setHoveredDecisions(response.data);
+                    }
+                }
+            });
+        };
+
+        // Initial data load
+        loadData();
+
+        // Update data every 5 seconds if the dialog is not open
         let interval;
-
-        // Run interval only if the dialog is closed
         if (!dialogOpen) {
-            interval = setInterval(reloadDecisions, 5000);
-        }  // Update every 5 seconds
-
-        // After loading the decisions immediately show them in the panel
-        if (decisions.length > 0) {
-            setHoveredDecisions(decisions);
+            interval = setInterval(loadData, 5000);
         }
 
         return () => {
@@ -89,22 +106,6 @@ function DecisionOverviewMap() {
         };
     }, [selectedType, dialogOpen]);
 
-    //Load Decisions
-    function reloadDecisions() {
-        if (selectedType === 'all') {
-            decisionRest.findAllOpen().then(response => {
-                if (response.data) {
-                    setDecisions(response.data);
-                }
-            });
-        } else {
-            decisionRest.findAllOpenByType(selectedType).then(response => {
-                if (response.data) {
-                    setDecisions(response.data);
-                }
-            })
-        }
-    }
 
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
@@ -144,7 +145,9 @@ function DecisionOverviewMap() {
         // Creating base map layer using CartoDB light theme
         return new TileLayer({
             // URL for map tiles
-            data: "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            data: viewMode === 'heatmap'
+                ? "https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                : "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
             minZoom: 0,     // Minimum zoom level
             maxZoom: 19,    // Maximum zoom level
             tileSize: 256,  // Size of each map tile
@@ -193,8 +196,13 @@ function DecisionOverviewMap() {
             getFillColor: d => getIconColor(d[1].length),
             getLineColor: [0, 0, 0, 255],
             onHover: info => {
-                if (info.object) {      // Check whether the user has actually pointed the cursor at an object (marker) on the map.
-                    setHoveredDecisions(info.object[1]);
+                if (info.object) {
+                    const decisions = info.object[1];
+                    // Filter decisions by type if selected
+                    const filteredDecisions = selectedType === 'all'
+                        ? decisions
+                        : decisions.filter(d => d.decisionType?.name === selectedType);
+                    setHoveredDecisions(filteredDecisions);
                 }
             },
             onClick: info => {
@@ -225,6 +233,59 @@ function DecisionOverviewMap() {
         })
 
     }
+
+    function createHeatmapLayer() {
+        return new HeatmapLayer({
+            id: 'heatmap',
+            data: decisions,
+            getPosition: d => [d.cameraLongitude, d.cameraLatitude],
+            getWeight: 1,
+            radiusPixels: 30,
+            intensity: 1,
+            threshold: 0.05,
+            aggregation: 'SUM'
+        });
+    }
+
+    function createInteractiveLayer(groupedDecisions) { // Add an interactive layer on top of the heat map
+        return new ScatterplotLayer({
+            id: 'interactive-layer',
+            data: Object.entries(groupedDecisions),
+            pickable: true,
+            visible: true,
+            opacity: 0,  // Invisible layer
+            stroked: false,
+            filled: true,
+            radiusScale: 15,
+            radiusMinPixels: 5,
+            radiusMaxPixels: 100,
+            getPosition: d => [
+                d[1][0].cameraLongitude,
+                d[1][0].cameraLatitude
+            ],
+            getRadius: d => Math.sqrt(d[1].length) * 5,
+            onHover: info => {
+                if (info.object) {
+                    const decisions = info.object[1];
+                    const filteredDecisions = selectedType === 'all'
+                        ? decisions
+                        : decisions.filter(d => d.decisionType?.name === selectedType);
+                    setHoveredDecisions(filteredDecisions);
+                }
+            },
+            onClick: info => {
+                if (info.object) {
+                    setSelectedDecisions(info.object[1]);
+                    setCurrentDecisionIndex(0);
+                    setDialogOpen(true);
+                }
+            }
+        });
+    }
+
+    /////////////////////////////////////////////////////////////////////////////
+
+
     /////////////////////////////////////////////////////////////////////////////
 
     const groupedDecisions = groupDecisionsByLocation();
@@ -235,14 +296,19 @@ function DecisionOverviewMap() {
         .map(d => d.decisionType.name)
     ));
 
-    const layers = [
+    const layers = viewMode === 'normal' ? [
         createBaseMapLayer(),
         createDecisionPointsLayer(groupedDecisions),
         createTextLayer(groupedDecisions)
 
+    ] : [
+        createBaseMapLayer(),
+        createHeatmapLayer(decisions.filter(d =>
+            selectedType === 'all' || d.decisionType?.name === selectedType
+        )),
+        createInteractiveLayer(groupedDecisions)  // Add an interactive layer on top of the heat map
     ];
-
-
+    ////////////////////////////////////////////////////////////////////////////
 
     // Dialog component for displaying and managing decision details
     // This component opens when a marker on the map is clicked
@@ -474,19 +540,57 @@ function DecisionOverviewMap() {
                         }}
                     >
                         <Box sx={{mb: 2}}>
-                            <FormControl fullWidth>
-                                <InputLabel> {t('decision.type.filter')} </InputLabel>
+                            {/* View mode switch */}
+                            <FormControl fullWidth sx={{mb: 2}}>
+                                <InputLabel
+                                    sx={{
+                                        bgcolor: 'white',
+                                        px: 1,
+                                        '&.MuiInputLabel-shrink': {
+                                            bgcolor: 'white'
+                                        }
+                                    }}
+                                > View Mode </InputLabel>
                                 <Select
-                                    value={selectedType}
-                                    onChange={(e) => setSelectedType(e.target.value)}
-                                    label={t('decision.type.filter')}
+                                    value={viewMode}
+                                    onChange={(e) => setViewMode(e.target.value)}
                                 >
-                                    <MenuItem value="all"> {t('decision.type.all')} </MenuItem>
-
-                                    {decisionTypes.map(type => (<MenuItem key={type} value={type}> {type} </MenuItem>))}
-
+                                    <MenuItem value="normal">Normal</MenuItem>
+                                    <MenuItem value="heatmap">Heatmap</MenuItem>
                                 </Select>
                             </FormControl>
+
+
+                            <Box sx={{mb: 2}}>
+                                <FormControl fullWidth>
+                                    <InputLabel> {t('decision.type.filter')} </InputLabel>
+                                    <Select
+                                        value={selectedType}
+                                        onChange={(e) => {
+                                            const newValue = e.target.value;
+                                            setSelectedType(newValue);
+                                            // Force a data reload
+                                            const loadData = newValue === 'all'
+                                                ? decisionRest.findAllOpen()
+                                                : decisionRest.findAllOpenByType(newValue);
+
+                                            loadData.then(response => {
+                                                if (response.data) {
+                                                    setDecisions(response.data);
+                                                    // Update hoveredDecisions with new data
+                                                    setHoveredDecisions(response.data);
+                                                }
+                                            });
+                                        }}
+                                        label={t('decision.type.filter')}
+                                    >
+                                        <MenuItem value="all"> {t('decision.type.all')} </MenuItem>
+
+                                        {decisionTypes.map(type => (<MenuItem key={type} value={type}> {type} </MenuItem>))}
+
+                                    </Select>
+                                </FormControl>
+                            </Box>
                         </Box>
 
                         <Typography variant="h6" gutterBottom>
