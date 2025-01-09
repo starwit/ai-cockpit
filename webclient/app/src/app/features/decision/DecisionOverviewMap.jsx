@@ -38,45 +38,73 @@ const MAP_VIEW = new MapView({repeat: true});
 function DecisionOverviewMap() {
     // Add state to store decisions
     const {t, i18n} = useTranslation();
-    const [selectedType, setSelectedType] = useState('all');
+    const [selectedType, setSelectedType] = useState(['all']);
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
+    const [, setFilteredDecisions] = useState([]);
 
     useEffect(() => {
         reloadDecisions();
-        const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
+        const interval = setInterval(reloadDecisions, 5000); // Update every 5 seconds
         return () => clearInterval(interval);
-    }, [selectedType]);
+    }, []);
 
-    //Load Decisions
-    function reloadDecisions() {
-        if (selectedType === 'all') {
-            decisionRest.findAllOpen().then(response => {
-                if (response.data) {
-                    setDecisions(response.data);
-                }
-            });
+    useEffect(() => {
+        if (decisions.length > 0) { // Check for decisions existence
+            filterDecisions(decisions);
+        }
+    }, [selectedType, decisions]); // Keep tracking both dependencies
+
+    function filterDecisions(data) {
+        if (!data) return; // Check for data existence
+
+        if (selectedType.includes('all')) {
+            setFilteredDecisions(data);
         } else {
-            decisionRest.findAllOpenByType(selectedType).then(response => {
-                if (response.data) {
-                    setDecisions(response.data);
-                }
-            })
+            const filtered = data.filter(d =>
+                d.decisionType && selectedType.includes(d.decisionType.name)
+            );
+            setFilteredDecisions(filtered);
         }
     }
 
-    // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
-    function groupDecisionsByLocation() {
-        return decisions.reduce((acc, decision) => {
-            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
-            if (!acc[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
-                acc[key] = [];
+
+    //Load Decisions
+    function reloadDecisions() {
+        decisionRest.findAllOpen().then(response => {
+            if (response && response.data) {
+                const validDecisions = response.data.filter(d => d != null);
+                setDecisions(validDecisions);
+                filterDecisions(validDecisions);
             }
-            acc[key].push(decision);    // Add the current decision to the array for this location
-            return acc;
-        }, {});
+        }).catch(error => {
+            console.error('Error loading decisions:', error);
+            setDecisions([]); // Set empty array on error
+            setFilteredDecisions([]); // Clear filtered decisions as well
+        });
+    }
+
+    // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
+    function groupDecisionsByLocation(decisions, selectedType) {
+        if (!decisions) return {};
+
+        return decisions
+            .filter(d => d && (
+                selectedType.includes('all') ||
+                (d.decisionType && selectedType.includes(d.decisionType.name))
+            ))
+            .reduce((acc, decision) => {
+                if (decision.cameraLatitude && decision.cameraLongitude) {
+                    const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`; // Create a unique key from the coordinates
+                    if (!acc[key]) {        // If the array for these coordinates does not exist yet, create it
+                        acc[key] = [];
+                    }
+                    acc[key].push(decision);
+                }
+                return acc;
+            }, {});
     }
 
     // Set initial map position and zoom level
@@ -181,7 +209,7 @@ function DecisionOverviewMap() {
     }
     /////////////////////////////////////////////////////////////////////////////
 
-    const groupedDecisions = groupDecisionsByLocation();
+    const groupedDecisions = groupDecisionsByLocation(decisions, selectedType);
 
     //Filter decisions that have a type => retrieve type names => create Set to remove duplicates => convert Set back to an array
     const decisionTypes = Array.from(new Set(decisions
@@ -257,13 +285,50 @@ function DecisionOverviewMap() {
                             <FormControl fullWidth>
                                 <InputLabel> {t('decision.type.filter')} </InputLabel>
                                 <Select
+                                    multiple
                                     value={selectedType}
-                                    onChange={(e) => setSelectedType(e.target.value)}
+                                    onChange={(e) => {
+                                        const values = e.target.value;
+                                        // If 'all' is selected - toggle it
+                                        if (values.includes('all')) {
+                                            // If 'all' was not selected - select it and deselect all other values
+                                            if (!selectedType.includes('all')) {
+                                                setSelectedType(['all']);
+                                            }
+                                            // If 'all' was already selected - deselect it
+                                            else {
+                                                const newValues = values.filter(v => v !== 'all');
+                                                setSelectedType(newValues.length ? newValues : ['all']);
+                                            }
+                                        } else {
+                                            setSelectedType(values.length ? values : ['all']);
+                                        }
+                                    }}
                                     label={t('decision.type.filter')}
+                                    renderValue={(selected) => {
+                                        // Translate 'all' to the localized string
+                                        return selected.map(value =>
+                                            value === 'all' ? t('decision.type.all') : value
+                                        ).join(', ');
+                                    }}
                                 >
-                                    <MenuItem value="all"> {t('decision.type.all')} </MenuItem>
+                                    {/* Bold font for selected items */}
+                                    <MenuItem
+                                        value="all"
+                                        sx={{fontWeight: selectedType.includes('all') ? 'bold' : 'normal'}}
+                                    >
+                                        {t('decision.type.all')}
+                                    </MenuItem>
 
-                                    {decisionTypes.map(type => (<MenuItem key={type} value={type}> {type} </MenuItem>))}
+                                    {decisionTypes.map(type => (
+                                        <MenuItem
+                                            key={type}
+                                            value={type}
+                                            sx={{fontWeight: selectedType.includes(type) ? 'bold' : 'normal'}}
+                                        >
+                                            {type}
+                                        </MenuItem>
+                                    ))}
 
                                 </Select>
                             </FormControl>
@@ -276,14 +341,12 @@ function DecisionOverviewMap() {
                             <Box>
                                 <Typography variant="subtitle1" gutterBottom>
                                     {t('decision.found', {
-                                        count: hoveredDecisions.filter(d =>
-                                            selectedType === 'all' || d.decisionType?.name === selectedType
-                                        ).length
+                                        count: hoveredDecisions.length
                                     })}
                                 </Typography>
                                 <Box sx={{flex: 1, overflowY: 'auto'}}>
                                     {hoveredDecisions
-                                        .filter(d => selectedType === 'all' || d.decisionType?.name === selectedType)
+                                        .filter(d => selectedType.includes('all') || d.decisionType?.name && selectedType.includes(d.decisionType.name))
                                         .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime)) // Sort by Date
                                         .map(decision => (
                                             <Paper
