@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback, useRef} from 'react';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
 
@@ -9,7 +9,9 @@ import {
 } from "@deck.gl/layers";
 
 import DeckGL from "@deck.gl/react";
+
 import DecisionRest from '../../services/DecisionRest';
+
 import {useTranslation} from 'react-i18next';
 
 import {
@@ -20,8 +22,11 @@ import {
     FormControl,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
 } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+
+import {ThemeProvider, createTheme} from '@mui/material/styles';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -29,49 +34,116 @@ import {formatDateShort} from '../../commons/formatter/DateFormatter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
+const ANIMATION_SPEED = 0.5;
 
 function DecisionOverviewMap() {
     // Add state to store decisions
     const {t, i18n} = useTranslation();
-    const [selectedType, setSelectedType] = useState('all');
+    const [selectedType, setSelectedType] = useState(['all']);
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
+    const [, setFilteredDecisions] = useState([]);
+
+    // UseRef to store the animation frame ID
+    const animationFrameId = useRef(null);
+    const lastUpdateTime = useRef(null);
+    const [currentTime, setCurrentTime] = useState(0);
+
+    // UseCallback to memoize the animate function
+    const animate = useCallback((timestamp) => {
+        if (!lastUpdateTime.current) {
+            lastUpdateTime.current = timestamp;
+        }
+
+        const deltaTime = timestamp - lastUpdateTime.current;
+        lastUpdateTime.current = timestamp;
+
+        setCurrentTime(t => (t + (deltaTime * ANIMATION_SPEED * 0.1)) % 1000);
+        animationFrameId.current = window.requestAnimationFrame(animate);
+    }, []);
+
+    useEffect(() => {
+        setCurrentTime(0); // Reset time on component mount
+        lastUpdateTime.current = null;
+        animationFrameId.current = window.requestAnimationFrame(animate);
+
+        return () => {
+            if (animationFrameId.current) {
+                window.cancelAnimationFrame(animationFrameId.current);
+                lastUpdateTime.current = null;
+                setCurrentTime(0);
+            }
+        };
+    }, [animate]);
+
+    useEffect(() => {
+        const animationFrame = window.requestAnimationFrame(animate);
+        return () => window.cancelAnimationFrame(animationFrame);
+    }, [animate]);
+
 
     useEffect(() => {
         reloadDecisions();
-        const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
+        const interval = setInterval(reloadDecisions, 5000); // Update every 5 seconds
         return () => clearInterval(interval);
-    }, [selectedType]);
+    }, []);
 
-    //Load Decisions
-    function reloadDecisions() {
-        if (selectedType === 'all') {
-            decisionRest.findAllOpen().then(response => {
-                if (response.data) {
-                    setDecisions(response.data);
-                }
-            });
+    useEffect(() => {
+        if (decisions.length > 0) { // Check for decisions existence
+            filterDecisions(decisions);
+        }
+    }, [selectedType, decisions]); // Keep tracking both dependencies
+
+    function filterDecisions(data) {
+        if (!data) return; // Check for data existence
+
+        if (selectedType.includes('all')) {
+            setFilteredDecisions(data);
         } else {
-            decisionRest.findAllOpenByType(selectedType).then(response => {
-                if (response.data) {
-                    setDecisions(response.data);
-                }
-            })
+            const filtered = data.filter(d =>
+                d.decisionType && selectedType.includes(d.decisionType.name)
+            );
+            setFilteredDecisions(filtered);
         }
     }
 
-    // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
-    function groupDecisionsByLocation() {
-        return decisions.reduce((acc, decision) => {
-            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
-            if (!acc[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
-                acc[key] = [];
+
+    //Load Decisions
+    function reloadDecisions() {
+        decisionRest.findAllOpen().then(response => {
+            if (response && response.data) {
+                const validDecisions = response.data.filter(d => d != null);
+                setDecisions(validDecisions);
+                filterDecisions(validDecisions);
             }
-            acc[key].push(decision);    // Add the current decision to the array for this location
-            return acc;
-        }, {});
+        }).catch(error => {
+            console.error('Error loading decisions:', error);
+            setDecisions([]); // Set empty array on error
+            setFilteredDecisions([]); // Clear filtered decisions as well
+        });
+    }
+
+    // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
+    function groupDecisionsByLocation(decisions, selectedType) {
+        if (!decisions) return {};
+
+        return decisions
+            .filter(d => d && (
+                selectedType.includes('all') ||
+                (d.decisionType && selectedType.includes(d.decisionType.name))
+            ))
+            .reduce((acc, decision) => {
+                if (decision.cameraLatitude && decision.cameraLongitude) {
+                    const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`; // Create a unique key from the coordinates
+                    if (!acc[key]) {        // If the array for these coordinates does not exist yet, create it
+                        acc[key] = [];
+                    }
+                    acc[key].push(decision);
+                }
+                return acc;
+            }, {});
     }
 
     // Set initial map position and zoom level
@@ -145,14 +217,44 @@ function DecisionOverviewMap() {
                 d[1][0].cameraLongitude,
                 d[1][0].cameraLatitude
             ],
-            getRadius: d => Math.sqrt(d[1].length) * 5,
+            getRadius: d => {
+                const baseRadius = Math.sqrt(d[1].length) * 5;
+
+                // Add a pulsating effect for the icons with more than 5 decisions
+                if (d[1].length > 5) {
+                    // Heartbeat effect
+                    /* currentTime * 0.006   BIGGER = FASTER heart rate, SMALLER = SLOWER heart rate
+                    Example values: 0.002 (slow), 0.004 (medium), 0.008 (fast) */
+                    const t = (currentTime * 0.006) % 1; // Slowing down the time
+                    let pulseEffect = 1;
+
+                    // pulseEffect = 1 + M * Math.sin(t * Math.PI * N);
+                    //Where: M - amplitude, N - frequency
+                    // First beat   
+                    if (t < 0.1) {
+                        pulseEffect = 1 + 1 * Math.sin(t * Math.PI * 1);
+                    }
+                    // Second beat
+                    else if (t < 0.17) {
+                        pulseEffect = 1 + 1.5 * Math.sin((t - 0.1) * Math.PI * 1);
+                    }
+
+                    return baseRadius * pulseEffect;
+                }
+
+                return baseRadius;
+            },
             getFillColor: d => getIconColor(d[1].length),
             getLineColor: [0, 0, 0, 255],
             onHover: info => {
                 if (info.object) {      // Check whether the user has actually pointed the cursor at an object (marker) on the map.
                     setHoveredDecisions(info.object[1]);
                 }
+            },
+            updateTriggers: {
+                getRadius: [currentTime] // Update the radius when the time changes
             }
+
         })
     }
 
@@ -167,17 +269,92 @@ function DecisionOverviewMap() {
             ],
             getText: d => String(d[1].length),
             getSize: 16,
+            sizeScale: 2,      // Increase the size of the text
+            sizeUnits: 'pixels',  // Use pixels for text size
+            sizeMinPixels: 16,    // Min
+            sizeMaxPixels: 48,    // Max 
             getAngle: 0,
             getTextAnchor: 'middle',
             getAlignmentBaseline: 'center',
-            getColor: [255, 255, 255]
+            getColor: [255, 255, 255],
+            outlineWidth: 2,
+            outlineColor: [0, 0, 0],
+            fontSettings: {
+                sdf: true,     // Turn on Signed Distance Field (SDF) for better text rendering
+                fontSize: 24,   // Base font size
+                buffer: 10      // Buffer for better text visibility
+            }
         })
 
     }
+
+    function createWaveLayer(groupedDecisions) {
+        // Create a wave effect for the icons
+        const waveCount = 6;
+        const waveData = Object.entries(groupedDecisions).flatMap(entry => {
+            return Array.from({length: waveCount}, (_, i) => ({
+                ...entry,
+                waveIndex: i
+            }));
+        });
+
+        return new ScatterplotLayer({
+            id: 'wave-layer',
+            data: waveData,
+            pickable: false,
+            stroked: false,
+            filled: true,
+            opacity: 0.9,
+            radiusScale: 7,
+            radiusMinPixels: 2,
+            radiusMaxPixels: 2000,
+
+            // Wave position
+            getPosition: d => [
+                d[1][0].cameraLongitude,
+                d[1][0].cameraLatitude
+            ],
+
+            // Wave radius
+            getRadius: d => {
+                const baseRadius = Math.sqrt(d[1].length) * 5;
+                const phaseOffset = (1000 / waveCount) * d.waveIndex;
+                const time = (currentTime + phaseOffset) % 1000;
+                const waveProgress = time / 1000;
+
+                // Add smooth appear and spread effects
+                const appearEffect = Math.min(1, waveProgress * 3);
+                const spreadEffect = 1 + waveProgress * 5;
+
+                return baseRadius * spreadEffect * appearEffect * (Math.sqrt(d[1].length));
+            },
+
+            // Wave color
+            getFillColor: d => {
+                const baseColor = getIconColor(d[1].length);
+                const phaseOffset = (1000 / waveCount) * d.waveIndex;
+                const time = (currentTime + phaseOffset) % 1000;
+                const waveProgress = time / 1000;
+
+                // Smooth fade out
+                const fadeOut = Math.pow(1 - waveProgress, 3);
+                // Smooth fade in
+                const fadeIn = Math.min(1, waveProgress * 3);
+
+                const alpha = Math.max(0, 200 * fadeOut * fadeIn);
+                return [...baseColor.slice(0, 3), alpha];
+            },
+            updateTriggers: {
+                getRadius: [currentTime],
+                getFillColor: [currentTime]
+            }
+        });
+    }
     /////////////////////////////////////////////////////////////////////////////
 
-    const groupedDecisions = groupDecisionsByLocation();
+    const groupedDecisions = groupDecisionsByLocation(decisions, selectedType);
 
+    //Filter decisions that have a type => retrieve type names => create Set to remove duplicates => convert Set back to an array
     const decisionTypes = Array.from(new Set(decisions
         .filter(d => d.decisionType?.name)
         .map(d => d.decisionType.name)
@@ -185,113 +362,177 @@ function DecisionOverviewMap() {
 
     const layers = [
         createBaseMapLayer(),
+        createWaveLayer(groupedDecisions),
         createDecisionPointsLayer(groupedDecisions),
         createTextLayer(groupedDecisions)
 
     ];
 
 
+    ////////////////////////////////////////////////////////
+    const theme = createTheme({
+        components: {
+            MuiCssBaseline: {
+                styleOverrides: {
+                    body: {
+                        overflow: 'hidden'
+                    },
+                    html: {
+                        overflow: 'hidden'
+                    }
+                }
+            }
+        }
+    });
+    ////////////////////////////////////////////////////////
+
     // Return the map component with minimum required styles
     return (
-        <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
-            <DeckGL
-                layers={layers}               // Add map layers
-                views={MAP_VIEW}              // Add map view settings
-                initialViewState={INITIAL_VIEW_STATE}  // Set initial position
-                controller={{dragRotate: false}}       // Disable rotation
-            />
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
+                <DeckGL
+                    layers={layers}               // Add map layers
+                    views={MAP_VIEW}              // Add map view settings
+                    initialViewState={INITIAL_VIEW_STATE}  // Set initial position
+                    controller={{dragRotate: false}}       // Disable rotation
+                />
 
-            <IconButton
-                onClick={() => setShowPanel(!showPanel)}
-                sx={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: showPanel ? '320px' : '10px',
-                    bgcolor: 'white'
-                }}
-                size="small"
-            >
-                {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-
-            {showPanel && (
-                <Paper
-                    elevation={3}
+                <IconButton
+                    onClick={() => setShowPanel(!showPanel)}
                     sx={{
                         position: 'absolute',
                         top: '10px',
-                        right: '10px',
-                        bottom: '10px',
-                        width: '300px',
-                        overflowY: 'auto',
-                        padding: '16px',
-                        bgcolor: 'rgba(255, 255, 255, 0.9)'
+                        right: showPanel ? '320px' : '10px',
+                        bgcolor: 'white'
                     }}
+                    size="small"
                 >
-                    <Box sx={{mb: 2}}>
-                        <FormControl fullWidth>
-                            <InputLabel> {t('decision.type.filter')} </InputLabel>
-                            <Select
-                                value={selectedType}
-                                onChange={(e) => setSelectedType(e.target.value)}
-                                label={t('decision.type.filter')}
-                            >
-                                <MenuItem value="all"> {t('decision.type.all')} </MenuItem>
+                    {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                </IconButton>
 
-                                {decisionTypes.map(type => (<MenuItem key={type} value={type}> {type} </MenuItem>))}
-
-                            </Select>
-                        </FormControl>
-                    </Box>
-
-                    <Typography variant="h6" gutterBottom>
-                        {t('decision.list.title')}
-                    </Typography>
-                    {hoveredDecisions ? (
-                        <Box>
-                            <Typography variant="subtitle1" gutterBottom>
-                                {t('decision.found', {count: hoveredDecisions.length})}
-                            </Typography>
-                            <Box sx={{flex: 1, overflowY: 'auto'}}>
-                                {hoveredDecisions.map((decision, index) => (
-                                    <Paper
-                                        key={decision.id}
-                                        elevation={1}
-                                        sx={{
-                                            p: 2,
-                                            mb: 1,
-                                            background: 'white'
-                                        }}
+                {showPanel && (
+                    <Paper
+                        elevation={3}
+                        sx={{
+                            position: 'absolute',
+                            top: '10px',
+                            right: '10px',
+                            bottom: '10px',
+                            width: '300px',
+                            overflowY: 'auto',
+                            padding: '16px',
+                            bgcolor: 'rgba(255, 255, 255, 0.9)'
+                        }}
+                    >
+                        <Box sx={{mb: 2}}>
+                            <FormControl fullWidth>
+                                <InputLabel> {t('decision.type.filter')} </InputLabel>
+                                <Select
+                                    multiple
+                                    value={selectedType}
+                                    onChange={(e) => {
+                                        const values = e.target.value;
+                                        // If 'all' is selected - toggle it
+                                        if (values.includes('all')) {
+                                            // If 'all' was not selected - select it and deselect all other values
+                                            if (!selectedType.includes('all')) {
+                                                setSelectedType(['all']);
+                                            }
+                                            // If 'all' was already selected - deselect it
+                                            else {
+                                                const newValues = values.filter(v => v !== 'all');
+                                                setSelectedType(newValues.length ? newValues : ['all']);
+                                            }
+                                        } else {
+                                            setSelectedType(values.length ? values : ['all']);
+                                        }
+                                    }}
+                                    label={t('decision.type.filter')}
+                                    renderValue={(selected) => {
+                                        // Translate 'all' to the localized string
+                                        return selected.map(value =>
+                                            value === 'all' ? t('decision.type.all') : value
+                                        ).join(', ');
+                                    }}
+                                >
+                                    {/* Bold font for selected items */}
+                                    <MenuItem
+                                        value="all"
+                                        sx={{fontWeight: selectedType.includes('all') ? 'bold' : 'normal'}}
                                     >
-                                        <Typography variant="h6">
-                                            {decision.decisionType?.name}
-                                        </Typography>
-                                        <Typography>
-                                            {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
-                                        </Typography>
-                                        <Typography>
-                                            {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
-                                        </Typography>
-                                        {decision.description && (
-                                            <Typography>
-                                                {t('decision.description')}: {decision.description}
-                                            </Typography>
-                                        )}
-                                    </Paper>
-                                ))}
-                            </Box>
+                                        {t('decision.type.all')}
+                                    </MenuItem>
+
+                                    {decisionTypes.map(type => (
+                                        <MenuItem
+                                            key={type}
+                                            value={type}
+                                            sx={{fontWeight: selectedType.includes(type) ? 'bold' : 'normal'}}
+                                        >
+                                            {type}
+                                        </MenuItem>
+                                    ))}
+
+                                </Select>
+                            </FormControl>
                         </Box>
-                    ) : (
-                        <Typography>
-                            {t('decision.list.hover')}
+
+                        <Typography variant="h6" gutterBottom>
+                            {t('decision.list.title')}
                         </Typography>
-                    )}
-                </Paper>
+                        {hoveredDecisions ? (
+                            <Box>
+                                <Typography variant="subtitle1" gutterBottom>
+                                    {t('decision.found', {
+                                        count: hoveredDecisions.length
+                                    })}
+                                </Typography>
+                                <Box sx={{flex: 1, overflowY: 'auto'}}>
+                                    {hoveredDecisions
+                                        .filter(d => selectedType.includes('all') || d.decisionType?.name && selectedType.includes(d.decisionType.name))
+                                        .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime)) // Sort by Date
+                                        .map(decision => (
+                                            <Paper
+                                                key={decision.id}
+                                                elevation={1}
+                                                sx={{
+                                                    p: 2,
+                                                    mb: 1,
+                                                    background: 'white'
+                                                }}
+                                            >
+                                                <Typography variant="h6">
+                                                    {decision.decisionType?.name}
+                                                </Typography>
+                                                <Typography>
+                                                    {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
+                                                </Typography>
+                                                <Typography>
+                                                    {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
+                                                </Typography>
+                                                {decision.description && (
+                                                    <Typography>
+                                                        {t('decision.description')}: {decision.description}
+                                                    </Typography>
+                                                )}
+                                            </Paper>
+                                        ))}
+                                </Box>
+                            </Box>
+                        ) : (
+                            <Typography>
+                                {t('decision.list.hover')}
+                            </Typography>
+                        )}
+                    </Paper>
 
-            )}  {/* showPanel && ...*/}
+                )}  {/* showPanel && ...*/}
 
-        </Box>
+            </Box>
+        </ThemeProvider>
     );
 }
+
 
 export default DecisionOverviewMap;
