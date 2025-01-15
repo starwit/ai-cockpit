@@ -5,16 +5,21 @@ import App from "./app/App";
 import * as serviceWorker from "./serviceWorker";
 import {HashRouter as Router} from "react-router-dom";
 import "./localization/i18n";
-import {SnackbarProvider} from "notistack";
+import {ToastContainer} from "react-toastify";
 import MainTheme from "./app/assets/themes/MainTheme";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <Router>
         <MainTheme>
-            <SnackbarProvider maxSnack={5} classes={{containerRoot: "snackbar-root"}}>
-                <App />
-            </SnackbarProvider>
+            <App />
+            <ToastContainer
+                position="bottom-left"
+                closeOnClick
+                pauseOnFocusLoss={false}
+                draggable={false}
+                theme="colored"
+            />
         </MainTheme>
     </Router>
 );

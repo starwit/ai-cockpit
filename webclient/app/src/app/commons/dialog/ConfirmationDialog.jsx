@@ -7,7 +7,7 @@ import {DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import PropTypes from "prop-types";
 
 function ConfirmationDialog(props) {
-    const {open, onClose, onSubmit, title, message, confirmTitle, submitMessage} = props;
+    const {open, onClose, onSubmit, title, message, submitMessage} = props;
     const {t} = useTranslation();
 
     return (

@@ -1,10 +1,8 @@
-import {useEffect} from "react";
-import {useSnackbar} from "notistack";
 import axios from "axios";
 import {useTranslation} from "react-i18next";
+import {toast} from "react-toastify";
 
 function ErrorHandler(props) {
-    const {enqueueSnackbar} = useSnackbar();
     const {t} = useTranslation();
 
     if (axios.interceptors.response.handlers.length === 0) {
@@ -52,8 +50,7 @@ function ErrorHandler(props) {
                     console.error(`A ${config.method} request failed with status code ${status}:`, data, config);
                 }
 
-                enqueueSnackbar(t(errorMessage), {variant: "error"});
-
+                toast.error(t(errorMessage));
                 return Promise.reject(error);
             }
         );
