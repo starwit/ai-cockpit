@@ -79,10 +79,6 @@ function DecisionOverviewMap() {
                 setDecisions(validDecisions);
                 filterDecisions(validDecisions);
             }
-        }).catch(error => {
-            console.error('Error loading decisions:', error);
-            setDecisions([]); // Set empty array on error
-            setFilteredDecisions([]); // Clear filtered decisions as well
         });
     }
 
@@ -244,149 +240,146 @@ function DecisionOverviewMap() {
 
     // Return the map component with minimum required styles
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
-                <DeckGL
-                    layers={layers}               // Add map layers
-                    views={MAP_VIEW}              // Add map view settings
-                    initialViewState={INITIAL_VIEW_STATE}  // Set initial position
-                    controller={{dragRotate: false}}       // Disable rotation
-                />
+        <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
+            <DeckGL
+                layers={layers}               // Add map layers
+                views={MAP_VIEW}              // Add map view settings
+                initialViewState={INITIAL_VIEW_STATE}  // Set initial position
+                controller={{dragRotate: false}}       // Disable rotation
+            />
 
-                <IconButton
-                    onClick={() => setShowPanel(!showPanel)}
+            <IconButton
+                onClick={() => setShowPanel(!showPanel)}
+                sx={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: showPanel ? '320px' : '10px',
+                    bgcolor: 'white'
+                }}
+                size="small"
+            >
+                {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+
+            {showPanel && (
+                <Paper
+                    elevation={3}
                     sx={{
                         position: 'absolute',
                         top: '10px',
-                        right: showPanel ? '320px' : '10px',
-                        bgcolor: 'white'
+                        right: '10px',
+                        bottom: '10px',
+                        width: '300px',
+                        overflowY: 'auto',
+                        padding: '16px',
+                        bgcolor: 'rgba(255, 255, 255, 0.9)'
                     }}
-                    size="small"
                 >
-                    {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
-
-                {showPanel && (
-                    <Paper
-                        elevation={3}
-                        sx={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            bottom: '10px',
-                            width: '300px',
-                            overflowY: 'auto',
-                            padding: '16px',
-                            bgcolor: 'rgba(255, 255, 255, 0.9)'
-                        }}
-                    >
-                        <Box sx={{mb: 2}}>
-                            <FormControl fullWidth>
-                                <InputLabel> {t('decision.type.filter')} </InputLabel>
-                                <Select
-                                    multiple
-                                    value={selectedType}
-                                    onChange={(e) => {
-                                        const values = e.target.value;
-                                        // If 'all' is selected - toggle it
-                                        if (values.includes('all')) {
-                                            // If 'all' was not selected - select it and deselect all other values
-                                            if (!selectedType.includes('all')) {
-                                                setSelectedType(['all']);
-                                            }
-                                            // If 'all' was already selected - deselect it
-                                            else {
-                                                const newValues = values.filter(v => v !== 'all');
-                                                setSelectedType(newValues.length ? newValues : ['all']);
-                                            }
-                                        } else {
-                                            setSelectedType(values.length ? values : ['all']);
+                    <Box sx={{mb: 2}}>
+                        <FormControl fullWidth>
+                            <InputLabel> {t('decision.type.filter')} </InputLabel>
+                            <Select
+                                multiple
+                                value={selectedType}
+                                onChange={(e) => {
+                                    const values = e.target.value;
+                                    // If 'all' is selected - toggle it
+                                    if (values.includes('all')) {
+                                        // If 'all' was not selected - select it and deselect all other values
+                                        if (!selectedType.includes('all')) {
+                                            setSelectedType(['all']);
                                         }
-                                    }}
-                                    label={t('decision.type.filter')}
-                                    renderValue={(selected) => {
-                                        // Translate 'all' to the localized string
-                                        return selected.map(value =>
-                                            value === 'all' ? t('decision.type.all') : value
-                                        ).join(', ');
-                                    }}
+                                        // If 'all' was already selected - deselect it
+                                        else {
+                                            const newValues = values.filter(v => v !== 'all');
+                                            setSelectedType(newValues.length ? newValues : ['all']);
+                                        }
+                                    } else {
+                                        setSelectedType(values.length ? values : ['all']);
+                                    }
+                                }}
+                                label={t('decision.type.filter')}
+                                renderValue={(selected) => {
+                                    // Translate 'all' to the localized string
+                                    return selected.map(value =>
+                                        value === 'all' ? t('decision.type.all') : value
+                                    ).join(', ');
+                                }}
+                            >
+                                {/* Bold font for selected items */}
+                                <MenuItem
+                                    value="all"
+                                    sx={{fontWeight: selectedType.includes('all') ? 'bold' : 'normal'}}
                                 >
-                                    {/* Bold font for selected items */}
+                                    {t('decision.type.all')}
+                                </MenuItem>
+
+                                {decisionTypes.map(type => (
                                     <MenuItem
-                                        value="all"
-                                        sx={{fontWeight: selectedType.includes('all') ? 'bold' : 'normal'}}
+                                        key={type}
+                                        value={type}
+                                        sx={{fontWeight: selectedType.includes(type) ? 'bold' : 'normal'}}
                                     >
-                                        {t('decision.type.all')}
+                                        {type}
                                     </MenuItem>
+                                ))}
 
-                                    {decisionTypes.map(type => (
-                                        <MenuItem
-                                            key={type}
-                                            value={type}
-                                            sx={{fontWeight: selectedType.includes(type) ? 'bold' : 'normal'}}
-                                        >
-                                            {type}
-                                        </MenuItem>
-                                    ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
 
-                                </Select>
-                            </FormControl>
-                        </Box>
-
-                        <Typography variant="h6" gutterBottom>
-                            {t('decision.list.title')}
-                        </Typography>
-                        {hoveredDecisions ? (
-                            <Box>
-                                <Typography variant="subtitle1" gutterBottom>
-                                    {t('decision.found', {
-                                        count: hoveredDecisions.length
-                                    })}
-                                </Typography>
-                                <Box sx={{flex: 1, overflowY: 'auto'}}>
-                                    {hoveredDecisions
-                                        .filter(d => selectedType.includes('all') || d.decisionType?.name && selectedType.includes(d.decisionType.name))
-                                        .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime)) // Sort by Date
-                                        .map(decision => (
-                                            <Paper
-                                                key={decision.id}
-                                                elevation={1}
-                                                sx={{
-                                                    p: 2,
-                                                    mb: 1,
-                                                    background: 'white'
-                                                }}
-                                            >
-                                                <Typography variant="h6">
-                                                    {decision.decisionType?.name}
-                                                </Typography>
-                                                <Typography>
-                                                    {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
-                                                </Typography>
-                                                <Typography>
-                                                    {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
-                                                </Typography>
-                                                {decision.description && (
-                                                    <Typography>
-                                                        {t('decision.description')}: {decision.description}
-                                                    </Typography>
-                                                )}
-                                            </Paper>
-                                        ))}
-                                </Box>
-                            </Box>
-                        ) : (
-                            <Typography>
-                                {t('decision.list.hover')}
+                    <Typography variant="h6" gutterBottom>
+                        {t('decision.list.title')}
+                    </Typography>
+                    {hoveredDecisions ? (
+                        <Box>
+                            <Typography variant="subtitle1" gutterBottom>
+                                {t('decision.found', {
+                                    count: hoveredDecisions.length
+                                })}
                             </Typography>
-                        )}
-                    </Paper>
+                            <Box sx={{flex: 1, overflowY: 'auto'}}>
+                                {hoveredDecisions
+                                    .filter(d => selectedType.includes('all') || d.decisionType?.name && selectedType.includes(d.decisionType.name))
+                                    .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime)) // Sort by Date
+                                    .map(decision => (
+                                        <Paper
+                                            key={decision.id}
+                                            elevation={1}
+                                            sx={{
+                                                p: 2,
+                                                mb: 1,
+                                                background: 'white'
+                                            }}
+                                        >
+                                            <Typography variant="h6">
+                                                {decision.decisionType?.name}
+                                            </Typography>
+                                            <Typography>
+                                                {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
+                                            </Typography>
+                                            <Typography>
+                                                {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
+                                            </Typography>
+                                            {decision.description && (
+                                                <Typography>
+                                                    {t('decision.description')}: {decision.description}
+                                                </Typography>
+                                            )}
+                                        </Paper>
+                                    ))}
+                            </Box>
+                        </Box>
+                    ) : (
+                        <Typography>
+                            {t('decision.list.hover')}
+                        </Typography>
+                    )}
+                </Paper>
 
-                )}  {/* showPanel && ...*/}
+            )}  {/* showPanel && ...*/}
 
-            </Box>
-        </ThemeProvider>
+        </Box>
     );
 }
 
