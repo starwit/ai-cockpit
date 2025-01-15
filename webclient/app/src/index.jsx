@@ -16,7 +16,8 @@ root.render(
             <ToastContainer
                 position="bottom-left"
                 closeOnClick
-                pauseOnFocusLoss={true}
+                limit={1}
+                pauseOnFocusLoss
                 draggable={false}
                 theme="colored"
             />
