@@ -1,26 +1,26 @@
 [
   {
-    "name": "Ordnungsamt benachrichtigen",
+    "name": "Notify Public Order Office",
     "description": "",
     "executionPolicy": "WITHCHECK"
   },
   {
-    "name": "Auftragsliste und Tour generieren",
+    "name": "Generate Task List and Route",
     "description": "",
     "executionPolicy": "WITHCHECK"
   },
   {
-    "name": "Abschleppdienst benachrichtigen",
+    "name": "Notify Towing Service",
     "description": "",
     "executionPolicy": "WITHCHECK"
   },
   {
-    "name": "Grünflächenamt benachrichtigen",
+    "name": "Notify Parks Department",
     "description": "",
     "executionPolicy": "WITHCHECK"
   },
   {
-    "name": "Einsatzwagen benachrichtigen",
+    "name": "Notify Patrol Vehicle",
     "description": "",
     "executionPolicy": "WITHCHECK"
   }

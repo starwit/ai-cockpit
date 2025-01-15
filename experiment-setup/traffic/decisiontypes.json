@@ -14,7 +14,7 @@
     },
     {
         "name": "accident",
-        "description": "A traffic decision involving a collision or crash between vehicles or other obstacles",
+        "description": "A decision involving a collision or crash between vehicles or other obstacles",
         "decision": [],
         "actionType": [
             {
