@@ -1,7 +1,7 @@
 [
   {
-    "name": "Verunreinigte Verkehrsschilder",
-    "description": "Verkehrsschild kann nicht mehr erkannt werden und Säuberung muss veranlasst werden",
+    "name": "Contaminated Traffic Signs",
+    "description": "Traffic sign is no longer recognizable and needs to be cleaned",
     "actionType": [
       {
         "id": 5
@@ -9,8 +9,8 @@
     ]
   },
   {
-    "name": "Wildkrautbewuchs",
-    "description": "Wildkaut auf Gehweg oder am Straßenrand",
+    "name": "Wild Weed Growth",
+    "description": "Wild weeds on the sidewalk or roadside",
     "actionType": [
       {
         "id": 4
@@ -18,8 +18,8 @@
     ]
   },
   {
-    "name": "Überfüllter Müllbehälter",
-    "description": "Müll liegt bereits neben den Müllbehälter",
+    "name": "Overfilled Trash Bin",
+    "description": "Trash is already lying next to the trash bin",
     "actionType": [
       {
         "id": 5
@@ -27,8 +27,8 @@
     ]
   },
   {
-    "name": "Müllablagerung",
-    "description": "unbefugte Ablagerung von Sperrmüll oder anderer Müllhaufen",
+    "name": "Illegal Waste Disposal",
+    "description": "Unauthorized dumping of bulky waste or other piles of trash",
     "actionType": [
       {
         "id": 5
@@ -36,8 +36,8 @@
     ]
   },
   {
-    "name": "Falschparker",
-    "description": "Falschparker behindert die Müllabfuhr und muss abgeschleppt werden",
+    "name": "Illegally Parked Vehicle",
+    "description": "Illegally parked vehicle obstructing garbage collection and needs towing",
     "actionType": [
       {
         "id": 1

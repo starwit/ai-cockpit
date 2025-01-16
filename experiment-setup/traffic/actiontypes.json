@@ -1,7 +1,7 @@
 [
     {
         "name": "notify police",
-        "description": "Notify the police about the traffic decision",
+        "description": "Notify the police about the decision",
         "executionPolicy": "WITHCHECK",
         "action": []
     },
@@ -13,7 +13,7 @@
     },
     {
         "name": "notify public alarm services",
-        "description": "Notify public platforms or apps about the traffic decision",
+        "description": "Notify public platforms or apps about the decision",
         "executionPolicy": "AUTOMATIC",
         "action": []
     },
