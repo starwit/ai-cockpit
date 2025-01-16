@@ -1,5 +1,5 @@
 import CloseIcon from "@mui/icons-material/Close";
-import {Dialog, DialogContent, DialogTitle, IconButton} from "@mui/material";
+import {Dialog, DialogContent, DialogTitle, IconButton, Stack} from "@mui/material";
 import React, {useEffect, useMemo} from "react";
 import TransparencyFunctions from "../../services/TransparencyFunctions";
 import CycloneDXViewer from "./CycloneDXViewer";
@@ -8,6 +8,8 @@ function ComponentDetailsDialog(props) {
     const transparencyFunctions = useMemo(() => new TransparencyFunctions(), []);
     const {open, moduleData, handleClose} = props;
     const [sbomList, setSbomList] = React.useState([]);
+    const [size, setSize] = React.useState(0);
+    const [isLoaded, setIsLoaded] = React.useState(false);
 
     useEffect(() => {
         reload();
@@ -15,21 +17,32 @@ function ComponentDetailsDialog(props) {
 
     function reload() {
         const sboms = {}
+        let size = Object.values(moduleData.sBOMLocation).length;
+        console.log(size);
         Object.entries(moduleData.sBOMLocation).map((entry) => {
             transparencyFunctions.loadSBOM(entry[1]).then(response => {
+                console.log(response.data);
+                if (!(response.headers['content-type'].includes("application/json"))) {
+                    return;
+                }
                 if (response.data == null) {
                     return;
                 }
                 const sbomName = entry[0];
                 sboms[sbomName] = response.data;
                 setSbomList(sboms);
+                size--;
+                console.log(size);
+                if (size == 0) {
+                    setIsLoaded(true);
+                }
             });
         });
     }
 
     return (
         <Dialog
-            open={open}
+            open={open && isLoaded}
             onClose={handleClose}>
             <DialogTitle>{moduleData.name}</DialogTitle>
             <IconButton
@@ -44,11 +57,13 @@ function ComponentDetailsDialog(props) {
                 <CloseIcon />
             </IconButton>
             <DialogContent>
-                {Object.values(sbomList).map((entry, idx) =>
-                (
-                    <CycloneDXViewer key={idx} cycloneData={entry} />
-                )
-                )}
+                <Stack>
+                    {Object.values(sbomList).map((entry, idx) =>
+                    (
+                        <CycloneDXViewer key={idx} cycloneData={entry} />
+                    )
+                    )}
+                </Stack>
             </DialogContent>
         </Dialog>
     );

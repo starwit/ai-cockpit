@@ -1,38 +1,102 @@
 [
     {
-        "id": 1,
-        "name": "AnDe",
-        "description": "A fantastic AI module",
+        "id": 0,
+        "name": "Anomaly Detection",
+        "description": "Detects traffic anomalies",
         "useAI": true,
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "sbom-backend.json",
-            "frontend": "sbom-frontend.json"
+            "backend": "aic-sbom-backend.json"
+        }
+    },
+    {
+        "id": 1,
+        "name": "Anomaly Post-Processing",
+        "description": "Classify and package anomalies for human intervention",
+        "useAI": false,
+        "aiType": "MISC",
+        "modelVersion": "1.0.0",
+        "sBOMLocation": {
+            "backend": "aic-sbom-backend.json"
         }
     },
     {
         "id": 2,
         "name": "AI Cockpit",
-        "description": "An AI act inspired cockpit to monitor AI apps",
+        "description": "An AI act inspired cockpit to monitor AI application landscapes",
         "useAI": false,
         "aiType": null,
         "modelVersion": null,
         "sBOMLocation": {
-            "backend": "sbom-backend.json",
-            "frontend": "sbom-frontend.json"
+            "backend": "aic-sbom-backend.json",
+            "frontend": "aic-sbom-frontend.json"
         }
     },
     {
         "id": 3,
-        "name": "Sandy",
-        "description": "A super intepretation engine",
+        "name": "Starwit GeoMerger",
+        "description": "Combines multiple detections of the same object into one geo representation",
         "useAI": true,
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "sbom-backend.json",
-            "frontend": "sbom-frontend.json"
+            "backend": "aic-sbom-backend.json"
+        }
+    },
+    {
+        "id": 4,
+        "name": "Starwit Object Tracker",
+        "description": "Tracks moving objects",
+        "useAI": true,
+        "aiType": "MISC",
+        "modelVersion": "1.0.0",
+        "sBOMLocation": {
+            "backend": "aic-sbom-backend.json"
+        }
+    },
+    {
+        "id": 5,
+        "name": "Starwit Object Follower",
+        "description": "Tracks moving objects via multiple cameras",
+        "useAI": true,
+        "aiType": "MISC",
+        "modelVersion": "1.0.0",
+        "sBOMLocation": {
+            "backend": "aic-sbom-backend.json"
+        }
+    },
+    {
+        "id": 6,
+        "name": "Starwit Anomaly Classifier",
+        "description": "Classifies Anomalies",
+        "useAI": true,
+        "aiType": "MISC",
+        "modelVersion": "1.0.0",
+        "sBOMLocation": {
+            "backend": "aic-sbom-backend.json"
+        }
+    },
+    {
+        "id": 7,
+        "name": "Starwit Action Chooser",
+        "description": "Selects actions to mitigate effects of a found anomaly.",
+        "useAI": true,
+        "aiType": "MISC",
+        "modelVersion": "1.0.0",
+        "sBOMLocation": {
+            "backend": "aic-sbom-backend.json"
+        }
+    },
+    {
+        "id": 8,
+        "name": "Starwit Feedback Learner",
+        "description": "Takes user feedback from AI Cockpit, to improve anomaly detectio & classification",
+        "useAI": true,
+        "aiType": "MISC",
+        "modelVersion": "1.0.0",
+        "sBOMLocation": {
+            "backend": "aic-sbom-backend.json"
         }
     }
 ]

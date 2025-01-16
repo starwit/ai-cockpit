@@ -36,14 +36,14 @@
     "scripts": {
         "start": "vite --force",
         "build": "vite build",
-        "sbom": "cyclonedx-npm --spec-version 1.5"
+        "sbom": "cyclonedx-npm --spec-version 1.6 --output-file dist/aic-sbom-frontend.json"
     },
     "eslintConfig": {
         "extends": "react-app"
     },
     "devDependencies": {
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-        "@cyclonedx/cyclonedx-npm": "^1.19.3",
+        "@cyclonedx/cyclonedx-npm": "^1.20.0",
         "@mui/x-data-grid": "7.22.3",
         "@vitejs/plugin-react": "^4.3.3",
         "buffer": "npm:buffer@^6.0.3",

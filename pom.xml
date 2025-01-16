@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -10,7 +12,14 @@
     <groupId>de.starwit</groupId>
     <artifactId>ai-cockpit</artifactId>
     <version>0.1.7-SNAPSHOT</version>
-    <description>App template from test @ spring</description>
+    <description>Starwit's implementation of AI Cockpit. Stay in control of complex AI systems!</description>
+    <licenses>
+        <license>
+            <name>AGPLv3</name>
+            <url>https://github.com/starwit/ai-cockpit/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <packaging>pom</packaging>
 
     <scm>
@@ -133,6 +142,11 @@
                 <artifactId>protobuf-java</artifactId>
                 <version>4.29.1</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents.client5</groupId>
+                <artifactId>httpclient5</artifactId>
+                <version>5.4.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -168,34 +182,6 @@
                     <version>4.0.0-M16</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.cyclonedx</groupId>
-                    <artifactId>cyclonedx-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <phase>prepare-package</phase>
-                            <goals>
-                                <goal>makeAggregateBom</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <projectType>library</projectType>
-                        <schemaVersion>1.5</schemaVersion>
-                        <includeBomSerialNumber>true</includeBomSerialNumber>
-                        <includeCompileScope>true</includeCompileScope>
-                        <includeProvidedScope>true</includeProvidedScope>
-                        <includeRuntimeScope>true</includeRuntimeScope>
-                        <includeSystemScope>true</includeSystemScope>
-                        <includeTestScope>false</includeTestScope>
-                        <includeLicenseText>false</includeLicenseText>
-                        <outputReactorProjects>true</outputReactorProjects>
-                        <outputFormat>json</outputFormat>
-                        <outputName>sbom-backend</outputName>
-                        <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
-                        <verbose>false</verbose>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
                     <version>3.1.0</version>
@@ -204,11 +190,15 @@
                             <phase>prepare-package</phase>
                             <configuration>
                                 <target>
-                                    <concat destfile="${project.build.outputDirectory}/static/info.txt">
-                                        <fileset file="${project.build.outputDirectory}/META-INF/build-info.properties" />
-                                        <fileset file="${project.build.outputDirectory}/git.properties" />
+                                    <concat
+                                        destfile="${project.build.outputDirectory}/static/info.txt">
+                                        <fileset
+                                            file="${project.build.outputDirectory}/META-INF/build-info.properties" />
+                                        <fileset
+                                            file="${project.build.outputDirectory}/git.properties" />
                                         <filterchain>
-                                            <filterreader classname="org.apache.tools.ant.filters.LineContains">
+                                            <filterreader
+                                                classname="org.apache.tools.ant.filters.LineContains">
                                                 <param type="negate" value="true" />
                                                 <param type="contains" value="#" />
                                             </filterreader>

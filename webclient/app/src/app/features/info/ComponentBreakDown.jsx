@@ -2,12 +2,13 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {Card, CardContent, Divider, IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from "@mui/material";
+import {Card, CardContent, Divider, IconButton, Link, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TransparencyFunctions from "../../services/TransparencyFunctions";
 import ComponentDetailsDialog from "./ComponentDetailsDialog";
+import DescriptionIcon from '@mui/icons-material/Description';
 
 function ComponentBreakDown() {
     const {t} = useTranslation();
@@ -15,6 +16,7 @@ function ComponentBreakDown() {
     const [moduleList, setModuleList] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [moduleData, setModuleData] = React.useState({});
+    const [reportGenerationEnabled, setReportGenerationEnabled] = React.useState({});
 
     useEffect(() => {
         reload();
@@ -26,6 +28,14 @@ function ComponentBreakDown() {
                 return;
             } else {
                 setModuleList(response.data);
+            }
+        });
+
+        transparencyFunctions.isReportGenerationEnabled().then(response => {
+            if (response.data == null) {
+                return;
+            } else {
+                setReportGenerationEnabled(response.data);
             }
         });
     }
@@ -51,6 +61,7 @@ function ComponentBreakDown() {
     }
 
     function showPDF() {
+
     }
 
     return <>
@@ -90,13 +101,41 @@ function ComponentBreakDown() {
                                         <TableRow>
                                             <TableCell align="left">Details</TableCell>
                                             <TableCell align="left">
-                                                <IconButton onClick={e => {
-                                                    handleOpen(row);
-                                                }}
-                                                >
-                                                    <VisibilityIcon />
-                                                </IconButton>
-                                                <IconButton onClick={showPDF}><PictureAsPdfIcon /></IconButton>
+                                                <Tooltip title={t("transparency.components.details.show")}>
+                                                    <IconButton onClick={e => {
+                                                        handleOpen(row);
+                                                    }}
+                                                    >
+                                                        <VisibilityIcon />
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title={t("transparency.components.details.download.pdf")}>
+                                                    {reportGenerationEnabled ?
+                                                        <Link href={"/ai-cockpit/api/transparency/reports/" + row.id + "/pdf"} target="_blank" download>
+                                                            <IconButton onClick={showPDF(row.id)}>
+                                                                <PictureAsPdfIcon />
+                                                            </IconButton>
+                                                        </Link>
+                                                        :
+                                                        <IconButton disabled>
+                                                            <PictureAsPdfIcon />
+                                                        </IconButton>
+                                                    }
+                                                </Tooltip>
+                                                <Tooltip title={t("transparency.components.details.download.spreadsheet")}>
+                                                    {reportGenerationEnabled ?
+                                                        <Link href={"/ai-cockpit/api/transparency/reports/" + row.id + "/spreadsheet"} target="_blank" download>
+                                                            <IconButton >
+                                                                <DescriptionIcon />
+                                                            </IconButton>
+                                                        </Link>
+                                                        :
+                                                        <IconButton disabled>
+                                                            <DescriptionIcon />
+                                                        </IconButton>
+                                                    }
+
+                                                </Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     </TableBody>
@@ -106,7 +145,7 @@ function ComponentBreakDown() {
                     </Card>
                 </Grid>
             ))}
-        </Grid>
+        </Grid >
         {renderModuleList()}
     </>;
 }
