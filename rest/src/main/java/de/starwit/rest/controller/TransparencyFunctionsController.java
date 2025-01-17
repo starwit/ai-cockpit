@@ -136,7 +136,7 @@ public class TransparencyFunctionsController {
     var uris = getsBomUri(m);
     String sbomURI = uris.get(0);
 
-    String reportRequest = "{\"sbomURI\":\"" + sbomURI + "\",";
+    String reportRequest = "{\"sbomURI\":\"" + sbomUri + "\",";
     reportRequest += "\"dcId\": 0,";
     reportRequest += "\"compact\": true,";
     reportRequest += "\"sbom\": \"\"";
