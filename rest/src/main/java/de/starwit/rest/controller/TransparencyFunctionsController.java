@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,12 +135,18 @@ public class TransparencyFunctionsController {
 
   private String createRequestBody(Module m) {
     var uris = getsBomUri(m);
-    String sbomUri = uris.get(0);
 
-    String reportRequest = "{\"sbomURI\":\"" + sbomUri + "\",";
+    StringBuffer uriString = new StringBuffer();
+    for (String uri : uris) {
+      uriString.append("\"" + uri + "\",");
+    }
+    String s = uriString.toString();
+    String sbomUri = "[" + s.substring(0, s.lastIndexOf(",")) + "]";
+
+    String reportRequest = "{\"sbomURI\":" + sbomUri + ",";
     reportRequest += "\"dcId\": 0,";
     reportRequest += "\"compact\": true,";
-    reportRequest += "\"sbom\": \"\"";
+    reportRequest += "\"sbom\": []";
     reportRequest += "}";
 
     return reportRequest;
@@ -164,12 +171,9 @@ public class TransparencyFunctionsController {
     List<String> result = new ArrayList<>();
     for (var key : m.getsBOMLocation().keySet()) {
       String sbomLocation = m.getsBOMLocation().get(key);
+      // simple sanity check, that URI is an actual HTTP address
       if (sbomLocation.contains("http")) {
         result.add(sbomLocation);
-      } else {
-        // TODO it needs to be enforced elsewhere, that sbom location is a valid URI.
-        // There is no way, healing this here.
-        result.add("http://localhost:8081/ai-cockpit/" + sbomLocation);
       }
     }
     return result;

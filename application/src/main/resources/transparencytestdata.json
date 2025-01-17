@@ -7,7 +7,7 @@
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "aic-sbom-backend.json"
+            "backend": "http://localhost:8081/ai-cockpit/aic-sbom-backend.json"
         }
     },
     {
@@ -18,7 +18,7 @@
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "aic-sbom-backend.json"
+            "backend": "http://localhost:8081/ai-cockpit/aic-sbom-backend.json"
         }
     },
     {
@@ -29,8 +29,8 @@
         "aiType": null,
         "modelVersion": null,
         "sBOMLocation": {
-            "backend": "aic-sbom-backend.json",
-            "frontend": "aic-sbom-frontend.json"
+            "backend": "http://localhost:8081/ai-cockpit/aic-sbom-backend.json",
+            "frontend": "http://localhost:8081/ai-cockpit/aic-sbom-frontend.json"
         }
     },
     {
@@ -41,7 +41,7 @@
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "aic-sbom-backend.json"
+            "backend": "http://localhost:8081/ai-cockpit/aic-sbom-backend.json"
         }
     },
     {
@@ -52,7 +52,7 @@
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "aic-sbom-backend.json"
+            "backend": "http://localhost:8081/ai-cockpit/aic-sbom-backend.json"
         }
     },
     {
@@ -63,7 +63,7 @@
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "aic-sbom-backend.json"
+            "backend": "http://localhost:8081/ai-cockpit/aic-sbom-backend.json"
         }
     },
     {
@@ -74,7 +74,7 @@
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "aic-sbom-backend.json"
+            "backend": "http://localhost:8081/ai-cockpit/aic-sbom-backend.json"
         }
     },
     {
@@ -85,7 +85,7 @@
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "aic-sbom-backend.json"
+            "backend": "http://localhost:8081/ai-cockpit/aic-sbom-backend.json"
         }
     },
     {
@@ -96,7 +96,7 @@
         "aiType": "MISC",
         "modelVersion": "1.0.0",
         "sBOMLocation": {
-            "backend": "aic-sbom-backend.json"
+            "backend": "http://localhost:8081/ai-cockpit/aic-sbom-backend.json"
         }
     }
 ]

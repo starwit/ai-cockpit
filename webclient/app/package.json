@@ -1,6 +1,7 @@
 {
     "name": "ai-cockpit-webapp",
     "version": "0.1.0",
+    "license": "AGPLv3",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.13.5",

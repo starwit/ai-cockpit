@@ -23,11 +23,10 @@ function CycloneDXViewer(props) {
                         {cycloneData.metadata.component.name} {cycloneData.metadata.component.version}
                     </Typography>
                     <Divider />
-                    <Typography>Generated at: {cycloneData.metadata.timestamp}</Typography>
-                    <Typography>Package type: {cycloneData.metadata.component.type}</Typography>
-                    <Typography>Used libraries: {cycloneData.components.length}</Typography>
-                    <Typography>Indirect dependencies: {cycloneData.dependencies.length}</Typography>
-                    {/* <Typography>Generated with: {cycloneData.metadata.tools[0].name} {cycloneData.metadata.tools[0].version}</Typography> */}
+                    <Typography>{t("transparency.sbom.generated")}: {cycloneData.metadata.timestamp}</Typography>
+                    <Typography>{t("transparency.sbom.packagetype")}: {cycloneData.metadata.component.type}</Typography>
+                    <Typography>{t("transparency.sbom.usedlibs")}: {cycloneData.components.length}</Typography>
+                    <Typography>{t("transparency.sbom.indirectDeps")}: {cycloneData.dependencies.length}</Typography>
                     <Typography>{getUsedTools()}</Typography>
                 </Stack>
             </CardContent>
