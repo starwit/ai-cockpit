@@ -133,7 +133,7 @@ public class TransparencyFunctionsController {
   }
 
   private String createRequestBody(Module m) {
-    var uris = getsBOMUri(m);
+    var uris = getsBomUri(m);
     String sbomURI = uris.get(0);
 
     String reportRequest = "{\"sbomURI\":\"" + sbomURI + "\",";
