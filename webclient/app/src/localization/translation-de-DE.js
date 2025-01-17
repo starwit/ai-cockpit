@@ -121,6 +121,13 @@ const translationDeDE = {
     "transparency.components.details.useAI": "Dieses Modul nutzt KI-Methoden",
     "transparency.components.details.typeAI": "KI-Typ",
     "transparency.components.details.modelVersion": "Modelversion",
-    "transparency.sbom.title": "Bill of Material"
+    "transparency.sbom.title": "Bill of Material",
+    "transparency.sbom.generated": "Erzeugt am",
+    "transparency.sbom.packagetype": "Packettyp",
+    "transparency.sbom.usedlibs": "Eingebundene Bibliotheken",
+    "transparency.sbom.indirectDeps": "Indirekte Abhängigkeiten",
+    "transparency.components.details.show": "Details",
+    "transparency.components.details.download.pdf": "PDF herunterladen",
+    "transparency.components.details.download.spreadsheet": "Tabellendarstellung herunterladen"
 };
 export default translationDeDE;

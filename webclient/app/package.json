@@ -1,6 +1,7 @@
 {
     "name": "ai-cockpit-webapp",
     "version": "0.1.0",
+    "license": "AGPLv3",
     "private": true,
     "dependencies": {
         "@emotion/react": "^11.13.5",
@@ -39,13 +40,13 @@
     "scripts": {
         "start": "vite --force",
         "build": "vite build",
-        "sbom": "cyclonedx-npm --spec-version 1.5"
+        "sbom": "cyclonedx-npm --spec-version 1.6 --output-file dist/aic-sbom-frontend.json"
     },
     "eslintConfig": {
         "extends": "react-app"
     },
     "devDependencies": {
-        "@cyclonedx/cyclonedx-npm": "^1.19.3",
+        "@cyclonedx/cyclonedx-npm": "^1.20.0",
         "@mui/x-data-grid": "7.23.6",
         "@vitejs/plugin-react": "^4.3.3",
         "buffer": "npm:buffer@^6.0.3",

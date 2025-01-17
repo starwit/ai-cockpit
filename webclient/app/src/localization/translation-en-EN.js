@@ -121,6 +121,13 @@ const translationEnEN = {
     "transparency.components.details.useAI": "This module uses AI methods",
     "transparency.components.details.typeAI": "AI Type",
     "transparency.components.details.modelVersion": "Model Version",
-    "transparency.sbom.title": "Bill of Material"
+    "transparency.sbom.title": "Bill of Material",
+    "transparency.sbom.generated": "Generated at",
+    "transparency.sbom.packagetype": "Package type",
+    "transparency.sbom.usedlibs": "Use libraries",
+    "transparency.sbom.indirectDeps": "Indirect dependencies",
+    "transparency.components.details.show": "Show Details",
+    "transparency.components.details.download.pdf": "Download PDF",
+    "transparency.components.details.download.spreadsheet": "Download Spreadsheet"
 };
 export default translationEnEN;
