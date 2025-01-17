@@ -33,6 +33,11 @@ minio:
   password: minioadmin
   endpoint: http://localhost:9000
 
+sbom:
+  enabled: false
+  generator:
+    uri: http://localhost:8080
+
 # extraEnv: |
 #   - name: JAVA_TOOL_OPTIONS
 #     value: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5000
