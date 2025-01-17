@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -116,7 +117,8 @@ public class TransparencyFunctionsController {
       if (response.getStatusCode().is2xxSuccessful()) {
         result = response.getBody();
       } else {
-        resp.setStatus(404);
+        resp.setStatus(HttpStatus.NOT_FOUND.value());
+
       }
     } catch (Exception e) {
       LOG.error("Can't load report from remote URI " + e.getMessage());
