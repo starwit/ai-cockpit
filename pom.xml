@@ -200,7 +200,7 @@
                                 <includeLicenseText>false</includeLicenseText>
                                 <outputReactorProjects>true</outputReactorProjects>
                                 <outputFormat>json</outputFormat>
-                                <outputName>sbom-backend</outputName>
+                                <outputName>aic-sbom-backend</outputName>
                                 <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
                                 <verbose>true</verbose>
                             </configuration>
