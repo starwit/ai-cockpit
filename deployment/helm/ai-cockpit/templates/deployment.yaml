@@ -58,6 +58,10 @@ spec:
               value: {{ .Values.minio.password }}
             - name: MINIO_ENDPOINT
               value: {{ .Values.minio.endpoint }}
+            - name: SBOM_ENABLED
+              value: {{ .Values.sbom.enabled  | quote }}
+            - name: SBOM_GENERATOR_URI
+              value: {{ .Values.sbom.generator.uri  | quote}}
             {{- if .Values.auth.enabled }}
             - name: SPRING_PROFILES_ACTIVE
               value: auth
