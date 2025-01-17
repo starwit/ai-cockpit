@@ -21,7 +21,6 @@ function ComponentDetailsDialog(props) {
         console.log(size);
         Object.entries(moduleData.sBOMLocation).map((entry) => {
             transparencyFunctions.loadSBOM(entry[1]).then(response => {
-                console.log(response.data);
                 if (!(response.headers['content-type'].includes("application/json"))) {
                     return;
                 }
@@ -32,7 +31,6 @@ function ComponentDetailsDialog(props) {
                 sboms[sbomName] = response.data;
                 setSbomList(sboms);
                 size--;
-                console.log(size);
                 if (size == 0) {
                     setIsLoaded(true);
                 }

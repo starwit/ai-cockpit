@@ -133,10 +133,10 @@ public class TransparencyFunctionsController {
   }
 
   private String createRequestBody(Module m) {
-    var uris = getsBOMUri(m);
-    String sbomURI = uris.get(0);
+    var uris = getsBomUri(m);
+    String sbomUri = uris.get(0);
 
-    String reportRequest = "{\"sbomURI\":\"" + sbomURI + "\",";
+    String reportRequest = "{\"sbomURI\":\"" + sbomUri + "\",";
     reportRequest += "\"dcId\": 0,";
     reportRequest += "\"compact\": true,";
     reportRequest += "\"sbom\": \"\"";
@@ -160,7 +160,7 @@ public class TransparencyFunctionsController {
     return apiEndpoint;
   }
 
-  private List<String> getsBOMUri(Module m) {
+  private List<String> getsBomUri(Module m) {
     List<String> result = new ArrayList<>();
     for (var key : m.getsBOMLocation().keySet()) {
       String sbomLocation = m.getsBOMLocation().get(key);
