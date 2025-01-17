@@ -60,8 +60,12 @@ function ComponentBreakDown() {
         />);
     }
 
-    function showPDF() {
+    function getApiPDFPath(id) {
+        return window.location.pathname + "api/transparency/reports/" + id + "/pdf";
+    }
 
+    function getApiSpreadSheetPath(id) {
+        return window.location.pathname + "api/transparency/reports/" + id + "/spreadsheet";
     }
 
     return <>
@@ -111,8 +115,8 @@ function ComponentBreakDown() {
                                                 </Tooltip>
                                                 <Tooltip title={t("transparency.components.details.download.pdf")}>
                                                     {reportGenerationEnabled ?
-                                                        <Link href={"/ai-cockpit/api/transparency/reports/" + row.id + "/pdf"} target="_blank" download>
-                                                            <IconButton onClick={showPDF(row.id)}>
+                                                        <Link href={getApiPDFPath(row.id)} target="_blank" download>
+                                                            <IconButton >
                                                                 <PictureAsPdfIcon />
                                                             </IconButton>
                                                         </Link>
@@ -124,7 +128,7 @@ function ComponentBreakDown() {
                                                 </Tooltip>
                                                 <Tooltip title={t("transparency.components.details.download.spreadsheet")}>
                                                     {reportGenerationEnabled ?
-                                                        <Link href={"/ai-cockpit/api/transparency/reports/" + row.id + "/spreadsheet"} target="_blank" download>
+                                                        <Link href={getApiSpreadSheetPath(row.id)} target="_blank" download>
                                                             <IconButton >
                                                                 <DescriptionIcon />
                                                             </IconButton>
