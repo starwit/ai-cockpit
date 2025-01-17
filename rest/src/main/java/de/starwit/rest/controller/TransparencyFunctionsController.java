@@ -43,10 +43,10 @@ public class TransparencyFunctionsController {
   @Autowired
   private RestTemplate restTemplate;
 
-  @Value("${sbom.enabled}")
+  @Value("${sbom.enabled:false}")
   private boolean reportGenerationEnabled;
 
-  @Value("${sbom.generator.uri}")
+  @Value("${sbom.generator.uri:}")
   private String reportGeneratorUri;
 
   @PostConstruct
