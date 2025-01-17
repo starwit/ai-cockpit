@@ -31,7 +31,6 @@ function ComponentDetailsDialog(props) {
                 sboms[sbomName] = response.data;
                 setSbomList(sboms);
                 size--;
-                console.log(size);
                 if (size == 0) {
                     setIsLoaded(true);
                 }
