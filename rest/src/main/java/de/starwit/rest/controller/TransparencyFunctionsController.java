@@ -160,7 +160,7 @@ public class TransparencyFunctionsController {
     return apiEndpoint;
   }
 
-  private List<String> getsBOMUri(Module m) {
+  private List<String> getsBomUri(Module m) {
     List<String> result = new ArrayList<>();
     for (var key : m.getsBOMLocation().keySet()) {
       String sbomLocation = m.getsBOMLocation().get(key);
