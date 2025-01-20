@@ -47,9 +47,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import MediaContent from "../../commons/MediaContent";
 
-import {ThemeProvider, createTheme} from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {formatDateShort, formatDateFull} from '../../commons/formatter/DateFormatter';
@@ -495,167 +492,148 @@ function DecisionOverviewMap() {
             </Dialog>
         );
     }
-    ////////////////////////////////////////////////////////
-    const theme = createTheme({
-        components: {
-            MuiCssBaseline: {
-                styleOverrides: {
-                    body: {
-                        overflow: 'hidden'
-                    },
-                    html: {
-                        overflow: 'hidden'
-                    }
-                }
-            }
-        }
-    });
-    ////////////////////////////////////////////////////////
 
-    // Return the map component with minimum required styles
+
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
-                <DeckGL
-                    layers={layers}
-                    views={MAP_VIEW}
-                    initialViewState={INITIAL_VIEW_STATE}
-                    controller={{dragRotate: false}}
-                />
+        <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
+            <DeckGL
+                layers={layers}
+                views={MAP_VIEW}
+                initialViewState={INITIAL_VIEW_STATE}
+                controller={{dragRotate: false}}
+            />
 
-                {/* Filter panel on the left */}
-                {showFilterPanel && (
-                    <Paper
-                        elevation={3}
-                        sx={{
-                            position: 'absolute',
-                            top: '10px',
-                            left: '10px',
-                            bottom: '10px',
-                            width: '300px',
-                            padding: '16px',
-                            bgcolor: 'rgba(255, 255, 255, 0.9)',
-                            zIndex: 1, // Ensure the panel is above the map
-                            maxHeight: '110px', // Limit the height
-                            overflowY: 'auto' // Allow scrolling only inside the panel if needed
-                        }}
-                    >
-                        <Box sx={{mb: 2}}>
-                            <FormControl fullWidth>
-                                <InputLabel>{t('decision.type.filter')}</InputLabel>
-                                <Select
-                                    value={selectedType}
-                                    onChange={(e) => setSelectedType(e.target.value)}
-                                    label={t('decision.type.filter')}
-                                >
-                                    <MenuItem value="all">{t('decision.type.all')}</MenuItem>
-                                    {decisionTypes.map((type) => (
-                                        <MenuItem key={type} value={type}>
-                                            {type}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Box>
-                    </Paper>
-                )}
-
-                {/* Button to show/hide the filter panel */}
-                <IconButton
-                    onClick={() => setShowFilterPanel(!showFilterPanel)}
+            {/* Filter panel on the left */}
+            {showFilterPanel && (
+                <Paper
+                    elevation={3}
                     sx={{
                         position: 'absolute',
                         top: '10px',
-                        left: showFilterPanel ? '320px' : '10px',
-                        bgcolor: 'white',
-                        zIndex: 2 // Ensure the button is above other elements
+                        left: '10px',
+                        bottom: '10px',
+                        width: '300px',
+                        padding: '16px',
+                        bgcolor: 'rgba(255, 255, 255, 0.9)',
+                        zIndex: 1, // Ensure the panel is above the map
+                        maxHeight: '110px', // Limit the height
+                        overflowY: 'auto' // Allow scrolling only inside the panel if needed
                     }}
-                    size="small"
                 >
-                    {showFilterPanel ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                </IconButton>
+                    <Box sx={{mb: 2}}>
+                        <FormControl fullWidth>
+                            <InputLabel>{t('decision.type.filter')}</InputLabel>
+                            <Select
+                                value={selectedType}
+                                onChange={(e) => setSelectedType(e.target.value)}
+                                label={t('decision.type.filter')}
+                            >
+                                <MenuItem value="all">{t('decision.type.all')}</MenuItem>
+                                {decisionTypes.map((type) => (
+                                    <MenuItem key={type} value={type}>
+                                        {type}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                </Paper>
+            )}
 
-                {/* Results list on the right */}
-                {showPanel && (
-                    <Paper
-                        elevation={3}
-                        sx={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            bottom: '10px',
-                            width: '300px',
-                            overflowY: 'auto',
-                            padding: '16px',
-                            bgcolor: 'rgba(255, 255, 255, 0.9)',
-                            maxHeight: 'calc(100vh - 100px)',
-                            zIndex: 1
-                        }}
-                    >
-                        <Typography variant="h6" gutterBottom>
-                            {t('decision.list.title')}
+            {/* Button to show/hide the filter panel */}
+            <IconButton
+                onClick={() => setShowFilterPanel(!showFilterPanel)}
+                sx={{
+                    position: 'absolute',
+                    top: '10px',
+                    left: showFilterPanel ? '320px' : '10px',
+                    bgcolor: 'white',
+                    zIndex: 2 // Ensure the button is above other elements
+                }}
+                size="small"
+            >
+                {showFilterPanel ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+            </IconButton>
+
+            {/* Results list on the right */}
+            {showPanel && (
+                <Paper
+                    elevation={3}
+                    sx={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        bottom: '10px',
+                        width: '300px',
+                        overflowY: 'auto',
+                        padding: '16px',
+                        bgcolor: 'rgba(255, 255, 255, 0.9)',
+                        maxHeight: 'calc(100vh - 100px)',
+                        zIndex: 1
+                    }}
+                >
+                    <Typography variant="h6" gutterBottom>
+                        {t('decision.list.title')}
+                    </Typography>
+                    <Box>
+                        <Typography variant="subtitle1" gutterBottom>
+                            {t('decision.found', {
+                                count: hoveredDecisions ? hoveredDecisions.length : filteredDecisions.length
+
+                            })}
                         </Typography>
-                        <Box>
-                            <Typography variant="subtitle1" gutterBottom>
-                                {t('decision.found', {
-                                    count: hoveredDecisions ? hoveredDecisions.length : filteredDecisions.length
-
-                                })}
-                            </Typography>
-                            <Box sx={{flex: 1, overflowY: 'auto'}}>
-                                {(hoveredDecisions || decisions)
-                                    .filter((d) => selectedType === 'all' || d.decisionType?.name === selectedType)
-                                    .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime))
-                                    .map((decision) => (
-                                        <Paper
-                                            key={decision.id}
-                                            elevation={1}
-                                            sx={{
-                                                p: 2,
-                                                mb: 1,
-                                                background: 'white'
-                                            }}
-                                        >
-                                            <Typography variant="h6">
-                                                {decision.decisionType?.name}
-                                            </Typography>
+                        <Box sx={{flex: 1, overflowY: 'auto'}}>
+                            {(hoveredDecisions || decisions)
+                                .filter((d) => selectedType === 'all' || d.decisionType?.name === selectedType)
+                                .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime))
+                                .map((decision) => (
+                                    <Paper
+                                        key={decision.id}
+                                        elevation={1}
+                                        sx={{
+                                            p: 2,
+                                            mb: 1,
+                                            background: 'white'
+                                        }}
+                                    >
+                                        <Typography variant="h6">
+                                            {decision.decisionType?.name}
+                                        </Typography>
+                                        <Typography>
+                                            {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
+                                        </Typography>
+                                        <Typography>
+                                            {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
+                                        </Typography>
+                                        {decision.description && (
                                             <Typography>
-                                                {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
+                                                {t('decision.description')}: {decision.description}
                                             </Typography>
-                                            <Typography>
-                                                {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
-                                            </Typography>
-                                            {decision.description && (
-                                                <Typography>
-                                                    {t('decision.description')}: {decision.description}
-                                                </Typography>
-                                            )}
-                                        </Paper>
-                                    ))}
-                            </Box>
+                                        )}
+                                    </Paper>
+                                ))}
                         </Box>
-                    </Paper>
-                )}
+                    </Box>
+                </Paper>
+            )}
 
-                {/* Button to show/hide the results list */}
-                <IconButton
-                    onClick={() => setShowPanel(!showPanel)}
-                    sx={{
-                        position: 'absolute',
-                        top: '10px',
-                        right: showPanel ? '320px' : '10px',
-                        bgcolor: 'white',
-                        zIndex: 2 // Ensure the button is above other elements
-                    }}
-                    size="small"
-                >
-                    {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
+            {/* Button to show/hide the results list */}
+            <IconButton
+                onClick={() => setShowPanel(!showPanel)}
+                sx={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: showPanel ? '320px' : '10px',
+                    bgcolor: 'white',
+                    zIndex: 2 // Ensure the button is above other elements
+                }}
+                size="small"
+            >
+                {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
 
-                <DecisionDialog />
-            </Box>
-        </ThemeProvider>
+            <DecisionDialog />
+        </Box>
     );
 }
 
