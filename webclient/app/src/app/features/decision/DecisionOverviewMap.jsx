@@ -9,7 +9,6 @@ import {
 } from "@deck.gl/layers";
 
 import DeckGL from "@deck.gl/react";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import DecisionTypeRest from '../../services/DecisionTypeRest';
 import DecisionRest from '../../services/DecisionRest';
