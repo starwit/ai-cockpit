@@ -32,6 +32,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
+import Info from "@mui/icons-material/Info";
 import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
@@ -66,9 +67,9 @@ function DecisionDetail(props) {
         if (!isTextField) {
             if (event.key === 'Escape') {
                 handleClose();
-            } else if (event.key === 'ArrowRight') {
+            } else if (event.key === 'a') {
                 handleNext(data, rowIndex);
-            } else if (event.key === 'ArrowLeft') {
+            } else if (event.key === 'd') {
                 handleBefore(data, rowIndex);
             }
         }
@@ -205,10 +206,22 @@ function DecisionDetail(props) {
 
                     sx={{
                         position: "absolute",
-                        right: 60,
+                        right: 120,
                         top: 8,
                     }}
                 >{automaticNext ? <PauseIcon /> : <PlayArrowIcon />}
+
+                </IconButton>
+            </Tooltip>
+            <Tooltip title={t("arrow.info")}>
+                <IconButton
+                    sx={{
+                        position: "absolute",
+                        right: 60,
+                        top: 8,
+                    }}
+                >
+                    <Info />
 
                 </IconButton>
             </Tooltip>
@@ -352,17 +365,21 @@ function DecisionDetail(props) {
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
-                    <IconButton
-                        onClick={() => handleBefore(data, rowIndex)}
-                        variant="contained">
-                        <ArrowBackIosIcon />
-                    </IconButton>
+                    <Tooltip title={t("arrow.info")}>
+                        <IconButton
+                            onClick={() => handleBefore(data, rowIndex)}
+                            variant="contained">
+                            <ArrowBackIosIcon />
+                        </IconButton>
+                    </Tooltip>
                     {rowIndex + 1}/{data.length}
-                    <IconButton
-                        onClick={() => handleNext(data, rowIndex)}
-                        variant="contained">
-                        <ArrowForwardIosIcon />
-                    </IconButton>
+                    <Tooltip title={t("arrow.info")}>
+                        <IconButton
+                            onClick={() => handleNext(data, rowIndex)}
+                            variant="contained">
+                            <ArrowForwardIosIcon />
+                        </IconButton>
+                    </Tooltip>
                 </Box>
                 <Box sx={{
                     paddingBottom: 2,

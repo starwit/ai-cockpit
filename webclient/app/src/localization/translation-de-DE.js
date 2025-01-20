@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 const translationDeDE = {
+    "arrow.info": "Zwischen den Gefahrensituationen kann mit den A & D navigiert werden.",
     "decision": "Gefahrensituation",
     "decision.title": "Gefahrensituationen",
     "decision.create.title": "Gefahrensituation erfassen",
