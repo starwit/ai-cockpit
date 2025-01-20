@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 const translationEnEN = {
+    "arrow.info": "You can navigate between decisions using A & D",
     "decision": "Traffic Decision",
     "decision.title": "Traffic Decisions",
     "decision.create.title": "Create Decision",

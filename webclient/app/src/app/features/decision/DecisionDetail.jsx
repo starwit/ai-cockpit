@@ -22,7 +22,7 @@ import {
     IconButton,
     Tooltip
 } from "@mui/material";
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState, useCallback} from "react";
 import {useTranslation} from "react-i18next";
 import DecisionDetailStyles from "../../assets/themes/DecisionDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";
@@ -32,6 +32,8 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
+import Info from "@mui/icons-material/Info";
+import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
@@ -49,14 +51,52 @@ function DecisionDetail(props) {
 
     useEffect(() => {
         reload();
-        setRowIndex(data.indexOf(rowData));
+        setRowIndex(searchIndex(data, rowData));    //set the index of the current decision
     }, [open, rowData]);
 
     useEffect(() => {
         reloadActionTypes();
     }, [decisionType]);
 
-    function reload() {
+    const handleKeyDown = useCallback((event) => {
+        const activeElement = document.activeElement;
+        const isTextField = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
+
+        if (!isTextField) {
+            if (event.key === 'Escape') {
+                handleClose();
+            } else if (event.key === 'a') {
+                handleNext(data, rowIndex);
+            } else if (event.key === 'd') {
+                handleBefore(data, rowIndex);
+            }
+        }
+
+
+    }, [handleSave, handleClose, handleNext, handleBefore, data, rowIndex]);
+
+    useEffect(() => {
+        if (open) {
+            window.addEventListener('keydown', handleKeyDown);
+        }
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [open, handleKeyDown]);
+
+
+
+    function searchIndex(data, rowData) {   //search the index of the current decision
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].id === rowData.id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function reload() { //reload the decision types
         decisionTypeRest.findAll().then(response => {
             if (response.data == null) {
                 return;
@@ -66,7 +106,7 @@ function DecisionDetail(props) {
         });
     }
 
-    function findExistingActions(defaultActionTypes) {
+    function findExistingActions(defaultActionTypes) {  //find the existing actions
         const actions = [];
         rowData.action.forEach(action => {
             const found = defaultActionTypes.find(value => value.id == action.actionType.id);
@@ -77,7 +117,7 @@ function DecisionDetail(props) {
         return actions;
     }
 
-    function reloadActionTypes() {
+    function reloadActionTypes() {  //reload the action types
         if (decisionType == undefined || decisionType.id == undefined) {
             return null;
         }
@@ -109,7 +149,7 @@ function DecisionDetail(props) {
         setDecisionType(event.target.value);
     }
 
-    function renderDecisionMap() {
+    function renderDecisionMap() {  //render the map
         if (rowData.cameraLatitude == undefined || rowData.cameraLongitude == undefined) {
             return (
                 <Typography align="center">
@@ -172,10 +212,22 @@ function DecisionDetail(props) {
 
                     sx={{
                         position: "absolute",
-                        right: 60,
+                        right: 120,
                         top: 8,
                     }}
                 >{automaticNext ? <PauseIcon /> : <PlayArrowIcon />}
+
+                </IconButton>
+            </Tooltip>
+            <Tooltip title={t("arrow.info")}>
+                <IconButton
+                    sx={{
+                        position: "absolute",
+                        right: 60,
+                        top: 8,
+                    }}
+                >
+                    <Info />
 
                 </IconButton>
             </Tooltip>
@@ -318,17 +370,21 @@ function DecisionDetail(props) {
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
-                    <IconButton
-                        onClick={() => handleBefore(data, rowIndex)}
-                        variant="contained">
-                        <ArrowBackIosIcon />
-                    </IconButton>
+                    <Tooltip title={t("arrow.info")}>
+                        <IconButton
+                            onClick={() => handleBefore(data, rowIndex)}
+                            variant="contained">
+                            <ArrowBackIosIcon />
+                        </IconButton>
+                    </Tooltip>
                     {rowIndex + 1}/{data.length}
-                    <IconButton
-                        onClick={() => handleNext(data, rowIndex)}
-                        variant="contained">
-                        <ArrowForwardIosIcon />
-                    </IconButton>
+                    <Tooltip title={t("arrow.info")}>
+                        <IconButton
+                            onClick={() => handleNext(data, rowIndex)}
+                            variant="contained">
+                            <ArrowForwardIosIcon />
+                        </IconButton>
+                    </Tooltip>
                 </Box>
                 <Box sx={{
                     paddingBottom: 2,
