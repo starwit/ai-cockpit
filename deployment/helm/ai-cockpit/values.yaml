@@ -38,6 +38,11 @@ sbom:
   generator:
     uri: http://localhost:8080
 
+aiapi:
+  transparency:
+    enabled: false
+    uri: http://localhost:8081
+
 # extraEnv: |
 #   - name: JAVA_TOOL_OPTIONS
 #     value: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5000

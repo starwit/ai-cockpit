@@ -18,7 +18,6 @@ function ComponentDetailsDialog(props) {
     function reload() {
         const sboms = {}
         let size = Object.values(moduleData.sBOMLocation).length;
-        console.log(size);
         Object.entries(moduleData.sBOMLocation).map((entry) => {
             transparencyFunctions.loadSBOM(entry[1]).then(response => {
                 if (!(response.headers['content-type'].includes("application/json"))) {

@@ -1,0 +1,17 @@
+services:
+
+  transparency-api:
+    image: starwitorg/starwit-aicapi-transparency:0.0.6
+    environment:
+      SERVER_PORT: 8081
+      APP_SERVICE_URI: http://localhost:8081
+      SERVER_SERVLET_CONTEXT_PATH: ""
+    network_mode: host
+  
+  sbom-generator:
+    image: starwitorg/sbom-generator:0.0.10
+    environment:
+      SERVER_PORT: 8082
+    network_mode: host
+      
+  
