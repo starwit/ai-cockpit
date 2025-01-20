@@ -7,8 +7,7 @@ This project was partly funded by the government of the federal republic of Germ
 ![BMAS](docs/imgs/BMAS_Logo.svg)
 
 ## Deployment
-Cockpit is a part 
-see <https://github.com/starwit/ai-cockpit-deployment>
+Cockpit is a part of a bundle of services. For deployment options see <https://github.com/starwit/ai-cockpit-deployment>
 
 ## License
 
@@ -213,6 +212,12 @@ docker compose up
 
 ## Architecture & Concepts
 
+AI Cockpit is composed by a number of components. The following diagram shows, how those components are working together.
+
+![composition](./docs/imgs/Service-Composition-Architecture.drawio.svg)
+
 ### Data Model
+
+AI Cockpit needs a data model to collect system decisions and their resulting actions. The following class diagram shows the core data model.
 
 ![architecture](./docs/imgs/architecture.drawio.svg)

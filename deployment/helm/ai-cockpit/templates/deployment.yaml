@@ -62,6 +62,10 @@ spec:
               value: {{ .Values.sbom.enabled  | quote }}
             - name: SBOM_GENERATOR_URI
               value: {{ .Values.sbom.generator.uri  | quote}}
+            - name: AIAPI_TRANSPARENCY_ENABLED
+              value: {{ .Values.aiapi.transparency.enabled  | quote }}
+            - name: AIAPI_TRANSPARENCY_URI
+              value: {{ .Values.aiapi.transparency.uri  | quote}}              
             {{- if .Values.auth.enabled }}
             - name: SPRING_PROFILES_ACTIVE
               value: auth

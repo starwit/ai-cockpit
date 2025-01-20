@@ -51,18 +51,41 @@ public class TransparencyFunctionsController {
   @Value("${sbom.generator.uri:}")
   private String reportGeneratorUri;
 
+  @Value("${aiapi.transparency.enabled:false}")
+  private boolean transparencyApiEnabled;
+
+  @Value("${aiapi.transparency.uri:}")
+  private String transparencyApiUri;
+
   @PostConstruct
   private void init() {
-    ClassPathResource transparencyResource = new ClassPathResource("transparencytestdata.json");
-    try {
-      byte[] binaryData = FileCopyUtils.copyToByteArray(transparencyResource.getInputStream());
-      String strJson = new String(binaryData, StandardCharsets.UTF_8);
-      Module[] modulesArray = new ObjectMapper().readValue(
-          strJson,
-          Module[].class);
-      modules = new ArrayList<>(Arrays.asList(modulesArray));
-    } catch (IOException e) {
-      LOG.error("Can't load static test data for transparency functions " + e.getMessage());
+    if (transparencyApiEnabled) {
+      LOG.info("Transparency API enabled");
+      try {
+        LOG.info("Requesting transparency data from remote URI " + transparencyApiUri);
+        ResponseEntity<Module[]> response = restTemplate.getForEntity(transparencyApiUri + "/v0/modules",
+            Module[].class);
+        if (response.getStatusCode().is2xxSuccessful()) {
+          modules = Arrays.asList(response.getBody());
+        } else {
+          LOG.error("Can't load transparency data from remote URI " + transparencyApiUri);
+        }
+      } catch (Exception e) {
+        LOG.error("Can't load transparency data from remote URI " + transparencyApiUri + " " + e.getMessage());
+      }
+    } else {
+      LOG.info("Transparency API disabled, importing default data");
+      ClassPathResource transparencyResource = new ClassPathResource("transparencytestdata.json");
+      try {
+        byte[] binaryData = FileCopyUtils.copyToByteArray(transparencyResource.getInputStream());
+        String strJson = new String(binaryData, StandardCharsets.UTF_8);
+        Module[] modulesArray = new ObjectMapper().readValue(
+            strJson,
+            Module[].class);
+        modules = new ArrayList<>(Arrays.asList(modulesArray));
+      } catch (IOException e) {
+        LOG.error("Can't load static test data for transparency functions " + e.getMessage());
+      }
     }
   }
 

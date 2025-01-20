@@ -1,5 +1,6 @@
 include: 
   - ./docker-compose-minio.yml
+  - ./docker-compose-services.yml
 
 services:
   postgres:
@@ -20,25 +21,28 @@ services:
       - "5433:5432"
 
   aicockpit:
-    image: starwitorg/ai-cockpit:0.1.2
+    image: starwitorg/ai-cockpit:0.1.8
     environment:
-      - name: SPRING_DATASOURCE_URL
-        value: "jdbc:postgresql://postgres:5432/ai-cockpit"
-      - name: SPRING_DATASOURCE_USERNAME
-        value: ai-cockpit
-      - name: SPRING_DATASOURCE_PASSWORD
-        value: ai-cockpit
-      - name: MINIO_USER
-        value: minioadmin
-      - name: MINIO_PASSWORD
-        value: minioadmin
-      - name: MINIO_ENDPOINT
-        value: http://minio1:9000
-      - name: SCENARIO.SETUP
-        value: true
+      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/ai-cockpit"
+      SPRING_DATASOURCE_USERNAME: ai-cockpit
+      SPRING_DATASOURCE_PASSWORD: ai-cockpit
+      MINIO_USER: minioadmin
+      MINIO_PASSWORD: minioadmin
+      MINIO_ENDPOINT: http://minio1:9000
+      SCENARIO_SETUP: true
+      SBOM_ENABLED: true
+      SBOM_GENERATOR_URI: http://sbom-generator:8080
     volumes:
       - demodata:/scenariodata
+    ports:
+      - 8080:8081
 
 volumes:
-    # demo data to import
-    - demodata:../experiment-setup/traffic
+  db:
+  demodata:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: ../experiment-setup/traffic
