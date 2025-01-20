@@ -66,6 +66,7 @@ function DecisionOverviewMap() {
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
     const [showFilterPanel, setShowFilterPanel] = useState(true);
+    const [filteredDecisions, setFilteredDecisions] = useState([]);
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedDecisions, setSelectedDecisions] = useState(null);
@@ -81,17 +82,20 @@ function DecisionOverviewMap() {
             interval = setInterval(reloadDecisions, 5000);
         }  // Update every 5 seconds
 
-        // After loading the decisions immediately show them in the panel
-        if (decisions.length > 0) {
-            setHoveredDecisions(decisions);
-        }
-
         return () => {
             if (interval) {
                 clearInterval(interval);
             }
         };
     }, [selectedType, dialogOpen]);
+
+
+    // After the decisions are loaded, filter them based on the selected type
+    useEffect(() => {
+        if (decisions.length > 0) {
+            filterDecisions(decisions);
+        }
+    }, [selectedType, decisions]);
 
     //Load Decisions
     function reloadDecisions() {
@@ -108,6 +112,22 @@ function DecisionOverviewMap() {
                 }
             })
         }
+    }
+
+    function filterDecisions(data) {
+        if (!data) return;
+
+        let filtered;
+        if (selectedType === 'all') {
+            filtered = data; // Show all decisions
+        } else {
+            filtered = data.filter(d =>
+                d.decisionType && d.decisionType.name === selectedType
+            );
+        }
+
+        setFilteredDecisions(filtered);
+        setHoveredDecisions(filtered); // Refresh hovered decisions
     }
 
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
@@ -579,13 +599,8 @@ function DecisionOverviewMap() {
                         <Box>
                             <Typography variant="subtitle1" gutterBottom>
                                 {t('decision.found', {
-                                    count: hoveredDecisions
-                                        ? hoveredDecisions.filter((d) =>
-                                            selectedType === 'all' || d.decisionType?.name === selectedType
-                                        ).length
-                                        : decisions.filter((d) =>
-                                            selectedType === 'all' || d.decisionType?.name === selectedType
-                                        ).length
+                                    count: hoveredDecisions ? hoveredDecisions.length : filteredDecisions.length
+
                                 })}
                             </Typography>
                             <Box sx={{flex: 1, overflowY: 'auto'}}>
