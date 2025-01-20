@@ -40,32 +40,12 @@ function DecisionOverviewMap() {
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
-    const [, setFilteredDecisions] = useState([]);
 
     useEffect(() => {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000); // Update every 5 seconds
         return () => clearInterval(interval);
     }, []);
-
-    useEffect(() => {
-        if (decisions.length > 0) { // Check for decisions existence
-            filterDecisions(decisions);
-        }
-    }, [selectedType, decisions]); // Keep tracking both dependencies
-
-    function filterDecisions(data) {
-        if (!data) return; // Check for data existence
-
-        if (selectedType.includes('all')) {
-            setFilteredDecisions(data);
-        } else {
-            const filtered = data.filter(Decision =>
-                Decision.decisionType && selectedType.includes(Decision.decisionType.name)
-            );
-            setFilteredDecisions(filtered);
-        }
-    }
 
 
     //Load Decisions
@@ -74,7 +54,6 @@ function DecisionOverviewMap() {
             if (response && response.data) {
                 const validDecisions = response.data.filter(Decision => Decision != null);
                 setDecisions(validDecisions);
-                filterDecisions(validDecisions);
             }
         });
     }
@@ -219,9 +198,22 @@ function DecisionOverviewMap() {
 
     ];
 
+    // Convert the groupedDecisions object into an array of its values
+    // Each value is an array of decisions for a specific location (marker on the map)
+    // flat() - turns the array of arrays into a single array
+    const filteredGroupedDecisions = Object.values(groupedDecisions).flat().filter(decision =>
+        selectedType.includes('all') ||
+        (decision.decisionType?.name && selectedType.includes(decision.decisionType.name))
+    );
+
+    const totalFilteredDecisions = filteredGroupedDecisions.length;
+
 
     const handleTypeChange = (values) => {
         const newValues = values || [];
+        // Clear the hovered decision when the type filter changes
+        setHoveredDecisions(null);
+
         // Check if the new values include 'all'.
         if (newValues.includes('all')) {
             // If 'all' is selected but was not previously selected,
@@ -318,15 +310,20 @@ function DecisionOverviewMap() {
                     <Typography variant="h6" gutterBottom>
                         {t('decision.list.title')}
                     </Typography>
-                    {hoveredDecisions ? (
+                    {filteredGroupedDecisions.length > 0 ? (
                         <Box>
                             <Typography variant="subtitle1" gutterBottom>
                                 {t('decision.found', {
-                                    count: hoveredDecisions.length
+                                    count: hoveredDecisions
+                                        ? hoveredDecisions.filter(decision =>
+                                            selectedType.includes('all') ||
+                                            (decision.decisionType?.name && selectedType.includes(decision.decisionType.name))
+                                        ).length
+                                        : totalFilteredDecisions
                                 })}
                             </Typography>
                             <Box sx={{flex: 1, overflowY: 'auto'}}>
-                                {hoveredDecisions
+                                {hoveredDecisions && hoveredDecisions
                                     .filter(Decision => selectedType.includes('all') || Decision.decisionType?.name && selectedType.includes(Decision.decisionType.name))
                                     .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime)) // Sort by Date
                                     .map(decision => (
