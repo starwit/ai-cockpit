@@ -60,13 +60,20 @@ function DecisionDetail(props) {
     }, [decisionType]);
 
     const handleKeyDown = useCallback((event) => {
-        if (event.key === 'Escape') {
-            handleClose();
-        } else if (event.key === 'ArrowRight') {
-            handleNext(data, rowIndex);
-        } else if (event.key === 'ArrowLeft') {
-            handleBefore(data, rowIndex);
+        const activeElement = document.activeElement;
+        const isTextField = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
+
+        if (!isTextField) {
+            if (event.key === 'Escape') {
+                handleClose();
+            } else if (event.key === 'ArrowRight') {
+                handleNext(data, rowIndex);
+            } else if (event.key === 'ArrowLeft') {
+                handleBefore(data, rowIndex);
+            }
         }
+
+
     }, [handleSave, handleClose, handleNext, handleBefore, data, rowIndex]);
 
     useEffect(() => {
@@ -82,8 +89,8 @@ function DecisionDetail(props) {
 
 
     function searchIndex(data, rowData) {   //search the index of the current decision
-        for (let i = 0; i < data.length; i++) { 
-            if (data[i].id === rowData.id) {    
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].id === rowData.id) {
                 return i;
             }
         }
