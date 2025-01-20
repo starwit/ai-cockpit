@@ -1,0 +1,7 @@
+services:
+  sbom-generator:
+    image: starwitorg/sbom-generator:0.0.9
+    ports:
+      - "8080:8080"
+    network_mode: host
+  

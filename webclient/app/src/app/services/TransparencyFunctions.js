@@ -6,6 +6,10 @@ class TransparencyFunctions {
         this.baseUrl = window.location.pathname + "api/transparency";
     }
 
+    isReportGenerationEnabled = () => {
+        return axios.get(this.baseUrl + '/reports/enabled');
+    }
+
     getModuleList = () => {
         return axios.get(this.baseUrl + '/modules');
     };

@@ -4,10 +4,11 @@
     <parent>
         <groupId>de.starwit</groupId>
         <artifactId>ai-cockpit</artifactId>
-        <version>0.1.7-SNAPSHOT</version>
+        <version>0.1.9-SNAPSHOT</version>
     </parent>
 
     <artifactId>service</artifactId>
+    <description>Service layer of Starwit's AI Cockpit</description>
 
     <dependencies>
         <dependency>
@@ -66,6 +67,10 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
         </dependency>
     </dependencies>
 

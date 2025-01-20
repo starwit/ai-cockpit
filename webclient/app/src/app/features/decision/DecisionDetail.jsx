@@ -49,8 +49,6 @@ function DecisionDetail(props) {
     const {t, i18n} = useTranslation();
     const [rowIndex, setRowIndex] = useState([""]);
 
-    const theme = useTheme();
-
     useEffect(() => {
         reload();
         setRowIndex(searchIndex(data, rowData));    //set the index of the current decision
@@ -182,8 +180,16 @@ function DecisionDetail(props) {
             aria-describedby="decision-detail-dialog-description"
             maxWidth={false}
             fullWidth
-            PaperProps={{sx: {marginBottom: "10%", marginTop: "4%"}}}
-            sx={{aspectRatio: "16/9", alignSelf: "center"}}
+            PaperProps={{
+                sx: {
+                    position: "fixed",
+                    top: "40%", maxHeight: "80%",
+                    transform: `translate(-0%, -40%)`
+                }
+            }}
+            sx={{
+                aspectRatio: "16/9"
+            }}
         >
             <DialogTitle
                 id="decision-detail-dialog-title"
@@ -250,7 +256,6 @@ function DecisionDetail(props) {
             >
                 <Stack direction="column">
                     <Box>
-
                         <TextField
                             autoFocus
                             required
@@ -350,7 +355,7 @@ function DecisionDetail(props) {
                     justifyContent: 'flex-start'
                 }}>
                     <Button
-                        onClick={() => handleSave(actionTypes, decisionType, description, "NEW")}
+                        onClick={() => handleSave(actionTypes, decisionType, description, rowData.state)}
                         variant="contained"
                         startIcon={<SaveIcon />}>
                         {t("button.save")}
