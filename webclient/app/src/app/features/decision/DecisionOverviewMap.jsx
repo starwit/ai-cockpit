@@ -12,11 +12,12 @@ import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
 import {useTranslation} from 'react-i18next';
 
-import IconButton from '@mui/material';
+import {IconButton} from '@mui/material';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DecisionResultPanel from './DecisionResultPanel';
+import DecisionDetail from './DecisionDetail';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -30,6 +31,10 @@ function DecisionOverviewMap() {
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
     const groupedDecisions = groupDecisionsByLocation();
+    const [selectedDecisions, setSelectedDecisions] = useState([]);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [rowData, setRowData] = React.useState({});
+    const [automaticNext, setAutomaticNext] = React.useState(false);
 
     const layers = [
         createBaseMapLayer(),
@@ -132,7 +137,7 @@ function DecisionOverviewMap() {
 
             // Function to determine icon position
             // d[1][0] contains the first decision in the group (all have same coordinates)
-            getPosition: d => [
+            getPosition: decision => [
                 decision[1][0].cameraLongitude,
                 decision[1][0].cameraLatitude
             ],
@@ -143,8 +148,19 @@ function DecisionOverviewMap() {
                 if (info.object) {      // Check whether the user has actually pointed the cursor at an object (marker) on the map.
                     setHoveredDecisions(info.object[1]);
                 }
+            },
+            onClick: pickingInfo => {
+                handleOpenDecision(pickingInfo)
             }
         })
+    }
+
+    function handleOpenDecision(pickingInfo) {
+        if (pickingInfo.object) {
+            setSelectedDecisions(pickingInfo.object[1]);
+            setDialogOpen(true);
+            setRowData(pickingInfo.object[1][0]);
+        }
     }
 
     function createTextLayer() {
@@ -167,14 +183,12 @@ function DecisionOverviewMap() {
     }
     /////////////////////////////////////////////////////////////////////////////
 
-
-
     function renderDialog() {
-        if (!open) {
+        if (!dialogOpen) {
             return null;
         }
         return <DecisionDetail
-            open={open}
+            open={dialogOpen}
             handleClose={handleClose}
             handleSave={handleSave}
             handleNext={handleNext}
@@ -182,10 +196,80 @@ function DecisionOverviewMap() {
             rowData={rowData}
             automaticNext={automaticNext}
             toggleAutomaticNext={toggleAutomaticNext}
-            data={getData()}
+            data={selectedDecisions}
         />;
     }
 
+    function handleNext(data, index) {
+        const nextIndex = index + 1;
+        if (nextIndex < data.length) {
+            setRowData(data[nextIndex]);
+        } else {
+            setRowData(data[0]);
+        }
+    }
+
+    function handleBefore(data, index) {
+        const nextIndex = index - 1;
+        if (nextIndex >= 0) {
+            setRowData(data[nextIndex]);
+        } else {
+            setRowData(data[data.length - 1]);
+        }
+    }
+
+    function handleClose() {
+        setDialogOpen(false);
+    };
+
+    function toggleAutomaticNext() {
+        setAutomaticNext(!automaticNext);
+    }
+
+    function handleSave(actionTypes, decisionType, description, state) {
+        const foundDecision = selectedDecisions.find(value => value.id == rowData.id);
+        if (foundDecision) {
+            foundDecision.decisionType = decisionType;
+            foundDecision.description = description;
+            foundDecision.state = state;
+            const remoteFunctions = [];
+
+            const newActions = actionTypes;
+
+            let newActionTypes = actionTypes;
+            rowData.action.forEach(action => {
+                const found = actionTypes.find(value => value.id == action.actionType.id);
+                if (found === undefined) {
+                    remoteFunctions.push(actionRest.delete(action.id));
+                } else {
+                    newActionTypes = newActionTypes.filter(value => value.id !== action.actionType.id);
+                    newActions.push(action);
+                }
+            });
+
+            newActionTypes.forEach(mActiontype => {
+                const entity = {
+                    name: "",
+                    description: "",
+                    decision: {id: rowData.id},
+                    actionType: mActiontype
+                };
+                remoteFunctions.push(actionRest.create(entity));
+            });
+
+            decisionRest.update(foundDecision).then(response => {
+                Promise.all(remoteFunctions).then(() => {
+                    if (automaticNext) {
+                        handleNext(selectedDecisions, selectedDecisions.findIndex(value => value.id == rowData.id));
+                    } else {
+                        setDialogOpen(false);
+                    }
+                });
+            });
+        } else {
+            setDialogOpen(false);
+        }
+    };
 
     // Return the map component with minimum required styles
     return (
@@ -209,6 +293,7 @@ function DecisionOverviewMap() {
                 {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
             <DecisionResultPanel show={showPanel} decisions={hoveredDecisions} />
+            {renderDialog()}
         </>
     );
 }

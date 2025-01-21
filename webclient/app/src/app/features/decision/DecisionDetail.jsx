@@ -85,8 +85,6 @@ function DecisionDetail(props) {
         };
     }, [open, handleKeyDown]);
 
-
-
     function searchIndex(data, rowData) {   //search the index of the current decision
         for (let i = 0; i < data.length; i++) {
             if (data[i].id === rowData.id) {
@@ -102,7 +100,9 @@ function DecisionDetail(props) {
                 return;
             }
             setAllDecisionType(response.data);
-            setDecisionType(response.data.find(value => value.id == rowData.decisionType.id));
+            if (rowData.decisionType?.id) {
+                setDecisionType(response.data.find(value => value.id == rowData.decisionType.id));
+            }
         });
     }
 
@@ -313,7 +313,7 @@ function DecisionDetail(props) {
                                     labelId="decision.action.label"
                                     id="decision.action.select"
                                     multiple
-                                    value={actionTypes}
+                                    value={actionTypes ? actionTypes : []}
                                     onChange={handleChangeAction}
                                     input={<OutlinedInput label={t("decision.action")} />}
                                     renderValue={selected => (
