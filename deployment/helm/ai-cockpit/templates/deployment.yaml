@@ -31,7 +31,16 @@ spec:
         image: postgres:15.4
         command: ['sh', '-c', 
           'until pg_isready -h {{ include "postgresql.servicename" . }} -p 5432; 
-          do echo waiting for database; sleep 2; done;']        
+          do echo waiting for database; sleep 2; done;']
+      {{- if .Values.sampledata.enabled }}
+      - name: install-demo-data
+        image: starwitorg/ai-cockpit-sampledata:latest
+        command: [ 'sh', '-c', 
+          '/bin/import_binary_data.sh {{ .Values.minio.endpoint }} {{ .Values.minio.user }} {{ .Values.minio.password }} /scenariodata/{{ .Values.sampledata.importFolder }}']
+        volumeMounts:
+          - name: scenariodata
+            mountPath: /scenariodata
+      {{- end }}              
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -65,7 +74,13 @@ spec:
             - name: AIAPI_TRANSPARENCY_ENABLED
               value: {{ .Values.aiapi.transparency.enabled  | quote }}
             - name: AIAPI_TRANSPARENCY_URI
-              value: {{ .Values.aiapi.transparency.uri  | quote}}              
+              value: {{ .Values.aiapi.transparency.uri  | quote}}
+            {{- if .Values.sampledata.enabled }}
+            - name: SCENARIO_SETUP
+              value: "true"
+            - name: SCENARIO_IMPORTFOLDER
+              value: /scenariodata/{{ .Values.sampledata.importFolder }}-{{ .Values.sampledata.language }}
+            {{- end }}
             {{- if .Values.auth.enabled }}
             - name: SPRING_PROFILES_ACTIVE
               value: auth
@@ -100,6 +115,11 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          {{- if .Values.sampledata.enabled }}              
+          volumeMounts:
+            - name: scenariodata
+              mountPath: /scenariodata
+          {{- end }}         
           livenessProbe:
             httpGet:
               path: {{ .Values.app.context_path }}/monitoring/health
@@ -114,6 +134,11 @@ spec:
             periodSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      {{- if .Values.sampledata.enabled }}
+      volumes:
+        - name: scenariodata
+          emptyDir: {}
+      {{- end }}       
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
