@@ -36,10 +36,14 @@ spec:
       - name: install-demo-data
         image: starwitorg/ai-cockpit-sampledata:latest
         command: [ 'sh', '-c', 
-          '/bin/import_binary_data.sh {{ .Values.minio.endpoint }} {{ .Values.minio.user }} {{ .Values.minio.password }} /scenariodata/{{ .Values.sampledata.importFolder }}']
+          'echo "copy scenario data to pod volume";
+          cp -v -r /scenariodata/data_structures /target;
+          echo "importing binary data";
+          /bin/import_binary_data.sh {{ .Values.minio.endpoint }} {{ .Values.minio.user }} {{ .Values.minio.password }} /scenariodata/binary_data/{{ .Values.sampledata.importFolder }};
+          ']
         volumeMounts:
           - name: scenariodata
-            mountPath: /scenariodata
+            mountPath: /target
       {{- end }}              
       containers:
         - name: {{ .Chart.Name }}
@@ -79,7 +83,7 @@ spec:
             - name: SCENARIO_SETUP
               value: "true"
             - name: SCENARIO_IMPORTFOLDER
-              value: /scenariodata/{{ .Values.sampledata.importFolder }}-{{ .Values.sampledata.language }}
+              value: /scenariodata/data_structures/{{ .Values.sampledata.importFolder }}-{{ .Values.sampledata.language }}
             {{- end }}
             {{- if .Values.auth.enabled }}
             - name: SPRING_PROFILES_ACTIVE
