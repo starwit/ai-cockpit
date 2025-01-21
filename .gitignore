@@ -5,6 +5,20 @@ HELP.md
 application.properties
 docker-compose.yml
 
+### VS Code ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
 ### STS ###
 .apt_generated
 .classpath
