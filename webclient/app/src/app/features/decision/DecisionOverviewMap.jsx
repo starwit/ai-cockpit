@@ -124,11 +124,11 @@ function DecisionOverviewMap() {
             // Function to determine icon position
             // d[1][0] contains the first decision in the group (all have same coordinates)
             getPosition: d => [
-                d[1][0].cameraLongitude,
-                d[1][0].cameraLatitude
+                decision[1][0].cameraLongitude,
+                decision[1][0].cameraLatitude
             ],
-            getRadius: d => Math.sqrt(d[1].length) * 5,
-            getFillColor: d => getIconColor(d[1].length),
+            getRadius: decision => Math.sqrt(decision[1].length) * 5,
+            getFillColor: decision => getIconColor(decision[1].length),
             getLineColor: [0, 0, 0, 255],
             onHover: info => {
                 if (info.object) {      // Check whether the user has actually pointed the cursor at an object (marker) on the map.
@@ -143,11 +143,11 @@ function DecisionOverviewMap() {
             id: 'text-layer',
             data: Object.entries(groupedDecisions),      // Using Object.entries to convert the grouped object to array of [key, value] pairs.
             pickable: true,
-            getPosition: d => [
-                d[1][0].cameraLongitude,
-                d[1][0].cameraLatitude
+            getPosition: decision => [
+                decision[1][0].cameraLongitude,
+                decision[1][0].cameraLatitude
             ],
-            getText: d => String(d[1].length),
+            getText: decision => String(decision[1].length),
             getSize: 16,
             getAngle: 0,
             getTextAnchor: 'middle',
