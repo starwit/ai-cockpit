@@ -12,16 +12,11 @@ import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
 import {useTranslation} from 'react-i18next';
 
-import {
-    Paper,
-    Typography,
-    Box,
-    IconButton
-} from '@mui/material';
+import IconButton from '@mui/material';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import {formatDateShort} from '../../commons/formatter/DateFormatter';
+import DecisionResultPanel from './DecisionResultPanel';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -175,7 +170,7 @@ function DecisionOverviewMap() {
 
     // Return the map component with minimum required styles
     return (
-        <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
+        <>
             <DeckGL
                 layers={layers}               // Add map layers
                 views={MAP_VIEW}              // Add map view settings
@@ -186,78 +181,16 @@ function DecisionOverviewMap() {
             <IconButton
                 onClick={() => setShowPanel(!showPanel)}
                 sx={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: showPanel ? '320px' : '10px',
-                    bgcolor: 'white'
+                    bgcolor: 'white',
+                    position: 'fixed',
+                    right: showPanel ? 330 : 10,
                 }}
                 size="small"
             >
                 {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
-
-            {showPanel && (
-                <Paper
-                    elevation={3}
-                    sx={{
-                        position: 'absolute',
-                        top: '10px',
-                        right: '10px',
-                        bottom: '10px',
-                        width: '300px',
-                        overflowY: 'auto',
-                        padding: '16px',
-                        bgcolor: 'rgba(255, 255, 255, 0.9)'
-                    }}
-                >
-
-                    <Typography variant="h6" gutterBottom>
-                        {t('decision.list.title')}
-                    </Typography>
-                    {hoveredDecisions ? (
-                        <Box>
-                            <Typography variant="subtitle1" gutterBottom>
-                                {t('decision.found', {count: hoveredDecisions.length})}
-                            </Typography>
-                            <Box sx={{flex: 1, overflowY: 'auto'}}>
-                                {hoveredDecisions.map((decision, index) => (
-                                    <Paper
-                                        key={decision.id}
-                                        elevation={1}
-                                        sx={{
-                                            p: 2,
-                                            mb: 1,
-                                            background: 'white'
-                                        }}
-                                    >
-                                        <Typography variant="h6">
-                                            {decision.decisionType?.name}
-                                        </Typography>
-                                        <Typography>
-                                            {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
-                                        </Typography>
-                                        <Typography>
-                                            {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
-                                        </Typography>
-                                        {decision.description && (
-                                            <Typography>
-                                                {t('decision.description')}: {decision.description}
-                                            </Typography>
-                                        )}
-                                    </Paper>
-                                ))}
-                            </Box>
-                        </Box>
-                    ) : (
-                        <Typography>
-                            {t('decision.list.hover')}
-                        </Typography>
-                    )}
-                </Paper>
-
-            )}  {/* showPanel && ...*/}
-
-        </Box>
+            <DecisionResultPanel show={showPanel} decisions={hoveredDecisions} />
+        </>
     );
 }
 

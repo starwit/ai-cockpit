@@ -51,6 +51,7 @@ const ColorTheme = createTheme({
         },
         h6: {
             fontSize: "1.2rem",
+            fontWeight: 800,
             marginBottom: 5
         }
     },
