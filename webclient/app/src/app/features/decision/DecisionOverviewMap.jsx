@@ -29,6 +29,23 @@ function DecisionOverviewMap() {
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
+    const groupedDecisions = groupDecisionsByLocation();
+
+    const layers = [
+        createBaseMapLayer(),
+        createDecisionPointsLayer(groupedDecisions),
+        createTextLayer(groupedDecisions)
+
+    ];
+
+    // Set initial map position and zoom level
+    const INITIAL_VIEW_STATE = {
+        longitude: -86.13470,     // Initial longitude (X coordinate)
+        latitude: 39.91,      // Initial latitude (Y coordinate)
+        zoom: 10,            // Initial zoom level
+        pitch: 0,           // No tilt
+        bearing: 0          // No rotation
+    };
 
     useEffect(() => {
         reloadDecisions();
@@ -56,14 +73,6 @@ function DecisionOverviewMap() {
         }, {});
     }
 
-    // Set initial map position and zoom level
-    const INITIAL_VIEW_STATE = {
-        longitude: -86.13470,     // Initial longitude (X coordinate)
-        latitude: 39.91,      // Initial latitude (Y coordinate)
-        zoom: 10,            // Initial zoom level
-        pitch: 0,           // No tilt
-        bearing: 0          // No rotation
-    };
 
     function getIconColor(decisionCount) {
         if (decisionCount > 5) {
@@ -158,14 +167,24 @@ function DecisionOverviewMap() {
     }
     /////////////////////////////////////////////////////////////////////////////
 
-    const groupedDecisions = groupDecisionsByLocation();
 
-    const layers = [
-        createBaseMapLayer(),
-        createDecisionPointsLayer(groupedDecisions),
-        createTextLayer(groupedDecisions)
 
-    ];
+    function renderDialog() {
+        if (!open) {
+            return null;
+        }
+        return <DecisionDetail
+            open={open}
+            handleClose={handleClose}
+            handleSave={handleSave}
+            handleNext={handleNext}
+            handleBefore={handleBefore}
+            rowData={rowData}
+            automaticNext={automaticNext}
+            toggleAutomaticNext={toggleAutomaticNext}
+            data={getData()}
+        />;
+    }
 
 
     // Return the map component with minimum required styles
