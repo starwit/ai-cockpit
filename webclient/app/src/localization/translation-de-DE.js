@@ -3,6 +3,8 @@ const translationDeDE = {
     "arrow.info": "Zwischen den Gefahrensituationen kann mit den A & D navigiert werden.",
     "decision": "Gefahrensituation",
     "decision.title": "Gefahrensituationen",
+    "decision.type.filter": "Nach Typ filtern",
+    "decision.type.all": "Alle Typen",
     "decision.create.title": "Gefahrensituation erfassen",
     "decision.update.title": "Gefahrensituation bearbeiten",
     "decision.id": "id",

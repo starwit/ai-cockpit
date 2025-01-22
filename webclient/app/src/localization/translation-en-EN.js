@@ -3,6 +3,8 @@ const translationEnEN = {
     "arrow.info": "You can navigate between decisions using A & D",
     "decision": "Traffic Decision",
     "decision.title": "Traffic Decisions",
+    "decision.type.filter": "Filter by type",
+    "decision.type.all": "All types",
     "decision.create.title": "Create Decision",
     "decision.update.title": "Edit Decision",
     "decision.id": "id",

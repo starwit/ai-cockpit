@@ -55,6 +55,12 @@ public class DecisionController {
         return this.decisionService.findAllOpenDecisions();
     }
 
+    @Operation(summary = "Get all open decisions by type")
+    @GetMapping("/open/type/{typeName}")
+    public List<DecisionEntity> findAllOpenByType(@PathVariable("typeName") String typeName) {
+        return this.decisionService.findAllOpenDecisionsByType(typeName);
+    }
+
     @Operation(summary = "Get decision with id")
     @GetMapping(value = "/{id}")
     public DecisionEntity findById(@PathVariable("id") Long id) {
