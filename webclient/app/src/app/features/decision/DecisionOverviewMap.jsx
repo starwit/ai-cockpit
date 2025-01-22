@@ -37,7 +37,6 @@ import {
     FormControlLabel,
     Checkbox
 } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
 
 
 import CheckIcon from "@mui/icons-material/Check";
@@ -47,8 +46,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import MediaContent from "../../commons/MediaContent";
-
-import {ThemeProvider, createTheme} from '@mui/material/styles';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -481,173 +478,153 @@ function DecisionOverviewMap() {
         );
     }
 
-    ////////////////////////////////////////////////////////
-    const theme = createTheme({
-        components: {
-            MuiCssBaseline: {
-                styleOverrides: {
-                    body: {
-                        overflow: 'hidden'
-                    },
-                    html: {
-                        overflow: 'hidden'
-                    }
-                }
-            }
-        }
-    });
-    ////////////////////////////////////////////////////////
-
     // Return the map component with minimum required styles
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
-                <DeckGL
-                    layers={layers}               // Add map layers
-                    views={MAP_VIEW}              // Add map view settings
-                    initialViewState={INITIAL_VIEW_STATE}  // Set initial position
-                    controller={{dragRotate: false}}       // Disable rotation
-                />
+        <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
+            <DeckGL
+                layers={layers}               // Add map layers
+                views={MAP_VIEW}              // Add map view settings
+                initialViewState={INITIAL_VIEW_STATE}  // Set initial position
+                controller={{dragRotate: false}}       // Disable rotation
+            />
 
-                <DecisionDialog />
+            <DecisionDialog />
 
-                <IconButton
-                    onClick={() => setShowPanel(!showPanel)}
+            <IconButton
+                onClick={() => setShowPanel(!showPanel)}
+                sx={{
+                    position: 'absolute',
+                    top: '10px',
+                    right: showPanel ? '320px' : '10px',
+                    bgcolor: 'white'
+                }}
+                size="small"
+            >
+                {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            </IconButton>
+
+            {showPanel && (
+                <Paper
+                    elevation={3}
                     sx={{
                         position: 'absolute',
                         top: '10px',
-                        right: showPanel ? '320px' : '10px',
-                        bgcolor: 'white'
+                        right: '10px',
+                        bottom: '10px',
+                        width: '300px',
+                        overflowY: 'auto',
+                        padding: '16px',
+                        bgcolor: 'rgba(255, 255, 255, 0.9)'
                     }}
-                    size="small"
                 >
-                    {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                </IconButton>
+                    <Box sx={{mb: 2}}>
+                        {/* View mode switch */}
+                        <FormControl fullWidth sx={{mb: 2}}>
+                            <InputLabel
+                                sx={{
+                                    bgcolor: 'white',
+                                    px: 1,
+                                    '&.MuiInputLabel-shrink': {
+                                        bgcolor: 'white'
+                                    }
+                                }}
+                            > View Mode </InputLabel>
+                            <Select
+                                value={viewMode}
+                                onChange={(e) => setViewMode(e.target.value)}
+                            >
+                                <MenuItem value="normal">Normal</MenuItem>
+                                <MenuItem value="heatmap">Heatmap</MenuItem>
+                            </Select>
+                        </FormControl>
 
-                {showPanel && (
-                    <Paper
-                        elevation={3}
-                        sx={{
-                            position: 'absolute',
-                            top: '10px',
-                            right: '10px',
-                            bottom: '10px',
-                            width: '300px',
-                            overflowY: 'auto',
-                            padding: '16px',
-                            bgcolor: 'rgba(255, 255, 255, 0.9)'
-                        }}
-                    >
+
                         <Box sx={{mb: 2}}>
-                            {/* View mode switch */}
-                            <FormControl fullWidth sx={{mb: 2}}>
-                                <InputLabel
-                                    sx={{
-                                        bgcolor: 'white',
-                                        px: 1,
-                                        '&.MuiInputLabel-shrink': {
-                                            bgcolor: 'white'
-                                        }
-                                    }}
-                                > View Mode </InputLabel>
+                            <FormControl fullWidth>
+                                <InputLabel> {t('decision.type.filter')} </InputLabel>
                                 <Select
-                                    value={viewMode}
-                                    onChange={(e) => setViewMode(e.target.value)}
+                                    value={selectedType}
+                                    onChange={(e) => {
+                                        const newValue = e.target.value;
+                                        setSelectedType(newValue);
+                                        // Force a data reload
+                                        const loadData = newValue === 'all'
+                                            ? decisionRest.findAllOpen()
+                                            : decisionRest.findAllOpenByType(newValue);
+
+                                        loadData.then(response => {
+                                            if (response.data) {
+                                                setDecisions(response.data);
+                                                // Update hoveredDecisions with new data
+                                                setHoveredDecisions(response.data);
+                                            }
+                                        });
+                                    }}
+                                    label={t('decision.type.filter')}
                                 >
-                                    <MenuItem value="normal">Normal</MenuItem>
-                                    <MenuItem value="heatmap">Heatmap</MenuItem>
+                                    <MenuItem value="all"> {t('decision.type.all')} </MenuItem>
+
+                                    {decisionTypes.map(type => (<MenuItem key={type} value={type}> {type} </MenuItem>))}
+
                                 </Select>
                             </FormControl>
+                        </Box>
+                    </Box>
 
-
-                            <Box sx={{mb: 2}}>
-                                <FormControl fullWidth>
-                                    <InputLabel> {t('decision.type.filter')} </InputLabel>
-                                    <Select
-                                        value={selectedType}
-                                        onChange={(e) => {
-                                            const newValue = e.target.value;
-                                            setSelectedType(newValue);
-                                            // Force a data reload
-                                            const loadData = newValue === 'all'
-                                                ? decisionRest.findAllOpen()
-                                                : decisionRest.findAllOpenByType(newValue);
-
-                                            loadData.then(response => {
-                                                if (response.data) {
-                                                    setDecisions(response.data);
-                                                    // Update hoveredDecisions with new data
-                                                    setHoveredDecisions(response.data);
-                                                }
-                                            });
-                                        }}
-                                        label={t('decision.type.filter')}
-                                    >
-                                        <MenuItem value="all"> {t('decision.type.all')} </MenuItem>
-
-                                        {decisionTypes.map(type => (<MenuItem key={type} value={type}> {type} </MenuItem>))}
-
-                                    </Select>
-                                </FormControl>
+                    <Typography variant="h6" gutterBottom>
+                        {t('decision.list.title')}
+                    </Typography>
+                    {hoveredDecisions ? (
+                        <Box>
+                            <Typography variant="subtitle1" gutterBottom>
+                                {t('decision.found', {
+                                    count: hoveredDecisions.filter(d =>
+                                        selectedType === 'all' || d.decisionType?.name === selectedType
+                                    ).length
+                                })}
+                            </Typography>
+                            <Box sx={{flex: 1, overflowY: 'auto'}}>
+                                {hoveredDecisions
+                                    .filter(d => selectedType === 'all' || d.decisionType?.name === selectedType)
+                                    .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime)) // Sort by Date
+                                    .map(decision => (
+                                        <Paper
+                                            key={decision.id}
+                                            elevation={1}
+                                            sx={{
+                                                p: 2,
+                                                mb: 1,
+                                                background: 'white'
+                                            }}
+                                        >
+                                            <Typography variant="h6">
+                                                {decision.decisionType?.name}
+                                            </Typography>
+                                            <Typography>
+                                                {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
+                                            </Typography>
+                                            <Typography>
+                                                {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
+                                            </Typography>
+                                            {decision.description && (
+                                                <Typography>
+                                                    {t('decision.description')}: {decision.description}
+                                                </Typography>
+                                            )}
+                                        </Paper>
+                                    ))}
                             </Box>
                         </Box>
-
-                        <Typography variant="h6" gutterBottom>
-                            {t('decision.list.title')}
+                    ) : (
+                        <Typography>
+                            {t('decision.list.hover')}
                         </Typography>
-                        {hoveredDecisions ? (
-                            <Box>
-                                <Typography variant="subtitle1" gutterBottom>
-                                    {t('decision.found', {
-                                        count: hoveredDecisions.filter(d =>
-                                            selectedType === 'all' || d.decisionType?.name === selectedType
-                                        ).length
-                                    })}
-                                </Typography>
-                                <Box sx={{flex: 1, overflowY: 'auto'}}>
-                                    {hoveredDecisions
-                                        .filter(d => selectedType === 'all' || d.decisionType?.name === selectedType)
-                                        .sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime)) // Sort by Date
-                                        .map(decision => (
-                                            <Paper
-                                                key={decision.id}
-                                                elevation={1}
-                                                sx={{
-                                                    p: 2,
-                                                    mb: 1,
-                                                    background: 'white'
-                                                }}
-                                            >
-                                                <Typography variant="h6">
-                                                    {decision.decisionType?.name}
-                                                </Typography>
-                                                <Typography>
-                                                    {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
-                                                </Typography>
-                                                <Typography>
-                                                    {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
-                                                </Typography>
-                                                {decision.description && (
-                                                    <Typography>
-                                                        {t('decision.description')}: {decision.description}
-                                                    </Typography>
-                                                )}
-                                            </Paper>
-                                        ))}
-                                </Box>
-                            </Box>
-                        ) : (
-                            <Typography>
-                                {t('decision.list.hover')}
-                            </Typography>
-                        )}
-                    </Paper>
+                    )}
+                </Paper>
 
-                )}  {/* showPanel && ...*/}
+            )}  {/* showPanel && ...*/}
 
-            </Box>
-        </ThemeProvider>
+        </Box>
     );
 }
 
