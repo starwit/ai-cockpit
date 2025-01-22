@@ -65,7 +65,7 @@
         "unplugin": "^2.1.2",
         "util": "npm:util@^0.12.5",
         "vfile": "npm:vfile@^6.0.1",
-        "vite": "^6.0.7",
+        "vite": "^6.0.11",
         "zlib": "npm:browserify-zlib@^0.2.0"
     }
 }
