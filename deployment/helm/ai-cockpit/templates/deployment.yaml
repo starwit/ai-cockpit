@@ -34,7 +34,7 @@ spec:
           do echo waiting for database; sleep 2; done;']
       {{- if .Values.sampledata.enabled }}
       - name: install-demo-data
-        image: starwitorg/ai-cockpit-sampledata:latest
+        image: {{ .Values.sampledata.image }}
         command: [ 'sh', '-c', 
           'echo "copy scenario data to pod volume";
           cp -v -r /scenariodata/data_structures /target;

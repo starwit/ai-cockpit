@@ -45,6 +45,7 @@ aiapi:
 
 sampledata:
   enabled: false
+  image: starwitorg/ai-cockpit-sampledata:latest
   importFolder: traffic
   language: en
 
