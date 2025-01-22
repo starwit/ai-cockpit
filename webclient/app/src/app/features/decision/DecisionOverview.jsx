@@ -47,7 +47,7 @@ function DecisionOverview() {
         setTab(newValue);
     };
 
-    function handleNext(data, index) {  
+    function handleNext(data, index) {
         const nextIndex = index + 1;
         if (nextIndex < data.length) {
             setRowData(data[nextIndex]);
@@ -56,7 +56,7 @@ function DecisionOverview() {
         }
     }
 
-    function handleBefore(data, index) {        
+    function handleBefore(data, index) {
         const nextIndex = index - 1;
         if (nextIndex >= 0) {
             setRowData(data[nextIndex]);
@@ -65,7 +65,7 @@ function DecisionOverview() {
         }
     }
 
-    function toggleAutomaticNext(){
+    function toggleAutomaticNext() {
         setAutomaticNext(!automaticNext);
     }
 
@@ -107,8 +107,8 @@ function DecisionOverview() {
             Promise.all(remoteFunctions).then(() => {
                 if (automaticNext) {
                     handleNext(getData(), getData().findIndex(value => value.id == rowData.id));
-                }else{
-                setOpen(false);
+                } else {
+                    setOpen(false);
                 }
             });
         });

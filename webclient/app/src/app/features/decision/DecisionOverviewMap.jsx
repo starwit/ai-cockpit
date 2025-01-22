@@ -12,16 +12,12 @@ import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
 import {useTranslation} from 'react-i18next';
 
-import {
-    Paper,
-    Typography,
-    Box,
-    IconButton
-} from '@mui/material';
+import {IconButton} from '@mui/material';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import {formatDateShort} from '../../commons/formatter/DateFormatter';
+import DecisionResultPanel from './DecisionResultPanel';
+import DecisionDetail from './DecisionDetail';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -34,6 +30,27 @@ function DecisionOverviewMap() {
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
+    const groupedDecisions = groupDecisionsByLocation();
+    const [selectedDecisions, setSelectedDecisions] = useState([]);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [rowData, setRowData] = React.useState({});
+    const [automaticNext, setAutomaticNext] = React.useState(false);
+
+    const layers = [
+        createBaseMapLayer(),
+        createDecisionPointsLayer(groupedDecisions),
+        createTextLayer(groupedDecisions)
+
+    ];
+
+    // Set initial map position and zoom level
+    const INITIAL_VIEW_STATE = {
+        longitude: -86.13470,     // Initial longitude (X coordinate)
+        latitude: 39.91,      // Initial latitude (Y coordinate)
+        zoom: 10,            // Initial zoom level
+        pitch: 0,           // No tilt
+        bearing: 0          // No rotation
+    };
 
     useEffect(() => {
         reloadDecisions();
@@ -61,14 +78,6 @@ function DecisionOverviewMap() {
         }, {});
     }
 
-    // Set initial map position and zoom level
-    const INITIAL_VIEW_STATE = {
-        longitude: -86.13470,     // Initial longitude (X coordinate)
-        latitude: 39.91,      // Initial latitude (Y coordinate)
-        zoom: 10,            // Initial zoom level
-        pitch: 0,           // No tilt
-        bearing: 0          // No rotation
-    };
 
     function getIconColor(decisionCount) {
         if (decisionCount > 5) {
@@ -128,19 +137,30 @@ function DecisionOverviewMap() {
 
             // Function to determine icon position
             // d[1][0] contains the first decision in the group (all have same coordinates)
-            getPosition: d => [
-                d[1][0].cameraLongitude,
-                d[1][0].cameraLatitude
+            getPosition: decision => [
+                decision[1][0].cameraLongitude,
+                decision[1][0].cameraLatitude
             ],
-            getRadius: d => Math.sqrt(d[1].length) * 5,
-            getFillColor: d => getIconColor(d[1].length),
+            getRadius: decision => Math.sqrt(decision[1].length) * 5,
+            getFillColor: decision => getIconColor(decision[1].length),
             getLineColor: [0, 0, 0, 255],
             onHover: info => {
                 if (info.object) {      // Check whether the user has actually pointed the cursor at an object (marker) on the map.
                     setHoveredDecisions(info.object[1]);
                 }
+            },
+            onClick: pickingInfo => {
+                handleOpenDecision(pickingInfo)
             }
         })
+    }
+
+    function handleOpenDecision(pickingInfo) {
+        if (pickingInfo.object) {
+            setSelectedDecisions(pickingInfo.object[1]);
+            setDialogOpen(true);
+            setRowData(pickingInfo.object[1][0]);
+        }
     }
 
     function createTextLayer() {
@@ -148,11 +168,11 @@ function DecisionOverviewMap() {
             id: 'text-layer',
             data: Object.entries(groupedDecisions),      // Using Object.entries to convert the grouped object to array of [key, value] pairs.
             pickable: true,
-            getPosition: d => [
-                d[1][0].cameraLongitude,
-                d[1][0].cameraLatitude
+            getPosition: decision => [
+                decision[1][0].cameraLongitude,
+                decision[1][0].cameraLatitude
             ],
-            getText: d => String(d[1].length),
+            getText: decision => String(decision[1].length),
             getSize: 16,
             getAngle: 0,
             getTextAnchor: 'middle',
@@ -163,19 +183,97 @@ function DecisionOverviewMap() {
     }
     /////////////////////////////////////////////////////////////////////////////
 
-    const groupedDecisions = groupDecisionsByLocation();
+    function renderDialog() {
+        if (!dialogOpen) {
+            return null;
+        }
+        return <DecisionDetail
+            open={dialogOpen}
+            handleClose={handleClose}
+            handleSave={handleSave}
+            handleNext={handleNext}
+            handleBefore={handleBefore}
+            rowData={rowData}
+            automaticNext={automaticNext}
+            toggleAutomaticNext={toggleAutomaticNext}
+            data={selectedDecisions}
+        />;
+    }
 
-    const layers = [
-        createBaseMapLayer(),
-        createDecisionPointsLayer(groupedDecisions),
-        createTextLayer(groupedDecisions)
+    function handleNext(data, index) {
+        const nextIndex = index + 1;
+        if (nextIndex < data.length) {
+            setRowData(data[nextIndex]);
+        } else {
+            setRowData(data[0]);
+        }
+    }
 
-    ];
+    function handleBefore(data, index) {
+        const nextIndex = index - 1;
+        if (nextIndex >= 0) {
+            setRowData(data[nextIndex]);
+        } else {
+            setRowData(data[data.length - 1]);
+        }
+    }
 
+    function handleClose() {
+        setDialogOpen(false);
+    };
+
+    function toggleAutomaticNext() {
+        setAutomaticNext(!automaticNext);
+    }
+
+    function handleSave(actionTypes, decisionType, description, state) {
+        const foundDecision = selectedDecisions.find(value => value.id == rowData.id);
+        if (foundDecision) {
+            foundDecision.decisionType = decisionType;
+            foundDecision.description = description;
+            foundDecision.state = state;
+            const remoteFunctions = [];
+
+            const newActions = actionTypes;
+
+            let newActionTypes = actionTypes;
+            rowData.action.forEach(action => {
+                const found = actionTypes.find(value => value.id == action.actionType.id);
+                if (found === undefined) {
+                    remoteFunctions.push(actionRest.delete(action.id));
+                } else {
+                    newActionTypes = newActionTypes.filter(value => value.id !== action.actionType.id);
+                    newActions.push(action);
+                }
+            });
+
+            newActionTypes.forEach(mActiontype => {
+                const entity = {
+                    name: "",
+                    description: "",
+                    decision: {id: rowData.id},
+                    actionType: mActiontype
+                };
+                remoteFunctions.push(actionRest.create(entity));
+            });
+
+            decisionRest.update(foundDecision).then(response => {
+                Promise.all(remoteFunctions).then(() => {
+                    if (automaticNext) {
+                        handleNext(selectedDecisions, selectedDecisions.findIndex(value => value.id == rowData.id));
+                    } else {
+                        setDialogOpen(false);
+                    }
+                });
+            });
+        } else {
+            setDialogOpen(false);
+        }
+    };
 
     // Return the map component with minimum required styles
     return (
-        <Box sx={{height: 'calc(100vh - 64px)', position: 'relative'}}>
+        <>
             <DeckGL
                 layers={layers}               // Add map layers
                 views={MAP_VIEW}              // Add map view settings
@@ -186,78 +284,17 @@ function DecisionOverviewMap() {
             <IconButton
                 onClick={() => setShowPanel(!showPanel)}
                 sx={{
-                    position: 'absolute',
-                    top: '10px',
-                    right: showPanel ? '320px' : '10px',
-                    bgcolor: 'white'
+                    bgcolor: 'white',
+                    position: 'fixed',
+                    right: showPanel ? 330 : 10,
                 }}
                 size="small"
             >
                 {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
-
-            {showPanel && (
-                <Paper
-                    elevation={3}
-                    sx={{
-                        position: 'absolute',
-                        top: '10px',
-                        right: '10px',
-                        bottom: '10px',
-                        width: '300px',
-                        overflowY: 'auto',
-                        padding: '16px',
-                        bgcolor: 'rgba(255, 255, 255, 0.9)'
-                    }}
-                >
-
-                    <Typography variant="h6" gutterBottom>
-                        {t('decision.list.title')}
-                    </Typography>
-                    {hoveredDecisions ? (
-                        <Box>
-                            <Typography variant="subtitle1" gutterBottom>
-                                {t('decision.found', {count: hoveredDecisions.length})}
-                            </Typography>
-                            <Box sx={{flex: 1, overflowY: 'auto'}}>
-                                {hoveredDecisions.map((decision, index) => (
-                                    <Paper
-                                        key={decision.id}
-                                        elevation={1}
-                                        sx={{
-                                            p: 2,
-                                            mb: 1,
-                                            background: 'white'
-                                        }}
-                                    >
-                                        <Typography variant="h6">
-                                            {decision.decisionType?.name}
-                                        </Typography>
-                                        <Typography>
-                                            {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
-                                        </Typography>
-                                        <Typography>
-                                            {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
-                                        </Typography>
-                                        {decision.description && (
-                                            <Typography>
-                                                {t('decision.description')}: {decision.description}
-                                            </Typography>
-                                        )}
-                                    </Paper>
-                                ))}
-                            </Box>
-                        </Box>
-                    ) : (
-                        <Typography>
-                            {t('decision.list.hover')}
-                        </Typography>
-                    )}
-                </Paper>
-
-            )}  {/* showPanel && ...*/}
-
-        </Box>
+            <DecisionResultPanel show={showPanel} decisions={hoveredDecisions} />
+            {renderDialog()}
+        </>
     );
 }
 
