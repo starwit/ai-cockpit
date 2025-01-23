@@ -149,22 +149,28 @@ function DecisionDetail(props) {
         setDecisionType(event.target.value);
     }
 
-    function renderDecisionMap() {  //render the map
-        if (rowData.cameraLatitude == undefined || rowData.cameraLongitude == undefined) {
+    function renderActionVisualzation() {  //render the map
+        if (rowData.actionVisualizationUrl != undefined) {
             return (
-                <Typography align="center">
-                    {t("error.coordinates")}
-                </Typography>
+                <MediaContent
+                    sx={{aspectRatio: "16/9", objectFit: "contain"}}
+                    src={window.location.pathname + "api/decision/download/" + rowData.actionVisualizationUrl} />
+            );
+        } else if (rowData.cameraLatitude != undefined && rowData.cameraLongitude != undefined) {
+            return (
+                <Box sx={{aspectRatio: "16/9", objectFit: "contain"}}>
+                    <IconLayerMap
+                        sx={{position: "absolute", top: 0, left: 0, right: 0, bottom: 0}}
+                        latitude={rowData.cameraLatitude}
+                        longitude={rowData.cameraLongitude}
+                    />
+                </Box>
             );
         }
         return (
-            <Box sx={{aspectRatio: "16/9", objectFit: "contain"}}>
-                <IconLayerMap
-                    sx={{position: "absolute", top: 0, left: 0, right: 0, bottom: 0}}
-                    latitude={rowData.cameraLatitude}
-                    longitude={rowData.cameraLongitude}
-                />
-            </Box>
+            <Typography align="center">
+                {t("error.action.visualization")}
+            </Typography>
         );
     }
 
@@ -333,7 +339,7 @@ function DecisionDetail(props) {
                             </FormControl>
 
                             <Box sx={{aspectRatio: "inherit", position: 'relative'}}>
-                                {renderDecisionMap()}
+                                {renderActionVisualzation()}
                             </Box>
                         </Stack>
                     </Stack>

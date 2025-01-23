@@ -37,6 +37,9 @@ public class DecisionEntity extends AbstractEntity<Long> {
     @Column(name = "mediaurl")
     private String mediaUrl;
 
+    @Column(name = "actionvisualizationurl")
+    private String actionVisualizationUrl;
+
     @Column(name = "cameralatitude")
     private BigDecimal cameraLatitude;
 
@@ -74,6 +77,14 @@ public class DecisionEntity extends AbstractEntity<Long> {
 
     public void setMediaUrl(String mediaUrl) {
         this.mediaUrl = mediaUrl;
+    }
+
+    public String getActionVisualizationUrl() {
+        return actionVisualizationUrl;
+    }
+
+    public void setActionVisualizationUrl(String actionVisualizationUrl) {
+        this.actionVisualizationUrl = actionVisualizationUrl;
     }
 
     public BigDecimal getCameraLatitude() {
