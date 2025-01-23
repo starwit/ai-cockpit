@@ -77,7 +77,7 @@ const translationDeDE = {
     "error.general.delete": "Dieses Element konnte nicht gelöscht werden.",
     "error.general.create": "Dieses Element konnte nicht erstellt werden.",
     "error.general.update": "Dieses Element konnte nicht aktualisiert werden.",
-    "error.coordinates": "Keine Koordianten verfügbar",
+    "error.action.visualization": "Keine Visualisierung verfügbar",
     "error.general.get": "Dieses Element konnte nicht geladen werden.",
     "error.serverOffline": "Der Server scheint offline zu sein.",
     "error.userOffline": "Sie scheinen offline zu sein.",
