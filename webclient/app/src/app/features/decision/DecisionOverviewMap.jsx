@@ -1,4 +1,3 @@
-//NEW DECISIONOVERVIEWMAP
 import React, {useState, useEffect} from 'react';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
