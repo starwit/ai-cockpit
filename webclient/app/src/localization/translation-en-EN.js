@@ -129,6 +129,10 @@ const translationEnEN = {
     "transparency.sbom.indirectDeps": "Indirect dependencies",
     "transparency.components.details.show": "Show Details",
     "transparency.components.details.download.pdf": "Download PDF",
-    "transparency.components.details.download.spreadsheet": "Download Spreadsheet"
+    "transparency.components.details.download.spreadsheet": "Download Spreadsheet",
+    "view.mode": "View Mode",
+    "view.mode.normal": "Normal",
+    "view.mode.heatmap": "Heatmap",
+    "heatmap.description": "The heatmap shows concentration areas of traffic decisions"
 };
 export default translationEnEN;

@@ -1,3 +1,4 @@
+//NEW DECISIONOVERVIEWMAP
 import React, {useState, useEffect} from 'react';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
@@ -12,12 +13,20 @@ import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
 import {useTranslation} from 'react-i18next';
 
-import {IconButton} from '@mui/material';
+import {
+    IconButton,
+    Box,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
+} from '@mui/material';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DecisionResultPanel from './DecisionResultPanel';
 import DecisionDetail from './DecisionDetail';
+import DecisionHeatmap from './DecisionHeatmap';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -35,6 +44,7 @@ function DecisionOverviewMap() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
+    const [viewMode, setViewMode] = useState('normal');
 
     const layers = [
         createBaseMapLayer(),
@@ -51,6 +61,30 @@ function DecisionOverviewMap() {
         pitch: 0,           // No tilt
         bearing: 0          // No rotation
     };
+
+    const ViewModeControl = () => (
+        <Box sx={{
+            position: 'absolute',
+            top: 10,
+            left: 10,
+            zIndex: 1,
+            backgroundColor: 'white',
+            padding: 1,
+            borderRadius: 1
+        }}>
+            <FormControl size="small">
+                <InputLabel>{t('view.mode')}</InputLabel>
+                <Select
+                    value={viewMode}
+                    onChange={(e) => setViewMode(e.target.value)}
+                    label={t('view.mode')}
+                >
+                    <MenuItem value="normal">{t('view.mode.normal')}</MenuItem>
+                    <MenuItem value="heatmap">{t('view.mode.heatmap')}</MenuItem>
+                </Select>
+            </FormControl>
+        </Box>
+    );
 
     useEffect(() => {
         reloadDecisions();
@@ -274,12 +308,23 @@ function DecisionOverviewMap() {
     // Return the map component with minimum required styles
     return (
         <>
-            <DeckGL
-                layers={layers}               // Add map layers
-                views={MAP_VIEW}              // Add map view settings
-                initialViewState={INITIAL_VIEW_STATE}  // Set initial position
-                controller={{dragRotate: false}}       // Disable rotation
-            />
+            {viewMode === 'normal' ? (
+                <DeckGL
+                    layers={layers}
+                    views={MAP_VIEW}
+                    initialViewState={INITIAL_VIEW_STATE}
+                    controller={{dragRotate: false}}
+                />
+            ) : (
+                <DecisionHeatmap
+                    onHover={info => {
+                        if (info.object) {
+                            setHoveredDecisions(info.object[1]);
+                        }
+                    }}
+                    onClick={handleOpenDecision}
+                />
+            )}
 
             <IconButton
                 onClick={() => setShowPanel(!showPanel)}
@@ -292,7 +337,13 @@ function DecisionOverviewMap() {
             >
                 {showPanel ? <ChevronRightIcon /> : <ChevronLeftIcon />}
             </IconButton>
-            <DecisionResultPanel show={showPanel} decisions={hoveredDecisions} />
+
+            <DecisionResultPanel
+                show={showPanel}
+                decisions={hoveredDecisions}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+            />
             {renderDialog()}
         </>
     );
