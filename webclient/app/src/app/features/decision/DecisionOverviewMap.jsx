@@ -18,6 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DecisionResultPanel from './DecisionResultPanel';
 import DecisionDetail from './DecisionDetail';
+import DecisionTypeFilter from './DecisionTypeFilter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -25,16 +26,17 @@ const MAP_VIEW = new MapView({repeat: true});
 function DecisionOverviewMap() {
     // Add state to store decisions
     const {t, i18n} = useTranslation();
-
+    const [selectedType, setSelectedType] = useState(['all']);
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
-    const groupedDecisions = groupDecisionsByLocation();
     const [selectedDecisions, setSelectedDecisions] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
+
+    const groupedDecisions = groupDecisionsByLocation();
 
     const layers = [
         createBaseMapLayer(),
@@ -52,6 +54,15 @@ function DecisionOverviewMap() {
         bearing: 0          // No rotation
     };
 
+    // Filter decisions that have a type => retrieve type names => create Set to remove duplicates => convert Set back to an array
+    const decisionTypes = Array.from(
+        new Set(
+            decisions
+                .filter(decision => decision.decisionType?.name)
+                .map(decision => decision.decisionType.name)
+        )
+    );
+
     useEffect(() => {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
@@ -68,14 +79,21 @@ function DecisionOverviewMap() {
     }
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
-        return decisions.reduce((acc, decision) => {
-            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
-            if (!acc[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
-                acc[key] = [];
-            }
-            acc[key].push(decision);    // Add the current decision to the array for this location
-            return acc;
-        }, {});
+        return decisions
+            .filter(decision => decision && (
+                selectedType.includes('all') ||
+                (decision.decisionType && selectedType.includes(decision.decisionType.name))
+            ))
+            .reduce((acc, decision) => {
+                if (decision.cameraLatitude && decision.cameraLongitude) {
+                    const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
+                    if (!acc[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
+                        acc[key] = [];
+                    }
+                    acc[key].push(decision);    // Add the current decision to the array for this location
+                }
+                return acc;
+            }, {});
     }
 
 
@@ -274,6 +292,11 @@ function DecisionOverviewMap() {
     // Return the map component with minimum required styles
     return (
         <>
+            <DecisionTypeFilter
+                selectedType={selectedType}
+                onTypeChange={setSelectedType}
+                decisionTypes={decisionTypes}
+            />
             <DeckGL
                 layers={layers}               // Add map layers
                 views={MAP_VIEW}              // Add map view settings

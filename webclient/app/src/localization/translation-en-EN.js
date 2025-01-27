@@ -112,6 +112,8 @@ const translationEnEN = {
     "decisiontype.makeselect.notsaved": "Unsafed Changes!",
     "decisiontype.delete.message": "The configuration will be deleted",
     "decisiontype.save.message": "The decisiontype configurations must be saved before they can be edited",
+    "decision.type.filter": "Filter by Decision Type",
+    "decision.type.all": "All Types",
     "menu.info.componentbreakdown": "Component Overview",
     "menu.info.riskoverview": "Risk Assesment",
     "transparency.components.title": "System Module Overview",
