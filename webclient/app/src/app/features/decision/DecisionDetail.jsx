@@ -22,7 +22,7 @@ import {
     IconButton,
     Tooltip
 } from "@mui/material";
-import React, {useEffect, useMemo, useState, useCallback} from "react";
+import React, {useEffect, useMemo, useState, useCallback, useRef} from "react";
 import {useTranslation} from "react-i18next";
 import DecisionDetailStyles from "../../assets/themes/DecisionDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";
@@ -33,7 +33,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import Info from "@mui/icons-material/Info";
-import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
@@ -65,10 +64,18 @@ function DecisionDetail(props) {
         if (!isTextField) {
             if (event.key === 'Escape') {
                 handleClose();
-            } else if (event.key === 'a') {
+            } else if (event.key === 'd') {// navigate through the decisions
                 handleNext(data, rowIndex);
-            } else if (event.key === 'd') {
+            } else if (event.key === 'a') {
                 handleBefore(data, rowIndex);
+            }
+
+            if (event.key >= '1' && event.key <= '9') {//shortkey for decision types
+                console.log(event.key);
+                const index = parseInt(event.key, 10) - 1;
+                if (index < allDecisionType.length) {
+                    setDecisionType(allDecisionType[index]);
+                }
             }
         }
 
@@ -300,7 +307,7 @@ function DecisionDetail(props) {
                                 >
                                     {allDecisionType.map((decisionType, index) => (
                                         <MenuItem key={index} value={decisionType}>
-                                            <ListItemText>{decisionType.name}</ListItemText>
+                                            <ListItemText>{`${index + 1} - ${decisionType.name}`}</ListItemText>
                                         </MenuItem>
                                     ))}
                                 </Select>
