@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Features
+
+-  ab#1367 add action visualization to decision details ([a7237](https://github.com/starwit/ai-cockpit/commit/a7237af022a0f32) Anett Hübner)  
+
 ## refs/tags/0.1.6 (2024-12-02)
 
 ### Features

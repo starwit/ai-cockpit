@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const translationDeDE = {
-    "arrow.info": "Zwischen den Gefahrensituationen kann mit den A & D navigiert werden.",
+    "arrow.info": "Zwischen den Gefahrensituationen kann mit den A & D navigiert werden und den Gefahrentyp kann man mit den Zahlen 1-9 wechseln.",
     "decision": "Gefahrensituation",
     "decision.title": "Gefahrensituationen",
     "decision.create.title": "Gefahrensituation erfassen",
@@ -77,7 +77,7 @@ const translationDeDE = {
     "error.general.delete": "Dieses Element konnte nicht gelöscht werden.",
     "error.general.create": "Dieses Element konnte nicht erstellt werden.",
     "error.general.update": "Dieses Element konnte nicht aktualisiert werden.",
-    "error.coordinates": "Keine Koordianten verfügbar",
+    "error.action.visualization": "Keine Visualisierung verfügbar",
     "error.general.get": "Dieses Element konnte nicht geladen werden.",
     "error.serverOffline": "Der Server scheint offline zu sein.",
     "error.userOffline": "Sie scheinen offline zu sein.",

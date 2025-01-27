@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const translationEnEN = {
-    "arrow.info": "You can navigate between decisions using A & D",
+    "arrow.info": "You can navigate between decisions using A & D and change the decision type using the numbers 1-9.",
     "decision": "Traffic Decision",
     "decision.title": "Traffic Decisions",
     "decision.create.title": "Create Decision",
@@ -77,7 +77,7 @@ const translationEnEN = {
     "error.general.delete": "This element could not be deleted.",
     "error.general.create": "This element could not be created.",
     "error.general.update": "This element could not be updated.",
-    "error.coordinates": "No coordinates available",
+    "error.action.visualization": "No visualzation available",
     "error.general.get": "This element could not be loaded.",
     "error.serverOffline": "The server seems to be offline.",
     "error.userOffline": "You appear to be offline.",
