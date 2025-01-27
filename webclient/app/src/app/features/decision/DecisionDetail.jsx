@@ -64,9 +64,9 @@ function DecisionDetail(props) {
         if (!isTextField) {
             if (event.key === 'Escape') {
                 handleClose();
-            } else if (event.key === 'a') {// navigate through the decisions
+            } else if (event.key === 'd') {// navigate through the decisions
                 handleNext(data, rowIndex);
-            } else if (event.key === 'd') {
+            } else if (event.key === 'a') {
                 handleBefore(data, rowIndex);
             }
 
