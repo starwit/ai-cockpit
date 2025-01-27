@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const translationDeDE = {
-    "arrow.info": "Zwischen den Gefahrensituationen kann mit den A & D navigiert werden.",
+    "arrow.info": "Zwischen den Gefahrensituationen kann mit den A & D navigiert werden und den Gefahrentyp kann man mit den Zahlen 1-9 wechseln.",
     "decision": "Gefahrensituation",
     "decision.title": "Gefahrensituationen",
     "decision.create.title": "Gefahrensituation erfassen",
