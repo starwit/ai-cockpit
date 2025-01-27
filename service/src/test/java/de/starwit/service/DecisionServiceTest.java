@@ -17,13 +17,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import de.starwit.persistence.entity.ExecutionPolicies;
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionTypeEntity;
+import de.starwit.persistence.entity.ExecutionPolicies;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
+import de.starwit.service.impl.ActionExecutorService;
 import de.starwit.service.impl.DecisionService;
 import de.starwit.service.impl.DecisionTypeService;
 import de.starwit.visionapi.Reporting.IncidentMessage;
@@ -38,6 +39,9 @@ public class DecisionServiceTest {
 
     @Autowired
     ActionTypeRepository actionTypeRepository;
+
+    @Autowired
+    ActionExecutorService actionExecutorService;
 
     @Autowired
     private DecisionService decisionService;
