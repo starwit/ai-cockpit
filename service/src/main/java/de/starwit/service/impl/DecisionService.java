@@ -9,6 +9,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,6 +55,9 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
     private String endpoint;
 
     private final EntityManager entityManager;
+
+    @Autowired
+    private ActionExecutorService actionExecutorService;
 
     @Autowired
     private DecisionRepository decisionRepository;
@@ -106,6 +110,16 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         entity = saveOrUpdate(entity);
         entityManager.detach(entity);
         return entity;
+    }
+
+    public void executeActions(DecisionEntity entity) {
+        Set<ActionEntity> actions = entity.getAction();
+        if (actions != null && !actions.isEmpty()) {
+            for (ActionEntity actionEntity : actions) {
+                actionEntity.setMetadata(entity.getDecisionType().getName());
+                actionExecutorService.sendAction(actionEntity);
+            }
+        }
     }
 
     public byte[] getFileFromMinio(String bucketName, String objectName)

@@ -32,6 +32,9 @@ public class ActionTypeEntity extends AbstractEntity<Long> {
     @OneToMany(mappedBy = "actionType")
     private Set<ActionEntity> action;
 
+    @Column(name = "endpoint")
+    private String endpoint;
+
     @JsonFilter("filterId")
     @ManyToMany(mappedBy = "actionType")
     private Set<DecisionTypeEntity> decisionType;
@@ -68,6 +71,14 @@ public class ActionTypeEntity extends AbstractEntity<Long> {
 
     public void setExecutionPolicy(ExecutionPolicies executionPolicy) {
         this.executionPolicy = executionPolicy;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
     }
 
     public Set<DecisionTypeEntity> getDecisionType() {
