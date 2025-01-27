@@ -22,12 +22,14 @@ import org.springframework.data.redis.connection.stream.StreamOffset;
 import org.springframework.data.redis.stream.StreamMessageListenerContainer;
 import org.springframework.data.redis.stream.Subscription;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.ClientOptions.DisconnectedBehavior;
 
 @SpringBootApplication
 @EnableAsync
+@EnableScheduling
 @ComponentScan(basePackages = "de.starwit.persistence")
 public class ServiceConfiguration {
 

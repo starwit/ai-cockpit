@@ -1,6 +1,6 @@
 package de.starwit.persistence.entity;
 
-public enum ExecutionPolicies {
+public enum ExecutionPolicy {
     MANUAL, WITHCHECK, AUTOMATIC;
 
 }
