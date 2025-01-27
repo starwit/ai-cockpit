@@ -60,7 +60,7 @@ function DecisionDetail(props) {
     const handleKeyDown = useCallback((event) => {
         const activeElement = document.activeElement;
         const isTextField = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
-
+        console.log(event.key);
         if (!isTextField) {
             if (event.key === 'Escape') {
                 handleClose();
@@ -68,14 +68,16 @@ function DecisionDetail(props) {
                 handleNext(data, rowIndex);
             } else if (event.key === 'a') {
                 handleBefore(data, rowIndex);
-            }
-
-            if (event.key >= '1' && event.key <= '9') {//shortkey for decision types
+            }else if (event.key >= '1' && event.key <= '9') {//shortkey for decision types
                 console.log(event.key);
                 const index = parseInt(event.key, 10) - 1;
                 if (index < allDecisionType.length) {
                     setDecisionType(allDecisionType[index]);
                 }
+            }else if (event.key == 'Enter') {
+                handleSave(actionTypes, decisionType, description, "ACCEPTED")
+            }else if (event.key == 'Delete') {
+                handleSave(actionTypes, decisionType, description, "REJECTED")
             }
         }
 
@@ -302,7 +304,7 @@ function DecisionDetail(props) {
                                     onChange={handleChangeDecisionType}
                                     label={t("decision.decisionType")}
                                     renderValue={selected => (
-                                        <Chip label={selected.name} variant="outlined" sx={{border: "none"}} />
+                                        <Chip key={selected.id} label={selected.name} variant="outlined" sx={{border: "none"}} />
                                     )}
                                 >
                                     {allDecisionType.map((decisionType, index) => (
@@ -420,8 +422,7 @@ function DecisionDetail(props) {
                         onClick={() => handleSave(actionTypes, decisionType, description, "ACCEPTED")}
                         variant="contained"
                         color="success"
-                        startIcon={<CheckIcon />}
-                        autoFocus>
+                        startIcon={<CheckIcon />}>
                         {t("decision.button.acknowledged")}
                     </Button>
                 </Box>
