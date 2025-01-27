@@ -197,6 +197,7 @@ function DecisionOverviewMap() {
             automaticNext={automaticNext}
             toggleAutomaticNext={toggleAutomaticNext}
             data={selectedDecisions}
+            hideMap={true}
         />;
     }
 

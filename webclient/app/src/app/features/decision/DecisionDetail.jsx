@@ -38,7 +38,18 @@ import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
 function DecisionDetail(props) {
-    const {open, rowData, handleClose, handleSave, data, handleNext, handleBefore, automaticNext, toggleAutomaticNext} = props;
+    const {
+        open,
+        rowData,
+        handleClose,
+        handleSave,
+        data,
+        handleNext,
+        handleBefore,
+        automaticNext,
+        toggleAutomaticNext,
+        hideMap = false
+    } = props;
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
     const [actionTypes, setActionTypes] = useState(rowData.action);
@@ -272,10 +283,11 @@ function DecisionDetail(props) {
                     </Box>
 
                     <Stack direction="row">
-                        <Stack sx={{width: 1 / 2}}>
+                        <Stack sx={{width: hideMap ? 1 : 1 / 2}}>
                             <FormControl
                                 fullWidth
                                 variant="outlined"
+                                sx={{mb: 2}}
                             >
 
                                 <InputLabel id="decision.decisionType.label">
@@ -299,13 +311,26 @@ function DecisionDetail(props) {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <MediaContent
-                                sx={{aspectRatio: "16/9", objectFit: "contain"}}
-                                src={window.location.pathname + "api/decision/download/" + rowData.mediaUrl} />
-
+                            <Box sx={{flex: 1, minHeight: 0}}>
+                                <MediaContent
+                                    sx={{
+                                        aspectRatio: "16/9",
+                                        objectFit: "contain",
+                                        mt: 2,
+                                        transform: hideMap ? "translateX(26%) translateY(10%) scaleX(1.517)" : "none"
+                                    }}
+                                    src={window.location.pathname + "api/decision/download/" + rowData.mediaUrl}
+                                />
+                            </Box>
                         </Stack>
+
+
                         <Stack sx={{width: 1 / 2}}>
-                            <FormControl fullWidth variant="outlined">
+                            <FormControl
+                                fullWidth
+                                variant="outlined"
+                                sx={{mb: 2}}
+                            >
                                 <InputLabel id="decision.action.label">
                                     {t("decision.action")}
                                 </InputLabel>
@@ -332,9 +357,13 @@ function DecisionDetail(props) {
                                 </Select>
                             </FormControl>
 
-                            <Box sx={{aspectRatio: "inherit", position: 'relative'}}>
-                                {renderDecisionMap()}
-                            </Box>
+
+
+                            {!hideMap && (
+                                <Box sx={{aspectRatio: "inherit", position: 'relative', height: '100%'}}>
+                                    {renderDecisionMap()}
+                                </Box>
+                            )}
                         </Stack>
                     </Stack>
                 </Stack>
