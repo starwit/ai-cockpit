@@ -31,7 +31,6 @@ public class ActionService implements ServiceInterface<ActionEntity, ActionRepos
 
     public List<ActionEntity> findAllNewActions() {
         List<ActionEntity> result = actionRepository.findByState(ActionState.NEW);
-        result.addAll(actionRepository.findByState(ActionState.CANCELED));
         return result;
     }
 }
