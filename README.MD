@@ -122,7 +122,7 @@ If you want to start the Application with Minio then you need to run:
 The Minio WebApp is available under localhost:9001 and the shell Application is available under localhost:9000.
 You need to upload a videos a bucket named __anomalies__ link video files in decision data accordingly.
 
-#### Test Traffic Execution
+#### Test Action Execution
 
 * start [alert-viewer](https://github.com/starwit/alert-viewer)
 * add endpoint to your demodata:
