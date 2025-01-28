@@ -9,8 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
@@ -47,11 +45,6 @@ public class ServiceConfiguration {
 
     @Value("${spring.data.redis.active:false}")
     private Boolean activateRedis;
-
-    @Bean
-    TaskExecutor taskExecutor() {
-        return new SimpleAsyncTaskExecutor();
-    }
 
     @Bean
     @ConditionalOnProperty(value = "spring.data.redis.active", havingValue = "true", matchIfMissing = false)

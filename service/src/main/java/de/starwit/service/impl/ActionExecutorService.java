@@ -10,14 +10,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionState;
-import de.starwit.persistence.entity.DecisionState;
 import de.starwit.persistence.entity.ExecutionPolicy;
 
 @Service
@@ -31,28 +29,24 @@ public class ActionExecutorService {
 
     static final Logger LOG = LoggerFactory.getLogger(ActionExecutorService.class);
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedDelayString = "${action.execution.delay:10s}")
     public void executeActions() {
         List<ActionEntity> actions = actionService.findAllNewActions();
         if (actions != null && !actions.isEmpty()) {
             for (ActionEntity action : actions) {
                 ExecutionPolicy executionPolicy = action.getActionType().getExecutionPolicy();
-                if (executionPolicy == ExecutionPolicy.AUTOMATIC
-                        || (executionPolicy == ExecutionPolicy.WITHCHECK
-                                && action.getDecision().getState() == DecisionState.ACCEPTED)) {
-
-                    action.setMetadata("| *** " 
-                    + action.getDecision().getDecisionType().getName() 
-                    + " * " 
-                    + action.getActionType().getName() 
-                    + " *** |");
+                if (executionPolicy.allow(action)) {
+                    action.setMetadata("| *** "
+                            + action.getDecision().getDecisionType().getName()
+                            + " * "
+                            + action.getActionType().getName()
+                            + " *** |");
                     sendAction(action);
                 }
             }
         }
     }
 
-    @Async
     public CompletableFuture<ActionState> sendAction(ActionEntity actionEntity) {
         String endpoint = actionEntity.getActionType().getEndpoint();
         String requestContent = actionEntity.getMetadata();

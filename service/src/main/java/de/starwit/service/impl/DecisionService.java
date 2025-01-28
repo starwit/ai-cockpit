@@ -64,9 +64,6 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
     @Autowired
     private ActionTypeRepository actionTypeRepository;
 
-    @Autowired
-    private ActionExecutorService actionExecutorService;
-
     @Override
     public DecisionRepository getRepository() {
         return decisionRepository;
