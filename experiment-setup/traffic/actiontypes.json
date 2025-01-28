@@ -3,35 +3,30 @@
         "name": "notify police",
         "description": "Notify the police about the decision",
         "executionPolicy": "WITHCHECK",
-        "endpoint": "http://localhost:8080/api/alerts",
         "action": []
     },
     {
         "name": "notify emergency services",
         "description": "Notify emergency services like ambulances or fire departments",
         "executionPolicy": "MANUAL",
-        "endpoint": "http://localhost:8080/api/alerts",
         "action": []
     },
     {
         "name": "notify public alarm services",
         "description": "Notify public platforms or apps about the decision",
         "executionPolicy": "AUTOMATIC",
-        "endpoint": "http://localhost:8080/api/alerts",
         "action": []
     },
     {
         "name": "I2X notification",
         "description": "Issue an infrastructure to X message",
         "executionPolicy": "WITHCHECK",
-        "endpoint": "http://localhost:8080/api/alerts",
         "action": []
     },
     {
         "name": "notify towing service",
         "description": "Get disabled vehicles or obstacles removed",
         "executionPolicy": "AUTOMATIC",
-        "endpoint": "http://localhost:8080/api/alerts",
         "action": []
     }
 ]
