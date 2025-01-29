@@ -47,7 +47,7 @@ public class ActionExecutorService {
         }
     }
 
-    public CompletableFuture<ActionState> sendAction(ActionEntity actionEntity) {
+    public void sendAction(ActionEntity actionEntity) {
         String endpoint = actionEntity.getActionType().getEndpoint();
         String requestContent = actionEntity.getMetadata();
         LOG.info("Sending action request to remote URI " + endpoint);
@@ -76,6 +76,5 @@ public class ActionExecutorService {
             actionEntity.setState(ActionState.CANCELED);
         }
         actionService.saveOrUpdate(actionEntity);
-        return CompletableFuture.completedFuture(actionEntity.getState());
     }
 }
