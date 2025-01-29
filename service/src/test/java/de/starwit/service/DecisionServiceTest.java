@@ -17,11 +17,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import de.starwit.persistence.entity.ExecutionPolicies;
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionTypeEntity;
+import de.starwit.persistence.entity.ExecutionPolicy;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import de.starwit.service.impl.DecisionService;
@@ -54,13 +54,13 @@ public class DecisionServiceTest {
         ActionTypeEntity actionType = new ActionTypeEntity();
         actionType.setDescription("Notify public platforms or apps about the traffic decision");
         actionType.setName("notify public platform");
-        actionType.setExecutionPolicy(ExecutionPolicies.AUTOMATIC);
+        actionType.setExecutionPolicy(ExecutionPolicy.AUTOMATIC);
         actionType = actionTypeRepository.save(actionType);
 
         ActionTypeEntity actionType2 = new ActionTypeEntity();
         actionType2.setDescription("Notify police");
         actionType2.setName("notify police");
-        actionType2.setExecutionPolicy(ExecutionPolicies.WITHCHECK);
+        actionType2.setExecutionPolicy(ExecutionPolicy.WITHCHECK);
         actionType2 = actionTypeRepository.save(actionType2);
 
         Set<ActionTypeEntity> actionTypes = new HashSet<>();

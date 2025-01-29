@@ -25,12 +25,15 @@ public class ActionTypeEntity extends AbstractEntity<Long> {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "executionpolicy")
-    private ExecutionPolicies executionPolicy;
+    private ExecutionPolicy executionPolicy;
 
     // entity relations
     @JsonFilter("filterId")
     @OneToMany(mappedBy = "actionType")
     private Set<ActionEntity> action;
+
+    @Column(name = "endpoint")
+    private String endpoint;
 
     @JsonFilter("filterId")
     @ManyToMany(mappedBy = "actionType")
@@ -62,12 +65,20 @@ public class ActionTypeEntity extends AbstractEntity<Long> {
         this.action = action;
     }
 
-    public ExecutionPolicies getExecutionPolicy() {
+    public ExecutionPolicy getExecutionPolicy() {
         return executionPolicy;
     }
 
-    public void setExecutionPolicy(ExecutionPolicies executionPolicy) {
+    public void setExecutionPolicy(ExecutionPolicy executionPolicy) {
         this.executionPolicy = executionPolicy;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public void setEndpoint(String endpoint) {
+        this.endpoint = endpoint;
     }
 
     public Set<DecisionTypeEntity> getDecisionType() {
