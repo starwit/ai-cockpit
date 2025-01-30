@@ -52,7 +52,7 @@ const translationDeDE = {
     "actionType.description": "description",
     "actionType.description.hint": "",
     "app.baseName": "ai-cockpit",
-    "home.title": "KI Cockpit",
+    "home.title": "Human in the loop",
     "home.welcome": "Willkommen im KI Cockpit",
     "button.submit": "OK",
     "button.create": "Hinzufügen",

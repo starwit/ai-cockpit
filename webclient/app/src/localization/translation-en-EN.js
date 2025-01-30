@@ -52,7 +52,7 @@ const translationEnEN = {
     "actionType.description": "description",
     "actionType.description.hint": "",
     "app.baseName": "ai-cockpit",
-    "home.title": "AI Cockpit",
+    "home.title": "Human in the loop",
     "home.welcome": "Welcome to ai-cockpit",
     "button.submit": "OK",
     "button.create": "Add",

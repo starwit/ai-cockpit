@@ -4,15 +4,27 @@ const ColorTheme = createTheme({
     palette: {
         type: "light",
         primary: {
-            main: "#0B3954",
+            main: "#e93e3a",
             contrastText: "#fff"
         },
+        error: {
+            main: "#e93e3a"
+        },
+        success: {
+            main: "#2B8753"
+        },
+        warning: {
+            main: "#f48326"
+        },
+        info: {
+            main: "#25649C"
+        },
         secondary: {
-            main: "#FF8552",
-            contrastText: "#000"
+            main: "#eee",
+            contrastText: "#e93e3a"
         },
         background: {
-            default: "#f1f1f1",
+            default: "#fefefe",
             paper: "#fff"
         },
         line: {

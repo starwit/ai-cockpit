@@ -13,6 +13,8 @@ import {
 import {useTranslation} from 'react-i18next';
 
 import React from "react";
+import logo from "../assets/images/KICockpit_White.png";
+import logo2 from "../assets/images/KICockpit_FullColour.png";
 import ConfigMenu from "../features/config/ConfigMenu";
 import InfoMenu from "../features/info/InfoMenu";
 
@@ -21,17 +23,19 @@ function CockpitAppBar() {
     return (
         <>
             <Container>
-                <AppBar>
+                <AppBar color="secondary" >
+                    {/*<AppBar sx={{mr: 2, backgroundImage: "linear-gradient(60deg, #ed4037 0%, #f59346 100%)"}}>*/}
                     <Toolbar>
+
                         <IconButton
                             size="large"
                             edge="start"
                             color="inherit"
                             href="./"
                             aria-label="menu"
-                            sx={{mr: 2}}
+                            sx={{m: 0, p: 0, mr: 2}}
                         >
-                            <HomeIcon />
+                            <img src={logo2} height={40} alt="LI-Cockpit" />
                         </IconButton>
                         <Typography variant="h1" component="div" sx={{flexGrow: 1}}>{t('home.title')}</Typography>
                         <Tooltip title={t('map.tooltip')}>
@@ -42,11 +46,11 @@ function CockpitAppBar() {
                                 variant="outlined">
                                 <MapIcon />
                             </IconButton>
-                        </Tooltip>
+                        </Tooltip >
                         <ConfigMenu />
                         <InfoMenu />
-                    </Toolbar>
-                </AppBar>
+                    </Toolbar >
+                </AppBar >
             </Container >
         </>
     );
