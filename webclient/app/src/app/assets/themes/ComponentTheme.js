@@ -27,7 +27,6 @@ const ComponentTheme = createTheme(ColorTheme,
             MuiIconButton: {
                 defaultProps: {
                     color: "inherit",
-                    backgroundImage: "linear-gradient(60deg, #ed4037 0%, #f59346 100%)"
                 }
             }
         }

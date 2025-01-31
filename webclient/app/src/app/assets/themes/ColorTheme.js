@@ -4,7 +4,7 @@ const ColorTheme = createTheme({
     palette: {
         type: "light",
         primary: {
-            main: "#e93e3a",
+            main: "#07437F",
             contrastText: "#fff"
         },
         error: {
@@ -17,7 +17,9 @@ const ColorTheme = createTheme({
             main: "#f48326"
         },
         info: {
-            main: "#25649C"
+            main: "#07437F"
+            //main: "#233A59"
+            //main: "#25649C"
         },
         secondary: {
             main: "#eee",

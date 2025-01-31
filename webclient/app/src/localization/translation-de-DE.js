@@ -53,6 +53,7 @@ const translationDeDE = {
     "actionType.description.hint": "",
     "app.baseName": "ai-cockpit",
     "home.title": "Human in the loop",
+    "home.copyright": "© Starwit Technologies GmbH",
     "home.welcome": "Willkommen im KI Cockpit",
     "button.submit": "OK",
     "button.create": "Hinzufügen",

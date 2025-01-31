@@ -53,6 +53,7 @@ const translationEnEN = {
     "actionType.description.hint": "",
     "app.baseName": "ai-cockpit",
     "home.title": "Human in the loop",
+    "home.copyright": "© Starwit Technologies GmbH",
     "home.welcome": "Welcome to ai-cockpit",
     "button.submit": "OK",
     "button.create": "Add",
