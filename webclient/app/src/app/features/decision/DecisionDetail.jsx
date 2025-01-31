@@ -401,7 +401,7 @@ function DecisionDetail(props) {
                     justifyContent: 'flex-end'
                 }}>
                     <Button
-                        sx={[DecisionDetailStyles.button, {mr: 5}]}
+                        sx={[DecisionDetailStyles.button, {marginRight: 5}]}
                         onClick={() => handleSave(actionTypes, decisionType, description, "REJECTED")}
                         variant="contained"
                         color="error"
