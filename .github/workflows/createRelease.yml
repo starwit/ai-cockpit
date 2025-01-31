@@ -133,6 +133,28 @@ jobs:
         push: true
         tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
 
+  publish_kic:
+    name: "Build and publish docker"
+    needs: build
+    runs-on: [self-hosted, linux, X64]
+
+    steps:
+    - name: Build kic with Maven
+      run: mvn clean -B package -P frontend --settings .github/workflows/settings.xml --file pom.xml
+      env:
+         CI: false
+         PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
+         MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
+         VITE_THEME: kic
+
+    - name: Build and push kic
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./dockerfile
+        push: true
+        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}-kic:${{ env.TAG }}
+
   publish_helm:
     name: "Publish helm chart"
     needs: build

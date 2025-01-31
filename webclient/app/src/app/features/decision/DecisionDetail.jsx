@@ -419,7 +419,6 @@ function DecisionDetail(props) {
                     <Button
                         onClick={() => handleSave(actionTypes, decisionType, description, rowData.state)}
                         variant="contained"
-                        color="info"
                         startIcon={<SaveIcon />}>
                         {t("button.save")}
                     </Button>
