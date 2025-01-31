@@ -10,6 +10,8 @@ import de.starwit.persistence.serializer.ZonedDateTimeDeserializer;
 import de.starwit.persistence.serializer.ZonedDateTimeSerializer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -32,6 +34,13 @@ public class ActionEntity extends AbstractEntity<Long> {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "metadata")
+    private String metadata;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state")
+    private ActionState state = ActionState.NEW;
 
     // entity relations
     @JsonFilter("filterId")
@@ -85,4 +94,19 @@ public class ActionEntity extends AbstractEntity<Long> {
         this.actionType = actionType;
     }
 
+    public String getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
+    }
+
+    public ActionState getState() {
+        return state;
+    }
+
+    public void setState(ActionState state) {
+        this.state = state;
+    }
 }

@@ -9,13 +9,15 @@ function MediaContent(props) {
         src.endsWith('mp4') ?
             <Box sx={sx}>
                 <ReactPlayer
+                    sx={{bottom: 0}}
                     url={src}
-                    width='100%'
-                    height='100%'
                     controls={true}
+                    width="100%"
+                    height="100%"
                     muted={true}
                     playing={true}
                     playbackRate={2}
+
                 />
             </Box>
             :

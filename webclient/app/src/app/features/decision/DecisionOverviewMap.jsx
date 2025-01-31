@@ -230,6 +230,7 @@ function DecisionOverviewMap() {
             automaticNext={automaticNext}
             toggleAutomaticNext={toggleAutomaticNext}
             data={selectedDecisions}
+            showMap={false}
         />;
     }
 

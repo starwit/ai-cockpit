@@ -43,6 +43,12 @@ aiapi:
     enabled: false
     uri: http://localhost:8081
 
+sampledata:
+  enabled: false
+  image: starwitorg/ai-cockpit-sampledata:latest
+  importFolder: traffic
+  language: en
+
 # extraEnv: |
 #   - name: JAVA_TOOL_OPTIONS
 #     value: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5000

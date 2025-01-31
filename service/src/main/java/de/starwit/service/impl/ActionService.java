@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.starwit.persistence.entity.ActionEntity;
+import de.starwit.persistence.entity.ActionState;
 import de.starwit.persistence.repository.ActionRepository;
 
 /**
@@ -26,5 +27,10 @@ public class ActionService implements ServiceInterface<ActionEntity, ActionRepos
 
     public List<ActionEntity> findAllWithoutDecision() {
         return actionRepository.findAllWithoutDecision();
+    }
+
+    public List<ActionEntity> findAllNewActions() {
+        List<ActionEntity> result = actionRepository.findByState(ActionState.NEW);
+        return result;
     }
 }

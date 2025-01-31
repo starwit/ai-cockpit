@@ -1,0 +1,108 @@
+{
+    "github-actions.org-features": true,
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    },
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "sonarlint.rules": {
+        "java:S1854": {
+            "level": "off"
+        },
+        "java:S2864": {
+            "level": "off"
+        },
+        "java:S115": {
+            "level": "off"
+        },
+        "java:S4684": {
+            "level": "off"
+        },
+        "java:S112": {
+            "level": "off"
+        },
+        "java:S6813": {
+            "level": "off"
+        }
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit"
+    },
+    "editor.suggestSelection": "first",
+    "editor.renderWhitespace": "none",
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.format.settings.url": "",
+    "java.format.settings.profile": "CodeFormatterProfile",
+    "[java]": {
+
+
+        "editor.defaultFormatter": null,
+        "editor.tabSize": 4,
+        "editor.renderControlCharacters": true,
+        "editor.guides.indentation": true
+    },
+    "editor.tabSize": 4,
+    "editor.defaultFormatter": "redhat.vscode-commons",
+    "editor.autoIndent": "keep",
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml",
+        "editor.tabSize": 4
+    },
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "bracket-pair-colorizer-2.depreciation-notice": false,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
+    "git.confirmSync": false,
+    "editor.guides.indentation": true,
+    "editor.renderControlCharacters": false,
+    "[html]": {
+        "editor.defaultFormatter": "vscode.html-language-features"
+    },
+    "editor.formatOnSave": true,
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "editor.wrappingIndent": "none",
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "[javascriptreact]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "boot-java.rewrite.reconcile": true,
+    "workbench.editorAssociations": {
+        "*.odt": "default"
+    },
+    "markdown.marp.enableHtml": true,
+    "gitlens.codeLens.enabled": false,
+    "gitlens.terminal.overrideGitEditor": false,
+    "editor.linkedEditing": true,
+    "editor.minimap.enabled": false,
+    "editor.unicodeHighlight.includeComments": true,
+    "emmet.variables": {
+        "lang": "en"
+    },
+    "workbench.editor.revealIfOpen": true,
+    "workbench.tree.indent": 20,
+    "[bat]": {
+        "files.eol": "\r\n"
+    },
+    "terminal.integrated.enablePersistentSessions": false,
+    "terminal.integrated.tabs.hideCondition": "never",
+    "java.debug.settings.hotCodeReplace": "auto",
+    "java.sources.organizeImports.staticStarThreshold": 1,
+    "cSpell.diagnosticLevel": "Hint",
+    "trailing-spaces.includeEmptyLines": false,
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.explorerKind": "external",
+    "terminal.integrated.localEchoStyle": "dim",
+    "terminal.integrated.automationProfile.linux": {
+},
+"window.zoomLevel": -1,
+"trailing-spaces.backgroundColor": "rgba(255,0,0,0.1)",
+"java.configuration.detectJdksAtStart": false,
+"java.compile.nullAnalysis.mode": "automatic"
+}

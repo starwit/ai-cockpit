@@ -1,7 +1,5 @@
 Example for customValues.yaml
 
-
-
 ```yaml
 # Define an ingress to application
 ingress:
@@ -30,6 +28,12 @@ auth:
 minio:
   user: minioadmin
   password: minioadmin
-  endpoint: http://localhost:9000 # MinIO's API endpoint
+  endpoint: http://test-minio.minio.svc.cluster.local:9000 # API endopint != UI
+
+# import sample data, NOTE: this will not happen, if any data is already present
+sampledata:
+  enabled: true
+  importFolder: traffic
+  language: en
 
 ```
