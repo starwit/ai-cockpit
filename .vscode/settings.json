@@ -55,7 +55,6 @@
     "bracket-pair-colorizer-2.depreciation-notice": false,
     "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
-    "workbench.colorTheme": "Default Light Modern",
     "git.confirmSync": false,
     "editor.guides.indentation": true,
     "editor.renderControlCharacters": false,
