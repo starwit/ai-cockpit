@@ -25,7 +25,7 @@ function DecisionResultPanel(props) {
                 <Stack direction="row">
                     <Paper sx={{width: 300, padding: 1}}>
                         {/* Mode selector */}
-                        <FormControl fullWidth sx={{mb: 2}}>
+                        <FormControl fullWidth sx={{marginBottom: 2}}>
                             <InputLabel>View Mode</InputLabel>
                             <Select
                                 value={viewMode}
@@ -40,7 +40,7 @@ function DecisionResultPanel(props) {
                         {/* Description for heatmap mode */}
                         {viewMode === 'heatmap' && (
                             <>
-                                <Typography variant="body2" sx={{mb: 2}}>
+                                <Typography variant="body2" sx={{marginBottom: 2}}>
                                     {t('heatmap.description')}
                                 </Typography>
                                 <Divider sx={{my: 2}} />
