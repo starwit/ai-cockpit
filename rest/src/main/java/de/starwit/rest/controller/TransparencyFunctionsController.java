@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import de.starwit.transparency.model.Module;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
+
+import de.starwit.aic.model.Module;
+import de.starwit.aic.model.ModuleSBOMLocationValue;
 
 @RestController
 @RequestMapping(path = "${rest.base-path}/transparency")
@@ -43,6 +47,9 @@ public class TransparencyFunctionsController {
 
   @Autowired
   private RestTemplate restTemplate;
+
+  @Autowired
+  ObjectMapper objectMapper;
 
   @Value("${sbom.enabled:false}")
   private boolean reportGenerationEnabled;
@@ -60,6 +67,7 @@ public class TransparencyFunctionsController {
   private void init() {
     if (transparencyApiEnabled) {
       LOG.info("Transparency API enabled");
+      objectMapper.registerModule(new JavaTimeModule());
       try {
         LOG.info("Requesting transparency data from remote URI " + transparencyApiUri);
         ResponseEntity<Module[]> response = restTemplate.getForEntity(transparencyApiUri + "/v0/modules",
@@ -71,6 +79,7 @@ public class TransparencyFunctionsController {
         }
       } catch (Exception e) {
         LOG.error("Can't load transparency data from remote URI " + transparencyApiUri + " " + e.getMessage());
+        LOG.debug(ExceptionUtils.getStackTrace(e));
       }
     } else {
       LOG.info("Transparency API disabled, importing default data");
@@ -78,7 +87,7 @@ public class TransparencyFunctionsController {
       try {
         byte[] binaryData = FileCopyUtils.copyToByteArray(transparencyResource.getInputStream());
         String strJson = new String(binaryData, StandardCharsets.UTF_8);
-        Module[] modulesArray = new ObjectMapper().readValue(
+        Module[] modulesArray = objectMapper.readValue(
             strJson,
             Module[].class);
         modules = new ArrayList<>(Arrays.asList(modulesArray));
@@ -192,10 +201,11 @@ public class TransparencyFunctionsController {
   private List<String> getsBomUri(Module m) {
     List<String> result = new ArrayList<>();
     for (var key : m.getsBOMLocation().keySet()) {
-      String sbomLocation = m.getsBOMLocation().get(key);
+      ModuleSBOMLocationValue sbomLocation = m.getsBOMLocation().get(key);
+      var uri = sbomLocation.getUrl();
       // simple sanity check, that URI is an actual HTTP address
-      if (sbomLocation.contains("http")) {
-        result.add(sbomLocation);
+      if (uri.contains("http")) {
+        result.add(uri);
       }
     }
     return result;

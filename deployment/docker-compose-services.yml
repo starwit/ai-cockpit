@@ -1,7 +1,7 @@
 services:
 
   transparency-api:
-    image: starwitorg/starwit-aicapi-transparency:0.0.6
+    image: starwitorg/starwit-aicapi-transparency:0.1.0
     environment:
       SERVER_PORT: 8081
       APP_SERVICE_URI: http://localhost:8081

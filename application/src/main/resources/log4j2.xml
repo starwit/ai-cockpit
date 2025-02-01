@@ -11,24 +11,24 @@
             </PatternLayout>
         </Console>
         <RollingFile name="FileAppender" fileName="./${baseName}.log"
-                     filePattern="./${baseName}-%d{yyyy-MM-dd}-%i.log.gz">
+            filePattern="./${baseName}-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout>
                 <Pattern>${pattern}</Pattern>
             </PatternLayout>
             <Policies>
-                <SizeBasedTriggeringPolicy size="1MB"/>
+                <SizeBasedTriggeringPolicy size="1MB" />
             </Policies>
-            <DefaultRolloverStrategy max="10"/>
+            <DefaultRolloverStrategy max="10" />
         </RollingFile>
     </Appenders>
 
     <Loggers>
         <Logger name="de.test" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAppender"/>
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="ConsoleAppender" />
+            <AppenderRef ref="FileAppender" />
         </Logger>
         <Root level="info">
-            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="ConsoleAppender" />
         </Root>
     </Loggers>
 </Configuration>
