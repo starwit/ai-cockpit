@@ -121,6 +121,28 @@ public class TransparencyFunctionsController {
   }
 
   @Operation(summary = "Get PDF report")
+  @GetMapping(value = "/modules/sbom/{id}/{component}")
+  public String loadSBomFromRemoteUri(@PathVariable("id") int id, @PathVariable("component") String component) {
+
+    Module m = modules.get(id);
+
+    try {
+      ResponseEntity<String> response = restTemplate.getForEntity(m.getsBOMLocation().get(component).getUrl(),
+          String.class);
+
+      if (response.getStatusCode().is2xxSuccessful()) {
+        return response.getBody();
+      } else {
+        return "";
+      }
+    } catch (Exception e) {
+      LOG.error("Can't load sbom from remote URI " + e.getMessage());
+    }
+
+    return "";
+  }
+
+  @Operation(summary = "Get PDF report")
   @GetMapping(value = "/reports/{id}/{type}")
   public byte[] loadPDF(HttpServletResponse resp, @PathVariable("id") int id, @PathVariable("type") String type) {
     byte[] result = null;
