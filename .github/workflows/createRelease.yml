@@ -139,6 +139,10 @@ jobs:
     runs-on: [self-hosted, linux, X64]
 
     steps:
+    - name: Get tag name
+      run: |
+        echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
+
     - name: setup node
       uses: actions/setup-node@v4
       with:
