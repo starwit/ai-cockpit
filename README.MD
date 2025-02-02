@@ -188,7 +188,10 @@ npm start
 If you want to build your application with KI-Cockpit layout, you need to set environment variable VITE_THEME=kic and VITE_TITLE="Human in Command" before starting the build. or execute:
 
 ```shell
-npm start --mode kic
+export VITE_TITLE="Human in Command"
+export VITE_THEME="kic"
+
+npm start
 ```
 
 NPM server starts under localhost:3000/starwit/ by default

@@ -1,6 +1,5 @@
 import {defineConfig} from "vite";
 import react from "@vitejs/plugin-react";
-import {createUnplugin} from 'unplugin'
 
 export default defineConfig(({command}) => {
   if (command === "serve") {
