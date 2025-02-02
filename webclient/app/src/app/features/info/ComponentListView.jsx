@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Link} from "@mui/material";
+import {IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Link, ListItem, List} from "@mui/material";
 import {useTranslation} from "react-i18next";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -34,6 +34,14 @@ export default function ComponentListView(props) {
         />);
     }
 
+    function getModuleDetails(id) {
+        for (const module of moduleList) {
+            if (module.id === id) {
+                return module.name;
+            }
+        }
+    }
+
     function getApiPDFPath(id) {
         return window.location.pathname + "api/transparency/reports/" + id + "/pdf";
     }
@@ -53,6 +61,8 @@ export default function ComponentListView(props) {
                             <TableCell align="right">{t("transparency.components.details.isAI")}</TableCell>
                             <TableCell align="right">{t("transparency.components.details.modelVersion")}</TableCell>
                             <TableCell align="right">{t("transparency.components.details")}</TableCell>
+                            <TableCell align="right">{t("transparency.components.details.succesors")}</TableCell>
+                            <TableCell align="right">{t("transparency.components.details.submodules")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -97,6 +107,19 @@ export default function ComponentListView(props) {
                                             </IconButton>
                                         }
                                     </Tooltip>
+                                </TableCell>
+                                <TableCell align="right">
+                                    {module.successors.length > 0 ?
+                                        <List>
+                                            {module.successors.map((successor, index) => (
+                                                <ListItem key={index}>{getModuleDetails(successor.id)}</ListItem>
+                                            ))}
+                                        </List>
+                                        :
+                                        ""
+                                    }
+                                </TableCell>
+                                <TableCell align="right">
                                 </TableCell>
                             </TableRow>
                         ))}

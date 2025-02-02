@@ -10,6 +10,8 @@ import TransparencyFunctions from "../../services/TransparencyFunctions";
 import ComponentDetailsDialog from "./ComponentDetailsDialog";
 import DescriptionIcon from '@mui/icons-material/Description';
 import ComponentListView from "./ComponentListView";
+import ComponentTreeView from "./ComponentTreeView";
+import ComponentGraphView from "./ComponentGraphView";
 
 function ComponentBreakDown() {
     const {t} = useTranslation();
@@ -82,6 +84,7 @@ function ComponentBreakDown() {
             <Tab label={t("transparency.views.cards")} />
             <Tab label={t("transparency.views.list")} />
             <Tab label={t("transparency.views.tree")} />
+            <Tab label={t("transparency.views.graph")} />
         </Tabs>
 
         <Box>
@@ -165,6 +168,14 @@ function ComponentBreakDown() {
                     ))}
                 </Grid >}
             {tabIndex === 1 && <ComponentListView
+                moduleList={moduleList}
+                reportGenerationEnabled={reportGenerationEnabled}
+            />}
+            {tabIndex === 2 && <ComponentTreeView
+                moduleList={moduleList}
+                reportGenerationEnabled={reportGenerationEnabled}
+            />}
+            {tabIndex === 3 && <ComponentGraphView
                 moduleList={moduleList}
                 reportGenerationEnabled={reportGenerationEnabled}
             />}
