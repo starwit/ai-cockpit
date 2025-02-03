@@ -237,7 +237,7 @@ function DecisionDetail(props) {
                 renderValue={selected => (
                     <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                         {selected.map((value, index) => (
-                            <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
+                            <Chip key={index} label={value.name} variant="outlined" color="primary" />
                         ))}
                     </Box>
                 )}

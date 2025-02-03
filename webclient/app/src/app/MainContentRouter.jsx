@@ -7,6 +7,7 @@ import DecisionTypeOverview from "./features/config/DecisionTypeOverview";
 import DecisionOverview from "./features/decision/DecisionOverview";
 import ComponentBreakDown from "./features/info/ComponentBreakDown";
 import DecisionOverviewMap from "./features/decision/DecisionOverviewMap";
+import CockpitFooter from "./commons/CockpitFooter";
 
 function MainContentRouter() {
     return (
@@ -25,6 +26,7 @@ function MainContentRouter() {
                     }} />
                 </Routes>
             </Container>
+            <CockpitFooter />
         </>
     );
 }
