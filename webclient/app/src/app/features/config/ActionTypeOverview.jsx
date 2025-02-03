@@ -1,13 +1,14 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
-import {Button, Container, MenuItem, Select, Stack, Typography} from "@mui/material";
+import Start from "@mui/icons-material/Start";
+import {Button, Container, Stack, Typography} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
 import ActionTypeRest from "../../services/ActionTypeRest";
-import Start from "@mui/icons-material/Start";
+import ActionTypeSelect from "./ActionTypeSelect";
 
 function ActionTypeOverview() {
     const {t} = useTranslation();
@@ -37,7 +38,7 @@ function ActionTypeOverview() {
             width: 300,
             editable: false,
             renderCell: params =>
-                <DropdownMenu row={params.row} updateRow={params.updateRow} />
+                <ActionTypeSelect row={params.row} updateRow={params.updateRow} />
         },
         {
             field: "endpoint",
@@ -142,23 +143,6 @@ function ActionTypeOverview() {
         setDeleteRow({});
     };
 
-    const DropdownMenu = ({row, updateRow}) => {
-        const {t} = useTranslation();
-
-        const handleChange = event => {
-            const newValue = event.target.value;
-            updateRow(row.id, newValue);
-        };
-
-        return (
-            <Select value={row.executionPolicy} onChange={handleChange} sx={{width: "100%", height: 40}} >
-                <MenuItem value={"MANUAL"}>{t("actiontype.policy.manual")}</MenuItem>
-                <MenuItem value={"WITHCHECK"}>{t("actiontype.policy.withcheck")}</MenuItem>
-                <MenuItem value={"AUTOMATIC"}>{t("actiontype.policy.automated")}</MenuItem>
-            </Select>
-        );
-    };
-
     function renderDeleteDialog() {
         if (!openDelete) {
             return null;
@@ -211,3 +195,4 @@ function ActionTypeOverview() {
 }
 
 export default ActionTypeOverview;
+
