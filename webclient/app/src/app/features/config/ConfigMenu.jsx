@@ -80,11 +80,11 @@ function ConfigMenu() {
                                 onKeyDown={handleListKeyDown}
                             >
                                 <MenuItem component={Link} to={"/decision-type"}>
-                                    <ListItemIcon><NearbyError /></ListItemIcon>
+                                    <ListItemIcon><NearbyError fontSize="small" /></ListItemIcon>
                                     <ListItemText>{t("menu.config.decisiontype")}</ListItemText>
                                 </MenuItem>
                                 <MenuItem component={Link} to={"/action-type"}>
-                                    <ListItemIcon><Start /></ListItemIcon>
+                                    <ListItemIcon><Start fontSize="small" /></ListItemIcon>
                                     <ListItemText>{t("menu.config.actiontype")}</ListItemText>
                                 </MenuItem>
 
