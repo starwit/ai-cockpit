@@ -41,6 +41,7 @@ const translationDeDE = {
     "decisionType.name": "name",
     "decisionType.name.hint": "",
     "map.tooltip": "Auf der Karte anzeigen",
+    "list.tooltip": "Liste anzeigen",
     "automatic.next.tooltip": "automatisch den nächsten Dialog öffnen",
     "actionType": "ActionType",
     "actionType.title": "ActionType",
