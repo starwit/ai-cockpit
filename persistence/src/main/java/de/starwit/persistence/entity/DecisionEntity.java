@@ -59,6 +59,11 @@ public class DecisionEntity extends AbstractEntity<Long> {
     @JoinColumn(name = "decisiontype_id")
     private DecisionTypeEntity decisionType;
 
+    @ManyToOne
+    @JoinColumn(name = "module_id")
+    private ModuleEntity module;
+
+
     @OneToMany(mappedBy = "decision", cascade = { CascadeType.ALL })
     private Set<ActionEntity> action;
 
