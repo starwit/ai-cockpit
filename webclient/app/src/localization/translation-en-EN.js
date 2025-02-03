@@ -96,7 +96,7 @@ const translationEnEN = {
     "actiontype.addItem": "Add Action Type",
     "actiontype.saveItem": "Save All",
     "actiontype.description": "Action Type Description",
-    "actiontype.policy": "Action Execution Policy",
+    "actiontype.policy": "Automation Level",
     "actiontype.policy.manual": "Manual",
     "actiontype.policy.withcheck": "Approval",
     "actiontype.policy.automated": "Automated",
@@ -112,6 +112,7 @@ const translationEnEN = {
     "decisiontype.makeselect.notsaved": "Unsafed Changes!",
     "decisiontype.delete.message": "The configuration will be deleted",
     "decisiontype.save.message": "The decisiontype configurations must be saved before they can be edited",
+    "menu.info": "General Informations",
     "menu.info.componentbreakdown": "Component Overview",
     "menu.info.riskoverview": "Risk Assesment",
     "transparency.components.title": "System Module Overview",
@@ -133,6 +134,7 @@ const translationEnEN = {
     "view.mode": "View Mode",
     "view.mode.normal": "Normal",
     "view.mode.heatmap": "Heatmap",
-    "heatmap.description": "The heatmap shows concentration areas of traffic decisions"
+    "heatmap.description": "The heatmap shows concentration areas of traffic decisions",
+    "menu.autonomy": "Autonomy Levels"
 };
 export default translationEnEN;

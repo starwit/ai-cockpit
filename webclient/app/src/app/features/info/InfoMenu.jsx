@@ -78,6 +78,9 @@ function ConfigMenu() {
                                 <MenuItem component={Link} to={"/info/component-breakdown"}>
                                     {t("menu.info.componentbreakdown")}
                                 </MenuItem>
+                                <MenuItem component={Link} to={"/info/component-breakdown"}>
+                                    {t("menu.info.componentbreakdown")}
+                                </MenuItem>
                             </MenuList>
                         </ClickAwayListener>
                     </Paper>

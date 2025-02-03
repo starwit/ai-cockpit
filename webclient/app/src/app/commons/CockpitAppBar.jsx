@@ -15,6 +15,7 @@ import {useTranslation} from 'react-i18next';
 import React from "react";
 import ConfigMenu from "../features/config/ConfigMenu";
 import InfoMenu from "../features/info/InfoMenu";
+import AutonomyLevelDialog from "../features/info/AutonomyLevelDialog";
 
 function CockpitAppBar() {
     const {t} = useTranslation();
@@ -45,6 +46,7 @@ function CockpitAppBar() {
                         </Tooltip>
                         <ConfigMenu />
                         <InfoMenu />
+                        <AutonomyLevelDialog />
                     </Toolbar>
                 </AppBar>
             </Container >

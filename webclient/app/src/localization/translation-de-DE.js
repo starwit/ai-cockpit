@@ -96,7 +96,7 @@ const translationDeDE = {
     "actiontype.addItem": "Maßnahme hinzufügen",
     "actiontype.saveItem": "Speichern",
     "actiontype.description": "Maßnahmenbeschreibung",
-    "actiontype.policy": "Ausführungslevel",
+    "actiontype.policy": "Autonomiestufe",
     "actiontype.policy.manual": "Manuell",
     "actiontype.policy.withcheck": "Genehmigungsvorbehalt",
     "actiontype.policy.automated": "Automatisch",
@@ -112,6 +112,7 @@ const translationDeDE = {
     "decisiontype.makeselect.notsaved": "Ungesicherte Änderungen!",
     "decisiontype.delete.message": "Die Gefahrentypkonfiguration wird unwiderruflich gelöscht.",
     "decisiontype.save.message": "Die Gefahrentypkonfigurationen müssen erst gespeichert werden, bevor sie bearbeitet werden können",
+    "menu.info": "Allgemeine Informationen",
     "menu.info.componentbreakdown": "Modulübersicht",
     "menu.info.riskoverview": "Risikobewertung",
     "transparency.components.title": "Modulübersicht",
@@ -133,6 +134,12 @@ const translationDeDE = {
     "view.mode": "Ansichtsmodus",
     "view.mode.normal": "Normal",
     "view.mode.heatmap": "Wärmekarte",
-    "heatmap.description": "Die Wärmekarte zeigt Konzentrationsbereiche von Gefahrensituationen"
+    "heatmap.description": "Die Wärmekarte zeigt Konzentrationsbereiche von Gefahrensituationen",
+    "menu.autonomy": "Autonomiestufen",
+    "autonomy.executionPolicy.description": "Folgende Ausfürungsmöglichkeiten gibt es:",
+    "actiontype.policy.manual.description": "Die Maßnahme ist nur beschrieben, wird aber nicht ausgeführt",
+    "actiontype.policy.withcheck.description": "Der Nutzer muss sich die Gefahrensituation in der Detailansicht ansehen und sie als geprüft markieren. Erst dann wird die zugeordnete Maßnahme ausgeführt",
+    "actiontype.policy.automated.description": "Die Maßnahme wird sofort nach Meldung der Gefahrensituation ausgeführt",
+    "autonomy.description": "Meldet die KI eine neue Gefahrensituation, werden für den Gefahrentyp vorkonfigurierte Maßnahmen erstellt. Die Autonomiestufen sind im Maßnahmentyp konfiguriert und legen fest, wann eine Maßnahme ausgeführt wird."
 };
 export default translationDeDE;
