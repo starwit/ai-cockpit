@@ -84,7 +84,7 @@ function ComponentBreakDown() {
             <Tab label={t("transparency.views.cards")} />
             <Tab label={t("transparency.views.list")} />
             <Tab label={t("transparency.views.tree")} />
-            <Tab label={t("transparency.views.graph")} />
+            {/* <Tab label={t("transparency.views.graph")} /> */}
         </Tabs>
 
         <Box>
@@ -175,10 +175,9 @@ function ComponentBreakDown() {
                 moduleList={moduleList}
                 reportGenerationEnabled={reportGenerationEnabled}
             />}
-            {tabIndex === 3 && <ComponentGraphView
+            {/*             {tabIndex === 3 && <ComponentGraphView
                 moduleList={moduleList}
-                reportGenerationEnabled={reportGenerationEnabled}
-            />}
+            />} */}
         </Box>
         {renderModuleList()}
     </>;
