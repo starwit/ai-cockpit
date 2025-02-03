@@ -9,7 +9,6 @@ export default function ComponentTreeView(props) {
     const {t} = useTranslation();
     var uniqueIdSuffix = 0;
 
-
     function getModuleDetails(id) {
         for (const module of moduleList) {
             if (module.id === id) {
@@ -40,9 +39,20 @@ export default function ComponentTreeView(props) {
                 {moduleList.map((module, index) => (
                     <TreeItem key={module.id} itemId={module.id} label={module.name} >
                         {module.successors.length > 0 ?
-                            module.successors.map((successor, index) => (
-                                <TreeItem key={getUniqueTreeViewItemId(successor.id)} itemId={getUniqueTreeViewItemId(successor.id)} label={getModuleDetails(successor.id)} />
-                            ))
+                            <TreeItem key={getUniqueTreeViewItemId(module.id)} itemId={getUniqueTreeViewItemId(module.id)} label={t("transparency.components.details.succesors")} >
+                                {module.successors.map((successor, index) => (
+                                    <TreeItem key={getUniqueTreeViewItemId(successor.id)} itemId={getUniqueTreeViewItemId(successor.id)} label={getModuleDetails(successor.id)} />
+                                ))}
+                            </TreeItem>
+                            :
+                            ""
+                        }
+                        {(module.submodules !== null) ?
+                            <TreeItem key={getUniqueTreeViewItemId(module.id)} itemId={getUniqueTreeViewItemId(module.id)} label={t("transparency.components.details.submodules")} >
+                                {module.submodules.map((submodule, index) => (
+                                    <TreeItem key={getUniqueTreeViewItemId(submodule.id)} itemId={getUniqueTreeViewItemId(submodule.id)} label={getModuleDetails(submodule.id)} />
+                                ))}
+                            </TreeItem>
                             :
                             ""
                         }
