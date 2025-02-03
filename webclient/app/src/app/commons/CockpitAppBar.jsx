@@ -46,7 +46,6 @@ function CockpitAppBar() {
                         </Tooltip>
                         <ConfigMenu />
                         <InfoMenu />
-                        <AutonomyLevelDialog />
                     </Toolbar>
                 </AppBar>
             </Container >

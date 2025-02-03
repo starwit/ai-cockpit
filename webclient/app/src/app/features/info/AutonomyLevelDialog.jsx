@@ -1,53 +1,21 @@
-import {Box, Container, Dialog, DialogContent, DialogTitle, IconButton, List, ListItem, ListItemIcon, ListItemText, Stack, Tooltip, Typography} from "@mui/material";
-import {useTranslation} from "react-i18next";
-import React from "react";
-import HdrAuto from "@mui/icons-material/HdrAuto";
 import CloseIcon from "@mui/icons-material/Close";
+import {Box, Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography} from "@mui/material";
+import React from "react";
+import {useTranslation} from "react-i18next";
 
 function AutonomyLevelDialog(props) {
-    const {openDialog} = props;
-    const [open, setOpen] = React.useState(openDialog);
+    const {open, setOpen} = props;
     const {t} = useTranslation();
-    const anchorRef = React.useRef(null);
 
-    // return focus to the button when we transitioned from !open -> open
-    const prevOpen = React.useRef(open);
-    React.useEffect(function () {
-        if (prevOpen.current === true && open === false) {
-            anchorRef.current.focus();
-        }
 
-        prevOpen.current = open;
-    }, [open]);
-
-    function handleToggle() {
-        setOpen((prevOpen) => !prevOpen);
-    };
-
-    function handleClose(event) {
-        if (anchorRef.current && anchorRef.current.contains(event.target)) {
-            return;
-        }
-
+    function handleClose() {
         setOpen(false);
     };
 
     return (
         <>
-            <Tooltip title={t("menu.autonomy")}>
-                <IconButton
-                    size="large"
-                    onClick={handleToggle}
-                    ref={anchorRef}
-                    variant="outlined"
-                    color="secondary"
-                >
-                    <HdrAuto />
-                </IconButton>
-            </Tooltip>
             <Dialog
                 open={open}
-                anchorEl={anchorRef.current}
                 placement="bottom-start"
                 onClose={handleClose}>
                 <DialogTitle><Typography variant="h2">{t("menu.autonomy")}</Typography></DialogTitle>

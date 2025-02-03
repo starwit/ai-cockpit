@@ -1,14 +1,18 @@
+import HdrAuto from "@mui/icons-material/HdrAuto";
 import Info from "@mui/icons-material/Info";
-import {ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Tooltip} from "@mui/material";
+import Lan from "@mui/icons-material/Lan";
+import {ClickAwayListener, Grow, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Popper, Tooltip} from "@mui/material";
 import React from "react";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
+import AutonomyLevelDialog from "./AutonomyLevelDialog";
 
 
 function ConfigMenu() {
     const {t} = useTranslation();
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
+    const [openDialog, setOpenDialog] = React.useState(false);
 
     // return focus to the button when we transitioned from !open -> open
     const prevOpen = React.useRef(open);
@@ -24,11 +28,15 @@ function ConfigMenu() {
         setOpen((prevOpen) => !prevOpen);
     };
 
+    function handleOpenDialog() {
+        setOpen(false);
+        setOpenDialog(true);
+    }
+
     function handleClose(event) {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
-
         setOpen(false);
     };
 
@@ -75,11 +83,13 @@ function ConfigMenu() {
                                 aria-labelledby="composition-button"
                                 onKeyDown={handleListKeyDown}
                             >
-                                <MenuItem component={Link} to={"/info/component-breakdown"}>
-                                    {t("menu.info.componentbreakdown")}
+                                <MenuItem component={Link} to={"/info/component-breakdown"} onClick={handleClose}>
+                                    <ListItemIcon><Lan fontSize="small" /></ListItemIcon>
+                                    <ListItemText>{t("menu.info.componentbreakdown")}</ListItemText>
                                 </MenuItem>
-                                <MenuItem component={Link} to={"/info/component-breakdown"}>
-                                    {t("menu.info.componentbreakdown")}
+                                <MenuItem onClick={handleOpenDialog}>
+                                    <ListItemIcon><HdrAuto fontSize="small" /></ListItemIcon>
+                                    <ListItemText>{t("menu.autonomy")}</ListItemText>
                                 </MenuItem>
                             </MenuList>
                         </ClickAwayListener>
@@ -87,6 +97,7 @@ function ConfigMenu() {
                 </Grow>
             )}
         </Popper>
+        <AutonomyLevelDialog open={openDialog} setOpen={setOpenDialog} />
     </>;
 
 }
