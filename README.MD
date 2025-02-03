@@ -14,10 +14,6 @@ Cockpit is a part of a bundle of services. For deployment options see <https://g
 
 Software in this repository is licensed under the AGPL-3.0 license. See [license agreement](LICENSE) for more details.
 
-## Development Setup
-
-This section describes how to run this software on your machine.
-
 ### Prerequisites
 
 The following components and tools are necessary to build & run AICockpit in your dev environment.
@@ -95,6 +91,8 @@ __Please note__: all steps need to be executed from base folder of repositories.
     ```bash
     mvn clean install -P frontend
     ```
+
+    There are two layout options. If you want to build your application with KI-Cockpit layout, you need to set environment variable VITE_THEME=kic VITE_THEME=kic and VITE_TITLE="Human in Command" before starting the build.
 
 4) start project
 
@@ -184,6 +182,15 @@ For debugging, you can start the frontend separately.
 
 ```shell
 cd webclient/app
+npm start
+```
+
+If you want to build your application with KI-Cockpit layout, you need to set environment variable VITE_THEME=kic and VITE_TITLE="Human in Command" before starting the build. or execute:
+
+```shell
+export VITE_TITLE="Human in Command"
+export VITE_THEME="kic"
+
 npm start
 ```
 
