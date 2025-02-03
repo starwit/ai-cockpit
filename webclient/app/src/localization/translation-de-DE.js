@@ -129,6 +129,10 @@ const translationDeDE = {
     "transparency.sbom.indirectDeps": "Indirekte Abhängigkeiten",
     "transparency.components.details.show": "Details",
     "transparency.components.details.download.pdf": "PDF herunterladen",
-    "transparency.components.details.download.spreadsheet": "Tabellendarstellung herunterladen"
+    "transparency.components.details.download.spreadsheet": "Tabellendarstellung herunterladen",
+    "view.mode": "Ansichtsmodus",
+    "view.mode.normal": "Normal",
+    "view.mode.heatmap": "Wärmekarte",
+    "heatmap.description": "Die Wärmekarte zeigt Konzentrationsbereiche von Gefahrensituationen"
 };
 export default translationDeDE;
