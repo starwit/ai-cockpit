@@ -79,15 +79,14 @@ function ConfigMenu() {
                                 aria-labelledby="composition-button"
                                 onKeyDown={handleListKeyDown}
                             >
-                                <MenuItem component={Link} to={"/decision-type"}>
+                                <MenuItem component={Link} to={"/decision-type"} onClick={handleClose}>
                                     <ListItemIcon><NearbyError fontSize="small" /></ListItemIcon>
                                     <ListItemText>{t("menu.config.decisiontype")}</ListItemText>
                                 </MenuItem>
-                                <MenuItem component={Link} to={"/action-type"}>
+                                <MenuItem component={Link} to={"/action-type"} onClick={handleClose}>
                                     <ListItemIcon><Start fontSize="small" /></ListItemIcon>
                                     <ListItemText>{t("menu.config.actiontype")}</ListItemText>
                                 </MenuItem>
-
                             </MenuList>
                         </ClickAwayListener>
                     </Paper>
