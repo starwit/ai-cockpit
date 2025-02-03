@@ -1,11 +1,11 @@
-import {Button, ClickAwayListener, Grow, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Popper, Tooltip, Typography} from "@mui/material";
+import {ClickAwayListener, Grow, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Popper, Tooltip} from "@mui/material";
 
+import Category from "@mui/icons-material/Category";
+import SettingsIcon from "@mui/icons-material/Settings";
+import Start from "@mui/icons-material/Start";
+import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
-import SettingsIcon from "@mui/icons-material/Settings";
-import {useEffect, useRef, useState} from "react";
-import NearbyError from "@mui/icons-material/NearbyError";
-import Start from "@mui/icons-material/Start"
 
 
 function ConfigMenu() {
@@ -80,7 +80,7 @@ function ConfigMenu() {
                                 onKeyDown={handleListKeyDown}
                             >
                                 <MenuItem component={Link} to={"/decision-type"} onClick={handleClose}>
-                                    <ListItemIcon><NearbyError fontSize="small" /></ListItemIcon>
+                                    <ListItemIcon><Category fontSize="small" /></ListItemIcon>
                                     <ListItemText>{t("menu.config.decisiontype")}</ListItemText>
                                 </MenuItem>
                                 <MenuItem component={Link} to={"/action-type"} onClick={handleClose}>

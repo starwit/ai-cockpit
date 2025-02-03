@@ -1,3 +1,4 @@
+import HdrAuto from "@mui/icons-material/HdrAuto";
 import CloseIcon from "@mui/icons-material/Close";
 import {Box, Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography} from "@mui/material";
 import React from "react";
@@ -18,7 +19,7 @@ function AutonomyLevelDialog(props) {
                 open={open}
                 placement="bottom-start"
                 onClose={handleClose}>
-                <DialogTitle><Typography variant="h2">{t("menu.autonomy")}</Typography></DialogTitle>
+                <DialogTitle><HdrAuto fontSize="small" /> <Typography variant="h2" component="span">{t("menu.autonomy")}</Typography></DialogTitle>
                 <IconButton
                     onClick={handleClose}
                     sx={{

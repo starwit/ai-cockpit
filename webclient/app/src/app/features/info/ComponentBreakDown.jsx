@@ -1,14 +1,15 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DescriptionIcon from '@mui/icons-material/Description';
+import Lan from "@mui/icons-material/Lan";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {Card, CardContent, Divider, IconButton, Link, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography} from "@mui/material";
+import {Card, CardContent, Container, Divider, IconButton, Link, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TransparencyFunctions from "../../services/TransparencyFunctions";
 import ComponentDetailsDialog from "./ComponentDetailsDialog";
-import DescriptionIcon from '@mui/icons-material/Description';
 
 function ComponentBreakDown() {
     const {t} = useTranslation();
@@ -68,9 +69,9 @@ function ComponentBreakDown() {
         return window.location.pathname + "api/transparency/reports/" + id + "/spreadsheet";
     }
 
-    return <>
-        <Typography variant="h1" component="div" sx={{flexGrow: 1}} gutterBottom>
-            {t("transparency.components.title")}
+    return <Container sx={{paddingTop: 2}}>
+        <Typography variant="h2" component="div" sx={{flexGrow: 1}} gutterBottom>
+            <Lan fontSize="small" /> {t("transparency.components.title")}
         </Typography>
         <Grid container spacing={4}>
             {moduleList.map(row => (
@@ -151,7 +152,7 @@ function ComponentBreakDown() {
             ))}
         </Grid >
         {renderModuleList()}
-    </>;
+    </Container>;
 }
 
 export default ComponentBreakDown;

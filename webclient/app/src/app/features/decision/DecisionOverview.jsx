@@ -1,7 +1,8 @@
+import NearbyError from "@mui/icons-material/NearbyError";
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
-import {Box, Button, IconButton, Tab, Tabs} from "@mui/material";
+import {Box, Button, Container, Icon, IconButton, Tab, Tabs, Typography} from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -219,8 +220,12 @@ function DecisionOverview() {
     }
 
     return (
-        <>
-            <Tabs onChange={handleTabChange} value={tab}>
+        <Container sx={{paddingTop: 2}}>
+
+            <Typography variant="h2" sx={{paddingBottom: 0, marginBottom: 0}}>
+                <NearbyError fontSize="small" /> {t("decisions.heading")}
+            </Typography>
+            <Tabs onChange={handleTabChange} value={tab} sx={{paddingBottom: 0, marginBottom: 0}}>
                 <Tab label={t("home.decisionTab.title.open")} key="tab0" />
                 <Tab label={t("home.decisionTab.title.done")} key="tab1" />
             </Tabs>
@@ -245,7 +250,7 @@ function DecisionOverview() {
                 />
             </Box>
             {renderDialog()}
-        </>
+        </Container>
     );
 }
 

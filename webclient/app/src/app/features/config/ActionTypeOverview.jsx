@@ -1,12 +1,13 @@
-import {Button, MenuItem, Select, Stack, Tooltip, Typography} from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import {Button, Container, MenuItem, Select, Stack, Typography} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
+import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
-import React, {useEffect, useState, useMemo} from "react";
-import ActionTypeRest from "../../services/ActionTypeRest";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
+import ActionTypeRest from "../../services/ActionTypeRest";
+import Start from "@mui/icons-material/Start";
 
 function ActionTypeOverview() {
     const {t} = useTranslation();
@@ -21,26 +22,33 @@ function ActionTypeOverview() {
         {
             field: "name",
             headerName: t("actiontype.name"),
-            width: 150,
+            flex: 0.5,
             editable: true
         },
         {
             field: "description",
             headerName: t("actiontype.description"),
-            width: 350,
+            flex: 1,
             editable: true
         },
         {
             field: "executionPolicy",
             headerName: t("actiontype.policy"),
-            width: 220,
+            width: 300,
             editable: false,
-            renderCell: params => <DropdownMenu row={params.row} updateRow={params.updateRow} />
+            renderCell: params =>
+                <DropdownMenu row={params.row} updateRow={params.updateRow} />
+        },
+        {
+            field: "endpoint",
+            headerName: t("actiontype.endpoint"),
+            flex: 0.4,
+            editable: true
         },
         {
             field: "actions",
             type: "actions",
-            headerName: "Actions",
+            headerName: t("button.actions"),
             sortable: false,
             width: 100,
             renderCell: params =>
@@ -83,9 +91,10 @@ function ActionTypeOverview() {
         if (isSaved) {
             const newRow = {
                 id: "",
-                name: "NONE",
-                description: "NONE",
-                executionPolicy: "MANUAL"
+                name: t("entry.new"),
+                description: t("entry.new"),
+                executionPolicy: "MANUAL",
+                endpoint: t("entry.new")
             };
             setActionTypes([...actionTypes, newRow]);
             setIsSaved(false);
@@ -98,6 +107,7 @@ function ActionTypeOverview() {
                 row.name = newRow.name;
                 row.description = newRow.description;
                 row.executionPolicy = newRow.executionPolicy;
+                row.endpoint = newRow.endpoint;
             }
         });
         setActionTypes(actionTypes);
@@ -115,7 +125,7 @@ function ActionTypeOverview() {
         setIsSaved(true);
     };
 
-    function handleDeleteClick(event, row) {
+    function handleDeleteClick(row) {
         if (row.id === "") {
             reloadActionTypes();
         } else {
@@ -141,7 +151,7 @@ function ActionTypeOverview() {
         };
 
         return (
-            <Select value={row.executionPolicy} onChange={handleChange} sx={{width: 175, height: 40}} >
+            <Select value={row.executionPolicy} onChange={handleChange} sx={{width: "100%", height: 40}} >
                 <MenuItem value={"MANUAL"}>{t("actiontype.policy.manual")}</MenuItem>
                 <MenuItem value={"WITHCHECK"}>{t("actiontype.policy.withcheck")}</MenuItem>
                 <MenuItem value={"AUTOMATIC"}>{t("actiontype.policy.automated")}</MenuItem>
@@ -163,22 +173,23 @@ function ActionTypeOverview() {
     }
 
     return (
-        <>
-            <Typography variant="h2" gutterBottom>
-                {t("actiontype.heading")}
-            </Typography>
-            <Stack direction="row" spacing={1} sx={{marginBottom: 1}}>
-                <Button variant="contained" color="primary" onClick={addRow} startIcon={<AddCircleOutlineIcon />}>
+        <Container sx={{paddingTop: 2}}>
+            <Stack direction="row" sx={{marginBottom: 1}}>
+                <Typography variant="h2" gutterBottom sx={{flex: 1}}>
+                    <Start fontSize="small" /> {t("actiontype.heading")}
+                </Typography>
+                <Button variant="text" color="primary" onClick={addRow} startIcon={<AddCircleIcon />}>
                     {t("actiontype.addItem")}
                 </Button>
-                <Button variant="contained" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
+                <Button variant="text" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
                     {t("actiontype.saveItem")}
                     {isSaved ? "" : "*"}
                 </Button>
-            </Stack>
+            </Stack >
             <DataGrid
                 rows={actionTypes}
                 columns={columnsWithUpdateRow}
+                resizeable={true}
                 initialState={{
                     pagination: {
                         paginationModel: {
@@ -195,7 +206,7 @@ function ActionTypeOverview() {
                 onProcessRowUpdateError={handleProcessRowUpdateError}
             />
             {renderDeleteDialog()}
-        </>
+        </Container>
     );
 }
 

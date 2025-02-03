@@ -52,12 +52,12 @@ const ColorTheme = createTheme({
             textTransform: "uppercase"
         },
         h2: {
-            fontSize: "1.8rem",
+            fontSize: "1.7rem",
             fontWeight: 400,
             textTransform: "uppercase"
         },
         h3: {
-            fontSize: "1.8rem",
+            fontSize: "1.7rem",
             fontWeight: 400
         },
         h5: {
