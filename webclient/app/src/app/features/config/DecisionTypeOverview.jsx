@@ -1,18 +1,20 @@
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Category from "@mui/icons-material/Category";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import Category from "@mui/icons-material/Category";
 import SaveIcon from "@mui/icons-material/Save";
 import {Button, Container, Stack, Typography} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
+import {deDE, elGR} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
 import DecisionTypeRest from "../../services/DecisionTypeRest";
 import DecisionTypeDetail from "./DecisionTypeDetail";
 
+
 function DecisionTypeOverview() {
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     const decisionTypeRest = useMemo(() => new DecisionTypeRest, []);
     const [decisionTypes, setDecisionTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
@@ -21,6 +23,7 @@ function DecisionTypeOverview() {
     const [openNotSaved, setOpenNotSaved] = React.useState(false);
     const [rowData, setRowData] = useState({});
     const [deleteRow, setDeleteRow] = useState({});
+    const locale = i18n.language == "de" ? deDE : elGR
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
@@ -209,6 +212,7 @@ function DecisionTypeOverview() {
             </Button>
         </Stack>
         <DataGrid
+            localeText={locale.components.MuiDataGrid.defaultProps.localeText}
             rows={decisionTypes}
             columns={columnsWithUpdateRow}
             initialState={{

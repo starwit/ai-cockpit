@@ -4,6 +4,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import Start from "@mui/icons-material/Start";
 import {Button, Container, Stack, Typography} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
+import {deDE, elGR} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
@@ -11,12 +12,13 @@ import ActionTypeRest from "../../services/ActionTypeRest";
 import ActionTypeSelect from "./ActionTypeSelect";
 
 function ActionTypeOverview() {
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     const actionTypeRest = useMemo(() => new ActionTypeRest, []);
     const [actionTypes, setActionTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
     const [openDelete, setOpenDelete] = React.useState(false);
     const [deleteRow, setDeleteRow] = useState({});
+    const locale = i18n.language == "de" ? deDE : elGR
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
@@ -171,6 +173,7 @@ function ActionTypeOverview() {
                 </Button>
             </Stack >
             <DataGrid
+                localeText={locale.components.MuiDataGrid.defaultProps.localeText}
                 rows={actionTypes}
                 columns={columnsWithUpdateRow}
                 resizeable={true}

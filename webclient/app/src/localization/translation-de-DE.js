@@ -95,7 +95,7 @@ const translationDeDE = {
     "decisiontype.addItem": "Hinzufügen",
     "decisiontype.saveItem": "Alles speichern",
     "decisiontype.description": "Beschreibung des Gefahrentyps",
-    "decisiontype.selectaction": "Typen von Maßnahmen Zuordnen",
+    "decisiontype.selectaction": "Typen von Maßnahmen zuordnen",
     "decisiontype.saveselect": "Speichern",
     "decisiontype.makeselect": "Zuordnen",
     "decisiontype.makeselect.notsaved": "Ungesicherte Änderungen!",

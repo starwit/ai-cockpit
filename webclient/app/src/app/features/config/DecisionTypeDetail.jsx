@@ -16,14 +16,16 @@ import DecisionTypeRest from "../../services/DecisionTypeRest";
 import {DataGrid, GridCloseIcon} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
 import ActionTypeSelect from "./ActionTypeSelect";
+import {deDE, elGR} from '@mui/x-data-grid/locales';
 
 function DecisionTypeDetail(props) {
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     const {open, rowData, handleClose} = props;
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const [isSaved, setIsSaved] = useState([true]);
     const [actionTypes, setActionTypes] = useState([]);
+    const locale = i18n.language == "de" ? deDE : elGR
 
     // action Action Type List
     const columns = [
@@ -132,7 +134,7 @@ function DecisionTypeDetail(props) {
                 <Typography variant="h2">
                     {rowData.name}
                 </Typography>
-                <Typography variant="captions">
+                <Typography variant="captions" fontWeight={theme => theme.typography.h2.fontWeight}>
                     {t("decisiontype.selectaction")}
                 </Typography>
             </DialogTitle>
@@ -152,6 +154,8 @@ function DecisionTypeDetail(props) {
                     <DataGrid
                         rows={actionTypes}
                         columns={columns}
+                        pageSizeOptions={[10]}
+                        localeText={locale.components.MuiDataGrid.defaultProps.localeText}
                     />
                     <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{marginTop: 1}}>
                         <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
