@@ -1,4 +1,4 @@
-import {Button, MenuItem, Select, Stack, Typography} from "@mui/material";
+import {Button, MenuItem, Select, Stack, Tooltip, Typography} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -177,7 +177,6 @@ function ActionTypeOverview() {
                 </Button>
             </Stack>
             <DataGrid
-                autoHeight
                 rows={actionTypes}
                 columns={columnsWithUpdateRow}
                 initialState={{

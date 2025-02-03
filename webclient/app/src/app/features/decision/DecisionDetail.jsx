@@ -22,7 +22,7 @@ import {
     IconButton,
     Tooltip
 } from "@mui/material";
-import React, {useEffect, useMemo, useState, useCallback, useRef} from "react";
+import React, {useEffect, useMemo, useState, useCallback} from "react";
 import {useTranslation} from "react-i18next";
 import DecisionDetailStyles from "../../assets/themes/DecisionDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";

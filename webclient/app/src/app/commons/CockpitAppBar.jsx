@@ -15,6 +15,7 @@ import {useTranslation} from 'react-i18next';
 import React from "react";
 import ConfigMenu from "../features/config/ConfigMenu";
 import InfoMenu from "../features/info/InfoMenu";
+import AutonomyLevelDialog from "../features/info/AutonomyLevelDialog";
 import general from "../assets/images/general_Logo.png";
 import kic from "../assets/images/kic_Logo.png";
 

@@ -97,7 +97,7 @@ const translationEnEN = {
     "actiontype.addItem": "Add Action Type",
     "actiontype.saveItem": "Save All",
     "actiontype.description": "Action Type Description",
-    "actiontype.policy": "Action Execution Policy",
+    "actiontype.policy": "Automation Level",
     "actiontype.policy.manual": "Manual",
     "actiontype.policy.withcheck": "Approval",
     "actiontype.policy.automated": "Automated",
@@ -113,6 +113,7 @@ const translationEnEN = {
     "decisiontype.makeselect.notsaved": "Unsafed Changes!",
     "decisiontype.delete.message": "The configuration will be deleted",
     "decisiontype.save.message": "The decisiontype configurations must be saved before they can be edited",
+    "menu.info": "General Informations",
     "menu.info.componentbreakdown": "Component Overview",
     "menu.info.riskoverview": "Risk Assesment",
     "transparency.components.title": "System Module Overview",
@@ -134,6 +135,13 @@ const translationEnEN = {
     "view.mode": "View Mode",
     "view.mode.normal": "Normal",
     "view.mode.heatmap": "Heatmap",
-    "heatmap.description": "The heatmap shows concentration areas of traffic decisions"
+    "heatmap.description": "The heatmap shows concentration areas of traffic decisions",
+    "menu.autonomy": "Autonomy Levels",
+    "autonomy.executionPolicy.description": "The following execution policies are possible:",
+    "actiontype.policy.manual.description": "The action is just described and will never be executed",
+    "actiontype.policy.withcheck.description": "The user has to check the decision of the AI in the details view before action is executed.",
+    "actiontype.policy.automated.description": "The action will be executed immediately",
+    "autonomy.description": "If the AI ​​reports a new decision, preconfigured actions are created according to the decision type. The autonomy levels are configured in the action types and define when the action is triggered."
+
 };
 export default translationEnEN;
