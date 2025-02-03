@@ -12,14 +12,7 @@ import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
 import {useTranslation} from 'react-i18next';
 
-import {
-    IconButton,
-    Box,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem
-} from '@mui/material';
+import {IconButton} from '@mui/material';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -61,30 +54,6 @@ function DecisionOverviewMap() {
         bearing: 0          // No rotation
     };
 
-    const ViewModeControl = () => (
-        <Box sx={{
-            position: 'absolute',
-            top: 10,
-            left: 10,
-            zIndex: 1,
-            backgroundColor: 'white',
-            padding: 1,
-            borderRadius: 1
-        }}>
-            <FormControl size="small">
-                <InputLabel>{t('view.mode')}</InputLabel>
-                <Select
-                    value={viewMode}
-                    onChange={(e) => setViewMode(e.target.value)}
-                    label={t('view.mode')}
-                >
-                    <MenuItem value="normal">{t('view.mode.normal')}</MenuItem>
-                    <MenuItem value="heatmap">{t('view.mode.heatmap')}</MenuItem>
-                </Select>
-            </FormControl>
-        </Box>
-    );
-
     useEffect(() => {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
@@ -93,7 +62,7 @@ function DecisionOverviewMap() {
 
     //Load Decisions
     function reloadDecisions() {
-        decisionRest.findAllOpen().then(response => {
+        decisionRest.findAll().then(response => {
             if (response.data) {
                 setDecisions(response.data);
             }
@@ -101,13 +70,13 @@ function DecisionOverviewMap() {
     }
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
-        return decisions.reduce((acc, decision) => {
+        return decisions.reduce((locationGroups, decision) => {
             const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
-            if (!acc[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
-                acc[key] = [];
+            if (!locationGroups[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
+                locationGroups[key] = [];
             }
-            acc[key].push(decision);    // Add the current decision to the array for this location
-            return acc;
+            locationGroups[key].push(decision);    // Add the current decision to the array for this location
+            return locationGroups;
         }, {});
     }
 
@@ -317,8 +286,10 @@ function DecisionOverviewMap() {
                 />
             ) : (
                 <DecisionHeatmap
+                    decisions={decisions}
                     onHover={info => {
-                        if (info.object) {
+                        // Hovering over a decision will display the decision details in the panel
+                        if (info.object && info.object[1] && Array.isArray(info.object[1])) {
                             setHoveredDecisions(info.object[1]);
                         }
                     }}

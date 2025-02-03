@@ -63,7 +63,11 @@ function DecisionResultPanel(props) {
                                             {decision.decisionType?.name}
                                         </Typography>
                                         <Typography>
-                                            {t('decision.acquisitionTime')}: {formatDateShort(decision.acquisitionTime, i18n)}
+                                            {t('decision.acquisitionTime')}: {
+                                                decision.acquisitionTime
+                                                    ? formatDateShort(decision.acquisitionTime, i18n) // Check validity of date
+                                                    : t('Invalid Date')
+                                            }
                                         </Typography>
                                         <Typography>
                                             {t('decision.state')}: {decision.state || t('decision.decisionType.new')}
