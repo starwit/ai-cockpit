@@ -130,14 +130,33 @@ function DecisionDetail(props) {
     }
 
     function findExistingActions(defaultActionTypes) {  //find the existing actions
-        const actions = [];
+        const currentActionTypes = [];
         rowData.action.forEach(action => {
             const found = defaultActionTypes.find(value => value.id == action.actionType.id);
             if (found != undefined) {
-                actions.push(found);
+                found.disabled = false;
+                if (action.state == 'DONE') {
+                    found.disabled = true;
+                }
+                currentActionTypes.push(found);
             }
         });
-        return actions;
+        return currentActionTypes;
+    }
+
+    function retainDoneActions(defaultActionTypes) {  //find the existing actions
+        const currentActionTypes = [];
+        rowData.action.forEach(action => {
+            if (action.state == 'DONE') {
+                const doneActionType = action.actionType;
+                doneActionType.disabled = true
+                currentActionTypes.push(doneActionType);
+            }
+        });
+        defaultActionTypes.forEach(type => {
+            currentActionTypes.push(type);
+        });
+        return currentActionTypes;
     }
 
     function reloadActionTypes() {  //reload the action types
@@ -154,7 +173,7 @@ function DecisionDetail(props) {
                 setActionTypes(findExistingActions(response.data));
             } else {
                 actionTypeRest.findByDecisionType(decisionType.id).then(response => {
-                    setActionTypes(response.data);
+                    setActionTypes(retainDoneActions(response.data));
                 })
 
             }
@@ -237,13 +256,15 @@ function DecisionDetail(props) {
                 renderValue={selected => (
                     <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                         {selected.map((value, index) => (
-                            <Chip key={index} label={value.name} variant="outlined" color="primary" />
+                            <Tooltip key={index} title={value.disabled ? t("decision.action.done") : ""}>
+                                <Chip key={index} label={value.name} variant="outlined" color={value.disabled ? "success" : "primary"} />
+                            </Tooltip>
                         ))}
                     </Box>
                 )}
             >
                 {allActionTypes.map((value, index) => (
-                    <MenuItem key={index} value={value}>
+                    <MenuItem key={index} value={value} disabled={value.disabled}>
                         {value.name}
                     </MenuItem>
                 ))}

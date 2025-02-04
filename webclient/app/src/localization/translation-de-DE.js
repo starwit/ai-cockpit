@@ -13,6 +13,7 @@ const translationDeDE = {
     "decision.decisionType": "Gefahrentyp",
     "decision.decisionType.new": "Neuen Typ Anlegen",
     "decision.action": "Maßnahmen",
+    "decision.action.done": "bereits gesendete Maßnahmen sind grün markiert und können nicht ausgewäht werden",
     "decision.action.header4standardvalues": "Standardwerte für Maßnahmen festlegen",
     "decision.button.acknowledged": "Geprüft",
     "decision.button.reportmistake": "Fehler",

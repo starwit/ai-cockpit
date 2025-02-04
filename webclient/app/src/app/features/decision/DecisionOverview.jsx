@@ -1,14 +1,13 @@
-import NearbyError from "@mui/icons-material/NearbyError";
 import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
-import {Box, Button, Container, Icon, IconButton, Tab, Tabs, Typography} from "@mui/material";
+import NearbyError from "@mui/icons-material/NearbyError";
+import {Box, Button, Container, IconButton, Tab, Tabs, Typography} from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import {deDE, elGR} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {formatDateShort} from "../../commons/formatter/DateFormatter";
-import ActionRest from "../../services/ActionRest";
 import DecisionRest from "../../services/DecisionRest";
 import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
@@ -17,8 +16,7 @@ function DecisionOverview() {
     const {t, i18n} = useTranslation();
     const [tab, setTab] = React.useState(0);
     const decisionRest = useMemo(() => new DecisionRest(), []);
-    const actionRest = useMemo(() => new ActionRest(), []);
-    const [decisions, setDecisions] = useState([]);
+    const [selectedDecisions, setSelectedDecisions] = useState([]);
     const [newDecisions, setNewDecisions] = useState([]);
     const [checkedDecisions, setCheckedDecisions] = useState([]);
     const [open, setOpen] = React.useState(false);
@@ -39,14 +37,13 @@ function DecisionOverview() {
                 return;
             }
             const sortedData = response.data.sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime));
-            setDecisions(sortedData);
             setNewDecisions(sortedData.filter(decision => decision.state == null || decision.state == "NEW"));
             setCheckedDecisions(sortedData.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
 
         });
     }
 
-    const handleTabChange = (event, newValue) => {
+    function handleTabChange(_event, newValue) {
         setTab(newValue);
     };
 
@@ -77,53 +74,29 @@ function DecisionOverview() {
     };
 
     function handleSave(actionTypes, decisionType, description, state) {
-        const foundDecision = decisions.find(value => value.id == rowData.id);
+        const foundDecision = getData().find(value => value.id == rowData.id);
+        const actionTypeIds = actionTypes.map(actionType => actionType['id'])
         foundDecision.decisionType = decisionType;
         foundDecision.description = description;
         foundDecision.state = state;
-        const remoteFunctions = [];
 
-        const newActions = actionTypes;
-
-        let newActionTypes = actionTypes;
-        rowData.action.forEach(action => {
-            const found = actionTypes.find(value => value.id == action.actionType.id);
-            if (found === undefined) {
-                remoteFunctions.push(actionRest.delete(action.id));
+        decisionRest.updateWithActions(foundDecision, actionTypeIds).then(() => {
+            if (automaticNext) {
+                handleNext(getData(), getData().findIndex(value => value.id == rowData.id));
             } else {
-                newActionTypes = newActionTypes.filter(value => value.id !== action.actionType.id);
-                newActions.push(action);
+                setOpen(false);
             }
-        });
-
-        newActionTypes.forEach(mActiontype => {
-            const entity = {
-                name: "",
-                description: "",
-                decision: {id: rowData.id},
-                actionType: mActiontype
-            };
-            remoteFunctions.push(actionRest.create(entity));
-        });
-
-        decisionRest.update(foundDecision).then(response => {
-            Promise.all(remoteFunctions).then(() => {
-                if (automaticNext) {
-                    handleNext(getData(), getData().findIndex(value => value.id == rowData.id));
-                } else {
-                    setOpen(false);
-                }
-            });
         });
     };
 
     function handleOpen(row) {
         setOpen(true);
+        setSelectedDecisions(tab == 0 ? newDecisions : checkedDecisions);
         setRowData(row);
     }
 
     function getData() {
-        return tab == 0 ? newDecisions : checkedDecisions;
+        return selectedDecisions;
     }
 
     const headers = [

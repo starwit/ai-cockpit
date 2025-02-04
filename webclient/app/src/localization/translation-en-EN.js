@@ -13,6 +13,7 @@ const translationEnEN = {
     "decision.decisionType": "Decision Type",
     "decision.decisionType.new": "New",
     "decision.action": "Actions",
+    "decision.action.done": "done actions are marked green and cannot be selected",
     "decision.action.header4standardvalues": "Add Standard Values for actions",
     "decision.button.acknowledged": "Acknowledged",
     "decision.button.reportmistake": "Report Mistake",

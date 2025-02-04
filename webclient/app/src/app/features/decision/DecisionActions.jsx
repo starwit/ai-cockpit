@@ -1,11 +1,15 @@
-import {Button, Chip} from "@mui/material";
+import {Button, Chip, Tooltip} from "@mui/material";
+import {useTranslation} from "react-i18next";
 
 export const renderActions = params => {
+    const {t} = useTranslation();
     params.row.action.sort((a, b) => a.actionType.name.localeCompare(b.actionType.name));
     return (
         <strong>
             {params.row.action.map(action => (
-                <Chip key={action.actionType.id} color="primary" label={action.actionType.name} variant="outlined" />
+                <Tooltip key={"tooltip-" + action.id} title={action.state == 'DONE' ? t("decision.action.done") : ""}>
+                    <Chip key={action.actionType.id} color={action.state == 'DONE' ? "success" : "primary"} label={action.actionType.name} variant="outlined" />
+                </Tooltip>
             ))}
         </strong>
     );
