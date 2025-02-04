@@ -425,8 +425,6 @@ function DecisionDetail(props) {
                 </Box>
                 <Box sx={{
                     paddingBottom: 2,
-                    paddingX: 2,
-                    marginLeft: 0,
                     flex: 1,
                     display: 'flex',
                     justifyContent: 'center',
@@ -451,6 +449,9 @@ function DecisionDetail(props) {
                 <Box sx={{
                     paddingBottom: 2,
                     paddingX: 2,
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'flex-end'
                 }}>
                     <Button
                         sx={[DecisionDetailStyles.button, {marginRight: 5}]}
