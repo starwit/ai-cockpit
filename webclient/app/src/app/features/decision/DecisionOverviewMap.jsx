@@ -85,15 +85,15 @@ function DecisionOverviewMap() {
                 selectedType.includes('all') ||
                 (decision.decisionType && selectedType.includes(decision.decisionType.name))
             ))
-            .reduce((acc, decision) => {
+            .reduce((locationGroups, decision) => {
                 if (decision.cameraLatitude && decision.cameraLongitude) {
                     const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
-                    if (!acc[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
-                        acc[key] = [];
+                    if (!locationGroups[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
+                        locationGroups[key] = [];
                     }
-                    acc[key].push(decision);    // Add the current decision to the array for this location
+                    locationGroups[key].push(decision);    // Add the current decision to the array for this location
                 }
-                return acc;
+                return locationGroups;
             }, {});
     }
 
