@@ -14,7 +14,9 @@ import {
     Typography,
     InputLabel,
     Select,
-    MenuItem
+    MenuItem,
+    Divider,
+    TextField
 } from '@mui/material';
 import {useTranslation} from 'react-i18next';
 
@@ -35,6 +37,7 @@ const STATES = [
 ];
 
 const TIME_FILTERS = [
+    {value: -1, label: 'time.range.custom'},
     {value: 0, label: 'time.range.allTime'},
     {value: 1, label: 'time.range.lastHour'},
     {value: 3, label: 'time.range.last3Hours'},
@@ -47,6 +50,8 @@ function DecisionHeatmap({decisions, onHover, onClick}) {
     const {t} = useTranslation();
     const [selectedStates, setSelectedStates] = useState([]);
     const [timeFilter, setTimeFilter] = useState(0);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
 
     // Filter decisions based on selected states. Null is considered as 'NEW'
@@ -68,7 +73,20 @@ function DecisionHeatmap({decisions, onHover, onClick}) {
         }
 
         // Apply time filter
-        if (timeFilter > 0) {
+        if (timeFilter === -1) {
+            // User defined range
+            if (startDate && endDate) {
+                const start = new Date(startDate);
+                start.setHours(0, 0, 0, 0);
+                const end = new Date(endDate);
+                end.setHours(23, 59, 59, 999);
+
+                filtered = filtered.filter(decision => {
+                    const decisionTime = new Date(decision.acquisitionTime);
+                    return decisionTime >= start && decisionTime <= end;
+                });
+            }
+        } else if (timeFilter > 0) {
             const cutoffTime = new Date();
             cutoffTime.setHours(cutoffTime.getHours() - timeFilter);
 
@@ -79,7 +97,7 @@ function DecisionHeatmap({decisions, onHover, onClick}) {
         }
 
         return filtered;
-    }, [decisions, selectedStates, timeFilter]);
+    }, [decisions, selectedStates, timeFilter, startDate, endDate]);
 
 
     function createBaseMapLayer() {
@@ -194,12 +212,20 @@ function DecisionHeatmap({decisions, onHover, onClick}) {
                         ))}
                     </FormGroup>
 
+                    <Divider sx={{marginY: 2}} />
+
                     <Box sx={{marginTop: 2}}>
                         <FormControl fullWidth size="small">
                             <InputLabel>{t('time.range')}</InputLabel>
                             <Select
                                 value={timeFilter}
-                                onChange={(e) => setTimeFilter(e.target.value)}
+                                onChange={(e) => {
+                                    setTimeFilter(e.target.value);
+                                    if (e.target.value !== -1) { // Reset date range when changing time filter
+                                        setStartDate('');
+                                        setEndDate('');
+                                    }
+                                }}
                                 label={t('time.range')}
                             >
                                 {TIME_FILTERS.map((filter) => (
@@ -211,8 +237,33 @@ function DecisionHeatmap({decisions, onHover, onClick}) {
                         </FormControl>
                     </Box>
 
+                    {timeFilter === -1 && (
+                        <Box sx={{mt: 2}}>
+                            <TextField
+                                type="date"
+                                label={t('time.range.start')}
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                size="small"
+                                fullWidth
+                                InputLabelProps={{shrink: true}}
+                                sx={{mb: 1}}
+                            />
+                            <TextField
+                                type="date"
+                                label={t('time.range.end')}
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                size="small"
+                                fullWidth
+                                InputLabelProps={{shrink: true}}
+                                inputProps={{min: startDate}}
+                            />
+                        </Box>
+                    )}
+
                     <Typography variant="caption" sx={{marginTop: 1, display: 'block'}}>
-                        Visible decisions: {filteredDecisions.length}
+                        {t('decision.found', {count: filteredDecisions.length})}
                     </Typography>
                 </Paper>
             </Box>
