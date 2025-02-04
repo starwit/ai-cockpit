@@ -22,7 +22,7 @@ import {
     IconButton,
     Tooltip
 } from "@mui/material";
-import React, {useEffect, useMemo, useState, useCallback, useRef} from "react";
+import React, {useEffect, useMemo, useState, useCallback} from "react";
 import {useTranslation} from "react-i18next";
 import DecisionDetailStyles from "../../assets/themes/DecisionDetailStyles";
 import {formatDateFull} from "../../commons/formatter/DateFormatter";
@@ -237,7 +237,7 @@ function DecisionDetail(props) {
                 renderValue={selected => (
                     <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                         {selected.map((value, index) => (
-                            <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
+                            <Chip key={index} label={value.name} variant="outlined" color="primary" />
                         ))}
                     </Box>
                 )}

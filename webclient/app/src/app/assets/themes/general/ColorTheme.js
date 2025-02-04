@@ -4,15 +4,15 @@ const ColorTheme = createTheme({
     palette: {
         type: "light",
         primary: {
-            main: "#0B3954",
+            main: "#09284f",
             contrastText: "#fff"
         },
         secondary: {
-            main: "#FF8552",
-            contrastText: "#000"
+            main: "#f3f6fe",
+            contrastText: "#09284f"
         },
         background: {
-            default: "#f1f1f1",
+            default: "#fefefe",
             paper: "#fff"
         },
         line: {
@@ -38,12 +38,12 @@ const ColorTheme = createTheme({
             textTransform: "uppercase"
         },
         h2: {
-            fontSize: "1.8rem",
+            fontSize: "1.7rem",
             fontWeight: 400,
             textTransform: "uppercase"
         },
         h3: {
-            fontSize: "1.8rem",
+            fontSize: "1.7rem",
             fontWeight: 400
         },
         h5: {

@@ -133,6 +133,57 @@ jobs:
         push: true
         tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}
 
+  publish_kic:
+    name: "Kic: build and publish docker"
+    needs: build
+    runs-on: [self-hosted, linux, X64]
+
+    steps:
+    - name: Get tag name
+      run: |
+        echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
+
+    - name: setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22 
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 21
+
+    - name: Set up Maven
+      uses: stCarolas/setup-maven@v5
+      with:
+         maven-version: 3.9.2      
+    - name: Build kic with Maven
+      run: mvn clean -B package -P frontend --settings .github/workflows/settings.xml --file pom.xml
+      env:
+         CI: false
+         PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
+         MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
+         VITE_THEME: kic
+         VITE_TITLE: Human in Command
+
+    - name: Kic Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ env.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+   
+    - name: Kic Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and push kic
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        file: ./dockerfile
+        push: true
+        tags: ${{ env.DOCKERHUB_ORG }}/${{ env.IMAGE_NAME }}:${{ env.TAG }}-kic
+
   publish_helm:
     name: "Publish helm chart"
     needs: build

@@ -1,17 +1,17 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import DescriptionIcon from '@mui/icons-material/Description';
+import Lan from "@mui/icons-material/Lan";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import {Box, Card, CardContent, Divider, IconButton, Link, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Tabs, Tooltip, Typography} from "@mui/material";
+import {Box, Card, CardContent, Container, Divider, IconButton, Link, Tab, Table, TableBody, TableCell, TableContainer, TableRow, Tabs, Tooltip, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import TransparencyFunctions from "../../services/TransparencyFunctions";
 import ComponentDetailsDialog from "./ComponentDetailsDialog";
-import DescriptionIcon from '@mui/icons-material/Description';
 import ComponentListView from "./ComponentListView";
 import ComponentTreeView from "./ComponentTreeView";
-import ComponentGraphView from "./ComponentGraphView";
 
 function ComponentBreakDown() {
     const {t} = useTranslation();
@@ -76,9 +76,9 @@ function ComponentBreakDown() {
         return window.location.pathname + "api/transparency/reports/" + id + "/spreadsheet";
     }
 
-    return <>
-        <Typography variant="h1" component="div" sx={{flexGrow: 1}} gutterBottom>
-            {t("transparency.components.title")}
+    return <Container sx={{paddingTop: 2}}>
+        <Typography variant="h2" component="div" sx={{flexGrow: 1}} gutterBottom>
+            <Lan fontSize="small" /> {t("transparency.components.title")}
         </Typography>
         <Tabs value={tabIndex} onChange={handleTabChange}>
             <Tab label={t("transparency.views.cards")} />
@@ -180,7 +180,7 @@ function ComponentBreakDown() {
             />} */}
         </Box>
         {renderModuleList()}
-    </>;
+    </Container>;
 }
 
 export default ComponentBreakDown;
