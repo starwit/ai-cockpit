@@ -18,6 +18,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DecisionResultPanel from './DecisionResultPanel';
 import DecisionDetail from './DecisionDetail';
+
 import DecisionTypeFilter from './DecisionTypeFilter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
