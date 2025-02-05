@@ -2,15 +2,18 @@ import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import NearbyError from "@mui/icons-material/NearbyError";
-import {Box, Button, Container, IconButton, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Button, Container, IconButton, Stack, Tab, Tabs, Typography} from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import {deDE, elGR} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {formatDateShort} from "../../commons/formatter/DateFormatter";
 import DecisionRest from "../../services/DecisionRest";
+import ActionRest from "../../services/ActionRest";
 import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+
 
 function DecisionOverview() {
     const {t, i18n} = useTranslation();
@@ -19,6 +22,7 @@ function DecisionOverview() {
         description: false
     });
     const decisionRest = useMemo(() => new DecisionRest(), []);
+    const actionRest = useMemo(() => new ActionRest(), []);
     const [selectedDecisions, setSelectedDecisions] = useState([]);
     const [newDecisions, setNewDecisions] = useState([]);
     const [checkedDecisions, setCheckedDecisions] = useState([]);
@@ -44,6 +48,10 @@ function DecisionOverview() {
             setCheckedDecisions(sortedData.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
 
         });
+    }
+
+    function handleActionExecution() {
+        actionRest.retryActionExecution()
     }
 
     function handleTabChange(_event, newValue) {
@@ -201,14 +209,23 @@ function DecisionOverview() {
 
     return (
         <Container sx={{paddingTop: 2}}>
-
             <Typography variant="h2" sx={{paddingBottom: 0, marginBottom: 0}}>
                 <NearbyError fontSize="small" /> {t("decisions.heading")}
             </Typography>
-            <Tabs onChange={handleTabChange} value={tab} sx={{paddingBottom: 0, marginBottom: 0}}>
-                <Tab label={t("home.decisionTab.title.open")} key="tab0" />
-                <Tab label={t("home.decisionTab.title.done")} key="tab1" />
-            </Tabs>
+
+            <Stack direction="row" sx={{marginBottom: 0}}>
+                <Tabs onChange={handleTabChange} value={tab} sx={{paddingBottom: 0, marginBottom: 0, flex: 1}}>
+                    <Tab label={t("home.decisionTab.title.open")} key="tab0" />
+                    <Tab label={t("home.decisionTab.title.done")} key="tab1" />
+                </Tabs>
+
+                <Button onClick={handleActionExecution} variant="text" color="primary" startIcon={<NotificationsActiveOutlinedIcon />}>
+                    {t("decision.retryActionExecution")}
+                </Button>
+
+            </Stack>
+
+
             <Box sx={{width: "100%"}}>
                 <DataGrid
                     columnVisibilityModel={columnVisibilityModel}

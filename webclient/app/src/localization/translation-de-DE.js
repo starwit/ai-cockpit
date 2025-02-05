@@ -22,6 +22,7 @@ const translationDeDE = {
     "decision.list.title": "Entscheidungsliste",
     "decision.list.hover": "Über einer Kamera schweben, um Entscheidungen zu sehen",
     "decision.found": "Gefunden: {{count}} Entscheidungen an diesem Ort",
+    "decision.retryActionExecution": "Maßnahmen übermitteln",
     "decision.state": "Status",
     "action": "Aktion",
     "action.title": "Aktionen",

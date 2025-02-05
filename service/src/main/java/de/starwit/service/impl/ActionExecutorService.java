@@ -1,7 +1,6 @@
 package de.starwit.service.impl;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -32,6 +32,10 @@ public class ActionExecutorService {
     @Scheduled(fixedDelayString = "${action.execution.delay:10s}")
     public void executeActions() {
         List<ActionEntity> actions = actionService.findAllNewActions();
+        executeActions(actions);
+    }
+
+    private void executeActions(List<ActionEntity> actions) {
         if (actions != null && !actions.isEmpty()) {
             for (ActionEntity action : actions) {
                 ExecutionPolicy executionPolicy = action.getActionType().getExecutionPolicy();
@@ -45,6 +49,12 @@ public class ActionExecutorService {
                 }
             }
         }
+    }
+
+    @Async
+    public void retryExecutionActions() {
+        List<ActionEntity> actions = actionService.findAllNewAndCanceled();
+        executeActions(actions);
     }
 
     public void sendAction(ActionEntity actionEntity) {

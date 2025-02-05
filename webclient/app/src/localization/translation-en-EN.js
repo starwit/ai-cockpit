@@ -21,6 +21,7 @@ const translationEnEN = {
     "decision.list.title": "Decisions List",
     "decision.list.hover": "Hover over a camera to see decisions",
     "decision.found": "Found {{count}} decisions at this location",
+    "decision.retryActionExecution": "Send Actions",
     "decision.state": "State",
     "action": "Action",
     "action.title": "Actions",
