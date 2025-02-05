@@ -12,7 +12,7 @@ import DecisionRest from "../../services/DecisionRest";
 import ActionRest from "../../services/ActionRest";
 import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
-import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
 
 function DecisionOverview() {
@@ -219,7 +219,7 @@ function DecisionOverview() {
                     <Tab label={t("home.decisionTab.title.done")} key="tab1" />
                 </Tabs>
 
-                <Button onClick={handleActionExecution} variant="text" color="primary" startIcon={<NotificationsActiveOutlinedIcon />}>
+                <Button onClick={handleActionExecution} variant="text" color="primary" startIcon={<NotificationsActiveIcon />}>
                     {t("decision.retryActionExecution")}
                 </Button>
 
