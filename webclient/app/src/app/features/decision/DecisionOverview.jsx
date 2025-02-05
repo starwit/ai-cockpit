@@ -126,7 +126,7 @@ function DecisionOverview() {
             type: "datetime",
             headerName: t("decision.acquisitionTime"),
             width: 200,
-            editable: true,
+            editable: false,
             valueGetter: value => value,
             valueFormatter: value => formatDateShort(value, i18n)
         },
@@ -134,13 +134,14 @@ function DecisionOverview() {
             field: "decisionType",
             headerName: t("decision.decisionType"),
             flex: 0.7,
-            editable: true,
+            editable: false,
             valueGetter: value => value.name
         },
         {
             field: "action",
             headerName: t("decision.action"),
             description: "",
+            disableExport: true,
             renderCell: renderActions,
             disableClickEventBubbling: true,
             flex: 1.5
@@ -149,13 +150,14 @@ function DecisionOverview() {
             field: "description",
             headerName: t("decision.description"),
             flex: 1.5,
-            editable: true
+            editable: false
         },
         {
             field: "actionButton",
             headerName: "",
             width: 110,
             align: "right",
+            disableExport: true,
             disableClickEventBubbling: true,
             renderCell: cellValues => {
                 return (
@@ -219,8 +221,8 @@ function DecisionOverview() {
                     slotProps={{
                         toolbar: {
                             showQuickFilter: true,
-                            printOptions: {disableToolbarButton: true},
-                            csvOptions: {disableToolbarButton: true}
+                            printOptions: {disableToolbarButton: false},
+                            csvOptions: {disableToolbarButton: false}
                         }
                     }}
                 />
