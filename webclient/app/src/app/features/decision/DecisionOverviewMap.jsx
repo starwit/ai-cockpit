@@ -71,6 +71,7 @@ function DecisionOverviewMap() {
                 .filter(decision => decision.decisionType?.name)
                 .map(decision => decision.decisionType.name)
         );
+    );
       
     const ViewModeControl = () => (
         <Box sx={{
