@@ -47,8 +47,8 @@
         "extends": "react-app"
     },
     "devDependencies": {
-        "@cyclonedx/cyclonedx-npm": "^1.20.0",
-        "@mui/x-data-grid": "7.23.6",
+        "@cyclonedx/cyclonedx-npm": "^2.0.0",
+        "@mui/x-data-grid": "7.25.0",
         "@vitejs/plugin-react": "^4.3.3",
         "buffer": "npm:buffer@^6.0.3",
         "crypto": "npm:crypto-browserify@^3.12.0",
