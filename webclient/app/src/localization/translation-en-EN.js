@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const translationEnEN = {
-    "arrow.info": "You can navigate between decisions using A & D and change the decision type using the numbers 1-9.",
+    "arrow.info": "You can navigate between decisions using A & D and change the decision type using the numbers 1-9. Use ENTER to accept and DEL to reject decision.",
     "decisions.heading": "Decisions",
     "decision.title": "Traffic Decisions",
     "decision.create.title": "Create Decision",
@@ -13,7 +13,8 @@ const translationEnEN = {
     "decision.decisionType": "Decision Type",
     "decision.decisionType.new": "New",
     "decision.action": "Actions",
-    "decision.action.done": "done actions are marked green and cannot be selected",
+    "decision.action.done": "action is executed successfully",
+    "decision.action.canceled": "action could not be executed",
     "decision.action.header4standardvalues": "Add Standard Values for actions",
     "decision.button.acknowledged": "Acknowledged",
     "decision.button.reportmistake": "Report Mistake",

@@ -103,7 +103,7 @@ public class DecisionController {
             oldActionTypeIds.removeAll(unchangedActionTypeIds);
 
         }
-        decisionService.UpdateDecisionEntitywithAction(dto.getDecision(), newActionTypeIds, oldActionTypeIds);
+        decisionService.UpdateDecisionEntityWithAction(dto.getDecision(), newActionTypeIds, oldActionTypeIds);
     }
 
     @Operation(summary = "Delete decision")

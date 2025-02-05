@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionState;
@@ -37,7 +38,6 @@ import io.minio.errors.InvalidResponseException;
 import io.minio.errors.ServerException;
 import io.minio.errors.XmlParserException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.LockModeType;
 
 /**
  * 
@@ -107,12 +107,17 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         }
         entity = saveOrUpdate(entity);
         entityManager.detach(entity);
+
         return entity;
     }
 
-    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
-    public DecisionEntity UpdateDecisionEntitywithAction(DecisionEntity entity, Set<Long> addedActionTypeIds,
+    public DecisionEntity UpdateDecisionEntityWithAction(DecisionEntity toBeSaved, Set<Long> addedActionTypeIds,
             Set<Long> removedActionTypeIds) {
+        DecisionEntity persisted = decisionRepository.findById(toBeSaved.getId()).get();
+        persisted.setDecisionType(toBeSaved.getDecisionType());
+        persisted.setDescription(toBeSaved.getDescription());
+        persisted.setState(toBeSaved.getState());
+
         List<ActionTypeEntity> actionTypes = new ArrayList<>();
         for (Long id : addedActionTypeIds) {
             if (actionTypeRepository.existsById(id)) {
@@ -120,29 +125,32 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
                 actionTypes.add(actionType);
             }
         }
-        addActions(entity, actionTypes);
-        removeActions(entity, removedActionTypeIds);
-
-        entity = saveOrUpdate(entity);
-        entityManager.detach(entity);
-        return entity;
+        addActions(persisted, actionTypes);
+        removeActions(persisted, removedActionTypeIds);
+        persisted = saveOrUpdate(persisted);
+        return persisted;
     }
 
     private void removeActions(DecisionEntity entity, Set<Long> removedActionTypeIds) {
-        List<ActionEntity> actions = new ArrayList<>();
+        Set<ActionEntity> actions = entity.getAction();
         List<ActionEntity> removeActions = new ArrayList<>();
+        if (actions == null) {
+            return;
+        }
         for (ActionEntity action : actions) {
-            if (actionRepository.existsById(action.getId())) {
-                action = actionRepository.getReferenceById(action.getId());
-                if (removedActionTypeIds.contains(action.getActionType().getId())
-                        && action.getState() == ActionState.NEW
-                        || action.getState() == ActionState.CANCELED) {
-                    removeActions.add(action);
-                    actionRepository.delete(action);
-                }
+            if (removedActionTypeIds.contains(action.getActionType().getId())
+                    && (action.getState() == ActionState.NEW
+                            || action.getState() == ActionState.CANCELED)) {
+                removeActions.add(action);
             }
         }
-        entity.getAction().removeAll(removeActions);
+
+        for (ActionEntity action : removeActions) {
+            entity.removeFromAction(action);
+            if (actionRepository.existsById(action.getId())) {
+                actionRepository.deleteById(action.getId());
+            }
+        }
     }
 
     private void addActions(DecisionEntity entity, List<ActionTypeEntity> actionTypes) {
@@ -151,6 +159,9 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
                 ActionEntity action = new ActionEntity();
                 action.setCreationTime(entity.getAcquisitionTime());
                 action.setActionType(actionType);
+                if (entity.getId() != null) {
+                    actionRepository.save(action);
+                }
                 entity.addToAction(action);
             }
         }

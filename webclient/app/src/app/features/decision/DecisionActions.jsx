@@ -1,19 +1,48 @@
 import {Button, Chip, Tooltip} from "@mui/material";
 import {useTranslation} from "react-i18next";
 
-export const renderActions = params => {
+export function renderActions(params) {
     const {t} = useTranslation();
     params.row.action.sort((a, b) => a.actionType.name.localeCompare(b.actionType.name));
+
     return (
-        <strong>
+        <>
             {params.row.action.map(action => (
-                <Tooltip key={"tooltip-" + action.id} title={action.state == 'DONE' ? t("decision.action.done") : ""}>
-                    <Chip key={action.actionType.id} color={action.state == 'DONE' ? "success" : "primary"} label={action.actionType.name} variant="outlined" />
+                <Tooltip key={"t-" + action.id} title={createActionTooltip(action.state, t)}>
+                    <Chip key={action.actionType.id} color={determineActionColor(action.state)} label={action.actionType.name} variant="outlined" />
                 </Tooltip>
             ))}
-        </strong>
+        </>
     );
 };
+
+export function createActionTooltip(actionState, t) {
+    if (actionState == undefined || actionState == null) {
+        return t("decision.action.new")
+    }
+    switch (actionState) {
+        case "DONE":
+            return t("decision.action.done")
+        case "CANCELED":
+            return t("decision.action.canceled")
+        default:
+            return t("decision.action.new")
+    }
+}
+
+export function determineActionColor(actionState) {
+    if (actionState == undefined || actionState == null) {
+        return "primary"
+    }
+    switch (actionState) {
+        case "DONE":
+            return "success"
+        case "CANCELED":
+            return "error"
+        default:
+            return "primary"
+    }
+}
 
 export function renderButton(title) {
     return function getButton(params) {

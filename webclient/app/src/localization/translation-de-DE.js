@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const translationDeDE = {
-    "arrow.info": "Zwischen den Gefahrensituationen kann mit den A & D navigiert werden und den Gefahrentyp kann man mit den Zahlen 1-9 wechseln.",
+    "arrow.info": "Zwischen den Gefahrensituationen kann mit den A & D navigiert werden und den Gefahrentyp kann man mit den Zahlen 1-9 wechseln. Mit ENTER kann eine Gefahrensituation als korrekt und mit Enf als falsch markiert werden.",
     "decisions.heading": "Gefahrensituationen",
     "decision.title": "Gefahrensituationen",
     "decision.create.title": "Gefahrensituation erfassen",
@@ -13,7 +13,9 @@ const translationDeDE = {
     "decision.decisionType": "Gefahrentyp",
     "decision.decisionType.new": "Neuen Typ Anlegen",
     "decision.action": "Maßnahmen",
-    "decision.action.done": "bereits gesendete Maßnahmen sind grün markiert und können nicht ausgewäht werden",
+    "decision.action.new": "Übermittlung ausstehend",
+    "decision.action.done": "Übermittlung erfolgreich",
+    "decision.action.canceled": "Übermittlung fehlgeschlagen",
     "decision.action.header4standardvalues": "Standardwerte für Maßnahmen festlegen",
     "decision.button.acknowledged": "Geprüft",
     "decision.button.reportmistake": "Fehler",

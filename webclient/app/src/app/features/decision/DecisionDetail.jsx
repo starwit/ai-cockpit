@@ -35,6 +35,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import Info from "@mui/icons-material/Info";
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
+import {createActionTooltip, determineActionColor} from "./DecisionActions";
 
 function DecisionDetail(props) {
     const {
@@ -68,7 +69,7 @@ function DecisionDetail(props) {
         reloadActionTypes();
     }, [decisionType]);
 
-    const handleKeyDown = useCallback((event) => {
+    const handleKeyDown = (event) => {
         const activeElement = document.activeElement;
         const isTextField = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
         if (!isTextField) {
@@ -91,7 +92,7 @@ function DecisionDetail(props) {
         }
 
 
-    }, [handleSave, handleClose, handleNext, handleBefore, data, rowIndex]);
+    };
 
     useEffect(() => {
         if (open) {
@@ -135,6 +136,7 @@ function DecisionDetail(props) {
             const found = defaultActionTypes.find(value => value.id == action.actionType.id);
             if (found != undefined) {
                 found.disabled = false;
+                found.actionState = action.state;
                 if (action.state == 'DONE') {
                     found.disabled = true;
                 }
@@ -150,6 +152,7 @@ function DecisionDetail(props) {
             if (action.state == 'DONE') {
                 const doneActionType = action.actionType;
                 doneActionType.disabled = true
+                doneActionType.actionState = action.state;
                 currentActionTypes.push(doneActionType);
             }
         });
@@ -256,8 +259,8 @@ function DecisionDetail(props) {
                 renderValue={selected => (
                     <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                         {selected.map((value, index) => (
-                            <Tooltip key={index} title={value.disabled ? t("decision.action.done") : ""}>
-                                <Chip key={index} label={value.name} variant="outlined" color={value.disabled ? "success" : "primary"} />
+                            <Tooltip key={index} title={createActionTooltip(value.actionState, t)}>
+                                <Chip key={index} label={value.name} variant="outlined" color={determineActionColor(value.actionState)} />
                             </Tooltip>
                         ))}
                     </Box>
