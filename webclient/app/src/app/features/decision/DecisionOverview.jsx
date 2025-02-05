@@ -4,7 +4,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import {Box, Button, Container, Icon, IconButton, Tab, Tabs, Typography} from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
-import {deDE, elGR} from '@mui/x-data-grid/locales';
+import {deDE, enUS} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {formatDateShort} from "../../commons/formatter/DateFormatter";
@@ -24,7 +24,7 @@ function DecisionOverview() {
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
-    const locale = i18n.language == "de" ? deDE : elGR
+    const locale = i18n.language == "de" ? deDE : enUS
 
 
     useEffect(() => {

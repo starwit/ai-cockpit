@@ -5,7 +5,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import {Button, Container, Stack, Typography} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
-import {deDE, elGR} from '@mui/x-data-grid/locales';
+import {deDE, enUS} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
@@ -23,7 +23,7 @@ function DecisionTypeOverview() {
     const [openNotSaved, setOpenNotSaved] = React.useState(false);
     const [rowData, setRowData] = useState({});
     const [deleteRow, setDeleteRow] = useState({});
-    const locale = i18n.language == "de" ? deDE : elGR
+    const locale = i18n.language == "de" ? deDE : enUS
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
