@@ -101,6 +101,8 @@ const translationDeDE = {
     "decisiontype.makeselect.notsaved": "Ungesicherte Änderungen!",
     "decisiontype.delete.message": "Die Gefahrentypkonfiguration wird unwiderruflich gelöscht.",
     "decisiontype.save.message": "Die Gefahrentypkonfigurationen müssen erst gespeichert werden, bevor sie bearbeitet werden können",
+    "decision.type.filter": "Nach Gefahrentyp filtern",
+    "decision.type.all": "Alle Typen",
     "menu.info": "Allgemeine Informationen",
     "menu.info.componentbreakdown": "Modulübersicht",
     "menu.info.riskoverview": "Risikobewertung",
