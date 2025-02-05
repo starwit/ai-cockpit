@@ -12,14 +12,7 @@ import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
 import {useTranslation} from 'react-i18next';
 
-import {
-    IconButton,
-    Box,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem
-} from '@mui/material';
+import {IconButton} from '@mui/material';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -70,32 +63,9 @@ function DecisionOverviewMap() {
             decisions
                 .filter(decision => decision.decisionType?.name)
                 .map(decision => decision.decisionType.name)
-        );
+        )
     );
-      
-    const ViewModeControl = () => (
-        <Box sx={{
-            position: 'absolute',
-            top: 10,
-            left: 10,
-            zIndex: 1,
-            backgroundColor: 'white',
-            padding: 1,
-            borderRadius: 1
-        }}>
-            <FormControl size="small">
-                <InputLabel>{t('view.mode')}</InputLabel>
-                <Select
-                    value={viewMode}
-                    onChange={(e) => setViewMode(e.target.value)}
-                    label={t('view.mode')}
-                >
-                    <MenuItem value="normal">{t('view.mode.normal')}</MenuItem>
-                    <MenuItem value="heatmap">{t('view.mode.heatmap')}</MenuItem>
-                </Select>
-            </FormControl>
-        </Box>
-    );
+
 
     useEffect(() => {
         reloadDecisions();
