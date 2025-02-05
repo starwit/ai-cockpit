@@ -54,6 +54,11 @@
             "name": "minio.endpoint",
             "type": "java.lang.String",
             "description": "endpoint for minio"
+        },
+        {
+            "name": "action.execution.delay",
+            "type": "java.lang.String",
+            "description": "Interval between last end of action execution and new start"
         }
     ]
 }

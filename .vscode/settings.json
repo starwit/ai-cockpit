@@ -42,7 +42,6 @@
         "editor.defaultFormatter": null,
         "editor.tabSize": 4,
         "editor.renderControlCharacters": true,
-        "editor.renderIndentGuides": true,
         "editor.guides.indentation": true
     },
     "editor.tabSize": 4,

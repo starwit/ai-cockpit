@@ -1,18 +1,20 @@
-import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
-import React, {useEffect, useState, useMemo} from "react";
-import {useTranslation} from "react-i18next";
-import DecisionTypeRest from "../../services/DecisionTypeRest";
-import ActionTypeRest from "../../services/ActionTypeRest";
-import {Button, Stack, Typography} from "@mui/material";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Category from "@mui/icons-material/Category";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SaveIcon from "@mui/icons-material/Save";
 import EditIcon from "@mui/icons-material/Edit";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import DecisionTypeDetail from "./DecisionTypeDetail";
+import SaveIcon from "@mui/icons-material/Save";
+import {Button, Container, Stack, Typography} from "@mui/material";
+import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
+import {deDE, elGR} from '@mui/x-data-grid/locales';
+import React, {useEffect, useMemo, useState} from "react";
+import {useTranslation} from "react-i18next";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
+import DecisionTypeRest from "../../services/DecisionTypeRest";
+import DecisionTypeDetail from "./DecisionTypeDetail";
 
-function DecisionTypeOverview(props) {
-    const {t} = useTranslation();
+
+function DecisionTypeOverview() {
+    const {t, i18n} = useTranslation();
     const decisionTypeRest = useMemo(() => new DecisionTypeRest, []);
     const [decisionTypes, setDecisionTypes] = useState([]);
     const [isSaved, setIsSaved] = useState([true]);
@@ -21,25 +23,26 @@ function DecisionTypeOverview(props) {
     const [openNotSaved, setOpenNotSaved] = React.useState(false);
     const [rowData, setRowData] = useState({});
     const [deleteRow, setDeleteRow] = useState({});
+    const locale = i18n.language == "de" ? deDE : elGR
 
     const columns = [
         {field: "id", headerName: "ID", width: 90},
         {
             field: "name",
             headerName: t("decisiontype.name"),
-            width: 150,
+            flex: 0.5,
             editable: true
         },
         {
             field: "description",
             headerName: t("decisiontype.description"),
-            width: 350,
+            flex: 1,
             editable: true
         },
         {
             field: "actions",
             type: "actions",
-            headerName: "Actions",
+            headerName: t("button.actions"),
             sortable: false,
             width: 100,
             renderCell: params =>
@@ -90,8 +93,8 @@ function DecisionTypeOverview(props) {
         if (isSaved) {
             const newRow = {
                 id: "",
-                name: "NONE",
-                description: "NONE"
+                name: t("entry.new"),
+                description: t("entry.new")
             };
             setDecisionTypes([...decisionTypes, newRow]);
             setIsSaved(false);
@@ -195,21 +198,21 @@ function DecisionTypeOverview(props) {
         />;
     }
 
-    return <>
-        <Typography variant="h2" gutterBottom>
-            {t("decisiontype.heading")}
-        </Typography>
-        <Stack direction="row" spacing={1} sx={{marginBottom: 1}}>
-            <Button variant="contained" color="primary" onClick={addRow} startIcon={<AddCircleOutlineIcon />}>
+    return <Container sx={{paddingTop: 2}}>
+        <Stack direction="row" sx={{marginBottom: 1}}>
+            <Typography variant="h2" gutterBottom sx={{flex: 1}}>
+                <Category fontSize="small" /> {t("decisiontype.heading")}
+            </Typography>
+            <Button variant="text" color="primary" onClick={addRow} startIcon={<AddCircleIcon />}>
                 {t("decisiontype.addItem")}
             </Button>
-            <Button variant="contained" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
+            <Button variant="text" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
                 {t("decisiontype.saveItem")}
                 {isSaved ? "" : "*"}
             </Button>
         </Stack>
         <DataGrid
-            autoHeight
+            localeText={locale.components.MuiDataGrid.defaultProps.localeText}
             rows={decisionTypes}
             columns={columnsWithUpdateRow}
             initialState={{
@@ -230,6 +233,6 @@ function DecisionTypeOverview(props) {
         {renderDialog()}
         {renderDeleteDialog()}
         {renderSaveDialog()}
-    </>;
+    </Container>;
 }
 export default DecisionTypeOverview;

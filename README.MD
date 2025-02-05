@@ -2,21 +2,17 @@
 
 AI cockpit aims at building a human control interface to AI systems. It is supposed to cover requirements from EU's AI act. More details can be found at <https://www.kicockpit.eu/>. All shared components necessary for this repo can be found [here](https://github.com/KI-Cockpit/ai-cockpit-api). There you also can find more info about all other activities & results of this project.
 
-This project was partly funded by the government of the federal republic of Germany. It is part of a research project aiming to keep _humans in command_ and is organized by the Federal Ministry of Labour and Social Affairs. 
+This project was partly funded by the government of the federal republic of Germany. It is part of a research project aiming to keep _humans in command_ and is organized by the Federal Ministry of Labour and Social Affairs.
 
 ![BMAS](docs/imgs/BMAS_Logo.svg)
 
 ## Deployment
+
 Cockpit is a part of a bundle of services. For deployment options see <https://github.com/starwit/ai-cockpit-deployment>
 
 ## License
 
 Software in this repository is licensed under the AGPL-3.0 license. See [license agreement](LICENSE) for more details.
-
-
-## Development Setup
-
-This section describes how to run this software on your machine.
 
 ### Prerequisites
 
@@ -96,6 +92,8 @@ __Please note__: all steps need to be executed from base folder of repositories.
     mvn clean install -P frontend
     ```
 
+    There are two layout options. If you want to build your application with KI-Cockpit layout, you need to set environment variable VITE_THEME=kic VITE_THEME=kic and VITE_TITLE="Human in Command" before starting the build.
+
 4) start project
 
     ```bash
@@ -121,6 +119,24 @@ If you want to start the Application with Minio then you need to run:
 
 The Minio WebApp is available under localhost:9001 and the shell Application is available under localhost:9000.
 You need to upload a videos a bucket named __anomalies__ link video files in decision data accordingly.
+
+#### Test Action Execution
+
+* start [alert-viewer](https://github.com/starwit/alert-viewer)
+* add endpoint to your demodata:
+
+  ```json
+    {
+      "state": "NEW",
+      "endpoint": "localhost:8080/api/alert",
+      "decisionType": {
+        "id": 1
+      },
+      "action": []
+    }
+  ```
+
+* start project
 
 #### Import Sample Data
 
@@ -166,6 +182,15 @@ For debugging, you can start the frontend separately.
 
 ```shell
 cd webclient/app
+npm start
+```
+
+If you want to build your application with KI-Cockpit layout, you need to set environment variable VITE_THEME=kic and VITE_TITLE="Human in Command" before starting the build. or execute:
+
+```shell
+export VITE_TITLE="Human in Command"
+export VITE_THEME="kic"
+
 npm start
 ```
 

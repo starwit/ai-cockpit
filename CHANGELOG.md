@@ -2,7 +2,13 @@
 
 Changelog of ai-cockpit.
 
-## Current Version ()
+## refs/tags/0.1.13 (2025-01-31)
+
+### Features
+
+-  add action execution ([8bdff](https://github.com/starwit/ai-cockpit/commit/8bdffce44a78c7d) Anett Hübner)  
+
+## refs/tags/0.1.12 (2025-01-23)
 
 ### Features
 

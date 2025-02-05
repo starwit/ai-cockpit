@@ -70,6 +70,7 @@ public class DecisionController {
     @Operation(summary = "Update decision")
     @PutMapping
     public DecisionEntity update(@Valid @RequestBody DecisionEntity entity) {
+        LOG.info("Updating decision with id: {}", entity.getId());
         return decisionService.saveOrUpdate(entity);
     }
 

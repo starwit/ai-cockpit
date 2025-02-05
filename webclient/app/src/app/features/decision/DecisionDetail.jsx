@@ -33,12 +33,22 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import Info from "@mui/icons-material/Info";
-import {useMediaQuery, useTheme} from "@mui/material"; //for responsive design
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
 
 function DecisionDetail(props) {
-    const {open, rowData, handleClose, handleSave, data, handleNext, handleBefore, automaticNext, toggleAutomaticNext} = props;
+    const {
+        open,
+        rowData,
+        handleClose,
+        handleSave,
+        data,
+        handleNext,
+        handleBefore,
+        automaticNext,
+        toggleAutomaticNext,
+        showMap = true
+    } = props;
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
     const [actionTypes, setActionTypes] = useState(rowData.action);
@@ -61,14 +71,22 @@ function DecisionDetail(props) {
     const handleKeyDown = useCallback((event) => {
         const activeElement = document.activeElement;
         const isTextField = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
-
         if (!isTextField) {
             if (event.key === 'Escape') {
                 handleClose();
-            } else if (event.key === 'a') {
+            } else if (event.key === 'd') {// navigate through the decisions
                 handleNext(data, rowIndex);
-            } else if (event.key === 'd') {
+            } else if (event.key === 'a') {
                 handleBefore(data, rowIndex);
+            } else if (event.key >= '1' && event.key <= '9') {//shortkey for decision types
+                const index = parseInt(event.key, 10) - 1;
+                if (index < allDecisionType.length) {
+                    setDecisionType(allDecisionType[index]);
+                }
+            } else if (event.key == 'Enter') {
+                handleSave(actionTypes, decisionType, description, "ACCEPTED")
+            } else if (event.key == 'Delete') {
+                handleSave(actionTypes, decisionType, description, "REJECTED")
             }
         }
 
@@ -84,6 +102,11 @@ function DecisionDetail(props) {
             window.removeEventListener('keydown', handleKeyDown);
         };
     }, [open, handleKeyDown]);
+
+
+    if (!open) {
+        return null;
+    }
 
     function searchIndex(data, rowData) {   //search the index of the current decision
         for (let i = 0; i < data.length; i++) {
@@ -149,21 +172,104 @@ function DecisionDetail(props) {
         setDecisionType(event.target.value);
     }
 
+    function renderDescriptionTextField() {
+        return <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="description"
+            name="description"
+            label={t("decision.description")}
+            type="text"
+            fullWidth
+            variant="standard"
+            value={description}
+            onChange={e => setDescription(e.target.value)} />;
+    }
+
+    function renderDecisionType() {
+        return <FormControl
+            fullWidth
+            variant="outlined"
+        >
+
+            <InputLabel id="decision.decisionType.label">
+                {t("decision.decisionType")}
+            </InputLabel>
+
+            <Select
+                labelId="decision.decisionType.label"
+                id="decision.decisionType"
+                value={decisionType}
+                onChange={handleChangeDecisionType}
+                label={t("decision.decisionType")}
+                renderValue={selected => (
+                    <Chip label={selected.name} variant="outlined" sx={{border: "none"}} />
+                )}
+            >
+                {allDecisionType.map((decisionType, index) => (
+                    <MenuItem key={index} value={decisionType}>
+                        <ListItemText>{`${index + 1} - ${decisionType.name}`}</ListItemText>
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>;
+    }
+
+    function renderDecisionVisualization() {
+        return <MediaContent
+            sx={{aspectRatio: "16/9", objectFit: "contain"}}
+            src={window.location.pathname + "api/decision/download/" + rowData.mediaUrl} />;
+    }
+
+    function renderActionSelect() {
+        return <FormControl fullWidth variant="outlined">
+            <InputLabel id="decision.action.label">
+                {t("decision.action")}
+            </InputLabel>
+            <Select
+                labelId="decision.action.label"
+                id="decision.action.select"
+                multiple
+                value={actionTypes ? actionTypes : []}
+                onChange={handleChangeAction}
+                input={<OutlinedInput label={t("decision.action")} />}
+                renderValue={selected => (
+                    <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
+                        {selected.map((value, index) => (
+                            <Chip key={index} label={value.name} variant="outlined" color="primary" />
+                        ))}
+                    </Box>
+                )}
+            >
+                {allActionTypes.map((value, index) => (
+                    <MenuItem key={index} value={value}>
+                        {value.name}
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>;
+    }
+
     function renderActionVisualzation() {  //render the map
         if (rowData.actionVisualizationUrl != undefined) {
             return (
-                <MediaContent
-                    sx={{aspectRatio: "16/9", objectFit: "contain"}}
-                    src={window.location.pathname + "api/decision/download/" + rowData.actionVisualizationUrl} />
+                <Box sx={{aspectRatio: "inherit", position: 'relative'}}>
+                    <MediaContent
+                        sx={{aspectRatio: "16/9", objectFit: "contain"}}
+                        src={window.location.pathname + "api/decision/download/" + rowData.actionVisualizationUrl} />
+                </Box>
             );
         } else if (rowData.cameraLatitude != undefined && rowData.cameraLongitude != undefined) {
             return (
-                <Box sx={{aspectRatio: "16/9", objectFit: "contain"}}>
-                    <IconLayerMap
-                        sx={{position: "absolute", top: 0, left: 0, right: 0, bottom: 0}}
-                        latitude={rowData.cameraLatitude}
-                        longitude={rowData.cameraLongitude}
-                    />
+                <Box sx={{aspectRatio: "inherit", position: 'relative'}}>
+                    <Box sx={{aspectRatio: "16/9", objectFit: "contain"}}>
+                        <IconLayerMap
+                            sx={{position: "absolute", top: 0, left: 0, right: 0, bottom: 0}}
+                            latitude={rowData.cameraLatitude}
+                            longitude={rowData.cameraLongitude}
+                        />
+                    </Box>
                 </Box>
             );
         }
@@ -174,8 +280,58 @@ function DecisionDetail(props) {
         );
     }
 
-    if (!open) {
-        return null;
+    function renderDialogContent() {
+
+        const content = showMap ? (<Stack direction="column">
+            {renderDescriptionTextField()}
+            <Stack direction="row">
+                <Stack sx={{width: 1 / 2}}>
+                    {renderDecisionType()}
+                    {renderDecisionVisualization()}
+
+                </Stack>
+                <Stack sx={{width: 1 / 2}}>
+                    {renderActionSelect()}
+                    {renderActionVisualzation()}
+                </Stack>
+            </Stack>
+        </Stack>
+        ) :
+            (<Stack direction="column">
+                {renderDescriptionTextField()}
+                <Stack direction="row">
+                    <Stack sx={{width: 1 / 2}}>
+                        {renderDecisionType()}
+                    </Stack>
+                    <Stack sx={{width: 1 / 2}}>
+                        {renderActionSelect()}
+                    </Stack>
+                </Stack>
+                <Box sx={{
+                    width: "50%",
+                    transform: `translate(50%, 0%)`,
+                    aspectRatio: "16/9"
+                }}>
+                    {renderDecisionVisualization()}
+                </Box>
+            </Stack>
+            );
+
+        return (
+            <DialogContent
+                id="decision-detail-dialog-description"
+                sx={{
+                    ...DecisionDetailStyles.dialogContent,
+                    height: 'auto',
+                    overflow: 'hidden',
+                    paddingX: 3, //horizontal padding
+                    paddingY: 2, //vertical padding
+                    marginLeft: 0  //margin left for "Details" field, Video element, Map and "Actions" filter
+                }}
+            >
+                {content}
+            </DialogContent>
+        )
     }
 
     return (
@@ -186,14 +342,9 @@ function DecisionDetail(props) {
             aria-describedby="decision-detail-dialog-description"
             maxWidth={false}
             fullWidth
-            PaperProps={{
-                sx: {
-                    position: "fixed",
-                    top: "40%", maxHeight: "80%",
-                    transform: `translate(-0%, -40%)`
-                }
-            }}
             sx={{
+                height: "100%",
+                width: "100%",
                 aspectRatio: "16/9"
             }}
         >
@@ -249,102 +400,7 @@ function DecisionDetail(props) {
                 <CloseIcon />
             </IconButton>
 
-            <DialogContent
-                id="decision-detail-dialog-description"
-                sx={{
-                    ...DecisionDetailStyles.dialogContent,
-                    height: 'auto',
-                    overflow: 'hidden',
-                    paddingX: 3, //horizontal padding
-                    paddingY: 2, //vertical padding
-                    marginLeft: 0  //margin left for "Details" field, Video element, Map and "Actions" filter
-                }}
-            >
-                <Stack direction="column">
-                    <Box>
-                        <TextField
-                            autoFocus
-                            required
-                            margin="dense"
-                            id="description"
-                            name="description"
-                            label={t("decision.description")}
-                            type="text"
-                            fullWidth
-                            variant="standard"
-                            value={description}
-                            onChange={e => setDescription(e.target.value)}
-                        />
-                    </Box>
-
-                    <Stack direction="row">
-                        <Stack sx={{width: 1 / 2}}>
-                            <FormControl
-                                fullWidth
-                                variant="outlined"
-                            >
-
-                                <InputLabel id="decision.decisionType.label">
-                                    {t("decision.decisionType")}
-                                </InputLabel>
-
-                                <Select
-                                    labelId="decision.decisionType.label"
-                                    id="decision.decisionType"
-                                    value={decisionType}
-                                    onChange={handleChangeDecisionType}
-                                    label={t("decision.decisionType")}
-                                    renderValue={selected => (
-                                        <Chip label={selected.name} variant="outlined" sx={{border: "none"}} />
-                                    )}
-                                >
-                                    {allDecisionType.map((decisionType, index) => (
-                                        <MenuItem key={index} value={decisionType}>
-                                            <ListItemText>{decisionType.name}</ListItemText>
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <MediaContent
-                                sx={{aspectRatio: "16/9", objectFit: "contain"}}
-                                src={window.location.pathname + "api/decision/download/" + rowData.mediaUrl} />
-
-                        </Stack>
-                        <Stack sx={{width: 1 / 2}}>
-                            <FormControl fullWidth variant="outlined">
-                                <InputLabel id="decision.action.label">
-                                    {t("decision.action")}
-                                </InputLabel>
-                                <Select
-                                    labelId="decision.action.label"
-                                    id="decision.action.select"
-                                    multiple
-                                    value={actionTypes ? actionTypes : []}
-                                    onChange={handleChangeAction}
-                                    input={<OutlinedInput label={t("decision.action")} />}
-                                    renderValue={selected => (
-                                        <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
-                                            {selected.map((value, index) => (
-                                                <Chip key={index} label={value.name} variant="outlined" sx={{color: "green"}} />
-                                            ))}
-                                        </Box>
-                                    )}
-                                >
-                                    {allActionTypes.map((value, index) => (
-                                        <MenuItem key={index} value={value}>
-                                            {value.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-
-                            <Box sx={{aspectRatio: "inherit", position: 'relative'}}>
-                                {renderActionVisualzation()}
-                            </Box>
-                        </Stack>
-                    </Stack>
-                </Stack>
-            </DialogContent>
+            {renderDialogContent()}
 
             <DialogActions sx={{
                 ...DecisionDetailStyles.dialogAction,
@@ -395,10 +451,6 @@ function DecisionDetail(props) {
                 <Box sx={{
                     paddingBottom: 2,
                     paddingX: 2,
-                    marginLeft: 0,
-                    flex: 1,
-                    display: 'flex',
-                    justifyContent: 'flex-end'
                 }}>
                     <Button
                         sx={[DecisionDetailStyles.button, {marginRight: 5}]}
@@ -413,8 +465,7 @@ function DecisionDetail(props) {
                         onClick={() => handleSave(actionTypes, decisionType, description, "ACCEPTED")}
                         variant="contained"
                         color="success"
-                        startIcon={<CheckIcon />}
-                        autoFocus>
+                        startIcon={<CheckIcon />}>
                         {t("decision.button.acknowledged")}
                     </Button>
                 </Box>

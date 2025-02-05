@@ -8,7 +8,6 @@ function ComponentDetailsDialog(props) {
     const transparencyFunctions = useMemo(() => new TransparencyFunctions(), []);
     const {open, moduleData, handleClose} = props;
     const [sbomList, setSbomList] = React.useState([]);
-    const [size, setSize] = React.useState(0);
     const [isLoaded, setIsLoaded] = React.useState(false);
 
     useEffect(() => {

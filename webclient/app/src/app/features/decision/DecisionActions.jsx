@@ -5,7 +5,7 @@ export const renderActions = params => {
     return (
         <strong>
             {params.row.action.map(action => (
-                <Chip key={action.actionType.id} label={action.actionType.name} variant="outlined" sx={{color: "green"}} />
+                <Chip key={action.actionType.id} color="primary" label={action.actionType.name} variant="outlined" />
             ))}
         </strong>
     );
