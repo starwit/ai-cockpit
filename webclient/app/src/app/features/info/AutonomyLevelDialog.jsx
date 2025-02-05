@@ -3,6 +3,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import {Box, Dialog, DialogContent, DialogTitle, IconButton, Stack, Typography} from "@mui/material";
 import React from "react";
 import {useTranslation} from "react-i18next";
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import NotificationsPausedOutlinedIcon from '@mui/icons-material/NotificationsPausedOutlined';
+import NotificationsOffOutlinedIcon from '@mui/icons-material/NotificationsOffOutlined';
+
 
 function AutonomyLevelDialog(props) {
     const {open, setOpen} = props;
@@ -41,15 +45,15 @@ function AutonomyLevelDialog(props) {
                         </Typography>
                         <Stack>
                             <Box>
-                                <Typography variant="h6">{t("actiontype.policy.manual")}:</Typography>
+                                <Typography variant="h6"><NotificationsOffOutlinedIcon fontSize="large" /> {t("actiontype.policy.manual")}:</Typography>
                                 <Typography variant="body2">{t("actiontype.policy.manual.description")}</Typography>
                             </Box>
                             <Box>
-                                <Typography variant="h6">{t("actiontype.policy.withcheck")}:</Typography>
+                                <Typography variant="h6"><NotificationsPausedOutlinedIcon fontSize="large" /> {t("actiontype.policy.withcheck")}:</Typography>
                                 <Typography variant="body2">{t("actiontype.policy.withcheck.description")}</Typography>
                             </Box>
                             <Box>
-                                <Typography variant="h6">{t("actiontype.policy.automated")}:</Typography>
+                                <Typography variant="h6"><NotificationsActiveOutlinedIcon fontSize="large" /> {t("actiontype.policy.automated")}:</Typography>
                                 <Typography variant="body2">{t("actiontype.policy.automated.description")}</Typography>
                             </Box>
                         </Stack>

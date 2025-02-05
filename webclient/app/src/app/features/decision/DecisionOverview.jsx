@@ -15,6 +15,9 @@ import DecisionDetail from "./DecisionDetail";
 function DecisionOverview() {
     const {t, i18n} = useTranslation();
     const [tab, setTab] = React.useState(0);
+    const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
+        description: false
+    });
     const decisionRest = useMemo(() => new DecisionRest(), []);
     const [selectedDecisions, setSelectedDecisions] = useState([]);
     const [newDecisions, setNewDecisions] = useState([]);
@@ -149,7 +152,7 @@ function DecisionOverview() {
         {
             field: "description",
             headerName: t("decision.description"),
-            flex: 1.5,
+            flex: 1,
             editable: false
         },
         {
@@ -208,6 +211,10 @@ function DecisionOverview() {
             </Tabs>
             <Box sx={{width: "100%"}}>
                 <DataGrid
+                    columnVisibilityModel={columnVisibilityModel}
+                    onColumnVisibilityModelChange={(newModel) =>
+                        setColumnVisibilityModel(newModel)
+                    }
                     localeText={locale.components.MuiDataGrid.defaultProps.localeText}
                     initialState={{
                         sorting: {
