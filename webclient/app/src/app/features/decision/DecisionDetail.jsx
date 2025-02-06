@@ -35,6 +35,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import Info from "@mui/icons-material/Info";
 import MediaContent from "../../commons/MediaContent";
 import IconLayerMap from "../../commons/geographicalMaps/IconLayerMap";
+import {createActionTooltip, determineActionColor} from "./DecisionActions";
 
 function DecisionDetail(props) {
     const {
@@ -68,7 +69,7 @@ function DecisionDetail(props) {
         reloadActionTypes();
     }, [decisionType]);
 
-    const handleKeyDown = useCallback((event) => {
+    const handleKeyDown = (event) => {
         const activeElement = document.activeElement;
         const isTextField = activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA';
         if (!isTextField) {
@@ -91,7 +92,7 @@ function DecisionDetail(props) {
         }
 
 
-    }, [handleSave, handleClose, handleNext, handleBefore, data, rowIndex]);
+    };
 
     useEffect(() => {
         if (open) {
@@ -130,14 +131,35 @@ function DecisionDetail(props) {
     }
 
     function findExistingActions(defaultActionTypes) {  //find the existing actions
-        const actions = [];
+        const currentActionTypes = [];
         rowData.action.forEach(action => {
             const found = defaultActionTypes.find(value => value.id == action.actionType.id);
             if (found != undefined) {
-                actions.push(found);
+                found.disabled = false;
+                found.actionState = action.state;
+                if (action.state == 'DONE') {
+                    found.disabled = true;
+                }
+                currentActionTypes.push(found);
             }
         });
-        return actions;
+        return currentActionTypes;
+    }
+
+    function retainDoneActions(defaultActionTypes) {  //find the existing actions
+        const currentActionTypes = [];
+        rowData.action.forEach(action => {
+            if (action.state == 'DONE') {
+                const doneActionType = action.actionType;
+                doneActionType.disabled = true
+                doneActionType.actionState = action.state;
+                currentActionTypes.push(doneActionType);
+            }
+        });
+        defaultActionTypes.forEach(type => {
+            currentActionTypes.push(type);
+        });
+        return currentActionTypes;
     }
 
     function reloadActionTypes() {  //reload the action types
@@ -154,7 +176,7 @@ function DecisionDetail(props) {
                 setActionTypes(findExistingActions(response.data));
             } else {
                 actionTypeRest.findByDecisionType(decisionType.id).then(response => {
-                    setActionTypes(response.data);
+                    setActionTypes(retainDoneActions(response.data));
                 })
 
             }
@@ -237,13 +259,15 @@ function DecisionDetail(props) {
                 renderValue={selected => (
                     <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
                         {selected.map((value, index) => (
-                            <Chip key={index} label={value.name} variant="outlined" color="primary" />
+                            <Tooltip key={index} title={createActionTooltip(value.actionState, t)}>
+                                <Chip key={index} label={value.name} variant="outlined" color={determineActionColor(value.actionState)} />
+                            </Tooltip>
                         ))}
                     </Box>
                 )}
             >
                 {allActionTypes.map((value, index) => (
-                    <MenuItem key={index} value={value}>
+                    <MenuItem key={index} value={value} disabled={value.disabled}>
                         {value.name}
                     </MenuItem>
                 ))}
@@ -425,8 +449,6 @@ function DecisionDetail(props) {
                 </Box>
                 <Box sx={{
                     paddingBottom: 2,
-                    paddingX: 2,
-                    marginLeft: 0,
                     flex: 1,
                     display: 'flex',
                     justifyContent: 'center',
@@ -451,6 +473,9 @@ function DecisionDetail(props) {
                 <Box sx={{
                     paddingBottom: 2,
                     paddingX: 2,
+                    flex: 1,
+                    display: 'flex',
+                    justifyContent: 'flex-end'
                 }}>
                     <Button
                         sx={[DecisionDetailStyles.button, {marginRight: 5}]}

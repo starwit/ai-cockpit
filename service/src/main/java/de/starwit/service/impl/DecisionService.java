@@ -8,17 +8,23 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.starwit.persistence.entity.ActionEntity;
+import de.starwit.persistence.entity.ActionState;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionState;
 import de.starwit.persistence.entity.DecisionTypeEntity;
+import de.starwit.persistence.repository.ActionRepository;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
@@ -64,6 +70,9 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
     @Autowired
     private ActionTypeRepository actionTypeRepository;
 
+    @Autowired
+    private ActionRepository actionRepository;
+
     @Override
     public DecisionRepository getRepository() {
         return decisionRepository;
@@ -94,18 +103,68 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         if (decisionType != null) {
             List<ActionTypeEntity> actionTypes = actionTypeRepository
                     .findByDecisionType(decisionType.getId());
-            if (actionTypes != null && !actionTypes.isEmpty()) {
-                for (ActionTypeEntity actionType : actionTypes) {
-                    ActionEntity action = new ActionEntity();
-                    action.setCreationTime(entity.getAcquisitionTime());
-                    action.setActionType(actionType);
-                    entity.addToAction(action);
-                }
-            }
+            addActions(entity, actionTypes);
         }
         entity = saveOrUpdate(entity);
         entityManager.detach(entity);
+
         return entity;
+    }
+
+    public DecisionEntity UpdateDecisionEntityWithAction(DecisionEntity toBeSaved, Set<Long> addedActionTypeIds,
+            Set<Long> removedActionTypeIds) {
+        DecisionEntity persisted = decisionRepository.findById(toBeSaved.getId()).get();
+        persisted.setDecisionType(toBeSaved.getDecisionType());
+        persisted.setDescription(toBeSaved.getDescription());
+        persisted.setState(toBeSaved.getState());
+
+        List<ActionTypeEntity> actionTypes = new ArrayList<>();
+        for (Long id : addedActionTypeIds) {
+            if (actionTypeRepository.existsById(id)) {
+                ActionTypeEntity actionType = actionTypeRepository.getReferenceById(id);
+                actionTypes.add(actionType);
+            }
+        }
+        addActions(persisted, actionTypes);
+        removeActions(persisted, removedActionTypeIds);
+        persisted = saveOrUpdate(persisted);
+        return persisted;
+    }
+
+    private void removeActions(DecisionEntity entity, Set<Long> removedActionTypeIds) {
+        Set<ActionEntity> actions = entity.getAction();
+        List<ActionEntity> removeActions = new ArrayList<>();
+        if (actions == null) {
+            return;
+        }
+        for (ActionEntity action : actions) {
+            if (removedActionTypeIds.contains(action.getActionType().getId())
+                    && (action.getState() == ActionState.NEW
+                            || action.getState() == ActionState.CANCELED)) {
+                removeActions.add(action);
+            }
+        }
+
+        for (ActionEntity action : removeActions) {
+            entity.removeFromAction(action);
+            if (actionRepository.existsById(action.getId())) {
+                actionRepository.deleteById(action.getId());
+            }
+        }
+    }
+
+    private void addActions(DecisionEntity entity, List<ActionTypeEntity> actionTypes) {
+        if (actionTypes != null && !actionTypes.isEmpty()) {
+            for (ActionTypeEntity actionType : actionTypes) {
+                ActionEntity action = new ActionEntity();
+                action.setCreationTime(entity.getAcquisitionTime());
+                action.setActionType(actionType);
+                if (entity.getId() != null) {
+                    actionRepository.save(action);
+                }
+                entity.addToAction(action);
+            }
+        }
     }
 
     public byte[] getFileFromMinio(String bucketName, String objectName)
