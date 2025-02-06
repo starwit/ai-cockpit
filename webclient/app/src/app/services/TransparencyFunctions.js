@@ -18,8 +18,8 @@ class TransparencyFunctions {
         return axios.get(this.baseUrl + '/modules/' + id);
     };
 
-    loadSBOM = (url) => {
-        return axios.get(url);
+    loadSBOM = (id, component) => {
+        return axios.get(this.baseUrl + '/modules/sbom/' + id + '/' + component);
     }
 
 }
