@@ -4,7 +4,7 @@ import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsAc
 import NotificationsPausedOutlinedIcon from '@mui/icons-material/NotificationsPausedOutlined';
 import NotificationsOffOutlinedIcon from '@mui/icons-material/NotificationsOffOutlined';
 import DoneIcon from '@mui/icons-material/Done';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 export function renderActions(params) {
     const {t} = useTranslation();
@@ -34,7 +34,7 @@ export function renderActions(params) {
             case "DONE":
                 return (<DoneIcon></DoneIcon>);
             case "CANCELED":
-                return (<ErrorOutlineIcon></ErrorOutlineIcon>);
+                return (<HighlightOffIcon></HighlightOffIcon>);
             default:
                 return (<></>);
         }
