@@ -3,6 +3,8 @@ import {useTranslation} from "react-i18next";
 import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
 import NotificationsPausedOutlinedIcon from '@mui/icons-material/NotificationsPausedOutlined';
 import NotificationsOffOutlinedIcon from '@mui/icons-material/NotificationsOffOutlined';
+import DoneIcon from '@mui/icons-material/Done';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 export function renderActions(params) {
     const {t} = useTranslation();
@@ -24,6 +26,21 @@ export function renderActions(params) {
         }
     }
 
+    function renderExecutionIcon(actionState) {
+        if (actionState == undefined || actionState == null) {
+            return (<></>);
+        }
+        switch (actionState) {
+            case "DONE":
+                return (<DoneIcon></DoneIcon>);
+            case "CANCELED":
+                return (<ErrorOutlineIcon></ErrorOutlineIcon>);
+            default:
+                return (<></>);
+        }
+
+    }
+
     return (
         <>
             {params.row.action.map(action => (
@@ -34,6 +51,8 @@ export function renderActions(params) {
                         label={action.actionType.name}
                         variant="outlined"
                         icon={renderIcon(action.actionType.executionPolicy)}
+                        deleteIcon={renderExecutionIcon(action.state)}
+                        onDelete="{() => ()}"
                     />
                 </Tooltip>
             ))
