@@ -30,8 +30,6 @@ export default function ComponentGraphView(props) {
         } else {
             startX = (startX + boxWidth) * connection.from;
         }
-        console.log(connection);
-        console.log(startX);
         return startX;
     }
 
@@ -42,8 +40,6 @@ export default function ComponentGraphView(props) {
         } else {
             endX = (startX + boxWidth) * connection.to;
         }
-        console.log(connection);
-        console.log(endX);
         return endX;
     }
 
@@ -54,7 +50,6 @@ export default function ComponentGraphView(props) {
                 connections.push({from: module.id, to: successor.id});
             }
         }
-        console.log(connections);
         return (
             <svg width="1000" height="200" style={{position: "absolute", top: 0, left: 0}}>
 
