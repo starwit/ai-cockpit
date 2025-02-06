@@ -145,4 +145,12 @@ public class DecisionEntity extends AbstractEntity<Long> {
         this.action.forEach(a -> a.setDecision(this));
     }
 
+    public void removeFromAction(ActionEntity action) {
+        action.setDecision(null);
+        if (this.action == null) {
+            return;
+        }
+        this.action.remove(action);
+    }
+
 }

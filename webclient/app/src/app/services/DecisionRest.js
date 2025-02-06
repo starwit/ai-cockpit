@@ -6,6 +6,14 @@ class DecisionRest extends CrudRest {
         super(window.location.pathname + "api/decision");
     }
 
+    updateWithActions(decision, actionTypeIds) {
+        const toBeSaved = {
+            "decision": decision,
+            "actionTypeIds": actionTypeIds
+        }
+        return axios.put(this.baseUrl + "/update-with-actions", toBeSaved);
+    }
+
     findAllOpen() {
         return axios.get(this.baseUrl + "/open");
     }

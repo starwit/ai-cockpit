@@ -6,7 +6,9 @@ import static org.mockito.Mockito.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Order;
@@ -20,8 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
+import de.starwit.persistence.entity.DecisionState;
 import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.entity.ExecutionPolicy;
+import de.starwit.persistence.repository.ActionRepository;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import de.starwit.service.impl.DecisionService;
@@ -38,6 +42,9 @@ public class DecisionServiceTest {
 
     @Autowired
     ActionTypeRepository actionTypeRepository;
+
+    @Autowired
+    ActionRepository actionRepository;
 
     @Autowired
     private DecisionService decisionService;
@@ -119,6 +126,49 @@ public class DecisionServiceTest {
         assertEquals(2, result.getAction().size());
         ActionEntity action = result.getAction().iterator().next();
         assertTrue(expectedDateTime.isEqual(action.getCreationTime()));
+    }
+
+    @Test
+    @Commit
+    @Order(4)
+    void testUpdateDecisionWithActions() {
+
+        // prepare
+        ActionTypeEntity actionType = new ActionTypeEntity();
+        actionType.setDescription("New Action");
+        actionType.setName("\"New Action");
+        actionType.setExecutionPolicy(ExecutionPolicy.WITHCHECK);
+        actionType = actionTypeRepository.save(actionType);
+
+        DecisionEntity decision = decisionService.findAll().get(0);
+        Set<ActionEntity> actions = decision.getAction();
+
+        decision.setState(DecisionState.ACCEPTED);
+        Set<Long> removedActionTypeIds = new HashSet<>();
+        removedActionTypeIds.add(actions.iterator().next().getId());
+
+        Set<Long> addedActionTypeIds = new HashSet<>();
+        addedActionTypeIds.add(actionType.getId());
+
+        // Call Methode
+        DecisionEntity result = decisionService.UpdateDecisionEntityWithAction(decision, addedActionTypeIds,
+                removedActionTypeIds);
+
+        // Assert
+        actions = result.getAction();
+        List<Long> resultActionTypeIds = new ArrayList<>();
+        for (ActionEntity action : actions) {
+            resultActionTypeIds.add(action.getActionType().getId());
+        }
+
+        assertEquals(2, resultActionTypeIds.size());
+        assertTrue(resultActionTypeIds.containsAll(addedActionTypeIds));
+        resultActionTypeIds.retainAll(removedActionTypeIds);
+        assertEquals(0, resultActionTypeIds.size());
+        assertEquals(DecisionState.ACCEPTED, result.getState());
+
+        List<ActionEntity> actionsWithoutDecisions = actionRepository.findAllWithoutDecision();
+        assertEquals(0, actionsWithoutDecisions.size());
     }
 
     @Test

@@ -16,7 +16,7 @@ import DecisionTypeRest from "../../services/DecisionTypeRest";
 import {DataGrid, GridCloseIcon} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
 import ActionTypeSelect from "./ActionTypeSelect";
-import {deDE, elGR} from '@mui/x-data-grid/locales';
+import {deDE, enUS} from '@mui/x-data-grid/locales';
 
 function DecisionTypeDetail(props) {
     const {t, i18n} = useTranslation();
@@ -25,7 +25,7 @@ function DecisionTypeDetail(props) {
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const [isSaved, setIsSaved] = useState([true]);
     const [actionTypes, setActionTypes] = useState([]);
-    const locale = i18n.language == "de" ? deDE : elGR
+    const locale = i18n.language == "de" ? deDE : enUS
 
     // action Action Type List
     const columns = [
