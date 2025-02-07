@@ -6,6 +6,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.rest.controller.ActionController;
+import de.starwit.service.impl.ActionExecutorService;
 import de.starwit.service.impl.ActionService;
 
 /**
@@ -21,6 +22,9 @@ public class ActionControllerIntegrationTest extends AbstractControllerIntegrati
 
     @MockitoBean
     private ActionService actionService;
+
+    @MockitoBean
+    private ActionExecutorService actionExecutorService;
 
     private static final String restpath = "/api/actions/";
 

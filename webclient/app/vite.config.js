@@ -9,12 +9,11 @@ export default defineConfig(({command}) => {
       ],
       base: "/ai-cockpit/",
       server: {
+        watch: {
+          usePolling: true
+        },
         proxy: {
-          "/ai-cockpit/api": "http://localhost:8081",
-          "/ai-cockpit/sbom-frontend.json": "http://localhost:8081",
-          "/ai-cockpit/sbom-backend.json": "http://localhost:8081",
-          "/ai-cockpit/aic-sbom-frontend.json": "http://localhost:8081",
-          "/ai-cockpit/aic-sbom-backend.json": "http://localhost:8081",
+          "/ai-cockpit/api": "http://localhost:8080"
         }
       },
     };

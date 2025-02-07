@@ -251,43 +251,18 @@ function DecisionOverviewMap() {
 
     function handleSave(actionTypes, decisionType, description, state) {
         const foundDecision = selectedDecisions.find(value => value.id == rowData.id);
+        const actionTypeIds = actionTypes.map(actionType => actionType['id'])
         if (foundDecision) {
             foundDecision.decisionType = decisionType;
             foundDecision.description = description;
             foundDecision.state = state;
-            const remoteFunctions = [];
 
-            const newActions = actionTypes;
-
-            let newActionTypes = actionTypes;
-            rowData.action.forEach(action => {
-                const found = actionTypes.find(value => value.id == action.actionType.id);
-                if (found === undefined) {
-                    remoteFunctions.push(actionRest.delete(action.id));
+            decisionRest.updateWithActions(foundDecision, actionTypeIds).then(response => {
+                if (automaticNext) {
+                    handleNext(selectedDecisions, selectedDecisions.findIndex(value => value.id == rowData.id));
                 } else {
-                    newActionTypes = newActionTypes.filter(value => value.id !== action.actionType.id);
-                    newActions.push(action);
+                    setDialogOpen(false);
                 }
-            });
-
-            newActionTypes.forEach(mActiontype => {
-                const entity = {
-                    name: "",
-                    description: "",
-                    decision: {id: rowData.id},
-                    actionType: mActiontype
-                };
-                remoteFunctions.push(actionRest.create(entity));
-            });
-
-            decisionRest.update(foundDecision).then(response => {
-                Promise.all(remoteFunctions).then(() => {
-                    if (automaticNext) {
-                        handleNext(selectedDecisions, selectedDecisions.findIndex(value => value.id == rowData.id));
-                    } else {
-                        setDialogOpen(false);
-                    }
-                });
             });
         } else {
             setDialogOpen(false);
