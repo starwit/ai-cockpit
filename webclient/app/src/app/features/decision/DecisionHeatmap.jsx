@@ -16,7 +16,7 @@ const INITIAL_VIEW_STATE = {
     bearing: 0
 };
 
-function DecisionHeatmap({onHover, onClick}) {
+function DecisionHeatmap({onHover, onClick, selectedTypes = ['all']}) {
     const [decisions, setDecisions] = useState([]);
     const decisionRest = new DecisionRest();
 
@@ -34,18 +34,26 @@ function DecisionHeatmap({onHover, onClick}) {
         });
     }
 
+    // First group decisions by location
     function groupDecisionsByLocation() {
         return decisions.reduce((acc, decision) => {
-            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;
-            if (!acc[key]) {
-                acc[key] = [];
+            // Only include decisions that match the filter criteria
+            if (selectedTypes.includes('all') ||
+                (decision.decisionType && selectedTypes.includes(decision.decisionType.name))) {
+                const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;
+                if (!acc[key]) {
+                    acc[key] = [];
+                }
+                acc[key].push(decision);
             }
-            acc[key].push(decision);
             return acc;
         }, {});
     }
 
     const groupedDecisions = groupDecisionsByLocation();
+
+    // Extract filtered decisions for the heatmap layer
+    const filteredDecisions = Object.values(groupedDecisions).flat();
 
     function createBaseMapLayer() {
         return new TileLayer({
@@ -69,7 +77,7 @@ function DecisionHeatmap({onHover, onClick}) {
     function createHeatmapLayer() {
         return new HeatmapLayer({
             id: 'heatmap',
-            data: decisions,
+            data: filteredDecisions,
             getPosition: decision => [decision.cameraLongitude, decision.cameraLatitude],
             getWeight: 1,
             radiusPixels: 60,

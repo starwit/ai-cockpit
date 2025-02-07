@@ -127,6 +127,8 @@ const translationDeDE = {
     "view.mode.heatmap": "Wärmekarte",
     "heatmap.description": "Die Wärmekarte zeigt Konzentrationsbereiche von Gefahrensituationen",
     "menu.autonomy": "Autonomiestufen",
+    "map.normal": "Normalmodus",
+    "map.heatmap": "Heatmap-Modus",
     "autonomy.executionPolicy.description": "Folgende Ausfürungsmöglichkeiten gibt es:",
     "actiontype.policy.manual.description": "Die Maßnahme ist nur beschrieben, wird aber nicht ausgeführt",
     "actiontype.policy.withcheck.description": "Der Nutzer muss sich die Gefahrensituation in der Detailansicht ansehen und sie als geprüft markieren. Erst dann wird die zugeordnete Maßnahme ausgeführt",
