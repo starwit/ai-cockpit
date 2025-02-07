@@ -135,7 +135,7 @@ jobs:
 
   publish_kic:
     name: "Kic: build and publish docker"
-    needs: build
+    needs: publish_helm
     runs-on: [self-hosted, linux, X64]
 
     steps:

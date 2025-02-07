@@ -2,7 +2,7 @@
 
 Changelog of ai-cockpit.
 
-## Current Version ()
+## refs/tags/0.2.0 (2025-02-06)
 
 ### Features
 
