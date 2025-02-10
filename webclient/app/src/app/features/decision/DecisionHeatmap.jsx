@@ -30,11 +30,6 @@ const INITIAL_VIEW_STATE = {
     bearing: 0
 };
 
-
-
-
-
-
 const STATES = [
     {id: 'NEW', name: 'NEW'},
     {id: 'ACCEPTED', name: 'ACCEPTED'},
