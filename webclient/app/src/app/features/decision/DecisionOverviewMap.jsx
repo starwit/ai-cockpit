@@ -1,24 +1,23 @@
-import React, {useState, useEffect} from 'react';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
+import React, {useEffect, useState} from 'react';
 
 import {
     BitmapLayer,
-    TextLayer,
-    ScatterplotLayer
+    ScatterplotLayer,
+    TextLayer
 } from "@deck.gl/layers";
 
 import DeckGL from "@deck.gl/react";
-import DecisionRest from '../../services/DecisionRest';
 import {useTranslation} from 'react-i18next';
+import DecisionRest from '../../services/DecisionRest';
 
 import {IconButton} from '@mui/material';
 
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import DecisionResultPanel from './DecisionResultPanel';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DecisionDetail from './DecisionDetail';
-import DecisionHeatmap from './DecisionHeatmap';
+import DecisionResultPanel from './DecisionResultPanel';
 
 import DecisionTypeFilter from './DecisionTypeFilter';
 
@@ -37,7 +36,6 @@ function DecisionOverviewMap() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
-    const [viewMode, setViewMode] = useState('normal');
 
     const groupedDecisions = groupDecisionsByLocation();
 
@@ -308,23 +306,6 @@ function DecisionOverviewMap() {
                 initialViewState={INITIAL_VIEW_STATE}  // Set initial position
                 controller={{dragRotate: false}}       // Disable rotation
             />
-            {viewMode === 'normal' ? (
-                <DeckGL
-                    layers={layers}
-                    views={MAP_VIEW}
-                    initialViewState={INITIAL_VIEW_STATE}
-                    controller={{dragRotate: false}}
-                />
-            ) : (
-                <DecisionHeatmap
-                    onHover={info => {
-                        if (info.object) {
-                            setHoveredDecisions(info.object[1]);
-                        }
-                    }}
-                    onClick={handleOpenDecision}
-                />
-            )}
 
             <IconButton
                 onClick={() => setShowPanel(!showPanel)}
@@ -341,8 +322,6 @@ function DecisionOverviewMap() {
             <DecisionResultPanel
                 show={showPanel}
                 decisions={hoveredDecisions}
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
             />
             {renderDialog()}
         </>
