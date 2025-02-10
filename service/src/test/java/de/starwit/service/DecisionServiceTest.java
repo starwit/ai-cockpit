@@ -175,14 +175,14 @@ public class DecisionServiceTest {
     void testFindByName() {
         // prepare
         DecisionTypeEntity defaultDecisionType = new DecisionTypeEntity();
-        defaultDecisionType.setName("dangerous driving behaviour");
+        defaultDecisionType.setName("Testname");
         decisionTypeService.saveOrUpdate(defaultDecisionType);
 
         // Call-Methode
-        DecisionTypeEntity entity = decisionService.findDecisionTypeByName("dangerous driving behaviour");
+        DecisionTypeEntity entity = decisionService.findDecisionTypeByName("Testname");
 
         // Assert
-        assertTrue(entity.getName().equals("dangerous driving behaviour"));
+        assertTrue(entity.getName().equals("Testname"));
 
     }
 }
