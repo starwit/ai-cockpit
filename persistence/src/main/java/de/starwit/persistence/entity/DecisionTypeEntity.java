@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 public class DecisionTypeEntity extends AbstractEntity<Long> {
 
     // entity fields
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @Column(name = "description")
