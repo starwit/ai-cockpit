@@ -137,6 +137,8 @@ const translationEnEN = {
     "view.mode.heatmap": "Heatmap",
     "heatmap.description": "The heatmap shows concentration areas of traffic decisions",
     "menu.autonomy": "Autonomy Levels",
+    "map.normal": "Normal mode",
+    "map.heatmap": "Heatmap mode",
     "autonomy.executionPolicy.description": "The following execution policies are possible:",
     "actiontype.policy.manual.description": "The action is just described and will never be executed",
     "actiontype.policy.withcheck.description": "The user has to check the decision of the AI in the details view before action is executed.",
