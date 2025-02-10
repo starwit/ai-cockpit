@@ -13,7 +13,7 @@ export default defineConfig(({command}) => {
           usePolling: true
         },
         proxy: {
-          "/ai-cockpit/api": "http://localhost:8080"
+          "/ai-cockpit/api": "http://localhost:8081"
         }
       },
     };
