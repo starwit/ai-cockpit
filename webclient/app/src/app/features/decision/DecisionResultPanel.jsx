@@ -16,7 +16,7 @@ import {
 import {formatDateShort} from '../../commons/formatter/DateFormatter';
 
 function DecisionResultPanel(props) {
-    const {show, decisions, viewMode, onViewModeChange} = props;
+    const {show, decisions} = props;
     const {t, i18n} = useTranslation();
 
     return (

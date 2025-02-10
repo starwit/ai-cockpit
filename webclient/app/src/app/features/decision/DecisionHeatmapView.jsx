@@ -146,7 +146,6 @@ function DecisionHeatmapView() {
             <DecisionResultPanel
                 show={showPanel}
                 decisions={hoveredDecisions}
-                viewMode="heatmap"
             />
             {renderDialog()}
         </>
