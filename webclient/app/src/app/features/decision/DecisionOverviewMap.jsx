@@ -1,24 +1,25 @@
-import React, {useState, useEffect} from 'react';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
+import React, {useEffect, useState} from 'react';
 
 import {
     BitmapLayer,
-    TextLayer,
-    ScatterplotLayer
+    ScatterplotLayer,
+    TextLayer
 } from "@deck.gl/layers";
 
 import DeckGL from "@deck.gl/react";
-import DecisionRest from '../../services/DecisionRest';
 import {useTranslation} from 'react-i18next';
+import DecisionRest from '../../services/DecisionRest';
 
 import {IconButton} from '@mui/material';
 
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import DecisionResultPanel from './DecisionResultPanel';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DecisionDetail from './DecisionDetail';
-import DecisionHeatmap from './DecisionHeatmap';
+import DecisionResultPanel from './DecisionResultPanel';
+
+import DecisionTypeFilter from './DecisionTypeFilter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
@@ -26,17 +27,17 @@ const MAP_VIEW = new MapView({repeat: true});
 function DecisionOverviewMap() {
     // Add state to store decisions
     const {t, i18n} = useTranslation();
-
+    const [selectedType, setSelectedType] = useState(['all']);
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
     const [showPanel, setShowPanel] = useState(true);
-    const groupedDecisions = groupDecisionsByLocation();
     const [selectedDecisions, setSelectedDecisions] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
-    const [viewMode, setViewMode] = useState('normal');
+
+    const groupedDecisions = groupDecisionsByLocation();
 
     const layers = [
         createBaseMapLayer(),
@@ -54,6 +55,15 @@ function DecisionOverviewMap() {
         bearing: 0          // No rotation
     };
 
+    // Filter decisions that have a type => retrieve type names => create Set to remove duplicates => convert Set back to an array
+    const decisionTypes = Array.from(
+        new Set(
+            decisions
+                .filter(decision => decision.decisionType?.name)
+                .map(decision => decision.decisionType.name)
+        )
+    );
+
     useEffect(() => {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
@@ -70,14 +80,30 @@ function DecisionOverviewMap() {
     }
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
-        return decisions.reduce((locationGroups, decision) => {
+/*        return decisions.reduce((locationGroups, decision) => {
             const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
             if (!locationGroups[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
                 locationGroups[key] = [];
             }
             locationGroups[key].push(decision);    // Add the current decision to the array for this location
             return locationGroups;
-        }, {});
+        }, {}); */
+
+        return decisions
+            .filter(decision => decision && (
+                selectedType.includes('all') ||
+                (decision.decisionType && selectedType.includes(decision.decisionType.name))
+            ))
+            .reduce((locationGroups, decision) => {
+                if (decision.cameraLatitude && decision.cameraLongitude) {
+                    const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
+                    if (!locationGroups[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
+                        locationGroups[key] = [];
+                    }
+                    locationGroups[key].push(decision);    // Add the current decision to the array for this location
+                }
+                return locationGroups;
+            }, {});
     }
 
 
@@ -231,43 +257,18 @@ function DecisionOverviewMap() {
 
     function handleSave(actionTypes, decisionType, description, state) {
         const foundDecision = selectedDecisions.find(value => value.id == rowData.id);
+        const actionTypeIds = actionTypes.map(actionType => actionType['id'])
         if (foundDecision) {
             foundDecision.decisionType = decisionType;
             foundDecision.description = description;
             foundDecision.state = state;
-            const remoteFunctions = [];
 
-            const newActions = actionTypes;
-
-            let newActionTypes = actionTypes;
-            rowData.action.forEach(action => {
-                const found = actionTypes.find(value => value.id == action.actionType.id);
-                if (found === undefined) {
-                    remoteFunctions.push(actionRest.delete(action.id));
+            decisionRest.updateWithActions(foundDecision, actionTypeIds).then(response => {
+                if (automaticNext) {
+                    handleNext(selectedDecisions, selectedDecisions.findIndex(value => value.id == rowData.id));
                 } else {
-                    newActionTypes = newActionTypes.filter(value => value.id !== action.actionType.id);
-                    newActions.push(action);
+                    setDialogOpen(false);
                 }
-            });
-
-            newActionTypes.forEach(mActiontype => {
-                const entity = {
-                    name: "",
-                    description: "",
-                    decision: {id: rowData.id},
-                    actionType: mActiontype
-                };
-                remoteFunctions.push(actionRest.create(entity));
-            });
-
-            decisionRest.update(foundDecision).then(response => {
-                Promise.all(remoteFunctions).then(() => {
-                    if (automaticNext) {
-                        handleNext(selectedDecisions, selectedDecisions.findIndex(value => value.id == rowData.id));
-                    } else {
-                        setDialogOpen(false);
-                    }
-                });
             });
         } else {
             setDialogOpen(false);
@@ -277,25 +278,17 @@ function DecisionOverviewMap() {
     // Return the map component with minimum required styles
     return (
         <>
-            {viewMode === 'normal' ? (
-                <DeckGL
-                    layers={layers}
-                    views={MAP_VIEW}
-                    initialViewState={INITIAL_VIEW_STATE}
-                    controller={{dragRotate: false}}
-                />
-            ) : (
-                <DecisionHeatmap
-                    decisions={decisions}
-                    onHover={info => {
-                        // Hovering over a decision will display the decision details in the panel
-                        if (info.object && info.object[1] && Array.isArray(info.object[1])) {
-                            setHoveredDecisions(info.object[1]);
-                        }
-                    }}
-                    onClick={handleOpenDecision}
-                />
-            )}
+            <DecisionTypeFilter
+                selectedType={selectedType}
+                onTypeChange={setSelectedType}
+                decisionTypes={decisionTypes}
+            />
+            <DeckGL
+                layers={layers}               // Add map layers
+                views={MAP_VIEW}              // Add map view settings
+                initialViewState={INITIAL_VIEW_STATE}  // Set initial position
+                controller={{dragRotate: false}}       // Disable rotation
+            />
 
             <IconButton
                 onClick={() => setShowPanel(!showPanel)}
@@ -312,8 +305,6 @@ function DecisionOverviewMap() {
             <DecisionResultPanel
                 show={showPanel}
                 decisions={hoveredDecisions}
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
             />
             {renderDialog()}
         </>

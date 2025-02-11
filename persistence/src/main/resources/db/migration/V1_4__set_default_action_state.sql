@@ -1,0 +1,5 @@
+ALTER TABLE "action"
+ALTER "state" SET DEFAULT 'NEW';
+
+ALTER TABLE "action"
+ALTER "state" SET NOT NULL;

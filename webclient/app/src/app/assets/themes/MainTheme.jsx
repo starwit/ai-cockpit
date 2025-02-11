@@ -1,11 +1,17 @@
 import React from "react";
 import {ThemeProvider} from "@mui/material";
-import ComponentTheme from "./ComponentTheme";
+import general from "./general/ComponentTheme";
+import kic from "./kic/ComponentTheme";
+
 
 function MainTheme(props) {
+    const themeName = import.meta.env.VITE_THEME;
+    const themeMap = {general, kic};
+    const DynamicTheme = themeMap[themeName];
     return (
-        <ThemeProvider theme={ComponentTheme}>
+        <ThemeProvider theme={DynamicTheme}>
             {props.children}
+
         </ThemeProvider>
     )
 }

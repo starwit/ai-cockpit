@@ -26,7 +26,7 @@ const ComponentTheme = createTheme(ColorTheme,
             },
             MuiIconButton: {
                 defaultProps: {
-                    color: "inherit"
+                    color: "inherit",
                 }
             }
         }

@@ -2,7 +2,16 @@
 
 Changelog of ai-cockpit.
 
-## Current Version ()
+## refs/tags/0.2.0 (2025-02-06)
+
+### Features
+
+-  add button for action execution ([0522e](https://github.com/starwit/ai-cockpit/commit/0522e9cb5ae1250) Anett Hübner)  
+-  action automation and decision detail shortcuts ([f3b88](https://github.com/starwit/ai-cockpit/commit/f3b88403227c0fb) Anett Hübner)  
+-  ab#1378: Added autonomy level information ([b22a0](https://github.com/starwit/ai-cockpit/commit/b22a0dfd25a1962) Anett Hübner)  
+-  added dialog for automomy level ([22660](https://github.com/starwit/ai-cockpit/commit/2266050b8efd97f) Anett Hübner)  
+
+## refs/tags/0.1.13 (2025-01-31)
 
 ### Features
 

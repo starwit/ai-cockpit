@@ -2,7 +2,9 @@ package de.starwit.rest.controller;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +23,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.exception.NotificationException;
+import de.starwit.rest.dto.DecisionWithActionTypesDto;
 import de.starwit.rest.exception.NotificationDto;
-import de.starwit.service.impl.MinioException;
 import de.starwit.service.impl.DecisionService;
+import de.starwit.service.impl.MinioException;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -72,6 +76,34 @@ public class DecisionController {
     public DecisionEntity update(@Valid @RequestBody DecisionEntity entity) {
         LOG.info("Updating decision with id: {}", entity.getId());
         return decisionService.saveOrUpdate(entity);
+    }
+
+    @Operation(summary = "Update decision with action types")
+    @PutMapping("/update-with-actions")
+    public void updateDecisionsWithActions(@RequestBody DecisionWithActionTypesDto dto) {
+        LOG.info("Updating decision with id: {}", dto.getDecision().getId());
+
+        Set<ActionEntity> oldActions = dto.getDecision().getAction();
+
+        Set<Long> newActionTypeIds = dto.getActionTypeIds();
+        Set<Long> oldActionTypeIds = new HashSet<>();
+        Set<Long> unchangedActionTypeIds = new HashSet<>();
+
+        if (newActionTypeIds != null && oldActions != null) {
+            for (ActionEntity entity : oldActions) {
+                oldActionTypeIds.add(entity.getActionType().getId());
+            }
+
+            for (Long id : oldActionTypeIds) {
+                if (newActionTypeIds.contains(id)) {
+                    unchangedActionTypeIds.add(id);
+                }
+            }
+            newActionTypeIds.removeAll(unchangedActionTypeIds);
+            oldActionTypeIds.removeAll(unchangedActionTypeIds);
+
+        }
+        decisionService.UpdateDecisionEntityWithAction(dto.getDecision(), newActionTypeIds, oldActionTypeIds);
     }
 
     @Operation(summary = "Delete decision")

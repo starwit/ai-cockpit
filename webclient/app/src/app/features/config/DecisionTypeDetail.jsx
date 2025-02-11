@@ -15,14 +15,17 @@ import ActionTypeRest from "../../services/ActionTypeRest";
 import DecisionTypeRest from "../../services/DecisionTypeRest";
 import {DataGrid, GridCloseIcon} from "@mui/x-data-grid";
 import {useTranslation} from "react-i18next";
+import ActionTypeSelect from "./ActionTypeSelect";
+import {deDE, enUS} from '@mui/x-data-grid/locales';
 
 function DecisionTypeDetail(props) {
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     const {open, rowData, handleClose} = props;
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const [isSaved, setIsSaved] = useState([true]);
     const [actionTypes, setActionTypes] = useState([]);
+    const locale = i18n.language == "de" ? deDE : enUS
 
     // action Action Type List
     const columns = [
@@ -30,20 +33,22 @@ function DecisionTypeDetail(props) {
         {
             field: "name",
             headerName: t("actiontype.name"),
-            width: 150,
+            flex: 0.5,
             editable: false
         },
         {
             field: "description",
             headerName: t("actiontype.description"),
-            width: 350,
+            flex: 1,
             editable: false
         },
         {
             field: "executionPolicy",
             headerName: t("actiontype.policy"),
-            width: 220,
-            editable: false
+            width: 250,
+            editable: false,
+            renderCell: params => <ActionTypeSelect row={params.row} updateRow={params.updateRow} editable={false} />
+
         },
         {
             field: "actions2",
@@ -118,15 +123,19 @@ function DecisionTypeDetail(props) {
 
     return <>
         <Dialog
+            maxWidth="xl"
+            fullWidth={true}
             open={open}
             onClose={handleClose}
             aria-labelledby="decision-type-detail-dialog-title"
             aria-describedby="decision-type-detail-dialog-description"
-            maxWidth="xl"
         >
             <DialogTitle id="decision-type-detail-dialog-title" >
-                <Typography component="p" variant="h2">
-                    {t("decisiontype.selectaction")}{rowData.name}
+                <Typography variant="h2">
+                    {rowData.name}
+                </Typography>
+                <Typography variant="captions" fontWeight={theme => theme.typography.h2.fontWeight}>
+                    {t("decisiontype.selectaction")}
                 </Typography>
             </DialogTitle>
             <IconButton
@@ -140,12 +149,13 @@ function DecisionTypeDetail(props) {
             >
                 <GridCloseIcon />
             </IconButton>
-            <DialogContent id="decision-type-detail-dialog-description">
+            <DialogContent id="decision-type-detail-dialog-description" sx={{width: "100%"}}>
                 <Grid2>
                     <DataGrid
-                        autoHeight
                         rows={actionTypes}
                         columns={columns}
+                        pageSizeOptions={[10]}
+                        localeText={locale.components.MuiDataGrid.defaultProps.localeText}
                     />
                     <Stack direction="row" justifyContent="flex-end" spacing={1} sx={{marginTop: 1}}>
                         <Button variant="contained" color="primary" onClick={saveSelection} startIcon={<SaveIcon />}>
