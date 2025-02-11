@@ -1,8 +1,10 @@
 import {Card, CardContent, Divider, Stack, Typography} from "@mui/material";
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 function CycloneDXViewer(props) {
     const {cycloneData} = props;
+    const {t} = useTranslation();
 
     function getUsedTools() {
         if (Array.isArray(cycloneData.metadata.tools)) {

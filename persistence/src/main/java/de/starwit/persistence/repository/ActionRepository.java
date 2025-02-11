@@ -17,4 +17,7 @@ public interface ActionRepository extends JpaRepository<ActionEntity, Long> {
     public List<ActionEntity> findAllWithoutDecision();
 
     public List<ActionEntity> findByState(ActionState state);
+
+    @Query("SELECT e FROM ActionEntity e WHERE e.state like '%NEW%' OR e.state like '%CANCELED%'")
+    public List<ActionEntity> findAllNewAndCanceled();
 }

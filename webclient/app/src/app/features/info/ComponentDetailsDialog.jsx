@@ -8,7 +8,6 @@ function ComponentDetailsDialog(props) {
     const transparencyFunctions = useMemo(() => new TransparencyFunctions(), []);
     const {open, moduleData, handleClose} = props;
     const [sbomList, setSbomList] = React.useState([]);
-    const [size, setSize] = React.useState(0);
     const [isLoaded, setIsLoaded] = React.useState(false);
 
     useEffect(() => {
@@ -19,7 +18,7 @@ function ComponentDetailsDialog(props) {
         const sboms = {}
         let size = Object.values(moduleData.sBOMLocation).length;
         Object.entries(moduleData.sBOMLocation).map((entry) => {
-            transparencyFunctions.loadSBOM(entry[1]).then(response => {
+            transparencyFunctions.loadSBOM(moduleData.id, entry[0]).then(response => {
                 if (!(response.headers['content-type'].includes("application/json"))) {
                     return;
                 }

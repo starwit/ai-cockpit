@@ -1,9 +1,11 @@
-import {Button, ClickAwayListener, Grow, IconButton, MenuItem, MenuList, Paper, Popper, Tooltip, Typography} from "@mui/material";
+import {ClickAwayListener, Grow, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Popper, Tooltip} from "@mui/material";
 
+import Category from "@mui/icons-material/Category";
+import SettingsIcon from "@mui/icons-material/Settings";
+import Start from "@mui/icons-material/Start";
+import {useEffect, useRef, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
-import SettingsIcon from "@mui/icons-material/Settings";
-import {useEffect, useRef, useState} from "react";
 
 
 function ConfigMenu() {
@@ -77,11 +79,13 @@ function ConfigMenu() {
                                 aria-labelledby="composition-button"
                                 onKeyDown={handleListKeyDown}
                             >
-                                <MenuItem component={Link} to={"/action-type"}>
-                                    {t("menu.config.actiontype")}
+                                <MenuItem component={Link} to={"/decision-type"} onClick={handleClose}>
+                                    <ListItemIcon><Category fontSize="small" /></ListItemIcon>
+                                    <ListItemText>{t("menu.config.decisiontype")}</ListItemText>
                                 </MenuItem>
-                                <MenuItem component={Link} to={"/decision-type"}>
-                                    {t("menu.config.decisiontype")}
+                                <MenuItem component={Link} to={"/action-type"} onClick={handleClose}>
+                                    <ListItemIcon><Start fontSize="small" /></ListItemIcon>
+                                    <ListItemText>{t("menu.config.actiontype")}</ListItemText>
                                 </MenuItem>
                             </MenuList>
                         </ClickAwayListener>

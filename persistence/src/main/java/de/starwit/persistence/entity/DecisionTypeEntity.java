@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -32,6 +33,10 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "decisiontype_actiontype", joinColumns = @JoinColumn(name = "decisiontype_id"), inverseJoinColumns = @JoinColumn(name = "actiontype_id"))
     private Set<ActionTypeEntity> actionType;
+
+    @ManyToOne
+    @JoinColumn(name = "module_id")
+    private ModuleEntity module;
 
     // entity fields getters and setters
     public String getName() {

@@ -18,6 +18,10 @@ docker-compose.yml
 .springBeans
 .sts4-cache
 
+### VS Code ###
+.vscode/*
+!.vscode/settings.json
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

@@ -33,4 +33,10 @@ public class ActionService implements ServiceInterface<ActionEntity, ActionRepos
         List<ActionEntity> result = actionRepository.findByState(ActionState.NEW);
         return result;
     }
+
+    public List<ActionEntity> findAllNewAndCanceled() {
+        List<ActionEntity> result = actionRepository.findAllNewAndCanceled();
+        return result;
+
+    }
 }

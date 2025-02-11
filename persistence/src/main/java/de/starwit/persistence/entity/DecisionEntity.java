@@ -59,6 +59,11 @@ public class DecisionEntity extends AbstractEntity<Long> {
     @JoinColumn(name = "decisiontype_id")
     private DecisionTypeEntity decisionType;
 
+    @ManyToOne
+    @JoinColumn(name = "module_id")
+    private ModuleEntity module;
+
+
     @OneToMany(mappedBy = "decision", cascade = { CascadeType.ALL })
     private Set<ActionEntity> action;
 
@@ -143,6 +148,14 @@ public class DecisionEntity extends AbstractEntity<Long> {
         }
         this.action.add(action);
         this.action.forEach(a -> a.setDecision(this));
+    }
+
+    public void removeFromAction(ActionEntity action) {
+        action.setDecision(null);
+        if (this.action == null) {
+            return;
+        }
+        this.action.remove(action);
     }
 
 }
