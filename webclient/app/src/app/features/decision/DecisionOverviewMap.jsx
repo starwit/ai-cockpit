@@ -9,7 +9,6 @@ import {
 } from "@deck.gl/layers";
 
 import DeckGL from "@deck.gl/react";
-import {useTranslation} from 'react-i18next';
 import DecisionRest from '../../services/DecisionRest';
 
 import {IconButton} from '@mui/material';
@@ -26,7 +25,6 @@ const MAP_VIEW = new MapView({repeat: true});
 
 function DecisionOverviewMap() {
     // Add state to store decisions
-    const {t, i18n} = useTranslation();
     const [selectedType, setSelectedType] = useState(['all']);
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
@@ -80,15 +78,6 @@ function DecisionOverviewMap() {
     }
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
-/*        return decisions.reduce((locationGroups, decision) => {
-            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
-            if (!locationGroups[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
-                locationGroups[key] = [];
-            }
-            locationGroups[key].push(decision);    // Add the current decision to the array for this location
-            return locationGroups;
-        }, {}); */
-
         return decisions
             .filter(decision => decision && (
                 selectedType.includes('all') ||

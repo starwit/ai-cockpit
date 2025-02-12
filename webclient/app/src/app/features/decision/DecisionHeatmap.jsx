@@ -30,13 +30,6 @@ const INITIAL_VIEW_STATE = {
     bearing: 0
 };
 
-/*
-function DecisionHeatmap({onHover, onClick, selectedTypes = ['all']}) {
-    const [decisions, setDecisions] = useState([]);
-    const decisionRest = new DecisionRest();
-*/
-
-
 const STATES = [
     {id: 'NEW', name: 'NEW'},
     {id: 'ACCEPTED', name: 'ACCEPTED'},
@@ -53,79 +46,54 @@ const TIME_FILTERS = [
     {value: 24, label: 'time.range.last24Hours'}
 ];
 
-function DecisionHeatmap({decisions, onHover, onClick}) {
+function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['all']}) {
     const {t} = useTranslation();
     const [selectedStates, setSelectedStates] = useState([]);
     const [timeFilter, setTimeFilter] = useState(0);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
-
-    // Filter decisions based on selected states. Null is considered as 'NEW'
     const filteredDecisions = useMemo(() => {
-        if (!decisions) return [];
+        if (!Array.isArray(decisions) || decisions.length === 0) return [];
 
-        let filtered = decisions;
+        return decisions.filter(decision => {
+            // Validate required location data
+            if (!decision?.cameraLatitude || !decision?.cameraLongitude) {
+                return false;
+            }
 
-        // Apply state filter
-        if (selectedStates.length > 0) {
-            filtered = filtered.filter(decision => {
-                if (selectedStates.includes('NEW')) {
-                    if (!decision.state || decision.state === 'NEW') {
-                        return true;
-                    }
+            // Apply type filter
+            const typeMatch = selectedTypes.includes('all') ||
+                (decision.decisionType && selectedTypes.includes(decision.decisionType.name));
+            if (!typeMatch) return false;
+
+            // Apply state filter
+            if (selectedStates.length > 0) {
+                // Default to 'NEW' state if not set
+                const decisionState = decision.state || 'NEW';
+                if (!selectedStates.includes(decisionState)) {
+                    return false;
                 }
-                return selectedStates.includes(decision.state);
-            });
-        }
+            }
 
-        // Apply time filter
-        if (timeFilter === -1) {
-            // User defined range
-            if (startDate && endDate) {
+            // Apply time range filter
+            if (timeFilter === -1 && startDate && endDate) {
                 const start = new Date(startDate);
                 start.setHours(0, 0, 0, 0);
                 const end = new Date(endDate);
                 end.setHours(23, 59, 59, 999);
-
-                filtered = filtered.filter(decision => {
-                    const decisionTime = new Date(decision.acquisitionTime);
-                    return decisionTime >= start && decisionTime <= end;
-                });
-            }
-        } else if (timeFilter > 0) {
-            const cutoffTime = new Date();
-            cutoffTime.setHours(cutoffTime.getHours() - timeFilter);
-
-            filtered = filtered.filter(decision => {
                 const decisionTime = new Date(decision.acquisitionTime);
-                return decisionTime >= cutoffTime;
-            });
-        }
+                if (!(decisionTime >= start && decisionTime <= end)) return false;
+            } else if (timeFilter > 0) {
+                const cutoffTime = new Date();
+                cutoffTime.setHours(cutoffTime.getHours() - timeFilter);
+                const decisionTime = new Date(decision.acquisitionTime);
+                if (!(decisionTime >= cutoffTime)) return false;
+            }
 
-        return filtered;
-    }, [decisions, selectedStates, timeFilter, startDate, endDate]);
-
-    // First group decisions by location
-    /*    function groupDecisionsByLocation() {
-            return decisions.reduce((acc, decision) => {
-                // Only include decisions that match the filter criteria
-                if (selectedTypes.includes('all') ||
-                    (decision.decisionType && selectedTypes.includes(decision.decisionType.name))) {
-                    const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;
-                    if (!acc[key]) {
-                        acc[key] = [];
-                    }
-                    acc[key].push(decision);
-                }
-                return acc;
-            }, {});
-        }
-    */
-
-
-    // Extract filtered decisions for the heatmap layer
-    //ssconst filteredDecisions = Object.values(groupedDecisions).flat();
+            return true;
+        });
+    }, [decisions, selectedTypes, selectedStates, timeFilter, startDate, endDate]);
 
     function createBaseMapLayer() {
         return new TileLayer({
@@ -160,43 +128,67 @@ function DecisionHeatmap({decisions, onHover, onClick}) {
     }
 
     function createInteractiveLayer() {
-        // Group decisions by location already filtered
-        const groupedFilteredDecisions = filteredDecisions.reduce((locationGroups, decision) => {
-            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;
+        if (filteredDecisions.length === 0) return null;
+
+        const groupedDecisions = filteredDecisions.reduce((locationGroups, decision) => {
+            const key = `${decision.cameraLatitude},${decision.cameraLongitude}`;
             if (!locationGroups[key]) {
-                locationGroups[key] = [];
+                locationGroups[key] = {
+                    position: [decision.cameraLongitude, decision.cameraLatitude],
+                    decisions: []
+                };
             }
-            locationGroups[key].push(decision);
+            locationGroups[key].decisions.push(decision);
             return locationGroups;
         }, {});
 
+        const points = Object.values(groupedDecisions);
+
         return new ScatterplotLayer({
             id: 'interactive-layer',
-            data: Object.entries(groupedFilteredDecisions), // Use already grouped data
+            data: points,
             pickable: true,
             visible: true,
-            opacity: 0,
-            stroked: false,
+            opacity: 0.1,
+            stroked: true,
             filled: true,
             radiusScale: 15,
             radiusMinPixels: 5,
             radiusMaxPixels: 100,
-            getPosition: group => [
-                group[1][0].cameraLongitude,
-                group[1][0].cameraLatitude
-            ],
-            getRadius: radius => Math.sqrt(radius[1].length) * 5,
-            onHover: onHover,
-            onClick: onClick
+            lineWidthMinPixels: 1,
+            getPosition: decision => decision.position,
+            getRadius: decision => Math.sqrt(decision.decisions.length) * 5,
+            getFillColor: [255, 140, 0, 180],
+            getLineColor: [255, 140, 0],
+            onHover: (info) => {
+                if (onHover) {
+                    const hoveredDecisions = info.object ? info.object.decisions : null;
+                    onHover({...info, object: hoveredDecisions});
+                }
+            },
+            onClick: (info) => {
+                if (onClick) {
+                    const clickedDecisions = info.object ? info.object.decisions : null;
+                    onClick({...info, object: clickedDecisions});
+                }
+            }
         });
     }
 
-    // Use useMemo to avoid creating new layers on every render
-    const layers = useMemo(() => [
-        createBaseMapLayer(),
-        createHeatmapLayer(),
-        createInteractiveLayer()
-    ], [filteredDecisions]); // Re-create layers when filteredDecisions change
+    const layers = useMemo(() => {
+        const layersList = [createBaseMapLayer()];
+
+        if (filteredDecisions.length > 0) {
+            layersList.push(createHeatmapLayer());
+
+            const interactiveLayer = createInteractiveLayer();
+            if (interactiveLayer) {
+                layersList.push(interactiveLayer);
+            }
+        }
+
+        return layersList;
+    }, [filteredDecisions]);
 
     return (
         <>
@@ -248,7 +240,7 @@ function DecisionHeatmap({decisions, onHover, onClick}) {
                                 value={timeFilter}
                                 onChange={(e) => {
                                     setTimeFilter(e.target.value);
-                                    if (e.target.value !== -1) { // Reset date range when changing time filter
+                                    if (e.target.value !== -1) {
                                         setStartDate('');
                                         setEndDate('');
                                     }
@@ -294,13 +286,12 @@ function DecisionHeatmap({decisions, onHover, onClick}) {
                     </Typography>
                 </Paper>
             </Box>
+
             <DeckGL
                 layers={layers}
                 views={MAP_VIEW}
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={{dragRotate: false}}
-                onHover={onHover}
-                onClick={onClick}
             />
         </>
     );
