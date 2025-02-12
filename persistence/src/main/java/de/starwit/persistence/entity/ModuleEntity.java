@@ -18,7 +18,7 @@ public class ModuleEntity extends AbstractEntity<Long> {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @OneToMany(mappedBy = "module", cascade = { CascadeType.ALL })
