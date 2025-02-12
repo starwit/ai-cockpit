@@ -9,7 +9,6 @@ import {
 } from "@deck.gl/layers";
 
 import DeckGL from "@deck.gl/react";
-import {useTranslation} from 'react-i18next';
 import DecisionRest from '../../services/DecisionRest';
 
 import {IconButton} from '@mui/material';
@@ -26,7 +25,6 @@ const MAP_VIEW = new MapView({repeat: true});
 
 function DecisionOverviewMap() {
     // Add state to store decisions
-    const {t, i18n} = useTranslation();
     const [selectedType, setSelectedType] = useState(['all']);
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
@@ -64,7 +62,6 @@ function DecisionOverviewMap() {
         )
     );
 
-
     useEffect(() => {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
@@ -73,7 +70,7 @@ function DecisionOverviewMap() {
 
     //Load Decisions
     function reloadDecisions() {
-        decisionRest.findAllOpen().then(response => {
+        decisionRest.findAll().then(response => {
             if (response.data) {
                 setDecisions(response.data);
             }
