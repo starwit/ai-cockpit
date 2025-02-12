@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Features
+
+-  add map menu for switching between normal and heatmap views, update translations ([d4007](https://github.com/starwit/ai-cockpit/commit/d400739136e6fd8) st200217)  
+
 ## refs/tags/0.2.0 (2025-02-06)
 
 ### Features
