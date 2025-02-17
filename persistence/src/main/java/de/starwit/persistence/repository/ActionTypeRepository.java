@@ -19,4 +19,6 @@ public interface ActionTypeRepository extends JpaRepository<ActionTypeEntity, Lo
     List<ActionTypeEntity> findByDecisionType(Long decisionTypeId);
 
     public List<ActionTypeEntity> findByName(String name);
+
+    public List<ActionTypeEntity> findByModule(ModuleEntity module);
 }

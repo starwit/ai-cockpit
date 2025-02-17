@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionTypeEntity;
+import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.DecisionRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import jakarta.validation.Valid;
@@ -65,6 +66,14 @@ public class DecisionTypeService
         for (DecisionTypeEntity decisionType : entityList) {
             saveOrUpdate(decisionType);
         }
+    }
+
+    public List<DecisionTypeEntity> findByName(String name) {
+        return decisiontypeRepository.findByName(name);
+    }
+
+    public List<DecisionTypeEntity> findByModule(ModuleEntity module) {
+        return decisiontypeRepository.findByModule(module);
     }
 
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionState;
+import de.starwit.persistence.entity.ModuleEntity;
 
 import java.util.List;
 
@@ -14,4 +15,8 @@ import java.util.List;
 @Repository
 public interface DecisionRepository extends JpaRepository<DecisionEntity, Long> {
     List<DecisionEntity> findByState(DecisionState state);
+
+    List<DecisionEntity> findByModule(ModuleEntity module);
+
+    List<DecisionEntity> findByModuleAndState(ModuleEntity module, DecisionState state);
 }
