@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,6 +116,20 @@ public class PostFlywayService {
                     List<DecisionTypeEntity> decisionTypes = mapper.readValue(file,
                             new TypeReference<List<DecisionTypeEntity>>() {
                             });
+
+                    for (DecisionTypeEntity decisionTypeEntity : decisionTypes) {
+                        Set<ActionTypeEntity> actionTypes = new java.util.HashSet<ActionTypeEntity>();
+                        decisionTypeEntity.getActionType().forEach(actionType -> {
+                            List<ActionTypeEntity> foundactionTypes = actionRepository.findByName(actionType.getName());
+                            if (!foundactionTypes.isEmpty() || foundactionTypes.get(0).getName().equals(actionType.getName())) {
+                                actionTypes.add(foundactionTypes.get(0));
+                            } else {
+                                LOG.error("Could not found actionType with the name " + actionType.getName());
+                            }
+                        });
+                        decisionTypeEntity.setActionType(actionTypes);
+                    }
+                    
                     processEntitiesWithModule(decisionTypes , moduleService, this.defaultModuleName);
                     decisionTypeRepository.saveAll(decisionTypes);
                 } catch (IOException e) {

@@ -8,15 +8,15 @@
         },
         "actionType": [
             {
-                "id": 1
+                "name": "notify police"
             },
             {
-                "id": 4
+                "name": "I2X notification"
             }
         ]
     },
     {
-        "name": "accident",
+        "name": "accnameent",
         "description": "A decision involving a collision or crash between vehicles or other obstacles",
         "decision": [],
         "module": {
@@ -24,16 +24,16 @@
         },
         "actionType": [
             {
-                "id": 2
+                "name": "notify emergency services"
             },
             {
-                "id": 3
+                "name": "notify public alarm services"
             },
             {
-                "id": 1
+                "name": "notify police"
             },
             {
-                "id": 5
+                "name": "notify towing service"
             }
         ]
     },
@@ -46,13 +46,13 @@
         },
         "actionType": [
             {
-                "id": 3
+                "name": "notify public alarm services"
             },
             {
-                "id": 1
+                "name": "notify police"
             },
             {
-                "id": 4
+                "name": "I2X notification"
             }
         ]
     },
@@ -62,13 +62,13 @@
         "decision": [],
         "actionType": [
             {
-                "id": 1
+                "name": "notify police"
             },
             {
-                "id": 5
+                "name": "notify towing service"
             },
             {
-                "id": 4
+                "name": "I2X notification"
             }
         ]
     },
@@ -78,13 +78,13 @@
         "decision": [],
         "actionType": [
             {
-                "id": 2
+                "name": "notify emergency services"
             },
             {
-                "id": 3
+                "name": "notify public alarm services"
             },
             {
-                "id": 1
+                "name": "notify police"
             }
         ]
     },
@@ -94,10 +94,10 @@
         "decision": [],
         "actionType": [
             {
-                "id": 3
+                "name": "notify public alarm services"
             },
             {
-                "id": 4
+                "name": "I2X notification"
             }
         ]
     }
