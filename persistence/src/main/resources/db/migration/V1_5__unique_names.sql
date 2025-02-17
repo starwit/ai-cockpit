@@ -3,3 +3,6 @@ ALTER TABLE "module"
 
 ALTER TABLE "decisiontype"
     ADD UNIQUE ("name");
+
+ALTER TABLE "actiontype"
+    ADD UNIQUE ("name");

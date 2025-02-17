@@ -1,8 +1,11 @@
 package de.starwit.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.ModuleRepository;
 
@@ -22,4 +25,7 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
         return moduleRepository;
     }
 
+    public List<ModuleEntity> findByName(String name) {
+        return moduleRepository.findByName(name);
+    }
 }

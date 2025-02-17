@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import de.starwit.persistence.entity.ActionTypeEntity;
+import de.starwit.persistence.entity.ModuleEntity;
 
 /**
  * ActionType Repository class
@@ -16,4 +17,8 @@ public interface ActionTypeRepository extends JpaRepository<ActionTypeEntity, Lo
 
     @Query("SELECT e FROM ActionTypeEntity e WHERE ?1 in (SELECT r.id FROM e.decisionType r)")
     List<ActionTypeEntity> findByDecisionType(Long decisionTypeId);
+
+    public List<ActionTypeEntity> findByName(String name);
+
+    public List<ActionTypeEntity> findByModuleId(Long moduleId);
 }

@@ -41,6 +41,7 @@ public class ActionTypeEntity extends AbstractEntity<Long> {
     @ManyToMany(mappedBy = "actionType")
     private Set<DecisionTypeEntity> decisionType;
 
+    @JsonFilter("filterName")
     @ManyToOne
     @JoinColumn(name = "module_id")
     private ModuleEntity module;
@@ -93,6 +94,14 @@ public class ActionTypeEntity extends AbstractEntity<Long> {
 
     public void setDecisionType(Set<DecisionTypeEntity> decisionType) {
         this.decisionType = decisionType;
+    }
+
+    public ModuleEntity getModule() {
+        return module;
+    }
+
+    public void setModule(ModuleEntity module) {
+        this.module = module;
     }
 
 }
