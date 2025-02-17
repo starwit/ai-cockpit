@@ -77,6 +77,7 @@ const translationDeDE = {
     "error.apptemplate.notfound": "Die Vorlage konnte nicht gefunden werden.",
     "error.app.notfound": "Diese App konnte nicht gefunden werden.",
     "error.entity.notfound": "Dieses Element konnte nicht gefunden werden.",
+    "filters.tooltip": "Filter nach Datum und Status",
     "home.about": "Informationen über die Anwendung",
     "home.decisionTab.title.open": "Offen",
     "home.decisionTab.title.done": "Erledigt",

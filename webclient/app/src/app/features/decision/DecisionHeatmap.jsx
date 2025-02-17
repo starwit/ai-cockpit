@@ -1,23 +1,10 @@
-import React, {useState, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import DeckGL from '@deck.gl/react';
 import {HeatmapLayer} from '@deck.gl/aggregation-layers';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from '@deck.gl/geo-layers';
 import {BitmapLayer, ScatterplotLayer} from '@deck.gl/layers';
-import {
-    FormGroup,
-    FormControlLabel,
-    FormControl,
-    Checkbox,
-    Box,
-    Paper,
-    Typography,
-    InputLabel,
-    Select,
-    MenuItem,
-    Divider,
-    TextField
-} from '@mui/material';
+import {Box, Typography} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 
 const MAP_VIEW = new MapView({repeat: true});
@@ -30,28 +17,14 @@ const INITIAL_VIEW_STATE = {
     bearing: 0
 };
 
-const STATES = [
-    {id: 'NEW', name: 'NEW'},
-    {id: 'ACCEPTED', name: 'ACCEPTED'},
-    {id: 'REJECTED', name: 'REJECTED'}
-];
-
-const TIME_FILTERS = [
-    {value: -1, label: 'time.range.custom'},
-    {value: 0, label: 'time.range.allTime'},
-    {value: 1, label: 'time.range.lastHour'},
-    {value: 3, label: 'time.range.last3Hours'},
-    {value: 6, label: 'time.range.last6Hours'},
-    {value: 12, label: 'time.range.last12Hours'},
-    {value: 24, label: 'time.range.last24Hours'}
-];
-
-function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['all']}) {
+function DecisionHeatmap({
+    decisions = [],
+    onHover,
+    onClick,
+    selectedTypes = ['all'],
+    filters = {selectedStates: [], timeFilter: 0, startDate: '', endDate: ''}
+}) {
     const {t} = useTranslation();
-    const [selectedStates, setSelectedStates] = useState([]);
-    const [timeFilter, setTimeFilter] = useState(0);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
 
     const filteredDecisions = useMemo(() => {
         if (!Array.isArray(decisions) || decisions.length === 0) return [];
@@ -68,32 +41,31 @@ function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['al
             if (!typeMatch) return false;
 
             // Apply state filter
-            if (selectedStates.length > 0) {
-                // Default to 'NEW' state if not set
+            if (filters.selectedStates.length > 0) {
                 const decisionState = decision.state || 'NEW';
-                if (!selectedStates.includes(decisionState)) {
+                if (!filters.selectedStates.includes(decisionState)) {
                     return false;
                 }
             }
 
             // Apply time range filter
-            if (timeFilter === -1 && startDate && endDate) {
-                const start = new Date(startDate);
+            if (filters.timeFilter === -1 && filters.startDate && filters.endDate) {
+                const start = new Date(filters.startDate);
                 start.setHours(0, 0, 0, 0);
-                const end = new Date(endDate);
+                const end = new Date(filters.endDate);
                 end.setHours(23, 59, 59, 999);
                 const decisionTime = new Date(decision.acquisitionTime);
                 if (!(decisionTime >= start && decisionTime <= end)) return false;
-            } else if (timeFilter > 0) {
+            } else if (filters.timeFilter > 0) {
                 const cutoffTime = new Date();
-                cutoffTime.setHours(cutoffTime.getHours() - timeFilter);
+                cutoffTime.setHours(cutoffTime.getHours() - filters.timeFilter);
                 const decisionTime = new Date(decision.acquisitionTime);
                 if (!(decisionTime >= cutoffTime)) return false;
             }
 
             return true;
         });
-    }, [decisions, selectedTypes, selectedStates, timeFilter, startDate, endDate]);
+    }, [decisions, selectedTypes, filters]);
 
     function createBaseMapLayer() {
         return new TileLayer({
@@ -156,8 +128,8 @@ function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['al
             radiusMinPixels: 5,
             radiusMaxPixels: 100,
             lineWidthMinPixels: 1,
-            getPosition: decision => decision.position,
-            getRadius: decision => Math.sqrt(decision.decisions.length) * 5,
+            getPosition: d => d.position,
+            getRadius: d => Math.sqrt(d.decisions.length) * 5,
             getFillColor: [255, 140, 0, 180],
             getLineColor: [255, 140, 0],
             onHover: (info) => {
@@ -198,93 +170,13 @@ function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['al
                 bottom: 40,
                 zIndex: 1
             }}>
-                <Paper sx={{
-                    p: 2,
-                    maxWidth: 200,
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    boxShadow: 3,
-                    borderRadius: 2
+                <Typography variant="caption" sx={{
+                    bgcolor: 'background.paper',
+                    p: 1,
+                    borderRadius: 1
                 }}>
-                    <Typography variant="subtitle2" gutterBottom>
-                        {t('decision.state')}
-                    </Typography>
-                    <FormGroup row>
-                        {STATES.map(({id, name}) => (
-                            <FormControlLabel
-                                key={`state-label-${id}`}
-                                control={
-                                    <Checkbox
-                                        key={`state-checkbox-${id}`}
-                                        checked={selectedStates.includes(name)}
-                                        onChange={(e) => {
-                                            if (e.target.checked) {
-                                                setSelectedStates([...selectedStates, name]);
-                                            } else {
-                                                setSelectedStates(selectedStates.filter(s => s !== name));
-                                            }
-                                        }}
-                                        size="small"
-                                    />
-                                }
-                                label={t(`decision.state.${name.toLowerCase()}`)}
-                            />
-                        ))}
-                    </FormGroup>
-
-                    <Divider sx={{marginY: 2}} />
-
-                    <Box sx={{marginTop: 2}}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel>{t('time.range')}</InputLabel>
-                            <Select
-                                value={timeFilter}
-                                onChange={(e) => {
-                                    setTimeFilter(e.target.value);
-                                    if (e.target.value !== -1) {
-                                        setStartDate('');
-                                        setEndDate('');
-                                    }
-                                }}
-                                label={t('time.range')}
-                            >
-                                {TIME_FILTERS.map((filter) => (
-                                    <MenuItem key={filter.value} value={filter.value}>
-                                        {t(filter.label)}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Box>
-
-                    {timeFilter === -1 && (
-                        <Box sx={{mt: 2}}>
-                            <TextField
-                                type="date"
-                                label={t('time.range.start')}
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                size="small"
-                                fullWidth
-                                InputLabelProps={{shrink: true}}
-                                sx={{mb: 1}}
-                            />
-                            <TextField
-                                type="date"
-                                label={t('time.range.end')}
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                size="small"
-                                fullWidth
-                                InputLabelProps={{shrink: true}}
-                                inputProps={{min: startDate}}
-                            />
-                        </Box>
-                    )}
-
-                    <Typography variant="caption" sx={{marginTop: 1, display: 'block'}}>
-                        {t('decision.found', {count: filteredDecisions.length})}
-                    </Typography>
-                </Paper>
+                    {t('decision.found', {count: filteredDecisions.length})}
+                </Typography>
             </Box>
 
             <DeckGL
