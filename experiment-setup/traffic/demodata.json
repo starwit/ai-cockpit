@@ -1,13 +1,13 @@
 [
   {
     "acquisitionTime": "DATETIME",
-    "mediaUrl": "anomalies/accident01.mp4",
+    "mediaUrl": "anomalies/accnameent01.mp4",
     "cameraLatitude": 39.95841772807577,
     "cameraLongitude": -86.12682180111628,
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "accnameent"
+      "name": "accnameent"
     },
     "action": []
   },
@@ -19,19 +19,19 @@
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "dangerous driving behaviour"
+      "name": "dangerous driving behaviour"
     },
     "action": []
   },
   {
     "acquisitionTime": "DATETIME",
-    "mediaUrl": "anomalies/accident02.mp4",
+    "mediaUrl": "anomalies/accnameent02.mp4",
     "cameraLatitude": 39.95841772807577,
     "cameraLongitude": -86.12682180111628,
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "accnameent"
+      "name": "accnameent"
     },
     "action": []
   },
@@ -43,7 +43,7 @@
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "dangerous driving behaviour"
+      "name": "dangerous driving behaviour"
     },
     "action": []
   },
@@ -55,19 +55,19 @@
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "dangerous driving behaviour"
+      "name": "dangerous driving behaviour"
     },
     "action": []
   },
   {
     "acquisitionTime": "DATETIME",
-    "mediaUrl": "anomalies/accident02.mp4",
+    "mediaUrl": "anomalies/accnameent02.mp4",
     "cameraLatitude": 39.95841772807577,
     "cameraLongitude": -86.12682180111628,
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "disabled vehicle"
+      "name": "disabled vehicle"
     },
     "action": []
   },
@@ -79,7 +79,7 @@
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "traffic jam"
+      "name": "traffic jam"
     },
     "action": []
   },
@@ -91,7 +91,7 @@
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "dangerous driving behaviour"
+      "name": "dangerous driving behaviour"
     },
     "action": []
   },
@@ -103,7 +103,7 @@
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "disabled vehicle"
+      "name": "disabled vehicle"
     },
     "action": []
   },
@@ -115,7 +115,7 @@
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "first responder ops"
+      "name": "first responder ops"
     },
     "action": []
   },
@@ -127,7 +127,7 @@
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "helpless person"
+      "name": "helpless person"
     },
     "action": []
   },
@@ -139,7 +139,7 @@
     "state": "NEW",
     "description": null,
     "decisionType": {
-      "id": "traffic jam"
+      "name": "traffic jam"
     },
     "action": []
   }
