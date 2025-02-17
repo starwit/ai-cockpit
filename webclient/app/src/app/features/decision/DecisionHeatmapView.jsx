@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Box, IconButton} from '@mui/material';
+import {IconButton} from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import DecisionRest from '../../services/DecisionRest';
@@ -35,7 +35,7 @@ function DecisionHeatmapView() {
     }, []);
 
     function reloadDecisions() {
-        decisionRest.findAllOpen().then(response => {
+        decisionRest.findAll().then(response => {
             if (response.data) {
                 setDecisions(response.data);
             }
@@ -123,9 +123,10 @@ function DecisionHeatmapView() {
                 decisionTypes={decisionTypes}
             />
             <DecisionHeatmap
+                decisions={decisions}
                 onHover={info => {
                     if (info.object) {
-                        setHoveredDecisions(info.object[1]);
+                        setHoveredDecisions(info.object);
                     }
                 }}
                 onClick={handleOpenDecision}
