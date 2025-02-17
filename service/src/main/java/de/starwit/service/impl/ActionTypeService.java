@@ -1,6 +1,7 @@
 package de.starwit.service.impl;
 
 import de.starwit.persistence.entity.ActionTypeEntity;
+import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import jakarta.validation.Valid;
 
@@ -68,5 +69,9 @@ public class ActionTypeService
 
     public List<ActionTypeEntity> findByDecisionType(Long decisionTypeId) {
         return actiontypeRepository.findByDecisionType(decisionTypeId);
+    }
+
+    public List<ActionTypeEntity> findByName(String name) {
+        return actiontypeRepository.findByName(name);
     }
 }
