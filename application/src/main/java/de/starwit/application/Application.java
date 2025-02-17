@@ -29,6 +29,7 @@ public class Application {
         ObjectMapper mapper = new ObjectMapper();
 
         SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+        filterProvider.addFilter("filterName", SimpleBeanPropertyFilter.filterOutAllExcept("name"));
         filterProvider.addFilter("filterId", SimpleBeanPropertyFilter.filterOutAllExcept("id"));
         filterProvider.addFilter("filterIdName", SimpleBeanPropertyFilter.filterOutAllExcept("id", "name", "title"));
         mapper.setFilterProvider(filterProvider);
