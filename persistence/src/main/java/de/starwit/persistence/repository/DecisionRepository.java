@@ -16,7 +16,7 @@ import java.util.List;
 public interface DecisionRepository extends JpaRepository<DecisionEntity, Long> {
     List<DecisionEntity> findByState(DecisionState state);
 
-    List<DecisionEntity> findByModule(ModuleEntity module);
+    List<DecisionEntity> findByModuleId(Long moduleId);
 
-    List<DecisionEntity> findByModuleAndState(ModuleEntity module, DecisionState state);
+    List<DecisionEntity> findByModuleIdAndState(Long moduleId, DecisionState state);
 }

@@ -83,12 +83,12 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         return decisionRepository.findByState(DecisionState.NEW);
     }
 
-    public List<DecisionEntity> findAllOpenDecisionsByModule(ModuleEntity module) {
-        return decisionRepository.findByModuleAndState(module, DecisionState.NEW);
+    public List<DecisionEntity> findAllOpenDecisionsByModule(Long moduleId) {
+        return decisionRepository.findByModuleIdAndState(moduleId, DecisionState.NEW);
     }
 
-    public List<DecisionEntity> findAllByModule(ModuleEntity module) {
-        return decisionRepository.findByModule(module);
+    public List<DecisionEntity> findAllByModule(Long moduleId) {
+        return decisionRepository.findByModuleId(moduleId);
     }
 
     public DecisionService(EntityManager entityManager) {

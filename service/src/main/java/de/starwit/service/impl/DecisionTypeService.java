@@ -72,8 +72,8 @@ public class DecisionTypeService
         return decisiontypeRepository.findByName(name);
     }
 
-    public List<DecisionTypeEntity> findByModule(ModuleEntity module) {
-        return decisiontypeRepository.findByModule(module);
+    public List<DecisionTypeEntity> findByModule(Long moduleId) {
+        return decisiontypeRepository.findByModuleId(moduleId);
     }
 
 }
