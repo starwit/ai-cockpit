@@ -4,7 +4,7 @@
         "description": "Notify the police about the decision",
         "executionPolicy": "WITHCHECK",
         "module": {
-            "name": "traffic"
+            "name": "Anomaly Detection"
         },
         "action": []
     },
@@ -13,7 +13,7 @@
         "description": "Notify emergency services like ambulances or fire departments",
         "executionPolicy": "MANUAL",
         "module": {
-            "name": "traffic"
+            "name": "Anomaly Detection"
         },
         "action": []
     },
@@ -22,7 +22,7 @@
         "description": "Notify public platforms or apps about the decision",
         "executionPolicy": "AUTOMATIC",
         "module": {
-            "name": "traffic"
+            "name": "Anomaly Detection"
         },
         "action": []
     },
@@ -31,7 +31,7 @@
         "description": "Issue an infrastructure to X message",
         "executionPolicy": "WITHCHECK",
         "module": {
-            "name": "traffic"
+            "name": "Anomaly Detection"
         },
         "action": []
     },
@@ -40,7 +40,7 @@
         "description": "Get disabled vehicles or obstacles removed",
         "executionPolicy": "AUTOMATIC",
         "module": {
-            "name": "traffic"
+            "name": "Anomaly Detection"
         },
         "action": []
     }

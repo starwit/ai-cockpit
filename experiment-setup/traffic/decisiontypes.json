@@ -4,7 +4,7 @@
         "description": "A road user involving reckless or unsafe driving behavior",
         "decision": [],
         "module": {
-            "name": "traffic"
+            "name": "Anomaly Detection"
         },
         "actionType": [
             {
@@ -16,11 +16,11 @@
         ]
     },
     {
-        "name": "accnameent",
+        "name": "accident",
         "description": "A decision involving a collision or crash between vehicles or other obstacles",
         "decision": [],
         "module": {
-            "name": "traffic"
+            "name": "Anomaly Detection"
         },
         "actionType": [
             {
@@ -42,7 +42,7 @@
         "description": "A situation where traffic is congested and vehicles are moving slowly or not at all",
         "decision": [],
         "module": {
-            "name": "traffic"
+            "name": "Anomaly Detection"
         },
         "actionType": [
             {

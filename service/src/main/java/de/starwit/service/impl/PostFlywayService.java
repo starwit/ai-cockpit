@@ -42,7 +42,7 @@ public class PostFlywayService {
     @Value("${scenario.importFolder:/scenariodata/traffic/}")
     private String scenarioImportFolder;
 
-    @Value("${default.module.name:traffic}")
+    @Value("${default.module.name:Anomaly Detection}")
     private String defaultModuleName;
 
     private String mititgationTypeFileName = "actiontypes.json";
