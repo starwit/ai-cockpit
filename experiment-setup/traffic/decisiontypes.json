@@ -16,7 +16,7 @@
         ]
     },
     {
-        "name": "accnameent",
+        "name": "accident",
         "description": "A decision involving a collision or crash between vehicles or other obstacles",
         "decision": [],
         "module": {
