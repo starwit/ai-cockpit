@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionTypeEntity;
+import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import jakarta.annotation.PostConstruct;
@@ -40,6 +42,9 @@ public class PostFlywayService {
     @Value("${scenario.importFolder:/scenariodata/traffic/}")
     private String scenarioImportFolder;
 
+    @Value("${default.module.name:Anomaly Detection}")
+    private String defaultModuleName;
+
     private String mititgationTypeFileName = "actiontypes.json";
 
     private String decisionTypeFileName = "decisiontypes.json";
@@ -54,6 +59,9 @@ public class PostFlywayService {
 
     @Autowired
     private DecisionService decisionService;
+
+    @Autowired
+    private ModuleService moduleService;
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
@@ -83,6 +91,7 @@ public class PostFlywayService {
                     List<ActionTypeEntity> actionTypes = mapper.readValue(file,
                             new TypeReference<List<ActionTypeEntity>>() {
                             });
+                    processEntitiesWithModule(actionTypes , moduleService, this.defaultModuleName);
                     actionRepository.saveAll(actionTypes);
                 } catch (IOException e) {
                     LOG.error("Can't parse action types, aborting import " + e.getMessage());
@@ -107,6 +116,21 @@ public class PostFlywayService {
                     List<DecisionTypeEntity> decisionTypes = mapper.readValue(file,
                             new TypeReference<List<DecisionTypeEntity>>() {
                             });
+
+                    for (DecisionTypeEntity decisionTypeEntity : decisionTypes) {
+                        Set<ActionTypeEntity> actionTypes = new java.util.HashSet<ActionTypeEntity>();
+                        decisionTypeEntity.getActionType().forEach(actionType -> {
+                            List<ActionTypeEntity> foundactionTypes = actionRepository.findByName(actionType.getName());
+                            if (!foundactionTypes.isEmpty() || foundactionTypes.get(0).getName().equals(actionType.getName())) {
+                                actionTypes.add(foundactionTypes.get(0));
+                            } else {
+                                LOG.error("Could not found actionType with the name " + actionType.getName());
+                            }
+                        });
+                        decisionTypeEntity.setActionType(actionTypes);
+                    }
+                    
+                    processEntitiesWithModule(decisionTypes , moduleService, this.defaultModuleName);
                     decisionTypeRepository.saveAll(decisionTypes);
                 } catch (IOException e) {
                     LOG.error("Can't parse Decision types, aborting import " + e.getMessage());
@@ -152,6 +176,33 @@ public class PostFlywayService {
             LOG.warn("Demo data file not found. Skipping import.");
         }
         return false;
+    }
+
+    // Entity muss getModule() und setModule() haben
+    public static <T> void processEntitiesWithModule(List<T> entities, ModuleService moduleService, String defaultModuleName) {
+        for (T entity : entities) {
+            try {
+                
+                ModuleEntity module = (ModuleEntity) entity.getClass().getMethod("getModule").invoke(entity);
+
+                if (module == null || module.getName() == null) {
+                    module = new ModuleEntity();
+                    module.setName(defaultModuleName);
+                    entity.getClass().getMethod("setModule", ModuleEntity.class).invoke(entity, module);
+                }
+
+                List<ModuleEntity> list = moduleService.findByName(module.getName());
+                if (list.isEmpty() || !list.get(0).getName().equals(module.getName())) {
+                    module = moduleService.saveOrUpdate(module);
+                    entity.getClass().getMethod("setModule", ModuleEntity.class).invoke(entity, module);
+                }else {
+                    module = list.get(0);
+                    entity.getClass().getMethod("setModule", ModuleEntity.class).invoke(entity, module);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Error processing entity: " + entity, e);
+            }
+        }
     }
 
 }

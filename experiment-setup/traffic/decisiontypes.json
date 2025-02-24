@@ -3,12 +3,15 @@
         "name": "dangerous driving behaviour",
         "description": "A road user involving reckless or unsafe driving behavior",
         "decision": [],
+        "module": {
+            "name": "Anomaly Detection"
+        },
         "actionType": [
             {
-                "id": 1
+                "name": "notify police"
             },
             {
-                "id": 4
+                "name": "I2X notification"
             }
         ]
     },
@@ -16,18 +19,21 @@
         "name": "accident",
         "description": "A decision involving a collision or crash between vehicles or other obstacles",
         "decision": [],
+        "module": {
+            "name": "Anomaly Detection"
+        },
         "actionType": [
             {
-                "id": 2
+                "name": "notify emergency services"
             },
             {
-                "id": 3
+                "name": "notify public alarm services"
             },
             {
-                "id": 1
+                "name": "notify police"
             },
             {
-                "id": 5
+                "name": "notify towing service"
             }
         ]
     },
@@ -35,15 +41,18 @@
         "name": "traffic jam",
         "description": "A situation where traffic is congested and vehicles are moving slowly or not at all",
         "decision": [],
+        "module": {
+            "name": "Anomaly Detection"
+        },
         "actionType": [
             {
-                "id": 3
+                "name": "notify public alarm services"
             },
             {
-                "id": 1
+                "name": "notify police"
             },
             {
-                "id": 4
+                "name": "I2X notification"
             }
         ]
     },
@@ -53,13 +62,13 @@
         "decision": [],
         "actionType": [
             {
-                "id": 1
+                "name": "notify police"
             },
             {
-                "id": 5
+                "name": "notify towing service"
             },
             {
-                "id": 4
+                "name": "I2X notification"
             }
         ]
     },
@@ -69,13 +78,13 @@
         "decision": [],
         "actionType": [
             {
-                "id": 2
+                "name": "notify emergency services"
             },
             {
-                "id": 3
+                "name": "notify public alarm services"
             },
             {
-                "id": 1
+                "name": "notify police"
             }
         ]
     },
@@ -85,10 +94,10 @@
         "decision": [],
         "actionType": [
             {
-                "id": 3
+                "name": "notify public alarm services"
             },
             {
-                "id": 4
+                "name": "I2X notification"
             }
         ]
     }
