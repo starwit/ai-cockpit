@@ -74,4 +74,8 @@ public class ActionTypeService
     public List<ActionTypeEntity> findByName(String name) {
         return actiontypeRepository.findByName(name);
     }
+
+    public List<ActionTypeEntity> findByModule(Long moduleId) {
+        return actiontypeRepository.findByModuleId(moduleId);
+    }
 }

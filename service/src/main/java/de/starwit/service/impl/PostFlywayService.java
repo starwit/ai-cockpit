@@ -165,6 +165,13 @@ public class PostFlywayService {
                         new TypeReference<List<DecisionEntity>>() {
                         });
                 for (DecisionEntity entity : decisionTypes) {
+                    List<DecisionTypeEntity> foundDecisionTypes = decisionTypeRepository.findByName(entity.getDecisionType().getName());
+                            if (!foundDecisionTypes.isEmpty() || foundDecisionTypes.get(0).getName().equals(entity.getDecisionType().getName())) {
+                                entity.setDecisionType(foundDecisionTypes.get(0));
+                                entity.setModule(foundDecisionTypes.get(0).getModule());
+                            } else {
+                                LOG.error("Could not found decisionType with the name " + entity.getDecisionType().getName());
+                            }
                     decisionService.createDecisionEntitywithAction(entity);
                 }
 
