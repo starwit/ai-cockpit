@@ -97,6 +97,26 @@ function DecisionHeatmapView({filters}) {
         }
     }
 
+    function renderDialog() {
+        if (!dialogOpen) {
+            return null;
+        }
+        return (
+            <DecisionDetail
+                open={dialogOpen}
+                handleClose={handleClose}
+                handleSave={handleSave}
+                handleNext={handleNext}
+                handleBefore={handleBefore}
+                rowData={rowData}
+                automaticNext={automaticNext}
+                toggleAutomaticNext={toggleAutomaticNext}
+                data={selectedDecisions}
+                showMap={false}
+            />
+        );
+    }
+
     return (
         <>
             <DecisionTypeFilter
@@ -131,20 +151,7 @@ function DecisionHeatmapView({filters}) {
                 show={showPanel}
                 decisions={hoveredDecisions}
             />
-            {dialogOpen && (
-                <DecisionDetail
-                    open={dialogOpen}
-                    handleClose={handleClose}
-                    handleSave={handleSave}
-                    handleNext={handleNext}
-                    handleBefore={handleBefore}
-                    rowData={rowData}
-                    automaticNext={automaticNext}
-                    toggleAutomaticNext={toggleAutomaticNext}
-                    data={selectedDecisions}
-                    showMap={false}
-                />
-            )}
+            {renderDialog()}
         </>
     );
 }

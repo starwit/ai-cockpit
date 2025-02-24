@@ -172,7 +172,7 @@ function DecisionHeatmap({
             }}>
                 <Typography variant="caption" sx={{
                     bgcolor: 'background.paper',
-                    p: 1,
+                    padding: 1,
                     borderRadius: 1
                 }}>
                     {t('decision.found', {count: filteredDecisions.length})}
