@@ -76,6 +76,7 @@ const translationEnEN = {
     "error.apptemplate.notfound": "The Template could not be found.",
     "error.app.notfound": "This App could not be found.",
     "error.entity.notfound": "This element could not be found.",
+    "filters.tooltip": "Filter by date and state",
     "home.about": "Information about the Application",
     "home.decisionTab.title.open": "Open",
     "home.decisionTab.title.done": "Done",
