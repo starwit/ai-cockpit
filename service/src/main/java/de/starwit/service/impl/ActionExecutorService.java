@@ -1,5 +1,6 @@
 package de.starwit.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionState;
+import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.ExecutionPolicy;
 
 @Service
@@ -40,15 +42,19 @@ public class ActionExecutorService {
             for (ActionEntity action : actions) {
                 ExecutionPolicy executionPolicy = action.getActionType().getExecutionPolicy();
                 if (executionPolicy.allow(action)) {
-                    action.setMetadata("| *** "
-                            + action.getDecision().getDecisionType().getName()
-                            + " * "
-                            + action.getActionType().getName()
-                            + " *** |");
+                    generateActionMetadata(action);
                     sendAction(action);
                 }
             }
         }
+    }
+
+    private void generateActionMetadata(ActionEntity action) {
+        action.setMetadata("| *** "
+                + action.getDecision().getDecisionType().getName()
+                + " * "
+                + action.getActionType().getName()
+                + " *** |");
     }
 
     @Async
@@ -60,14 +66,20 @@ public class ActionExecutorService {
     public void sendAction(ActionEntity actionEntity) {
         String endpoint = actionEntity.getActionType().getEndpoint();
         String requestContent = actionEntity.getMetadata();
+        DecisionEntity decision = actionEntity.getDecision();
         LOG.info("Sending action request to remote URI " + endpoint);
         LOG.debug("Request body: " + requestContent);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
 
         try {
-            if (endpoint != null && endpoint.length() > 4) {
-                RequestEntity<Void> requestEntity = RequestEntity.get(endpoint + "/" + requestContent).build();
+            if (endpoint != null && endpoint.length() > 4 && decision != null) {
+                BigDecimal lat = actionEntity.getDecision().getCameraLatitude();
+                BigDecimal lng = actionEntity.getDecision().getCameraLongitude();
+                endpoint = endpoint.replace("{coordinates}", lat + "/" + lng);
+                endpoint = endpoint.replace("{name}", actionEntity.getActionType().getName());
+                endpoint = endpoint.replace("{decisiontype}", actionEntity.getDecision().getDecisionType().getName());
+                RequestEntity<Void> requestEntity = RequestEntity.get(endpoint).build();
                 ResponseEntity<byte[]> response = restTemplate.exchange(requestEntity, byte[].class);
 
                 if (response.getStatusCode().is2xxSuccessful()) {
