@@ -78,6 +78,7 @@ public class ActionExecutorService {
                 BigDecimal lng = actionEntity.getDecision().getCameraLongitude();
                 endpoint = endpoint.replace("{coordinates}", lat + "/" + lng);
                 endpoint = endpoint.replace("{name}", actionEntity.getActionType().getName());
+                endpoint = endpoint.replace("{decisiontype}", actionEntity.getDecision().getDecisionType().getName());
                 RequestEntity<Void> requestEntity = RequestEntity.get(endpoint).build();
                 ResponseEntity<byte[]> response = restTemplate.exchange(requestEntity, byte[].class);
 
