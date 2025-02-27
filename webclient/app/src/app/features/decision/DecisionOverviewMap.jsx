@@ -1,6 +1,6 @@
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState, useMemo, useRef} from 'react';
 import {
     BitmapLayer,
     ScatterplotLayer,
@@ -18,7 +18,7 @@ import DecisionTypeFilter from './DecisionTypeFilter';
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
 
-// Set initial map position and zoom level
+// Set initial map position and zoom level (will be used only on first render)
 const INITIAL_VIEW_STATE = {
     longitude: -86.13470,     // Initial longitude (X coordinate)
     latitude: 39.91,      // Initial latitude (Y coordinate)
@@ -38,6 +38,79 @@ function DecisionOverviewMap({filters}) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = useState({});
     const [automaticNext, setAutomaticNext] = useState(false);
+
+    // Adding a state for ViewState and ref DeckGL
+    const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
+    const deckRef = useRef(null);
+    const isFirstLoad = useRef(true);
+
+    // Function to calculate bounds based on decision coordinates
+    function calculateBounds(filteredDecisions) {
+        if (!filteredDecisions || filteredDecisions.length === 0) {
+            return null;
+        }
+
+        let minLng = Infinity;
+        let maxLng = -Infinity;
+        let minLat = Infinity;
+        let maxLat = -Infinity;
+
+        // Find minimum and maximum coordinate values
+        filteredDecisions.forEach(decision => {
+            if (decision.cameraLatitude && decision.cameraLongitude) {
+                minLng = Math.min(minLng, decision.cameraLongitude);
+                maxLng = Math.max(maxLng, decision.cameraLongitude);
+                minLat = Math.min(minLat, decision.cameraLatitude);
+                maxLat = Math.max(maxLat, decision.cameraLatitude);
+            }
+        });
+
+        // If no valid coordinates were found
+        if (minLng === Infinity || minLat === Infinity) {
+            return null;
+        }
+
+        // Add some padding around the bounds
+        const padding = 0.1; // ~10% padding
+        const lngDiff = maxLng - minLng;
+        const latDiff = maxLat - minLat;
+
+        return {
+            west: minLng - lngDiff * padding,
+            east: maxLng + lngDiff * padding,
+            south: minLat - latDiff * padding,
+            north: maxLat + latDiff * padding
+        };
+    }
+
+    // Function to convert bounds to viewState
+    function boundsToViewState(bounds) {
+        if (!bounds) {
+            return INITIAL_VIEW_STATE;
+        }
+
+        const {west, east, south, north} = bounds;
+
+        // Calculate map center
+        const longitude = (west + east) / 2;
+        const latitude = (south + north) / 2;
+
+        // Approximate zoom calculation based on the area size
+        const lngDiff = east - west;
+        const latDiff = north - south;
+        const maxDiff = Math.max(lngDiff, latDiff);
+
+        // Formula for approximate zoom calculation
+        const zoom = Math.floor(Math.log2(360 / maxDiff)) - 1;
+
+        return {
+            longitude,
+            latitude,
+            zoom: Math.min(Math.max(zoom, 3), 18), // Limit zoom between 3 and 18
+            pitch: 0,
+            bearing: 0
+        };
+    }
 
     // Filter decisions based on selected filters
     const filteredDecisions = useMemo(() => {
@@ -73,6 +146,16 @@ function DecisionOverviewMap({filters}) {
             return true;
         });
     }, [decisions, selectedType, filters]);
+
+    // Effect to update viewState when filtered data changes
+    useEffect(() => {
+        if (filteredDecisions.length > 0 && isFirstLoad.current) {
+            const bounds = calculateBounds(filteredDecisions);
+            const newViewState = boundsToViewState(bounds);
+            setViewState(newViewState);
+            isFirstLoad.current = false;
+        }
+    }, [filteredDecisions]);
 
     // This grouping is necessary to combine multiple decisions that occur at the same location
     const groupedDecisions = useMemo(() => {
@@ -126,7 +209,12 @@ function DecisionOverviewMap({filters}) {
     const layers = [
         // Creating base map layer using OpenStreetMap theme
         new TileLayer({
-            data: "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            // Use CORS-Friendly image tiles from OpenStreetMap
+            data: "https://tile.openstreetmap.de/{z}/{x}/{y}.png",
+            loadOptions: {
+                mode: 'cors',
+                credentials: 'same-origin',
+            },
             minZoom: 0,     // Minimum zoom level
             maxZoom: 19,    // Maximum zoom level
             tileSize: 256,  // Size of each map tile
@@ -248,6 +336,26 @@ function DecisionOverviewMap({filters}) {
         }
     }
 
+    function renderDialog() {
+        if (!dialogOpen) {
+            return null;
+        }
+        return (
+            <DecisionDetail
+                open={dialogOpen}
+                handleClose={handleClose}
+                handleSave={handleSave}
+                handleNext={handleNext}
+                handleBefore={handleBefore}
+                rowData={rowData}
+                automaticNext={automaticNext}
+                toggleAutomaticNext={toggleAutomaticNext}
+                data={selectedDecisions}
+                showMap={false}
+            />
+        );
+    }
+
     return (
         <>
             <DecisionTypeFilter
@@ -256,9 +364,10 @@ function DecisionOverviewMap({filters}) {
                 decisionTypes={decisionTypes}
             />
             <DeckGL
+                ref={deckRef}
                 layers={layers}
                 views={MAP_VIEW}
-                initialViewState={INITIAL_VIEW_STATE}
+                initialViewState={viewState}
                 controller={{dragRotate: false}}
             />
 
@@ -278,20 +387,7 @@ function DecisionOverviewMap({filters}) {
                 show={showPanel}
                 decisions={hoveredDecisions}
             />
-            {dialogOpen && (
-                <DecisionDetail
-                    open={dialogOpen}
-                    handleClose={handleClose}
-                    handleSave={handleSave}
-                    handleNext={handleNext}
-                    handleBefore={handleBefore}
-                    rowData={rowData}
-                    automaticNext={automaticNext}
-                    toggleAutomaticNext={toggleAutomaticNext}
-                    data={selectedDecisions}
-                    showMap={false}
-                />
-            )}
+            {renderDialog()}
         </>
     );
 }
