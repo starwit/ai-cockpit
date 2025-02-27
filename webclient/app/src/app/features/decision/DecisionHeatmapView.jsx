@@ -8,7 +8,7 @@ import DecisionDetail from './DecisionDetail';
 import DecisionTypeFilter from './DecisionTypeFilter';
 import DecisionHeatmap from './DecisionHeatmap';
 
-function DecisionHeatmapView() {
+function DecisionHeatmapView({filters}) {
     const [selectedType, setSelectedType] = useState(['all']);
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null);
@@ -44,9 +44,9 @@ function DecisionHeatmapView() {
 
     function handleOpenDecision(pickingInfo) {
         if (pickingInfo.object) {
-            setSelectedDecisions(pickingInfo.object[1]);
+            setSelectedDecisions(pickingInfo.object);
             setDialogOpen(true);
-            setRowData(pickingInfo.object[1][0]);
+            setRowData(pickingInfo.object[0]);
         }
     }
 
@@ -78,12 +78,14 @@ function DecisionHeatmapView() {
 
     function handleSave(actionTypes, decisionType, description, state) {
         const foundDecision = selectedDecisions.find(value => value.id === rowData.id);
+        const actionTypeIds = actionTypes.map(actionType => actionType['id']);
+
         if (foundDecision) {
             foundDecision.decisionType = decisionType;
             foundDecision.description = description;
             foundDecision.state = state;
 
-            decisionRest.update(foundDecision).then(() => {
+            decisionRest.updateWithActions(foundDecision, actionTypeIds).then(() => {
                 if (automaticNext) {
                     handleNext(selectedDecisions, selectedDecisions.findIndex(value => value.id === rowData.id));
                 } else {
@@ -130,7 +132,8 @@ function DecisionHeatmapView() {
                     }
                 }}
                 onClick={handleOpenDecision}
-                selectedTypes={selectedType}  // Pass the selectedType state
+                selectedTypes={selectedType}
+                filters={filters}
             />
             <IconButton
                 onClick={() => setShowPanel(!showPanel)}
