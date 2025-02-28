@@ -1,6 +1,6 @@
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 
 import {
     BitmapLayer,
@@ -26,6 +26,12 @@ const MAP_VIEW = new MapView({repeat: true});
 function DecisionOverviewMap() {
     // Add state to store decisions
     const [selectedType, setSelectedType] = useState(['all']);
+    // New state for state and time filters
+    const [selectedStates, setSelectedStates] = useState([]);
+    const [timeFilter, setTimeFilter] = useState(0);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
@@ -34,15 +40,6 @@ function DecisionOverviewMap() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
-
-    const groupedDecisions = groupDecisionsByLocation();
-
-    const layers = [
-        createBaseMapLayer(),
-        createDecisionPointsLayer(groupedDecisions),
-        createTextLayer(groupedDecisions)
-
-    ];
 
     // Set initial map position and zoom level
     const INITIAL_VIEW_STATE = {
@@ -76,25 +73,61 @@ function DecisionOverviewMap() {
             }
         });
     }
+
+    // Decision filtering function
+    const filteredDecisions = useMemo(() => {
+        return decisions.filter(decision => {
+            // Basic validation
+            if (!decision || !decision.cameraLatitude || !decision.cameraLongitude) {
+                return false;
+            }
+
+            // Type filter
+            const typeMatch = selectedType.includes('all') ||
+                (decision.decisionType && selectedType.includes(decision.decisionType.name));
+            if (!typeMatch) return false;
+
+            // State filter
+            if (selectedStates.length > 0) {
+                // Default to 'NEW' state if not set
+                const decisionState = decision.state || 'NEW';
+                if (!selectedStates.includes(decisionState)) {
+                    return false;
+                }
+            }
+
+            // Time filter
+            if (timeFilter === -1 && startDate && endDate) {
+                const start = new Date(startDate);
+                start.setHours(0, 0, 0, 0);
+                const end = new Date(endDate);
+                end.setHours(23, 59, 59, 999);
+                const decisionTime = new Date(decision.acquisitionTime);
+                if (!(decisionTime >= start && decisionTime <= end)) return false;
+            } else if (timeFilter > 0) {
+                const cutoffTime = new Date();
+                cutoffTime.setHours(cutoffTime.getHours() - timeFilter);
+                const decisionTime = new Date(decision.acquisitionTime);
+                if (!(decisionTime >= cutoffTime)) return false;
+            }
+
+            return true;
+        });
+    }, [decisions, selectedType, selectedStates, timeFilter, startDate, endDate]);
+
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
-        return decisions
-            .filter(decision => decision && (
-                selectedType.includes('all') ||
-                (decision.decisionType && selectedType.includes(decision.decisionType.name))
-            ))
-            .reduce((locationGroups, decision) => {
-                if (decision.cameraLatitude && decision.cameraLongitude) {
-                    const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
-                    if (!locationGroups[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
-                        locationGroups[key] = [];
-                    }
-                    locationGroups[key].push(decision);    // Add the current decision to the array for this location
-                }
-                return locationGroups;
-            }, {});
+        return filteredDecisions.reduce((locationGroups, decision) => {
+            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;
+            if (!locationGroups[key]) {
+                locationGroups[key] = [];
+            }
+            locationGroups[key].push(decision);
+            return locationGroups;
+        }, {});
     }
 
+    const groupedDecisions = groupDecisionsByLocation();
 
     function getIconColor(decisionCount) {
         if (decisionCount > 5) {
@@ -200,6 +233,14 @@ function DecisionOverviewMap() {
     }
     /////////////////////////////////////////////////////////////////////////////
 
+    const layers = useMemo(() => {
+        return [
+            createBaseMapLayer(),
+            createDecisionPointsLayer(groupedDecisions),
+            createTextLayer(groupedDecisions)
+        ];
+    }, [groupedDecisions]);
+
     function renderDialog() {
         if (!dialogOpen) {
             return null;
@@ -271,6 +312,16 @@ function DecisionOverviewMap() {
                 selectedType={selectedType}
                 onTypeChange={setSelectedType}
                 decisionTypes={decisionTypes}
+                // Новые props для фильтров
+                selectedStates={selectedStates}
+                onStateChange={setSelectedStates}
+                timeFilter={timeFilter}
+                onTimeFilterChange={setTimeFilter}
+                startDate={startDate}
+                onStartDateChange={setStartDate}
+                endDate={endDate}
+                onEndDateChange={setEndDate}
+                filteredCount={filteredDecisions.length}
             />
             <DeckGL
                 layers={layers}               // Add map layers
