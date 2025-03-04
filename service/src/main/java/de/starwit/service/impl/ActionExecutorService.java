@@ -19,6 +19,7 @@ import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionState;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.ExecutionPolicy;
+import de.starwit.service.Automation;
 
 @Service
 public class ActionExecutorService {
@@ -28,6 +29,9 @@ public class ActionExecutorService {
 
     @Autowired
     private ActionService actionService;
+
+    @Autowired
+    private Automation automation;
 
     static final Logger LOG = LoggerFactory.getLogger(ActionExecutorService.class);
 
@@ -40,10 +44,12 @@ public class ActionExecutorService {
     private void executeActions(List<ActionEntity> actions) {
         if (actions != null && !actions.isEmpty()) {
             for (ActionEntity action : actions) {
-                ExecutionPolicy executionPolicy = action.getActionType().getExecutionPolicy();
-                if (executionPolicy.allow(action)) {
-                    generateActionMetadata(action);
-                    sendAction(action);
+                if (automation.getExecutionPolicy().allow(action)) {
+                    ExecutionPolicy executionPolicy = action.getActionType().getExecutionPolicy();
+                    if (executionPolicy.allow(action)) {
+                        generateActionMetadata(action);
+                        sendAction(action);
+                    }
                 }
             }
         }
