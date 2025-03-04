@@ -239,10 +239,8 @@ docker compose up
 
 AI Cockpit is composed by a number of components. The following diagram shows, how those components are working together.
 
-We are using an unified interface described [here](https://github.com/KI-Cockpit/ai-cockpit-api/blob/main/doc/domain-model.md#simplified-model)
+![composition](./docs/imgs/Service-Composition-Architecture.drawio.svg)
 
 ### Data Model
 
-AI Cockpit needs a data model to collect system decisions and their resulting actions. The following class diagram shows the core data model.
-
-![architecture](./docs/imgs/architecture.drawio.svg)
+AI Cockpit needs a data model to collect system decisions and their resulting actions. We are using an unified interface described [here](https://github.com/KI-Cockpit/ai-cockpit-api/blob/main/doc/domain-model.md#simplified-model)
