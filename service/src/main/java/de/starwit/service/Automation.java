@@ -1,5 +1,6 @@
 package de.starwit.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.ApplicationScope;
 
@@ -9,7 +10,8 @@ import de.starwit.persistence.entity.ExecutionPolicy;
 @Component
 public class Automation {
 
-    private ExecutionPolicy executionPolicy = ExecutionPolicy.AUTOMATIC;
+    @Value("${atomation:AUTOMATIC}")
+    private ExecutionPolicy executionPolicy;
 
     public ExecutionPolicy getExecutionPolicy() {
         return executionPolicy;
