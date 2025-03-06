@@ -1,23 +1,14 @@
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
 import React, {useEffect, useState} from 'react';
-
-import {
-    BitmapLayer,
-    ScatterplotLayer,
-    TextLayer
-} from "@deck.gl/layers";
-
+import {BitmapLayer, ScatterplotLayer, TextLayer} from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
-
 import {IconButton} from '@mui/material';
-
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DecisionDetail from './DecisionDetail';
 import DecisionResultPanel from './DecisionResultPanel';
-
 import DecisionTypeFilter from './DecisionTypeFilter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
@@ -41,7 +32,6 @@ function DecisionOverviewMap() {
         createBaseMapLayer(),
         createDecisionPointsLayer(groupedDecisions),
         createTextLayer(groupedDecisions)
-
     ];
 
     // Set initial map position and zoom level
@@ -64,11 +54,11 @@ function DecisionOverviewMap() {
 
     useEffect(() => {
         reloadDecisions();
-        const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
+        const interval = setInterval(reloadDecisions, 5000); // Update every 5 seconds
         return () => clearInterval(interval);
     }, []);
 
-    //Load Decisions
+    // Load Decisions
     function reloadDecisions() {
         decisionRest.findAll().then(response => {
             if (response.data) {
@@ -76,6 +66,7 @@ function DecisionOverviewMap() {
             }
         });
     }
+
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
         return decisions
@@ -85,16 +76,18 @@ function DecisionOverviewMap() {
             ))
             .reduce((locationGroups, decision) => {
                 if (decision.cameraLatitude && decision.cameraLongitude) {
-                    const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;   // Create a unique key using the camera coordinates. For example: "39.78-86.15"
-                    if (!locationGroups[key]) {    // If this is the first decision at these coordinates, initialize an empty array for this location
+                    // Group by coordinates rounded to 4 decimal places
+                    const lat = parseFloat(decision.cameraLatitude).toFixed(4);
+                    const lng = parseFloat(decision.cameraLongitude).toFixed(4);
+                    const key = `${lat}-${lng}`;
+                    if (!locationGroups[key]) {
                         locationGroups[key] = [];
                     }
-                    locationGroups[key].push(decision);    // Add the current decision to the array for this location
+                    locationGroups[key].push(decision);
                 }
                 return locationGroups;
             }, {});
     }
-
 
     function getIconColor(decisionCount) {
         if (decisionCount > 5) {
@@ -105,8 +98,6 @@ function DecisionOverviewMap() {
             return [0, 128, 0, 255] // Green - default
         }
     }
-
-    /////////////////////////////////////////////////////////////////////////////
 
     // Define map layers
     function createBaseMapLayer() {
@@ -132,7 +123,7 @@ function DecisionOverviewMap() {
                     bounds: [west, south, east, north]
                 });
             }
-        })
+        });
     }
 
     function createDecisionPointsLayer(groupedDecisions) {
@@ -147,9 +138,9 @@ function DecisionOverviewMap() {
             filled: true,       // Fill icons with color
 
             // Size settings for markers
-            radiusScale: 15,
+            radiusScale: 10, // Reduced scale
             radiusMinPixels: 5,
-            radiusMaxPixels: 100,
+            radiusMaxPixels: 30, // Maximum size
             lineWidthMinPixels: 1,
 
             // Function to determine icon position
@@ -158,7 +149,8 @@ function DecisionOverviewMap() {
                 decision[1][0].cameraLongitude,
                 decision[1][0].cameraLatitude
             ],
-            getRadius: decision => Math.sqrt(decision[1].length) * 5,
+            // Smooth radius increase with a limit
+            getRadius: decision => Math.min(Math.sqrt(decision[1].length) * 4, 30),
             getFillColor: decision => getIconColor(decision[1].length),
             getLineColor: [0, 0, 0, 255],
             onHover: info => {
@@ -169,7 +161,7 @@ function DecisionOverviewMap() {
             onClick: pickingInfo => {
                 handleOpenDecision(pickingInfo)
             }
-        })
+        });
     }
 
     function handleOpenDecision(pickingInfo) {
@@ -180,7 +172,7 @@ function DecisionOverviewMap() {
         }
     }
 
-    function createTextLayer() {
+    function createTextLayer(groupedDecisions) {
         return new TextLayer({
             id: 'text-layer',
             data: Object.entries(groupedDecisions),      // Using Object.entries to convert the grouped object to array of [key, value] pairs.
@@ -195,10 +187,8 @@ function DecisionOverviewMap() {
             getTextAnchor: 'middle',
             getAlignmentBaseline: 'center',
             getColor: [255, 255, 255]
-        })
-
+        });
     }
-    /////////////////////////////////////////////////////////////////////////////
 
     function renderDialog() {
         if (!dialogOpen) {
@@ -238,7 +228,7 @@ function DecisionOverviewMap() {
 
     function handleClose() {
         setDialogOpen(false);
-    };
+    }
 
     function toggleAutomaticNext() {
         setAutomaticNext(!automaticNext);
@@ -262,7 +252,7 @@ function DecisionOverviewMap() {
         } else {
             setDialogOpen(false);
         }
-    };
+    }
 
     // Return the map component with minimum required styles
     return (
