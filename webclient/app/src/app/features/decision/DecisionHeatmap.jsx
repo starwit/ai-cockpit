@@ -183,7 +183,7 @@ function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['al
             data: points,
             pickable: true,
             visible: true,
-            opacity: 0.1,
+            opacity: 0.01,
             stroked: true,
             filled: true,
             radiusScale: 15,
