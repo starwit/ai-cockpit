@@ -133,7 +133,7 @@ function DecisionOverviewMap() {
         const maxDiff = Math.max(lngDiff, latDiff);
 
         // Formula for approximate zoom calculation
-        const zoom = Math.floor(Math.log2(360 / maxDiff)) - 1;
+        const zoom = Math.floor(Math.log2(360 / maxDiff)) - 0.1;
 
         return {
             longitude,
