@@ -54,6 +54,8 @@ public class DecisionServiceTest {
     @Autowired
     private DecisionTypeService decisionTypeService;
 
+    private static long decisionId;
+
     @Test
     @Commit
     @Order(1)
@@ -85,7 +87,7 @@ public class DecisionServiceTest {
     void testCreateNewDecisionWithActionsMessage() {
 
         // prepare
-        long timestamp = 1633046400000L;
+        long timestamp = 1633046400001L;
         IncidentMessage decisionMessage = mock(IncidentMessage.class);
         when(decisionMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
         when(decisionMessage.getTimestampUtcMs()).thenReturn(timestamp);
@@ -103,15 +105,17 @@ public class DecisionServiceTest {
         assertEquals(2, result.getAction().size());
         ActionEntity action = result.getAction().iterator().next();
         assertTrue(expectedDateTime.isEqual(action.getCreationTime()));
+
+        decisionId = result.getId();
     }
 
     @Test
     @Commit
-    @Order(5)
+    @Order(3)
     void testCreateNewDecisionWithGeoLocation() {
 
         // prepare
-        long timestamp = 1633046400000L;
+        long timestamp = 1633046400002L;
         IncidentMessage decisionMessage = mock(IncidentMessage.class);
         when(decisionMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
         when(decisionMessage.getTimestampUtcMs()).thenReturn(timestamp);
@@ -130,7 +134,7 @@ public class DecisionServiceTest {
 
     @Test
     @Commit
-    @Order(3)
+    @Order(4)
     void testCreateNewDecisionWithActions() {
 
         // prepare
@@ -151,11 +155,12 @@ public class DecisionServiceTest {
         assertEquals(2, result.getAction().size());
         ActionEntity action = result.getAction().iterator().next();
         assertTrue(expectedDateTime.isEqual(action.getCreationTime()));
+
     }
 
     @Test
     @Commit
-    @Order(4)
+    @Order(5)
     void testUpdateDecisionWithActions() {
 
         // prepare
@@ -165,7 +170,7 @@ public class DecisionServiceTest {
         actionType.setExecutionPolicy(ExecutionPolicy.WITHCHECK);
         actionType = actionTypeRepository.save(actionType);
 
-        DecisionEntity decision = decisionService.findAll().get(0);
+        DecisionEntity decision = decisionService.findById(decisionId);
         Set<ActionEntity> actions = decision.getAction();
 
         decision.setState(DecisionState.ACCEPTED);
