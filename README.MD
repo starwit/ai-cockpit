@@ -20,7 +20,7 @@ The following components and tools are necessary to build & run AICockpit in you
 
 * Java JDK 21 or later
 * Maven 3
-* NodeJs (16.9.1) and NPM (8.3.2) - [NodeJS Install](https://nodejs.org/en/download/package-manager/)
+* Node (22) and NPM (11) - [NodeJS Install](https://nodejs.org/en/download/package-manager/)
 * Postgres (available for development via docker-compose scripts)
 * using Keycloak is optional
 
@@ -243,6 +243,4 @@ AI Cockpit is composed by a number of components. The following diagram shows, h
 
 ### Data Model
 
-AI Cockpit needs a data model to collect system decisions and their resulting actions. The following class diagram shows the core data model.
-
-![architecture](./docs/imgs/architecture.drawio.svg)
+AI Cockpit needs a data model to collect system decisions and their resulting actions. We are using an unified interface described [here](https://github.com/KI-Cockpit/ai-cockpit-api/blob/main/doc/domain-model.md#simplified-model)

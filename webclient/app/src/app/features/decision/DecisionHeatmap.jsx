@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import {useTranslation} from 'react-i18next';
 
+
 const MAP_VIEW = new MapView({repeat: true});
 
 const INITIAL_VIEW_STATE = {
@@ -21,7 +22,18 @@ const INITIAL_VIEW_STATE = {
     bearing: 0
 };
 
-function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['all']}) {
+function DecisionHeatmap({
+    decisions = [],
+    onHover,
+    onClick,
+    selectedTypes = ['all'],
+    // Filters from the DecisionTypeFilter component
+    selectedStates = [],
+    timeFilter = 0,
+    startDate = '',
+    endDate = ''
+}) {
+  
     const {t} = useTranslation();
 
     // State for viewState and DeckGL ref
