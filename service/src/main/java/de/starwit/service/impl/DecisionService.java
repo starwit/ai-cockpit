@@ -93,7 +93,7 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         ZonedDateTime dateTime = Instant.ofEpochMilli(decisionMessage.getTimestampUtcMs())
                 .atZone(ZoneId.systemDefault());
         entity.setAcquisitionTime(dateTime);
-        if (decisionMessage.hasCameraLocation()) {
+        if (!decisionMessage.hasCameraLocation()) {
             entity.setCameraLatitude(new BigDecimal(decisionMessage.getCameraLocation().getLatitude()));
             entity.setCameraLongitude(new BigDecimal(decisionMessage.getCameraLocation().getLongitude()));
         }
