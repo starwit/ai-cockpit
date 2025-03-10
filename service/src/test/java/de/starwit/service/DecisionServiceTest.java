@@ -3,6 +3,7 @@ package de.starwit.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -30,6 +31,7 @@ import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import de.starwit.service.impl.DecisionService;
 import de.starwit.service.impl.DecisionTypeService;
+import de.starwit.visionapi.Common.GeoCoordinate;
 import de.starwit.visionapi.Reporting.IncidentMessage;
 
 @Import(TestServiceConfiguration.class)
@@ -51,6 +53,8 @@ public class DecisionServiceTest {
 
     @Autowired
     private DecisionTypeService decisionTypeService;
+
+    private static long decisionId;
 
     @Test
     @Commit
@@ -83,7 +87,7 @@ public class DecisionServiceTest {
     void testCreateNewDecisionWithActionsMessage() {
 
         // prepare
-        long timestamp = 1633046400000L;
+        long timestamp = 1633046400001L;
         IncidentMessage decisionMessage = mock(IncidentMessage.class);
         when(decisionMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
         when(decisionMessage.getTimestampUtcMs()).thenReturn(timestamp);
@@ -101,11 +105,36 @@ public class DecisionServiceTest {
         assertEquals(2, result.getAction().size());
         ActionEntity action = result.getAction().iterator().next();
         assertTrue(expectedDateTime.isEqual(action.getCreationTime()));
+
+        decisionId = result.getId();
     }
 
     @Test
     @Commit
     @Order(3)
+    void testCreateNewDecisionWithGeoLocation() {
+
+        // prepare
+        long timestamp = 1633046400002L;
+        IncidentMessage decisionMessage = mock(IncidentMessage.class);
+        when(decisionMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
+        when(decisionMessage.getTimestampUtcMs()).thenReturn(timestamp);
+        when(decisionMessage.getCameraLocation()).thenReturn(mock(GeoCoordinate.class));
+        when(decisionMessage.getCameraLocation().getLatitude()).thenReturn(38.97);
+        when(decisionMessage.getCameraLocation().getLongitude()).thenReturn(40.78);
+
+        // Call Methode
+        DecisionEntity result = decisionService
+                .createNewDecisionBasedOnIncidentMessage(decisionMessage);
+
+        // Assert
+        assertEquals(new BigDecimal(38.97), result.getCameraLatitude());
+        assertEquals(new BigDecimal(40.78), result.getCameraLongitude());
+    }
+
+    @Test
+    @Commit
+    @Order(4)
     void testCreateNewDecisionWithActions() {
 
         // prepare
@@ -126,11 +155,12 @@ public class DecisionServiceTest {
         assertEquals(2, result.getAction().size());
         ActionEntity action = result.getAction().iterator().next();
         assertTrue(expectedDateTime.isEqual(action.getCreationTime()));
+
     }
 
     @Test
     @Commit
-    @Order(4)
+    @Order(5)
     void testUpdateDecisionWithActions() {
 
         // prepare
@@ -140,7 +170,7 @@ public class DecisionServiceTest {
         actionType.setExecutionPolicy(ExecutionPolicy.WITHCHECK);
         actionType = actionTypeRepository.save(actionType);
 
-        DecisionEntity decision = decisionService.findAll().get(0);
+        DecisionEntity decision = decisionService.findById(decisionId);
         Set<ActionEntity> actions = decision.getAction();
 
         decision.setState(DecisionState.ACCEPTED);
