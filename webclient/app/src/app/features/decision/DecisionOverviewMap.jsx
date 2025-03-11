@@ -1,6 +1,6 @@
-import {MapView} from '@deck.gl/core';
-import {TileLayer} from "@deck.gl/geo-layers";
-import React, {useEffect, useState, useRef, useMemo} from 'react';
+import { MapView } from '@deck.gl/core';
+import { TileLayer } from "@deck.gl/geo-layers";
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import {
     BitmapLayer,
     ScatterplotLayer,
@@ -8,7 +8,7 @@ import {
 } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
-import {IconButton} from '@mui/material';
+import { IconButton } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DecisionDetail from './DecisionDetail';
@@ -16,7 +16,7 @@ import DecisionResultPanel from './DecisionResultPanel';
 import DecisionTypeFilter from './DecisionTypeFilter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
-const MAP_VIEW = new MapView({repeat: true});
+const MAP_VIEW = new MapView({ repeat: true });
 
 // Initial map state (will be used only if there's no data)
 const INITIAL_VIEW_STATE = {
@@ -131,7 +131,7 @@ function DecisionOverviewMap() {
             return INITIAL_VIEW_STATE;
         }
 
-        const {west, east, south, north} = bounds;
+        const { west, east, south, north } = bounds;
 
         // Calculate map center
         const longitude = (west + east) / 2;
@@ -163,12 +163,6 @@ function DecisionOverviewMap() {
             isFirstLoad.current = false;
         }
     }, [groupedDecisions]);
-
-    const layers = useMemo(() => [
-        createBaseMapLayer(),
-        createDecisionPointsLayer(groupedDecisions),
-        createTextLayer(groupedDecisions)
-    ], [groupedDecisions]);
 
     useEffect(() => {
         reloadDecisions();
@@ -238,8 +232,6 @@ function DecisionOverviewMap() {
         }, {});
     }
 
-    const groupedDecisions = groupDecisionsByLocation();
-
     function getIconColor(decisionCount) {
         if (decisionCount > 5) {
             return [255, 0, 0, 255]; // Red
@@ -268,7 +260,7 @@ function DecisionOverviewMap() {
             renderSubLayers: props => {
                 // Get geographical boundaries of the current tile
                 const {
-                    bbox: {west, south, east, north}
+                    bbox: { west, south, east, north }
                 } = props.tile;
 
                 // Create image layer for the tile
@@ -345,13 +337,11 @@ function DecisionOverviewMap() {
         });
     }
 
-    const layers = useMemo(() => {
-        return [
-            createBaseMapLayer(),
-            createDecisionPointsLayer(groupedDecisions),
-            createTextLayer(groupedDecisions)
-        ];
-    }, [groupedDecisions]);
+    const layers = useMemo(() => [
+        createBaseMapLayer(),
+        createDecisionPointsLayer(groupedDecisions),
+        createTextLayer(groupedDecisions)
+    ], [groupedDecisions]);
 
     function renderDialog() {
         if (!dialogOpen) {
@@ -440,7 +430,7 @@ function DecisionOverviewMap() {
                 layers={layers}               // Add map layers
                 views={MAP_VIEW}              // Add map view settings
                 initialViewState={viewState}  // Set initial position
-                controller={{dragRotate: false}}       // Disable rotation
+                controller={{ dragRotate: false }}       // Disable rotation
             />
 
             <IconButton
