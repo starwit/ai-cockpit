@@ -1,7 +1,6 @@
 package de.starwit.service;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -88,9 +87,10 @@ public class DecisionServiceTest {
 
         // prepare
         long timestamp = 1633046400001L;
-        IncidentMessage decisionMessage = mock(IncidentMessage.class);
-        when(decisionMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
-        when(decisionMessage.getTimestampUtcMs()).thenReturn(timestamp);
+        IncidentMessage decisionMessage = IncidentMessage.newBuilder()
+                .setMediaUrl("http://testurl.com/media")
+                .setTimestampUtcMs(timestamp)
+                .build();
 
         // Call Methode
         DecisionEntity result = decisionService
@@ -116,12 +116,15 @@ public class DecisionServiceTest {
 
         // prepare
         long timestamp = 1633046400002L;
-        IncidentMessage decisionMessage = mock(IncidentMessage.class);
-        when(decisionMessage.getMediaUrl()).thenReturn("http://testurl.com/media");
-        when(decisionMessage.getTimestampUtcMs()).thenReturn(timestamp);
-        when(decisionMessage.getCameraLocation()).thenReturn(mock(GeoCoordinate.class));
-        when(decisionMessage.getCameraLocation().getLatitude()).thenReturn(38.97);
-        when(decisionMessage.getCameraLocation().getLongitude()).thenReturn(40.78);
+        GeoCoordinate coordinates = GeoCoordinate.newBuilder()
+                .setLatitude(38.97)
+                .setLongitude(40.78)
+                .build();
+        IncidentMessage decisionMessage = IncidentMessage.newBuilder()
+                .setMediaUrl("http://testurl.com/media")
+                .setTimestampUtcMs(timestamp)
+                .setCameraLocation(coordinates)
+                .build();
 
         // Call Methode
         DecisionEntity result = decisionService
