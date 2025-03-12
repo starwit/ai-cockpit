@@ -34,7 +34,7 @@ function CockpitAppBar() {
                             color="inherit"
                             href="./"
                             aria-label="menu"
-                            sx={{m: 0, p: 0, mr: 2}}
+                            sx={{margin: 0, padding: 0, marginRight: 2}}
                         >
                             <img src={DynamicLogo} height={40} alt="KI-Cockpit" />
                         </IconButton>
