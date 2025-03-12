@@ -1,4 +1,4 @@
-import {AppBar, createTheme} from "@mui/material";
+import {createTheme} from "@mui/material";
 import ColorTheme from "./ColorTheme";
 
 const ComponentTheme = createTheme(ColorTheme,
