@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## refs/tags/0.2.6 (2025-03-10)
+
+### Features
+
+-  added automation switch ([0d92e](https://github.com/starwit/ai-cockpit/commit/0d92eed06948e56) Anett Hübner)  
+
 ## refs/tags/0.2.3 (2025-02-12)
 
 ### Features

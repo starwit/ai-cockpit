@@ -4,6 +4,7 @@ const ColorTheme = createTheme({
     palette: {
         type: "light",
         primary: {
+            //main: "#f48326",
             main: "#07437F",
             contrastText: "#fff"
         },
@@ -23,7 +24,7 @@ const ColorTheme = createTheme({
         },
         secondary: {
             main: "#eee",
-            contrastText: "#e93e3a"
+            contrastText: "#f48326"
         },
         background: {
             default: "#fefefe",
@@ -42,19 +43,18 @@ const ColorTheme = createTheme({
 
     typography: {
         useNextVariants: true,
-        fontFamily: "Lato, sans-serif",
+        fontFamily: "Arial, sans-serif",
         fontSize: 16,
         body1: {},
         body2: {},
         h1: {
-            fontSize: "2rem",
+            fontSize: "32px",
             fontWeight: 400,
-            textTransform: "uppercase"
         },
         h2: {
-            fontSize: "1.7rem",
+            fontSize: "1.4em",
             fontWeight: 400,
-            textTransform: "uppercase"
+            textTransform: ""
         },
         h3: {
             fontSize: "1.7rem",

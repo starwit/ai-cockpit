@@ -1,7 +1,12 @@
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
-import React, {useEffect, useState} from 'react';
-import {BitmapLayer, ScatterplotLayer, TextLayer} from "@deck.gl/layers";
+import React, {useEffect, useState, useMemo} from 'react';
+import {
+    BitmapLayer,
+    ScatterplotLayer,
+    TextLayer
+} from "@deck.gl/layers";
+
 import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
 import {IconButton} from '@mui/material';
@@ -17,6 +22,12 @@ const MAP_VIEW = new MapView({repeat: true});
 function DecisionOverviewMap() {
     // Add state to store decisions
     const [selectedType, setSelectedType] = useState(['all']);
+    // New state for state and time filters
+    const [selectedStates, setSelectedStates] = useState([]);
+    const [timeFilter, setTimeFilter] = useState(0);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
     const decisionRest = new DecisionRest();
@@ -25,7 +36,6 @@ function DecisionOverviewMap() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
-
     const groupedDecisions = groupDecisionsByLocation();
 
     const layers = [
@@ -190,6 +200,14 @@ function DecisionOverviewMap() {
         });
     }
 
+    const layers = useMemo(() => {
+        return [
+            createBaseMapLayer(),
+            createDecisionPointsLayer(groupedDecisions),
+            createTextLayer(groupedDecisions)
+        ];
+    }, [groupedDecisions]);
+
     function renderDialog() {
         if (!dialogOpen) {
             return null;
@@ -261,6 +279,16 @@ function DecisionOverviewMap() {
                 selectedType={selectedType}
                 onTypeChange={setSelectedType}
                 decisionTypes={decisionTypes}
+                // Новые props для фильтров
+                selectedStates={selectedStates}
+                onStateChange={setSelectedStates}
+                timeFilter={timeFilter}
+                onTimeFilterChange={setTimeFilter}
+                startDate={startDate}
+                onStartDateChange={setStartDate}
+                endDate={endDate}
+                onEndDateChange={setEndDate}
+                filteredCount={filteredDecisions.length}
             />
             <DeckGL
                 layers={layers}               // Add map layers
