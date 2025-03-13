@@ -43,10 +43,11 @@ function DecisionHeatmapView() {
     }
 
     function handleOpenDecision(pickingInfo) {
-        if (pickingInfo.object) {
-            setSelectedDecisions(pickingInfo.object[1]);
+        if (pickingInfo.object && Array.isArray(pickingInfo.object) && pickingInfo.object.length > 0) {
+            // pickingInfo.object is an array of decisions 
+            setSelectedDecisions(pickingInfo.object);
             setDialogOpen(true);
-            setRowData(pickingInfo.object[1][0]);
+            setRowData(pickingInfo.object[0]);  // Take the first decision
         }
     }
 
