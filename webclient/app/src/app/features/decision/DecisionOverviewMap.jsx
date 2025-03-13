@@ -1,27 +1,31 @@
-import {MapView} from '@deck.gl/core';
-import {TileLayer} from "@deck.gl/geo-layers";
-import React, {useEffect, useState, useMemo} from 'react';
-
+import { MapView } from '@deck.gl/core';
+import { TileLayer } from "@deck.gl/geo-layers";
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import {
     BitmapLayer,
     ScatterplotLayer,
     TextLayer
 } from "@deck.gl/layers";
-
 import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
-
-import {IconButton} from '@mui/material';
-
+import { IconButton } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DecisionDetail from './DecisionDetail';
 import DecisionResultPanel from './DecisionResultPanel';
-
 import DecisionTypeFilter from './DecisionTypeFilter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
-const MAP_VIEW = new MapView({repeat: true});
+const MAP_VIEW = new MapView({ repeat: true });
+
+// Initial map state (will be used only if there's no data)
+const INITIAL_VIEW_STATE = {
+    longitude: -86.13470,     // Initial longitude (X coordinate)
+    latitude: 39.91,      // Initial latitude (Y coordinate)
+    zoom: 10,            // Initial zoom level
+    pitch: 0,           // No tilt
+    bearing: 0          // No rotation
+};
 
 function DecisionOverviewMap() {
     // Add state to store decisions
@@ -41,31 +45,132 @@ function DecisionOverviewMap() {
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
 
-    // Set initial map position and zoom level
-    const INITIAL_VIEW_STATE = {
-        longitude: -86.13470,     // Initial longitude (X coordinate)
-        latitude: 39.91,      // Initial latitude (Y coordinate)
-        zoom: 10,            // Initial zoom level
-        pitch: 0,           // No tilt
-        bearing: 0          // No rotation
-    };
+    // State for viewState and DeckGL ref
+    const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
+    const deckRef = useRef(null);
+    const isFirstLoad = useRef(true);
+
+    // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
+    const groupedDecisions = useMemo(() => {
+        return decisions
+            .filter(decision => decision && (
+                selectedType.includes('all') ||
+                (decision.decisionType && selectedType.includes(decision.decisionType.name))
+            ))
+            .reduce((locationGroups, decision) => {
+                if (decision.cameraLatitude && decision.cameraLongitude) {
+                    // Group by coordinates rounded to 4 decimal places
+                    const lat = parseFloat(decision.cameraLatitude).toFixed(4);
+                    const lng = parseFloat(decision.cameraLongitude).toFixed(4);
+                    const key = `${lat}-${lng}`;
+                    if (!locationGroups[key]) {
+                        locationGroups[key] = [];
+                    }
+                    locationGroups[key].push(decision);
+                }
+                return locationGroups;
+            }, {});
+    }, [decisions, selectedType]);
 
     // Filter decisions that have a type => retrieve type names => create Set to remove duplicates => convert Set back to an array
-    const decisionTypes = Array.from(
-        new Set(
-            decisions
-                .filter(decision => decision.decisionType?.name)
-                .map(decision => decision.decisionType.name)
-        )
-    );
+    const decisionTypes = useMemo(() => {
+        return Array.from(
+            new Set(
+                decisions
+                    .filter(decision => decision.decisionType?.name)
+                    .map(decision => decision.decisionType.name)
+            )
+        );
+    }, [decisions]);
+
+    // Function to calculate bounds based on marker coordinates
+    function calculateBounds(groupedDecisions) {
+        if (!groupedDecisions || Object.keys(groupedDecisions).length === 0) {
+            return null;
+        }
+
+        let minLng = Infinity;
+        let maxLng = -Infinity;
+        let minLat = Infinity;
+        let maxLat = -Infinity;
+
+        // Process all grouped decisions
+        Object.values(groupedDecisions).forEach(decisions => {
+            if (decisions.length > 0) {
+                const decision = decisions[0]; // Take first decision from group (all in group have same coordinates)
+                if (decision.cameraLatitude && decision.cameraLongitude) {
+                    minLng = Math.min(minLng, decision.cameraLongitude);
+                    maxLng = Math.max(maxLng, decision.cameraLongitude);
+                    minLat = Math.min(minLat, decision.cameraLatitude);
+                    maxLat = Math.max(maxLat, decision.cameraLatitude);
+                }
+            }
+        });
+
+        // If no valid coordinates found
+        if (minLng === Infinity || minLat === Infinity) {
+            return null;
+        }
+
+        // Add padding around edges
+        const padding = 0.1; // ~10% padding
+        const lngDiff = maxLng - minLng;
+        const latDiff = maxLat - minLat;
+
+        return {
+            west: minLng - lngDiff * padding,
+            east: maxLng + lngDiff * padding,
+            south: minLat - latDiff * padding,
+            north: maxLat + latDiff * padding
+        };
+    }
+
+    // Function to convert bounds to viewState
+    function boundsToViewState(bounds) {
+        if (!bounds) {
+            return INITIAL_VIEW_STATE;
+        }
+
+        const { west, east, south, north } = bounds;
+
+        // Calculate map center
+        const longitude = (west + east) / 2;
+        const latitude = (south + north) / 2;
+
+        // Calculate approximate zoom based on area size
+        const lngDiff = east - west;
+        const latDiff = north - south;
+        const maxDiff = Math.max(lngDiff, latDiff);
+
+        // Formula for approximate zoom calculation
+        const zoom = Math.floor(Math.log2(360 / maxDiff)) - 0.1;
+
+        return {
+            longitude,
+            latitude,
+            zoom: Math.min(Math.max(zoom, 3), 18), // Limit zoom between 3 and 18
+            pitch: 0,
+            bearing: 0
+        };
+    }
+
+    // Effect to update viewState when grouped data changes
+    useEffect(() => {
+        if (Object.keys(groupedDecisions).length > 0 && isFirstLoad.current) {
+            const bounds = calculateBounds(groupedDecisions);
+            const newViewState = boundsToViewState(bounds);
+            setViewState(newViewState);
+            isFirstLoad.current = false;
+        }
+    }, [groupedDecisions]);
 
     useEffect(() => {
         reloadDecisions();
-        const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
+        const interval = setInterval(reloadDecisions, 5000); // Update every 5 seconds
         return () => clearInterval(interval);
     }, []);
 
-    //Load Decisions
+    // Load Decisions
     function reloadDecisions() {
         decisionRest.findAll().then(response => {
             if (response.data) {
@@ -127,8 +232,6 @@ function DecisionOverviewMap() {
         }, {});
     }
 
-    const groupedDecisions = groupDecisionsByLocation();
-
     function getIconColor(decisionCount) {
         if (decisionCount > 5) {
             return [255, 0, 0, 255]; // Red
@@ -139,23 +242,25 @@ function DecisionOverviewMap() {
         }
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-
     // Define map layers
     function createBaseMapLayer() {
         // Creating base map layer using CartoDB light theme
         return new TileLayer({
             // URL for map tiles
-            data: "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            data: "https://tile.openstreetmap.de/{z}/{x}/{y}.png",
             minZoom: 0,     // Minimum zoom level
             maxZoom: 19,    // Maximum zoom level
             tileSize: 256,  // Size of each map tile
+            loadOptions: {
+                mode: 'cors',
+                credentials: 'same-origin',
+            },
 
             // Function to render each map tile
             renderSubLayers: props => {
                 // Get geographical boundaries of the current tile
                 const {
-                    bbox: {west, south, east, north}
+                    bbox: { west, south, east, north }
                 } = props.tile;
 
                 // Create image layer for the tile
@@ -165,7 +270,7 @@ function DecisionOverviewMap() {
                     bounds: [west, south, east, north]
                 });
             }
-        })
+        });
     }
 
     function createDecisionPointsLayer(groupedDecisions) {
@@ -180,9 +285,9 @@ function DecisionOverviewMap() {
             filled: true,       // Fill icons with color
 
             // Size settings for markers
-            radiusScale: 15,
+            radiusScale: 10, // Reduced scale
             radiusMinPixels: 5,
-            radiusMaxPixels: 100,
+            radiusMaxPixels: 30, // Maximum size
             lineWidthMinPixels: 1,
 
             // Function to determine icon position
@@ -191,7 +296,8 @@ function DecisionOverviewMap() {
                 decision[1][0].cameraLongitude,
                 decision[1][0].cameraLatitude
             ],
-            getRadius: decision => Math.sqrt(decision[1].length) * 5,
+            // Smooth radius increase with a limit
+            getRadius: decision => Math.min(Math.sqrt(decision[1].length) * 4, 30),
             getFillColor: decision => getIconColor(decision[1].length),
             getLineColor: [0, 0, 0, 255],
             onHover: info => {
@@ -202,7 +308,7 @@ function DecisionOverviewMap() {
             onClick: pickingInfo => {
                 handleOpenDecision(pickingInfo)
             }
-        })
+        });
     }
 
     function handleOpenDecision(pickingInfo) {
@@ -213,7 +319,7 @@ function DecisionOverviewMap() {
         }
     }
 
-    function createTextLayer() {
+    function createTextLayer(groupedDecisions) {
         return new TextLayer({
             id: 'text-layer',
             data: Object.entries(groupedDecisions),      // Using Object.entries to convert the grouped object to array of [key, value] pairs.
@@ -228,18 +334,14 @@ function DecisionOverviewMap() {
             getTextAnchor: 'middle',
             getAlignmentBaseline: 'center',
             getColor: [255, 255, 255]
-        })
-
+        });
     }
-    /////////////////////////////////////////////////////////////////////////////
 
-    const layers = useMemo(() => {
-        return [
-            createBaseMapLayer(),
-            createDecisionPointsLayer(groupedDecisions),
-            createTextLayer(groupedDecisions)
-        ];
-    }, [groupedDecisions]);
+    const layers = useMemo(() => [
+        createBaseMapLayer(),
+        createDecisionPointsLayer(groupedDecisions),
+        createTextLayer(groupedDecisions)
+    ], [groupedDecisions]);
 
     function renderDialog() {
         if (!dialogOpen) {
@@ -279,7 +381,7 @@ function DecisionOverviewMap() {
 
     function handleClose() {
         setDialogOpen(false);
-    };
+    }
 
     function toggleAutomaticNext() {
         setAutomaticNext(!automaticNext);
@@ -303,11 +405,11 @@ function DecisionOverviewMap() {
         } else {
             setDialogOpen(false);
         }
-    };
+    }
 
     // Return the map component with minimum required styles
     return (
-        <>
+        <div className="map-container">
             <DecisionTypeFilter
                 selectedType={selectedType}
                 onTypeChange={setSelectedType}
@@ -324,10 +426,11 @@ function DecisionOverviewMap() {
                 filteredCount={filteredDecisions.length}
             />
             <DeckGL
+                ref={deckRef}
                 layers={layers}               // Add map layers
                 views={MAP_VIEW}              // Add map view settings
-                initialViewState={INITIAL_VIEW_STATE}  // Set initial position
-                controller={{dragRotate: false}}       // Disable rotation
+                initialViewState={viewState}  // Set initial position
+                controller={{ dragRotate: false }}       // Disable rotation
             />
 
             <IconButton
@@ -347,7 +450,7 @@ function DecisionOverviewMap() {
                 decisions={hoveredDecisions}
             />
             {renderDialog()}
-        </>
+        </div>
     );
 }
 
