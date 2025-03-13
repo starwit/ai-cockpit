@@ -38,11 +38,13 @@ function DecisionOverviewMap() {
     const [automaticNext, setAutomaticNext] = React.useState(false);
     const groupedDecisions = groupDecisionsByLocation();
 
-    const layers = [
-        createBaseMapLayer(),
-        createDecisionPointsLayer(groupedDecisions),
-        createTextLayer(groupedDecisions)
-    ];
+    const layers = useMemo(() => {
+        return [
+            createBaseMapLayer(),
+            createDecisionPointsLayer(groupedDecisions),
+            createTextLayer(groupedDecisions)
+        ];
+    }, [groupedDecisions]);
 
     // Set initial map position and zoom level
     const INITIAL_VIEW_STATE = {
@@ -199,14 +201,6 @@ function DecisionOverviewMap() {
             getColor: [255, 255, 255]
         });
     }
-
-    const layers = useMemo(() => {
-        return [
-            createBaseMapLayer(),
-            createDecisionPointsLayer(groupedDecisions),
-            createTextLayer(groupedDecisions)
-        ];
-    }, [groupedDecisions]);
 
     function renderDialog() {
         if (!dialogOpen) {
