@@ -1,6 +1,6 @@
-import { MapView } from '@deck.gl/core';
-import { TileLayer } from "@deck.gl/geo-layers";
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import {MapView} from '@deck.gl/core';
+import {TileLayer} from "@deck.gl/geo-layers";
+import React, {useEffect, useState, useRef, useMemo} from 'react';
 import {
     BitmapLayer,
     ScatterplotLayer,
@@ -8,7 +8,7 @@ import {
 } from "@deck.gl/layers";
 import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
-import { IconButton } from '@mui/material';
+import {IconButton} from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DecisionDetail from './DecisionDetail';
@@ -44,6 +44,15 @@ function DecisionOverviewMap() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
+    const groupedDecisions = groupDecisionsByLocation();
+
+    const layers = useMemo(() => {
+        return [
+            createBaseMapLayer(),
+            createDecisionPointsLayer(groupedDecisions),
+            createTextLayer(groupedDecisions)
+        ];
+    }, [groupedDecisions]);
 
     // State for viewState and DeckGL ref
     const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
@@ -179,57 +188,26 @@ function DecisionOverviewMap() {
         });
     }
 
-    // Decision filtering function
-    const filteredDecisions = useMemo(() => {
-        return decisions.filter(decision => {
-            // Basic validation
-            if (!decision || !decision.cameraLatitude || !decision.cameraLongitude) {
-                return false;
-            }
-
-            // Type filter
-            const typeMatch = selectedType.includes('all') ||
-                (decision.decisionType && selectedType.includes(decision.decisionType.name));
-            if (!typeMatch) return false;
-
-            // State filter
-            if (selectedStates.length > 0) {
-                // Default to 'NEW' state if not set
-                const decisionState = decision.state || 'NEW';
-                if (!selectedStates.includes(decisionState)) {
-                    return false;
-                }
-            }
-
-            // Time filter
-            if (timeFilter === -1 && startDate && endDate) {
-                const start = new Date(startDate);
-                start.setHours(0, 0, 0, 0);
-                const end = new Date(endDate);
-                end.setHours(23, 59, 59, 999);
-                const decisionTime = new Date(decision.acquisitionTime);
-                if (!(decisionTime >= start && decisionTime <= end)) return false;
-            } else if (timeFilter > 0) {
-                const cutoffTime = new Date();
-                cutoffTime.setHours(cutoffTime.getHours() - timeFilter);
-                const decisionTime = new Date(decision.acquisitionTime);
-                if (!(decisionTime >= cutoffTime)) return false;
-            }
-
-            return true;
-        });
-    }, [decisions, selectedType, selectedStates, timeFilter, startDate, endDate]);
-
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
-        return filteredDecisions.reduce((locationGroups, decision) => {
-            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;
-            if (!locationGroups[key]) {
-                locationGroups[key] = [];
-            }
-            locationGroups[key].push(decision);
-            return locationGroups;
-        }, {});
+        return decisions
+            .filter(decision => decision && (
+                selectedType.includes('all') ||
+                (decision.decisionType && selectedType.includes(decision.decisionType.name))
+            ))
+            .reduce((locationGroups, decision) => {
+                if (decision.cameraLatitude && decision.cameraLongitude) {
+                    // Group by coordinates rounded to 4 decimal places
+                    const lat = parseFloat(decision.cameraLatitude).toFixed(4);
+                    const lng = parseFloat(decision.cameraLongitude).toFixed(4);
+                    const key = `${lat}-${lng}`;
+                    if (!locationGroups[key]) {
+                        locationGroups[key] = [];
+                    }
+                    locationGroups[key].push(decision);
+                }
+                return locationGroups;
+            }, {});
     }
 
     function getIconColor(decisionCount) {
@@ -337,12 +315,6 @@ function DecisionOverviewMap() {
         });
     }
 
-    const layers = useMemo(() => [
-        createBaseMapLayer(),
-        createDecisionPointsLayer(groupedDecisions),
-        createTextLayer(groupedDecisions)
-    ], [groupedDecisions]);
-
     function renderDialog() {
         if (!dialogOpen) {
             return null;
@@ -414,7 +386,6 @@ function DecisionOverviewMap() {
                 selectedType={selectedType}
                 onTypeChange={setSelectedType}
                 decisionTypes={decisionTypes}
-                // Новые props для фильтров
                 selectedStates={selectedStates}
                 onStateChange={setSelectedStates}
                 timeFilter={timeFilter}
