@@ -44,7 +44,6 @@ function DecisionOverviewMap() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
-    const groupedDecisions = groupDecisionsByLocation();
 
     const layers = useMemo(() => {
         return [
@@ -186,28 +185,6 @@ function DecisionOverviewMap() {
                 setDecisions(response.data);
             }
         });
-    }
-
-    // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
-    function groupDecisionsByLocation() {
-        return decisions
-            .filter(decision => decision && (
-                selectedType.includes('all') ||
-                (decision.decisionType && selectedType.includes(decision.decisionType.name))
-            ))
-            .reduce((locationGroups, decision) => {
-                if (decision.cameraLatitude && decision.cameraLongitude) {
-                    // Group by coordinates rounded to 4 decimal places
-                    const lat = parseFloat(decision.cameraLatitude).toFixed(4);
-                    const lng = parseFloat(decision.cameraLongitude).toFixed(4);
-                    const key = `${lat}-${lng}`;
-                    if (!locationGroups[key]) {
-                        locationGroups[key] = [];
-                    }
-                    locationGroups[key].push(decision);
-                }
-                return locationGroups;
-            }, {});
     }
 
     function getIconColor(decisionCount) {
