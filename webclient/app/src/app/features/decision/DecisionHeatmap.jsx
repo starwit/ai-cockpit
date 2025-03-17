@@ -237,33 +237,13 @@ function DecisionHeatmap({
     }, [filteredDecisions]);
 
     return (
-        <div className="heatmap-container">
-            <Box sx={{
-                position: 'absolute',
-                left: 20,
-                bottom: 40,
-                zIndex: 1
-            }}>
-                <Paper sx={{
-                    p: 2,
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    boxShadow: 3,
-                    borderRadius: 2
-                }}>
-                    <Typography variant="caption" sx={{display: 'block'}}>
-                        {t('decision.found', {count: filteredDecisions.length})}
-                    </Typography>
-                </Paper>
-            </Box>
-
-            <DeckGL
-                ref={deckRef}
-                layers={layers}
-                views={MAP_VIEW}
-                initialViewState={viewState}
-                controller={{dragRotate: false}}
-            />
-        </div>
+        <DeckGL
+            ref={deckRef}
+            layers={layers}
+            views={MAP_VIEW}
+            initialViewState={viewState}
+            controller={{dragRotate: false}}
+        />
     );
 }
 
