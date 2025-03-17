@@ -273,7 +273,6 @@ function DecisionOverviewMap() {
                 selectedType={selectedType}
                 onTypeChange={setSelectedType}
                 decisionTypes={decisionTypes}
-                // Новые props для фильтров
                 selectedStates={selectedStates}
                 onStateChange={setSelectedStates}
                 timeFilter={timeFilter}
