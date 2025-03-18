@@ -52,7 +52,7 @@ jobs:
       env:
          CI: false
          PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
-         MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
+         MAVEN_REPO_READ: ${{ secrets.VISION_MAVEN_READ_TOKEN }}
 
   checks:
     name: "Checks"
