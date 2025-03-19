@@ -1,5 +1,7 @@
 package de.starwit.persistence.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,8 @@ import java.util.List;
 @Repository
 public interface DecisionRepository extends JpaRepository<DecisionEntity, Long> {
     List<DecisionEntity> findByState(DecisionState state);
+
+    Page<DecisionEntity> findByStateIn(List<DecisionState> states, Pageable pageable);
+
+    Page<DecisionEntity> findByState(DecisionState state, Pageable pageable);
 }

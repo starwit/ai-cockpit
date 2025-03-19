@@ -17,5 +17,13 @@ class DecisionRest extends CrudRest {
     findAllOpen() {
         return axios.get(this.baseUrl + "/open");
     }
+
+    findAllOpenPaged(page, pageSize) {
+        return axios.get(this.baseUrl + `/openstate-paged?page=${page}&size=${pageSize}`);
+    }
+
+    findAllClosedPaged(page, pageSize) {
+        return axios.get(this.baseUrl + `/closedstate-paged?page=${page}&size=${pageSize}`);
+    }
 }
 export default DecisionRest;

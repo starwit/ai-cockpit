@@ -15,9 +15,15 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionState;
@@ -38,6 +44,7 @@ import io.minio.errors.InternalException;
 import io.minio.errors.InvalidResponseException;
 import io.minio.errors.ServerException;
 import io.minio.errors.XmlParserException;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityManager;
 
 /**
@@ -79,12 +86,21 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         return decisionRepository;
     }
 
+    public DecisionService(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
     public List<DecisionEntity> findAllOpenDecisions() {
         return decisionRepository.findByState(DecisionState.NEW);
     }
 
-    public DecisionService(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public Page<DecisionEntity> findAllClosedPaged(Pageable pageable) {
+        List<DecisionState> validStates = List.of(DecisionState.ACCEPTED, DecisionState.REJECTED);
+        return decisionRepository.findByStateIn(validStates, pageable);
+    }
+
+    public Page<DecisionEntity> findAllOpenPaged(Pageable pageable) {
+        return decisionRepository.findByState(DecisionState.NEW, pageable);
     }
 
     public DecisionEntity createNewDecisionBasedOnIncidentMessage(IncidentMessage decisionMessage) {

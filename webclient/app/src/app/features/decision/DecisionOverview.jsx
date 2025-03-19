@@ -32,6 +32,10 @@ function DecisionOverview() {
     const locale = i18n.language == "de" ? deDE : enUS
     const pageSize = 10;
 
+    const [loading, setLoading] = useState(false);
+    const [page, setPage] = useState(0);
+    const [rowCount, setRowCount] = useState(0);
+
 
     useEffect(() => {
         reloadDecisions();
