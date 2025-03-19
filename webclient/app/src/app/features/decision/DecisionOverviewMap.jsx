@@ -309,7 +309,6 @@ function DecisionOverviewMap() {
                 selectedType={selectedType}
                 onTypeChange={setSelectedType}
                 decisionTypes={decisionTypes}
-                // Props for filters
                 selectedStates={selectedStates}
                 onStateChange={setSelectedStates}
                 timeFilter={timeFilter}
