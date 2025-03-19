@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Bug Fixes
+
+-  action type null, delete actiontype, footer, jsonignore ([bd16f](https://github.com/starwit/ai-cockpit/commit/bd16f96325bdd42) Anett Hübner)  
+
 ## refs/tags/0.2.6 (2025-03-10)
 
 ### Features
