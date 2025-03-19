@@ -225,32 +225,29 @@ function DecisionOverview() {
 
             </Stack>
 
-
-            <Box sx={{width: "100%"}}>
-                <DataGrid
-                    columnVisibilityModel={columnVisibilityModel}
-                    onColumnVisibilityModelChange={(newModel) =>
-                        setColumnVisibilityModel(newModel)
+            <DataGrid
+                columnVisibilityModel={columnVisibilityModel}
+                onColumnVisibilityModelChange={(newModel) =>
+                    setColumnVisibilityModel(newModel)
+                }
+                localeText={locale.components.MuiDataGrid.defaultProps.localeText}
+                initialState={{
+                    sorting: {
+                        sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
+                    },
+                }}
+                rows={tab == 0 ? newDecisions : checkedDecisions}
+                columns={headers}
+                isCellEditable={() => {false}}
+                slots={{toolbar: GridToolbar}}
+                slotProps={{
+                    toolbar: {
+                        showQuickFilter: true,
+                        printOptions: {disableToolbarButton: false},
+                        csvOptions: {disableToolbarButton: false}
                     }
-                    localeText={locale.components.MuiDataGrid.defaultProps.localeText}
-                    initialState={{
-                        sorting: {
-                            sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
-                        },
-                    }}
-                    rows={tab == 0 ? newDecisions : checkedDecisions}
-                    columns={headers}
-                    isCellEditable={() => {false}}
-                    slots={{toolbar: GridToolbar}}
-                    slotProps={{
-                        toolbar: {
-                            showQuickFilter: true,
-                            printOptions: {disableToolbarButton: false},
-                            csvOptions: {disableToolbarButton: false}
-                        }
-                    }}
-                />
-            </Box>
+                }}
+            />
             {renderDialog()}
         </Container>
     );
