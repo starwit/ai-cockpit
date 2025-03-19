@@ -30,6 +30,7 @@ function DecisionOverview() {
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
     const locale = i18n.language == "de" ? deDE : enUS
+    const pageSize = 10;
 
 
     useEffect(() => {
@@ -153,7 +154,7 @@ function DecisionOverview() {
             headerName: t("decision.action"),
             description: "",
             disableExport: true,
-            renderCell: renderActions,
+            renderCell: params => renderActions(params),
             disableClickEventBubbling: true,
             flex: 1.5
         },
@@ -235,7 +236,13 @@ function DecisionOverview() {
                     sorting: {
                         sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
                     },
+                    pagination: {
+                        paginationModel: {
+                            pageSize: pageSize,
+                        },
+                    },
                 }}
+                pageSizeOptions={[pageSize, 25, 50, 100]}
                 rows={tab == 0 ? newDecisions : checkedDecisions}
                 columns={headers}
                 isCellEditable={() => {false}}
