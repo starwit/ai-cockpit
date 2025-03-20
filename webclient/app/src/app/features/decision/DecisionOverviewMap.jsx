@@ -1,7 +1,6 @@
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from "@deck.gl/geo-layers";
 import React, {useEffect, useState, useMemo} from 'react';
-
 import {
     BitmapLayer,
     ScatterplotLayer,
@@ -10,14 +9,11 @@ import {
 
 import DeckGL from "@deck.gl/react";
 import DecisionRest from '../../services/DecisionRest';
-
 import {IconButton} from '@mui/material';
-
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DecisionDetail from './DecisionDetail';
 import DecisionResultPanel from './DecisionResultPanel';
-
 import DecisionTypeFilter from './DecisionTypeFilter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
@@ -40,39 +36,6 @@ function DecisionOverviewMap() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
-
-    // Set initial map position and zoom level
-    const INITIAL_VIEW_STATE = {
-        longitude: -86.13470,     // Initial longitude (X coordinate)
-        latitude: 39.91,      // Initial latitude (Y coordinate)
-        zoom: 10,            // Initial zoom level
-        pitch: 0,           // No tilt
-        bearing: 0          // No rotation
-    };
-
-    // Filter decisions that have a type => retrieve type names => create Set to remove duplicates => convert Set back to an array
-    const decisionTypes = Array.from(
-        new Set(
-            decisions
-                .filter(decision => decision.decisionType?.name)
-                .map(decision => decision.decisionType.name)
-        )
-    );
-
-    useEffect(() => {
-        reloadDecisions();
-        const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
-        return () => clearInterval(interval);
-    }, []);
-
-    //Load Decisions
-    function reloadDecisions() {
-        decisionRest.findAll().then(response => {
-            if (response.data) {
-                setDecisions(response.data);
-            }
-        });
-    }
 
     // Decision filtering function
     const filteredDecisions = useMemo(() => {
@@ -115,19 +78,65 @@ function DecisionOverviewMap() {
         });
     }, [decisions, selectedType, selectedStates, timeFilter, startDate, endDate]);
 
+    const groupedDecisions = groupDecisionsByLocation();
+
+    const layers = useMemo(() => {
+        return [
+            createBaseMapLayer(),
+            createDecisionPointsLayer(groupedDecisions),
+            createTextLayer(groupedDecisions)
+        ];
+    }, [groupedDecisions]);
+
+    // Set initial map position and zoom level
+    const INITIAL_VIEW_STATE = {
+        longitude: -86.13470,     // Initial longitude (X coordinate)
+        latitude: 39.91,      // Initial latitude (Y coordinate)
+        zoom: 10,            // Initial zoom level
+        pitch: 0,           // No tilt
+        bearing: 0          // No rotation
+    };
+
+    // Filter decisions that have a type => retrieve type names => create Set to remove duplicates => convert Set back to an array
+    const decisionTypes = Array.from(
+        new Set(
+            decisions
+                .filter(decision => decision.decisionType?.name)
+                .map(decision => decision.decisionType.name)
+        )
+    );
+
+    useEffect(() => {
+        reloadDecisions();
+        const interval = setInterval(reloadDecisions, 5000); // Update every 5 seconds
+        return () => clearInterval(interval);
+    }, []);
+
+    // Load Decisions
+    function reloadDecisions() {
+        decisionRest.findAll().then(response => {
+            if (response.data) {
+                setDecisions(response.data);
+            }
+        });
+    }
+
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
     function groupDecisionsByLocation() {
         return filteredDecisions.reduce((locationGroups, decision) => {
-            const key = `${decision.cameraLatitude}-${decision.cameraLongitude}`;
-            if (!locationGroups[key]) {
-                locationGroups[key] = [];
+            if (decision.cameraLatitude && decision.cameraLongitude) {
+                // Group by coordinates rounded to 4 decimal places
+                const lat = parseFloat(decision.cameraLatitude).toFixed(4);
+                const lng = parseFloat(decision.cameraLongitude).toFixed(4);
+                const key = `${lat}-${lng}`;
+                if (!locationGroups[key]) {
+                    locationGroups[key] = [];
+                }
+                locationGroups[key].push(decision);
             }
-            locationGroups[key].push(decision);
             return locationGroups;
         }, {});
     }
-
-    const groupedDecisions = groupDecisionsByLocation();
 
     function getIconColor(decisionCount) {
         if (decisionCount > 5) {
@@ -138,8 +147,6 @@ function DecisionOverviewMap() {
             return [0, 128, 0, 255] // Green - default
         }
     }
-
-    /////////////////////////////////////////////////////////////////////////////
 
     // Define map layers
     function createBaseMapLayer() {
@@ -165,7 +172,7 @@ function DecisionOverviewMap() {
                     bounds: [west, south, east, north]
                 });
             }
-        })
+        });
     }
 
     function createDecisionPointsLayer(groupedDecisions) {
@@ -180,9 +187,9 @@ function DecisionOverviewMap() {
             filled: true,       // Fill icons with color
 
             // Size settings for markers
-            radiusScale: 15,
+            radiusScale: 10, // Reduced scale
             radiusMinPixels: 5,
-            radiusMaxPixels: 100,
+            radiusMaxPixels: 30, // Maximum size
             lineWidthMinPixels: 1,
 
             // Function to determine icon position
@@ -191,7 +198,8 @@ function DecisionOverviewMap() {
                 decision[1][0].cameraLongitude,
                 decision[1][0].cameraLatitude
             ],
-            getRadius: decision => Math.sqrt(decision[1].length) * 5,
+            // Smooth radius increase with a limit
+            getRadius: decision => Math.min(Math.sqrt(decision[1].length) * 4, 30),
             getFillColor: decision => getIconColor(decision[1].length),
             getLineColor: [0, 0, 0, 255],
             onHover: info => {
@@ -202,7 +210,7 @@ function DecisionOverviewMap() {
             onClick: pickingInfo => {
                 handleOpenDecision(pickingInfo)
             }
-        })
+        });
     }
 
     function handleOpenDecision(pickingInfo) {
@@ -213,7 +221,7 @@ function DecisionOverviewMap() {
         }
     }
 
-    function createTextLayer() {
+    function createTextLayer(groupedDecisions) {
         return new TextLayer({
             id: 'text-layer',
             data: Object.entries(groupedDecisions),      // Using Object.entries to convert the grouped object to array of [key, value] pairs.
@@ -228,18 +236,8 @@ function DecisionOverviewMap() {
             getTextAnchor: 'middle',
             getAlignmentBaseline: 'center',
             getColor: [255, 255, 255]
-        })
-
+        });
     }
-    /////////////////////////////////////////////////////////////////////////////
-
-    const layers = useMemo(() => {
-        return [
-            createBaseMapLayer(),
-            createDecisionPointsLayer(groupedDecisions),
-            createTextLayer(groupedDecisions)
-        ];
-    }, [groupedDecisions]);
 
     function renderDialog() {
         if (!dialogOpen) {
@@ -279,7 +277,7 @@ function DecisionOverviewMap() {
 
     function handleClose() {
         setDialogOpen(false);
-    };
+    }
 
     function toggleAutomaticNext() {
         setAutomaticNext(!automaticNext);
@@ -303,9 +301,8 @@ function DecisionOverviewMap() {
         } else {
             setDialogOpen(false);
         }
-    };
+    }
 
-    // Return the map component with minimum required styles
     return (
         <>
             <DecisionTypeFilter
