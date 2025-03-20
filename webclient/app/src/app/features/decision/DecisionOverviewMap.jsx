@@ -16,7 +16,7 @@ import DecisionResultPanel from './DecisionResultPanel';
 import DecisionTypeFilter from './DecisionTypeFilter';
 
 // Create map view settings - enable map repetition when scrolling horizontally
-const MAP_VIEW = new MapView({ repeat: true });
+const MAP_VIEW = new MapView({repeat: true});
 
 // Initial map state (will be used only if there's no data)
 const INITIAL_VIEW_STATE = {
@@ -32,9 +32,6 @@ function DecisionOverviewMap() {
     const [selectedType, setSelectedType] = useState(['all']);
     // New state for state and time filters
     const [selectedStates, setSelectedStates] = useState([]);
-    const [timeFilter, setTimeFilter] = useState(0);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
 
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null); // To track a hover
@@ -44,14 +41,6 @@ function DecisionOverviewMap() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
-
-    const layers = useMemo(() => {
-        return [
-            createBaseMapLayer(),
-            createDecisionPointsLayer(groupedDecisions),
-            createTextLayer(groupedDecisions)
-        ];
-    }, [groupedDecisions]);
 
     // State for viewState and DeckGL ref
     const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
@@ -90,6 +79,14 @@ function DecisionOverviewMap() {
             )
         );
     }, [decisions]);
+
+    const layers = useMemo(() => {
+        return [
+            createBaseMapLayer(),
+            createDecisionPointsLayer(groupedDecisions),
+            createTextLayer(groupedDecisions)
+        ];
+    }, [groupedDecisions]);
 
     // Function to calculate bounds based on marker coordinates
     function calculateBounds(groupedDecisions) {
@@ -139,7 +136,7 @@ function DecisionOverviewMap() {
             return INITIAL_VIEW_STATE;
         }
 
-        const { west, east, south, north } = bounds;
+        const {west, east, south, north} = bounds;
 
         // Calculate map center
         const longitude = (west + east) / 2;
@@ -215,7 +212,7 @@ function DecisionOverviewMap() {
             renderSubLayers: props => {
                 // Get geographical boundaries of the current tile
                 const {
-                    bbox: { west, south, east, north }
+                    bbox: {west, south, east, north}
                 } = props.tile;
 
                 // Create image layer for the tile
@@ -365,20 +362,13 @@ function DecisionOverviewMap() {
                 decisionTypes={decisionTypes}
                 selectedStates={selectedStates}
                 onStateChange={setSelectedStates}
-                timeFilter={timeFilter}
-                onTimeFilterChange={setTimeFilter}
-                startDate={startDate}
-                onStartDateChange={setStartDate}
-                endDate={endDate}
-                onEndDateChange={setEndDate}
-                filteredCount={filteredDecisions.length}
             />
             <DeckGL
                 ref={deckRef}
                 layers={layers}               // Add map layers
                 views={MAP_VIEW}              // Add map view settings
                 initialViewState={viewState}  // Set initial position
-                controller={{ dragRotate: false }}       // Disable rotation
+                controller={{dragRotate: false}}       // Disable rotation
             />
 
             <IconButton
