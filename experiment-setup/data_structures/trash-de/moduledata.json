@@ -1,0 +1,236 @@
+[
+  {
+    "id": 0,
+    "name": "Anomaly Detection",
+    "description": "Detects traffic anomalies",
+    "useAI": true,
+    "model": {
+      "name": "Kernel density estimate",
+      "version": "1.0.0",
+      "lastDeployment": "2025-01-25T12:36:50.277768993+01:00",
+      "modelType": "MISC",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": false,
+      "linkToPublicTrainingData": ""
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "sbom-samples/aic-sbom-backend.json"
+      }
+    },
+    "successors": [
+      {
+        "id": 1
+      }
+    ],
+    "submodules" :[]
+  },
+  {
+    "id": 1,
+    "name": "Anomaly Post-Processing",
+    "description": "Classify and package anomalies for human intervention",
+    "useAI": false,
+    "model": {},
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "sbom-samples/aic-sbom-backend.json"
+      }
+    },
+    "successors": [
+      {
+        "id": 2
+      }
+    ],
+    "submodules" :[]
+  },
+  {
+    "id": 2,
+    "name": "AI Cockpit",
+    "description": "An AI act inspired cockpit to monitor AI application landscapes",
+    "useAI": false,
+    "aiType": null,
+    "model": {},
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "sbom-samples/aic-sbom-backend.json"
+      },
+      "frontend": {
+        "url": "sbom-samples/aic-sbom-frontend.json"
+      }
+    },
+    "successors": [
+      {
+        "id": 7
+      },
+      {
+        "id": 8
+      }
+    ],
+    "submodules" :[]
+  },
+  {
+    "id": 3,
+    "name": "Starwit GeoMerger",
+    "description": "Combines multiple detections of the same object into one geo representation",
+    "useAI": false,
+    "model": {},
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "sbom-samples/aic-sbom-backend.json"
+      }
+    },
+    "successors": [
+      {
+        "id": 1
+      }
+    ],
+    "submodules" :[]
+  },
+  {
+    "id": 4,
+    "name": "Starwit Object Tracker",
+    "description": "Tracks moving objects",
+    "useAI": true,
+    "model": {
+      "name": "Yolov8",
+      "version": "8.0.0",
+      "lastDeployment": "2025-01-25T12:36:50.277768993+01:00",
+      "modelType": "COMPUTERVISION",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "sbom-samples/aic-sbom-backend.json"
+      }
+    },
+    "successors": [
+      {
+        "id": 3
+      },
+      {
+        "id": 5
+      }
+    ],
+    "submodules" :[]
+  },
+  {
+    "id": 5,
+    "name": "Starwit Object Follower",
+    "description": "Tracks moving objects via multiple cameras",
+    "useAI": true,
+    "model": {
+      "name": "Bath Super Tracker",
+      "version": "8.0.0",
+      "lastDeployment": "2025-01-25T12:36:50.277768993+01:00",
+      "modelType": "COMPUTERVISION",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "sbom-samples/aic-sbom-backend.json"
+      }
+    },
+    "successors": [
+      {
+        "id": 6
+      }
+    ],
+    "submodules" :[]
+  },
+  {
+    "id": 6,
+    "name": "Starwit Anomaly Classifier",
+    "description": "Classifies Anomalies",
+    "useAI": true,
+    "model": {
+      "name": "Starwit Classifier finetuned model",
+      "version": "1.0.0",
+      "lastDeployment": "2025-01-25T12:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "sbom-samples/aic-sbom-backend.json"
+      }
+    },
+    "successors": [
+      {
+        "id": 1
+      }
+    ],
+    "submodules" :[]
+  },
+  {
+    "id": 7,
+    "name": "Starwit Action Chooser",
+    "description": "Selects actions to mitigate effects of a found anomaly.",
+    "useAI": true,
+    "model": {
+      "name": "Starwit Rule Action Chooser",
+      "version": "1.0.0",
+      "lastDeployment": "2025-01-25T12:36:50.277768993+01:00",
+      "modelType": "RULEBASED",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "sbom-samples/aic-sbom-backend.json"
+      }
+    },
+    "successors": [],
+    "submodules" :[]
+  },
+  {
+    "id": 8,
+    "name": "Starwit Feedback Learner",
+    "description": "Takes user feedback from AI Cockpit, to improve anomaly detectio & classification",
+    "useAI": true,
+    "model": {
+      "name": "Starwit Feedback Learner",
+      "version": "1.0.0",
+      "lastDeployment": "2025-01-25T12:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8081/sbom/aic-sbom-backend.json"
+      }
+    },
+    "successors": [
+      {
+        "id": 0
+      }
+    ],
+    "submodules" :[]
+  }
+]

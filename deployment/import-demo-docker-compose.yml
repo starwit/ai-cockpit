@@ -30,11 +30,11 @@ services:
       MINIO_USER: minioadmin
       MINIO_PASSWORD: minioadmin
       MINIO_ENDPOINT: http://minio1:9000
-      SCENARIO_SETUP: true
       SBOM_ENABLED: true
       SBOM_GENERATOR_URI: http://sbom-generator:8080
+      SCENARIO_SETUP: true
     volumes:
-      - demodata:/scenariodata
+      - demodata:/scenariodata/traffic
     ports:
       - 8080:8081
 
@@ -45,4 +45,4 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: ../experiment-setup/traffic
+      device: ./scenariodata/data_structures/${scenario}-${language}

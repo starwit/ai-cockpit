@@ -139,6 +139,7 @@ You need to upload a videos a bucket named __anomalies__ link video files in dec
 * start project
 
 #### Import Sample Data
+For testing and demonstration purposes this section shows, how to import sample data.
 
 ##### Run demo setups
 
@@ -152,24 +153,24 @@ scenario.importFolder=experiment-setup/traffic/
 
 In folder [experiment-setup](experiment-setup/) you will find a growing number of demo data sets. Each folder can contain three files
 
-* miticationtypes.json - Definition of possible action types
+* actiontypes.json - Definition of possible action types
 * decisiontypes.json - Definition of possible analysis results
 * demodata.json - actual samples for observed/analyzed situtions and proposed actions
+* moduledata.json - Contains module definition
 
 File with demo data can contain marker __DATETIME__ as value for decision creation time. This will then on import be replaced by a date time in the past relative to import time.
 
 ##### Timed decision import to local dev instances
 
-AI Cockpit inserts upon first start a set of decision and action types. If you want to insert actual
-decisions you can use a script in folder experiment-setup. The following code snippet shows
+If you want to insert actual decisions you can use a script in folder experiment-setup. Please note, that demodata The following code snippet shows
 example usage:
 
   ```bash
     cd experiment-setup
-    ./fillDatabaseScript.sh http://localhost:8081/ai-cockpit/api/decision demo_setup.json 10
+    ./fillDatabaseScript.sh http://localhost:8081/ai-cockpit/api/ /path/to/binaries/ /path/to/demodata/demodata.json 5
   ```
 
-Params are dev instance location (no auth), file with data to import and duration between inserts. Please note, that this will work only in a local development setup without authentication.
+Params are dev instance location (no auth), binary data (e.g. videos), file with data to import and duration between inserts. Please note, that this will work only in a local development setup without authentication.
 
 This script also allows you, to test how decisions are flowing into AI Cockpit. __Note__: you will
 have to prepare video data on a Minio instance.

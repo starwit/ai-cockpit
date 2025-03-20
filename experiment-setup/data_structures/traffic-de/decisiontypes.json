@@ -1,0 +1,95 @@
+[
+    {
+        "name": "gefährliches Fahrverhalten",
+        "description": "Ein Verkehrsteilnehmer, der rücksichtslos oder unsicher fährt",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 1
+            },
+            {
+                "id": 4
+            }
+        ]
+    },
+    {
+        "name": "Unfall",
+        "description": "Ein Verkehrsvorfall, bei dem es zu einer Kollision oder einem Zusammenstoß zwischen Fahrzeugen oder anderen Hindernissen kommt",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 2
+            },
+            {
+                "id": 3
+            },
+            {
+                "id": 1
+            },
+            {
+                "id": 5
+            }
+        ]
+    },
+    {
+        "name": "Verkehrsstau",
+        "description": "Eine Situation, in der der Verkehr überlastet ist und Fahrzeuge langsam oder gar nicht fahren",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 3
+            },
+            {
+                "id": 1
+            },
+            {
+                "id": 4
+            }
+        ]
+    },
+    {
+        "name": "liegengebliebenes Fahrzeug",
+        "description": "Ein Fahrzeug blockiert den Verkehr",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 1
+            },
+            {
+                "id": 5
+            },
+            {
+                "id": 4
+            }
+        ]
+    },
+    {
+        "name": "hilflose Person",
+        "description": "Eine Person, die Unterstützung benötigt",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 2
+            },
+            {
+                "id": 3
+            },
+            {
+                "id": 1
+            }
+        ]
+    },
+    {
+        "name": "Einsatz von Ersthelfern",
+        "description": "Ersthelfer sind in einem Gebiet im Einsatz",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 3
+            },
+            {
+                "id": 4
+            }
+        ]
+    }
+]

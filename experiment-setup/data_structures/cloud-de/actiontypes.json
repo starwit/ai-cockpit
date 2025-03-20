@@ -1,0 +1,57 @@
+[
+    {
+        "name": "Anwendung in Wartungsmodus",
+        "description": "Applikation wird in Wartungsmodus versetzt und ist nicht mehr für Kunden erreichbar",
+        "executionPolicy": "WITHCHECK",
+        "action": []
+    },
+    {
+        "name": "Anwendung neustarten",
+        "description": "Applikation/Modul wird neugestartet",
+        "executionPolicy": "WITHCHECK",
+        "action": []
+    },    
+    {
+        "name": "Patch für Applikation/Modul",
+        "description": "Für eine Applikation wird ein Patch programmiert",
+        "executionPolicy": "MANUAL",
+        "action": []
+    },
+    {
+        "name": "Element-Konfiguration ändern",
+        "description": "Konfiguration eines Cloudelements wird angepasst",
+        "executionPolicy": "AUTOMATIC",
+        "action": []
+    },
+    {
+        "name": "Kunden informieren",
+        "description": "Eine Nachricht an alle Kunden senden",
+        "executionPolicy": "WITHCHECK",
+        "action": []
+    },
+    {
+        "name": "Datenbank sichern",
+        "description": "Daten werden gesichert",
+        "executionPolicy": "AUTOMATIC",
+        "action": []
+    },
+    {
+        "name": "Datenbanksicherung einspielen",
+        "description": "Daten werden zurück gespielt",
+        "executionPolicy": "AUTOMATIC",
+        "action": []
+    },
+    {
+        "name": "Loglevel erhöhen",
+        "description": "Loglevel wird erhöht",
+        "executionPolicy": "AUTOMATIC",
+        "action": []
+    },
+    {
+        "name": "Loglevel veringern",
+        "description": "Loglevel wird veringert",
+        "executionPolicy": "AUTOMATIC",
+        "action": []
+    }
+
+]

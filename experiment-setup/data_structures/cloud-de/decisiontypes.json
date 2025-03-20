@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Konfigurationsproblem",
+        "description": "Eine Anwendung ist für Kunden nicht erreichbar",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 1
+            },
+            {
+                "id": 4
+            }
+        ]
+    },
+    {
+        "name": "Fehlerhafte Daten",
+        "description": "Applikation zeigt fehlerhafte Kundendaten an",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 1
+            },
+            {
+                "id": 7
+            },
+            {
+                "id": 8
+            }
+        ]
+    },
+    {
+        "name": "Anwendungsfehler",
+        "description": "Bug in einer Applikation",
+        "decision": [],
+        "actionType": [
+            {
+                "id": 1
+            },
+            {
+                "id": 3
+            },
+            {
+                "id": 7
+            },
+            {
+                "id": 2
+            }
+        ]
+    }
+]
