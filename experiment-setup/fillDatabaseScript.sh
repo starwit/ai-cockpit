@@ -13,6 +13,7 @@ function main {
     if [ -n "$1" ]; then
         echo "Param for target Base URL exists " $1
         URL_BASE=$1
+        URL_DECISIONS=$URL_BASE"/decision"
     fi
 
     BINARY_DATA=binary_data/$SCENARIO
