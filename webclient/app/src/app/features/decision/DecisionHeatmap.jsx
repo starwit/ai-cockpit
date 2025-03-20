@@ -1,9 +1,16 @@
-import React, {useMemo} from 'react';
+import React, {useState, useMemo, useRef, useEffect} from 'react';
 import DeckGL from '@deck.gl/react';
 import {HeatmapLayer} from '@deck.gl/aggregation-layers';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from '@deck.gl/geo-layers';
 import {BitmapLayer, ScatterplotLayer} from '@deck.gl/layers';
+import {
+    Box,
+    Paper,
+    Typography
+} from '@mui/material';
+import {useTranslation} from 'react-i18next';
+
 
 const MAP_VIEW = new MapView({repeat: true});
 
@@ -26,6 +33,13 @@ function DecisionHeatmap({
     startDate = '',
     endDate = ''
 }) {
+  
+    const {t} = useTranslation();
+
+    // State for viewState and DeckGL ref
+    const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
+    const deckRef = useRef(null);
+    const isFirstLoad = useRef(true);
 
     const filteredDecisions = useMemo(() => {
         if (!Array.isArray(decisions) || decisions.length === 0) return [];
@@ -41,33 +55,87 @@ function DecisionHeatmap({
                 (decision.decisionType && selectedTypes.includes(decision.decisionType.name));
             if (!typeMatch) return false;
 
-            // Apply state filter
-            if (selectedStates.length > 0) {
-                // Default to 'NEW' state if not set
-                const decisionState = decision.state || 'NEW';
-                if (!selectedStates.includes(decisionState)) {
-                    return false;
-                }
-            }
-
-            // Apply time range filter
-            if (timeFilter === -1 && startDate && endDate) {
-                const start = new Date(startDate);
-                start.setHours(0, 0, 0, 0);
-                const end = new Date(endDate);
-                end.setHours(23, 59, 59, 999);
-                const decisionTime = new Date(decision.acquisitionTime);
-                if (!(decisionTime >= start && decisionTime <= end)) return false;
-            } else if (timeFilter > 0) {
-                const cutoffTime = new Date();
-                cutoffTime.setHours(cutoffTime.getHours() - timeFilter);
-                const decisionTime = new Date(decision.acquisitionTime);
-                if (!(decisionTime >= cutoffTime)) return false;
-            }
-
             return true;
         });
-    }, [decisions, selectedTypes, selectedStates, timeFilter, startDate, endDate]);
+    }, [decisions, selectedTypes]);
+
+    // Function to calculate bounds based on marker coordinates
+    function calculateBounds(decisions) {
+        if (!decisions || decisions.length === 0) {
+            return null;
+        }
+
+        let minLng = Infinity;
+        let maxLng = -Infinity;
+        let minLat = Infinity;
+        let maxLat = -Infinity;
+
+        // Find minimum and maximum coordinate values
+        decisions.forEach(decision => {
+            if (decision.cameraLatitude && decision.cameraLongitude) {
+                minLng = Math.min(minLng, decision.cameraLongitude);
+                maxLng = Math.max(maxLng, decision.cameraLongitude);
+                minLat = Math.min(minLat, decision.cameraLatitude);
+                maxLat = Math.max(maxLat, decision.cameraLatitude);
+            }
+        });
+
+        // If no valid coordinates found
+        if (minLng === Infinity || minLat === Infinity) {
+            return null;
+        }
+
+        // Add padding around edges
+        const padding = 0.1; // ~10% padding
+        const lngDiff = maxLng - minLng;
+        const latDiff = maxLat - minLat;
+
+        return {
+            west: minLng - lngDiff * padding,
+            east: maxLng + lngDiff * padding,
+            south: minLat - latDiff * padding,
+            north: maxLat + latDiff * padding
+        };
+    }
+
+    // Function to convert bounds to viewState
+    function boundsToViewState(bounds) {
+        if (!bounds) {
+            return INITIAL_VIEW_STATE;
+        }
+
+        const {west, east, south, north} = bounds;
+
+        // Calculate map center
+        const longitude = (west + east) / 2;
+        const latitude = (south + north) / 2;
+
+        // Calculate approximate zoom based on area size
+        const lngDiff = east - west;
+        const latDiff = north - south;
+        const maxDiff = Math.max(lngDiff, latDiff);
+
+        // Formula for approximate zoom calculation
+        const zoom = Math.floor(Math.log2(360 / maxDiff)) - 1;
+
+        return {
+            longitude,
+            latitude,
+            zoom: Math.min(Math.max(zoom, 3), 18), // Limit zoom between 3 and 18
+            pitch: 0,
+            bearing: 0
+        };
+    }
+
+    // Effect to update viewState when filtered data changes
+    useEffect(() => {
+        if (filteredDecisions.length > 0 && isFirstLoad.current) {
+            const bounds = calculateBounds(filteredDecisions);
+            const newViewState = boundsToViewState(bounds);
+            setViewState(newViewState);
+            isFirstLoad.current = false;
+        }
+    }, [filteredDecisions]);
 
     function createBaseMapLayer() {
         return new TileLayer({
@@ -75,6 +143,10 @@ function DecisionHeatmap({
             minZoom: 0,
             maxZoom: 19,
             tileSize: 256,
+            loadOptions: {
+                mode: 'cors',
+                credentials: 'same-origin',
+            },
             renderSubLayers: props => {
                 const {
                     bbox: {west, south, east, north}
@@ -123,7 +195,7 @@ function DecisionHeatmap({
             data: points,
             pickable: true,
             visible: true,
-            opacity: 0,
+            opacity: 0.01,
             stroked: true,
             filled: true,
             radiusScale: 15,
@@ -166,9 +238,10 @@ function DecisionHeatmap({
 
     return (
         <DeckGL
+            ref={deckRef}
             layers={layers}
             views={MAP_VIEW}
-            initialViewState={INITIAL_VIEW_STATE}
+            initialViewState={viewState}
             controller={{dragRotate: false}}
         />
     );
