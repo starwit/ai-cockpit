@@ -15,9 +15,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionState;
@@ -50,6 +48,9 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
     @Value("${decision.type.default:dangerous driving behaviour}")
     private String defaultDecisionType;
+
+    @Value("${decision.type.random:false}")
+    private Boolean randomDecisionType;
 
     @Value("${minio.user:minioadmin}")
     private String minioAccesskey;
@@ -98,7 +99,16 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
             entity.setCameraLongitude(new BigDecimal(decisionMessage.getCameraLocation().getLongitude()));
         }
         entity.setState(DecisionState.NEW);
-        DecisionTypeEntity decisionType = findDecisionTypeByName(defaultDecisionType);
+        DecisionTypeEntity decisionType = null;
+        if (randomDecisionType) {
+            List<DecisionTypeEntity> types = decisionTypeRepository.findAll();
+            if (types != null) {
+                int randomNum = (int) (Math.random() * types.size());
+                decisionType = types.get(randomNum);
+            }
+        } else {
+            decisionType = findDecisionTypeByName(defaultDecisionType);
+        }
         entity.setDecisionType(decisionType);
         return createDecisionEntitywithAction(entity);
     }

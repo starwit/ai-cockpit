@@ -128,7 +128,7 @@ function ActionTypeOverview() {
         setIsSaved(true);
     };
 
-    function handleDeleteClick(row) {
+    function handleDeleteClick(e, row) {
         if (row.id === "") {
             reloadActionTypes();
         } else {

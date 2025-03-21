@@ -30,6 +30,7 @@ function DecisionOverview() {
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
     const locale = i18n.language == "de" ? deDE : enUS
+    const pageSize = 10;
 
 
     useEffect(() => {
@@ -153,7 +154,7 @@ function DecisionOverview() {
             headerName: t("decision.action"),
             description: "",
             disableExport: true,
-            renderCell: renderActions,
+            renderCell: params => renderActions(params),
             disableClickEventBubbling: true,
             flex: 1.5
         },
@@ -225,32 +226,35 @@ function DecisionOverview() {
 
             </Stack>
 
-
-            <Box sx={{width: "100%"}}>
-                <DataGrid
-                    columnVisibilityModel={columnVisibilityModel}
-                    onColumnVisibilityModelChange={(newModel) =>
-                        setColumnVisibilityModel(newModel)
-                    }
-                    localeText={locale.components.MuiDataGrid.defaultProps.localeText}
-                    initialState={{
-                        sorting: {
-                            sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
+            <DataGrid
+                columnVisibilityModel={columnVisibilityModel}
+                onColumnVisibilityModelChange={(newModel) =>
+                    setColumnVisibilityModel(newModel)
+                }
+                localeText={locale.components.MuiDataGrid.defaultProps.localeText}
+                initialState={{
+                    sorting: {
+                        sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
+                    },
+                    pagination: {
+                        paginationModel: {
+                            pageSize: pageSize,
                         },
-                    }}
-                    rows={tab == 0 ? newDecisions : checkedDecisions}
-                    columns={headers}
-                    isCellEditable={() => {false}}
-                    slots={{toolbar: GridToolbar}}
-                    slotProps={{
-                        toolbar: {
-                            showQuickFilter: true,
-                            printOptions: {disableToolbarButton: false},
-                            csvOptions: {disableToolbarButton: false}
-                        }
-                    }}
-                />
-            </Box>
+                    },
+                }}
+                pageSizeOptions={[pageSize, 25, 50, 100]}
+                rows={tab == 0 ? newDecisions : checkedDecisions}
+                columns={headers}
+                isCellEditable={() => {false}}
+                slots={{toolbar: GridToolbar}}
+                slotProps={{
+                    toolbar: {
+                        showQuickFilter: true,
+                        printOptions: {disableToolbarButton: false},
+                        csvOptions: {disableToolbarButton: false}
+                    }
+                }}
+            />
             {renderDialog()}
         </Container>
     );
