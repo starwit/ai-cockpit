@@ -63,7 +63,7 @@
         {
             "name": "automation",
             "type": "java.lang.String",
-            "description": "A description for 'automation'"
+            "description": "Set over-all default automation level"
         }
     ]
 }
