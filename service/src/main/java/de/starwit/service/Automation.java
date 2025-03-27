@@ -10,7 +10,7 @@ import de.starwit.persistence.entity.ExecutionPolicy;
 @Component
 public class Automation {
 
-    @Value("${atomation:AUTOMATIC}")
+    @Value("${automation:AUTOMATIC}")
     private ExecutionPolicy executionPolicy;
 
     public ExecutionPolicy getExecutionPolicy() {

@@ -61,9 +61,9 @@
             "description": "Interval between last end of action execution and new start"
         },
         {
-            "name": "atomation",
+            "name": "automation",
             "type": "java.lang.String",
-            "description": "A description for 'atomation'"
+            "description": "Set over-all default automation level"
         }
     ]
 }
