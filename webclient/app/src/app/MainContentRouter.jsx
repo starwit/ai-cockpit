@@ -14,7 +14,7 @@ function MainContentRouter() {
     return (
         <>
             <CockpitAppBar />
-            <Container sx={{paddingTop: "4em"}}>
+            <Container sx={{paddingTop: "4em", paddingBottom: "4em"}}>
                 <Routes>
                     <Route path="/" element={<DecisionOverview />} />
                     <Route path="/decision-map-view" element={<DecisionOverviewMap />} />
