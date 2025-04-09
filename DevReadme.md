@@ -132,7 +132,7 @@ AI cockpit is aimed to serve in as many application domains as possible. Thus co
 ```bash
 # setup scenario & demo data
 scenario.setup=true
-scenario.importFolder=experiment-setup/traffic/
+scenario.importFolder=experiment-setup/data_structures/traffic-en/
 ```
 
 In folder [experiment-setup](experiment-setup/) you will find a growing number of demo data sets. Each folder can contain three files
