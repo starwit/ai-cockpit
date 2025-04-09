@@ -22,7 +22,7 @@ AI Cockpit needs a data model to collect system decisions and their resulting ac
 
 ## Development
 
-For details on how to develop, build and run AI Cockpit see [development instructions](DevReadme.md).
+For details on how to develop, build and run AI Cockpit see [development instructions](README-DEV.MD).
 
 ## License
 
