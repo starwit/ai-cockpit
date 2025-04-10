@@ -20,8 +20,6 @@ services:
 
   ai-cockpit-keycloak:
     image: docker.io/bitnami/keycloak:latest
-    volumes:
-      - ./keycloak/imports:/opt/keycloak/data/import
     depends_on:
       db-keycloak:
         condition: service_healthy
@@ -32,12 +30,14 @@ services:
       KEYCLOAK_DATABASE_NAME: keycloak
       KEYCLOAK_DATABASE_USER: keycloak
       KEYCLOAK_DATABASE_PASSWORD: keycloak
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
       KEYCLOAK_HTTP_RELATIVE_PATH: /auth/
-      KEYCLOAK_EXTRA_ARGS: "-Dkeycloak.import=/opt/keycloak/data/import/"
+      KEYCLOAK_EXTRA_ARGS: --import-realm
     ports:
       - '8080:8080'
+    volumes:
+      - ./keycloak/imports:/opt/bitnami/keycloak/data/import
 
 volumes:
   keycloak-db:
