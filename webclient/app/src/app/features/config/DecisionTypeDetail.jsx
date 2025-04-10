@@ -4,7 +4,7 @@ import {
     Dialog,
     DialogContent,
     DialogTitle,
-    Grid2,
+    Grid,
     IconButton,
     Stack,
     Typography
@@ -150,7 +150,7 @@ function DecisionTypeDetail(props) {
                 <GridCloseIcon />
             </IconButton>
             <DialogContent id="decision-type-detail-dialog-description" sx={{width: "100%"}}>
-                <Grid2>
+                <Grid>
                     <DataGrid
                         rows={actionTypes}
                         columns={columns}
@@ -163,7 +163,7 @@ function DecisionTypeDetail(props) {
                             {isSaved ? "" : "*"}
                         </Button>
                     </Stack>
-                </Grid2>
+                </Grid>
             </DialogContent>
         </Dialog>
     </>;

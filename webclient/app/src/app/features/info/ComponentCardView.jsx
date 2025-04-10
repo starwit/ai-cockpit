@@ -1,5 +1,5 @@
 import {Card, CardContent, Divider, IconButton, Link, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip} from '@mui/material';
-import Grid from "@mui/material/Grid2";
+import Grid from "@mui/material/Grid";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import DescriptionIcon from '@mui/icons-material/Description';
