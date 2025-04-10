@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Features
+
+-  ab#1479 add backend authentication for services (resource server pattern) ([80318](https://github.com/starwit/ai-cockpit/commit/8031814c645abd9) Anett Hübner)  
+
 ## 1 (2025-03-19)
 
 ### Bug Fixes
