@@ -9,7 +9,7 @@
 
     <groupId>de.starwit</groupId>
     <artifactId>ai-cockpit</artifactId>
-    <version>0.2.10-1</version>
+    <version>0.2.10-2-SNAPSHOT</version>
     <description>Starwit's implementation of AI Cockpit. Stay in control of complex AI systems!</description>
     <licenses>
         <license>
@@ -22,7 +22,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/starwit/ai-cockpit.git</connection>
-        <tag>0.2.10-1</tag>
+        <tag>0.0.10</tag>
     </scm>
 
     <properties>
