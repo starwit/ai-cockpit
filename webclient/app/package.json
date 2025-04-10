@@ -6,8 +6,8 @@
     "dependencies": {
         "@emotion/react": "^11.13.5",
         "@emotion/styled": "^11.13.5",
-        "@mui/icons-material": "^6.4.8",
-        "@mui/material": "^6.1.2",
+        "@mui/icons-material": "^7.0.2",
+        "@mui/material": "^7.0.2",
         "axios": "1.8.4",
         "buffer": "npm:buffer@^6.0.3",
         "crypto": "npm:crypto-browserify@^3.12.0",
@@ -48,8 +48,8 @@
         "extends": "react-app"
     },
     "devDependencies": {
-        "@cyclonedx/cyclonedx-npm": "^2.1.0",
-        "@mui/x-data-grid": "7.28.1",
+        "@cyclonedx/cyclonedx-npm": "^3.0.0",
+        "@mui/x-data-grid": "7.28.3",
         "@vitejs/plugin-react": "^4.3.4",
         "buffer": "npm:buffer@^6.0.3",
         "crypto": "npm:crypto-browserify@^3.12.0",
@@ -64,10 +64,10 @@
         "path": "npm:path-browserify@1.0.1",
         "prop-types": "^15.7.2",
         "stream": "npm:stream-browserify@^3.0.0",
-        "unplugin": "^2.2.2",
+        "unplugin": "^2.3.0",
         "util": "npm:util@^0.12.5",
         "vfile": "npm:vfile@^6.0.1",
-        "vite": "^6.2.2",
+        "vite": "^6.2.6",
         "zlib": "npm:browserify-zlib@^0.2.0"
     }
 }
