@@ -4,9 +4,12 @@ AI cockpit aims at building a human control interface to AI systems. It is suppo
 
 This project was partly funded by the government of the federal republic of Germany. It is part of a research project aiming to keep _humans in command_ and is organized by the Federal Ministry of Labour and Social Affairs.
 
+<img src="docs/imgs/cockpit-main-dialogue.png" alt="dialogue" width="80%"/>
+
+This software is __open source__ and it is intended to be used a large community of software developers, deployers and operators. Usage and modifications are strongly encouraged - see [contribution guide](docs/CONTRIBUTION.MD) on how to get involved.
+
 ![BMAS](docs/imgs/BMAS_Logo.svg)
 
-This software is __open source__ and it is intended to be used a large community of software developers, deployers and operators. Usage and modifications are strongly encouraged - see [contribution guide](CONTRIBUTION.MD) on how to get involved.
 
 ## Deployment
 
@@ -22,7 +25,9 @@ Cockpit has three main interfaces:
 
 ![composition](./docs/imgs/Service-Composition-Architecture.drawio.svg)
 
-Operational concepts are described [here](CONCEPTS.MD).
+A more detailed look into AI Cockpit's architecture can be found [here](docs/ARCHITECTURE.MD).
+
+Interaction design and concepts to stay humans in control are described [here](docs/CONCEPTS.MD). A quick intro can be found at [Youtube](https://www.youtube.com/watch?v=fwruWipZFng).
 
 ### Data Model
 
@@ -30,7 +35,7 @@ AI Cockpit needs a data model to collect system decisions and possible actions. 
 
 ## Development
 
-For details on how to develop, build and run AI Cockpit see [development instructions](README-DEV.MD).
+For details on how to develop, build and run AI Cockpit see [development instructions](docs/README-DEV.MD).
 
 ## License
 
