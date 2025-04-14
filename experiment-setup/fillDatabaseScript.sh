@@ -26,7 +26,7 @@ function main {
 get_access_token() {
     # get access token
     echo "Getting access token from " $AUTH_URL
-    ACCESS_TOKEN=`curl -X POST  -d "realm=default" -d "client_id=aicockpit" -d "username=$USERNAME" -d "password=$PASSWORD" -d "grant_type=password" $AUTH_URL | jq -r '.access_token'`
+    ACCESS_TOKEN=`curl -X POST -d "realm=aicockpit" -d "client_id=aicockpit" -d "username=$USERNAME" -d "password=$PASSWORD" -d "grant_type=password" $AUTH_URL | jq -r '.access_token'`
 }
 
 upload_binary_data() {

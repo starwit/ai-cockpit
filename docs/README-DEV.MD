@@ -147,15 +147,14 @@ File with demo data can contain marker __DATETIME__ as value for decision creati
 
 #### Timed decision import to local dev instances
 
-If you want to insert actual decisions you can use a script in folder experiment-setup. Please note, that demodata The following code snippet shows
+If you want to insert actual decisions you can use a script in folder experiment-setup. Please note, that these are just demodata - do not import them into productive instances. Import script can be used as follows:
 example usage:
 
   ```bash
     cd experiment-setup
-    ./fillDatabaseScript.sh http://localhost:8081/ai-cockpit/api/ /path/to/binaries/ /path/to/demodata/demodata.json 5
+    ./fillDatabaseScript.sh
   ```
-
-Params are dev instance location (no auth), binary data (e.g. videos), file with data to import and duration between inserts. Please note, that this will work only in a local development setup without authentication.
+Please note, that this script expects an _env.sh_ file in the same folder. Content can be derived from [template](../experiment-setup/env.sh.template).
 
 This script also allows you, to test how decisions are flowing into AI Cockpit. __Note__: you will
 have to prepare video data on a Minio instance.
@@ -229,7 +228,7 @@ docker compose up
 
 In order to test you need to setup a Keycloak instance and there a client needs to be configured like so:
 
-![Keycloak](docs/imgs/keycloak-config.png)
+![Keycloak](imgs/keycloak-config.png)
 
 Adjust and add the following entries to your local application property file. Replace coordinates according to your Keycloak configuration and use spring profile `SPRING_PROFILES_ACTIVE=auth`
 
@@ -255,14 +254,14 @@ Once security configuration is correct, you can access application API by reques
 curl -H application/x-www-form-urlencoded -d "realm=default" -d "client_id=client_id" -d "username=name" -d "password=password" -d "grant_type=password" "http://hostname/realms/ai-cockpit/protocol/openid-connect/token"
 ```
 
-for local setup, you can use the following:
+If you want to extract token as variable, the following code does that:
 
 ```bash
-curl -H application/x-www-form-urlencoded -d "realm=default" -d "client_id=client_id" -d "username=admin" -d "password=admin" -d "grant_type=password" "http://hostname/auth/realms/ai-cockpit/protocol/openid-connect/token | jq"
+TOKEN=`curl -H application/x-www-form-urlencoded -d "realm=default" -d "client_id=client_id" -d "username=admin" -d "password=admin" -d "grant_type=password" "http://hostname/auth/realms/ai-cockpit/protocol/openid-connect/token | jq -r '.access_token'`"
 ```
 
 Response will like so:
-![Token Response](docs/imgs/auth_token_response.png)
+![Token Response](imgs/auth_token_response.png)
 
 Copy content of field _access_token_ into a environment variable like so:
 
