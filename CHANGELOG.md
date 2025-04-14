@@ -2,21 +2,16 @@
 
 Changelog of ai-cockpit.
 
-## Current Version ()
+## 2 (2025-04-11)
 
 ### Features
 
 -  Support hierarchical object names for minio resources ([6ad91](https://github.com/starwit/ai-cockpit/commit/6ad91157c6616fd) flonix8)  
+-  ab#1479 add backend authentication for services (resource server pattern) ([80318](https://github.com/starwit/ai-cockpit/commit/8031814c645abd9) Anett Hübner)  
 
 ### Bug Fixes
 
 -  corrected errors because of new mui version ([f3900](https://github.com/starwit/ai-cockpit/commit/f3900919baf8523) Anett Hübner)  
-
-## 1 (2025-04-10)
-
-### Features
-
--  ab#1479 add backend authentication for services (resource server pattern) ([80318](https://github.com/starwit/ai-cockpit/commit/8031814c645abd9) Anett Hübner)  
 
 ## 1 (2025-03-19)
 
