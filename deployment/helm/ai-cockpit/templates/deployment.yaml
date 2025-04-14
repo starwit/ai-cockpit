@@ -88,7 +88,7 @@ spec:
             {{- if .Values.auth.enabled }}
             - name: SPRING_PROFILES_ACTIVE
               value: auth
-            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER
+            - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER-URI
               value: {{ .Values.auth.keycloakRealmUrlExternal }}
             - name: OIDC-CLIENT-REGISTRATION_AUTHORIZATION-URI
               value: {{ .Values.auth.keycloakRealmUrlExternal }}/protocol/openid-connect/auth
