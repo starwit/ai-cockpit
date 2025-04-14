@@ -64,7 +64,7 @@
         "path": "npm:path-browserify@1.0.1",
         "prop-types": "^15.7.2",
         "stream": "npm:stream-browserify@^3.0.0",
-        "unplugin": "^2.3.0",
+        "unplugin": "^2.3.2",
         "util": "npm:util@^0.12.5",
         "vfile": "npm:vfile@^6.0.1",
         "vite": "^6.2.6",
