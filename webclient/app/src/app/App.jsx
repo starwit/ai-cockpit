@@ -1,4 +1,3 @@
-import '@mui/material/styles/styled';
 import React from "react";
 import MainContentRouter from "./MainContentRouter";
 import {CssBaseline} from "@mui/material";

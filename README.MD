@@ -4,7 +4,12 @@ AI cockpit aims at building a human control interface to AI systems. It is suppo
 
 This project was partly funded by the government of the federal republic of Germany. It is part of a research project aiming to keep _humans in command_ and is organized by the Federal Ministry of Labour and Social Affairs.
 
+<img src="docs/imgs/cockpit-main-dialogue.png" alt="dialogue" width="80%"/>
+
+This software is __open source__ and it is intended to be used a large community of software developers, deployers and operators. Usage and modifications are strongly encouraged - see [contribution guide](docs/CONTRIBUTION.MD) on how to get involved.
+
 ![BMAS](docs/imgs/BMAS_Logo.svg)
+
 
 ## Deployment
 
@@ -13,16 +18,24 @@ Cockpit is a part of a bundle of services. For deployment options see <https://g
 ## Architecture & Concepts
 
 AI Cockpit is composed by a number of components. The following diagram shows, how those components are working together.
+Cockpit has three main interfaces:
+* Decision - here a system landscape will announce results of interpreting a problem/anomaly
+* Action - Operators can approve/disapprove proposed actions
+* Transparency - every module making decisions or executing actions, has to register via this interface. Registration will cover all necessary information for deployer/operators.
 
 ![composition](./docs/imgs/Service-Composition-Architecture.drawio.svg)
 
+A more detailed look into AI Cockpit's architecture can be found [here](docs/ARCHITECTURE.MD).
+
+Interaction design and concepts to stay humans in control are described [here](docs/CONCEPTS.MD). A quick intro can be found at [Youtube](https://www.youtube.com/watch?v=fwruWipZFng).
+
 ### Data Model
 
-AI Cockpit needs a data model to collect system decisions and their resulting actions. We are using an unified interface described [here](https://github.com/KI-Cockpit/ai-cockpit-api/blob/main/doc/domain-model.md#simplified-model)
+AI Cockpit needs a data model to collect system decisions and possible actions. Data definition are described [here](https://github.com/KI-Cockpit/ai-cockpit-api/blob/main/doc/domain-model.md#simplified-model).
 
 ## Development
 
-For details on how to develop, build and run AI Cockpit see [development instructions](README-DEV.MD).
+For details on how to develop, build and run AI Cockpit see [development instructions](docs/README-DEV.MD).
 
 ## License
 
