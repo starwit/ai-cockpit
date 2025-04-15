@@ -29,7 +29,7 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
     @OneToMany(mappedBy = "decisionType", cascade = { CascadeType.ALL })
     private Set<DecisionEntity> decision;
 
-    @JsonFilter("filterId")
+    @JsonFilter("filterIdName")
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "decisiontype_actiontype", joinColumns = @JoinColumn(name = "decisiontype_id"), inverseJoinColumns = @JoinColumn(name = "actiontype_id"))
     private Set<ActionTypeEntity> actionType;
