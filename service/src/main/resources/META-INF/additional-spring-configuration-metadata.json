@@ -64,6 +64,11 @@
             "name": "automation",
             "type": "java.lang.String",
             "description": "Set over-all default automation level"
+        },
+        {
+            "name": "default.module.name",
+            "type": "java.lang.String",
+            "description": "If no module is defined - this module is used"
         }
     ]
 }
