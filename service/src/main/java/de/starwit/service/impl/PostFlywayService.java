@@ -73,6 +73,7 @@ public class PostFlywayService {
             if (importactionTypes(scenarioImportFolder)) {
                 LOG.info("Import of action types successful, importing decision types");
                 if (importDecisionTypes(scenarioImportFolder)) {
+                    LOG.info("Import of desicion types successful, importing demo data");
                     importDemoData(scenarioImportFolder);
                 }
             }
@@ -91,7 +92,7 @@ public class PostFlywayService {
                     List<ActionTypeEntity> actionTypes = mapper.readValue(file,
                             new TypeReference<List<ActionTypeEntity>>() {
                             });
-                    processEntitiesWithModule(actionTypes , moduleService, this.defaultModuleName);
+                    processEntitiesWithModule(actionTypes, moduleService, this.defaultModuleName);
                     actionRepository.saveAll(actionTypes);
                 } catch (IOException e) {
                     LOG.error("Can't parse action types, aborting import " + e.getMessage());
@@ -118,21 +119,12 @@ public class PostFlywayService {
                             });
 
                     for (DecisionTypeEntity decisionTypeEntity : decisionTypes) {
-                        Set<ActionTypeEntity> actionTypes = new java.util.HashSet<ActionTypeEntity>();
-                        decisionTypeEntity.getActionType().forEach(actionType -> {
-                            List<ActionTypeEntity> foundactionTypes = actionRepository.findByName(actionType.getName());
-                            if (!foundactionTypes.isEmpty() || foundactionTypes.get(0).getName().equals(actionType.getName())) {
-                                actionTypes.add(foundactionTypes.get(0));
-                            } else {
-                                LOG.error("Could not found actionType with the name " + actionType.getName());
-                            }
-                        });
+                        Set<ActionTypeEntity> actionTypes = mapActionTypesByName(decisionTypeEntity.getActionType());
                         decisionTypeEntity.setActionType(actionTypes);
                     }
-                    
-                    processEntitiesWithModule(decisionTypes , moduleService, this.defaultModuleName);
+                    processEntitiesWithModule(decisionTypes, moduleService, this.defaultModuleName);
                     decisionTypeRepository.saveAll(decisionTypes);
-                } catch (IOException e) {
+                } catch (IOException | IndexOutOfBoundsException e) {
                     LOG.error("Can't parse Decision types, aborting import " + e.getMessage());
                 }
                 return true;
@@ -141,6 +133,22 @@ public class PostFlywayService {
             }
         }
         return false;
+    }
+
+    private Set<ActionTypeEntity> mapActionTypesByName(Set<ActionTypeEntity> decisionActionTypes) {
+        Set<ActionTypeEntity> actionTypes = new java.util.HashSet<ActionTypeEntity>();
+        if (!decisionActionTypes.isEmpty()) {
+            for (ActionTypeEntity actionType : decisionActionTypes) {
+                List<ActionTypeEntity> foundactionTypes = actionRepository.findByName(actionType.getName());
+                if (!foundactionTypes.isEmpty() &&
+                        foundactionTypes.get(0).getName().equals(actionType.getName())) {
+                    actionTypes.add(foundactionTypes.get(0));
+                } else {
+                    LOG.error("Could not found actionType with the name " + actionType.getName());
+                }
+            }
+        }
+        return actionTypes;
     }
 
     private boolean importDemoData(String folder) {
@@ -165,17 +173,19 @@ public class PostFlywayService {
                         new TypeReference<List<DecisionEntity>>() {
                         });
                 for (DecisionEntity entity : decisionTypes) {
-                    List<DecisionTypeEntity> foundDecisionTypes = decisionTypeRepository.findByName(entity.getDecisionType().getName());
-                            if (!foundDecisionTypes.isEmpty() || foundDecisionTypes.get(0).getName().equals(entity.getDecisionType().getName())) {
-                                entity.setDecisionType(foundDecisionTypes.get(0));
-                                entity.setModule(foundDecisionTypes.get(0).getModule());
-                            } else {
-                                LOG.error("Could not found decisionType with the name " + entity.getDecisionType().getName());
-                            }
+                    List<DecisionTypeEntity> foundDecisionTypes = decisionTypeRepository
+                            .findByName(entity.getDecisionType().getName());
+                    if (!foundDecisionTypes.isEmpty()
+                            && foundDecisionTypes.get(0).getName().equals(entity.getDecisionType().getName())) {
+                        entity.setDecisionType(foundDecisionTypes.get(0));
+                        entity.setModule(foundDecisionTypes.get(0).getModule());
+                    } else {
+                        LOG.error("Could not found decisionType with the name " + entity.getDecisionType().getName());
+                    }
                     decisionService.createDecisionEntitywithAction(entity);
                 }
 
-            } catch (IOException e) {
+            } catch (IOException | IndexOutOfBoundsException e) {
                 LOG.error("Can't parse demo data, aborting import " + e.getMessage());
             }
             return true;
@@ -186,10 +196,11 @@ public class PostFlywayService {
     }
 
     // Entity muss getModule() und setModule() haben
-    public static <T> void processEntitiesWithModule(List<T> entities, ModuleService moduleService, String defaultModuleName) {
+    public static <T> void processEntitiesWithModule(List<T> entities, ModuleService moduleService,
+            String defaultModuleName) {
         for (T entity : entities) {
             try {
-                
+
                 ModuleEntity module = (ModuleEntity) entity.getClass().getMethod("getModule").invoke(entity);
 
                 if (module == null || module.getName() == null) {
@@ -202,7 +213,7 @@ public class PostFlywayService {
                 if (list.isEmpty() || !list.get(0).getName().equals(module.getName())) {
                     module = moduleService.saveOrUpdate(module);
                     entity.getClass().getMethod("setModule", ModuleEntity.class).invoke(entity, module);
-                }else {
+                } else {
                     module = list.get(0);
                     entity.getClass().getMethod("setModule", ModuleEntity.class).invoke(entity, module);
                 }
