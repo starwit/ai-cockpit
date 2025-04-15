@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -60,9 +61,9 @@ public class DecisionEntity extends AbstractEntity<Long> {
     private DecisionTypeEntity decisionType;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "module_id")
     private ModuleEntity module;
-
 
     @OneToMany(mappedBy = "decision", cascade = { CascadeType.ALL })
     private Set<ActionEntity> action;
@@ -156,6 +157,14 @@ public class DecisionEntity extends AbstractEntity<Long> {
             return;
         }
         this.action.remove(action);
+    }
+
+    public ModuleEntity getModule() {
+        return module;
+    }
+
+    public void setModule(ModuleEntity module) {
+        this.module = module;
     }
 
 }

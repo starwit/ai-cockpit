@@ -5,10 +5,10 @@
         "decision": [],
         "actionType": [
             {
-                "id": 1
+                "name": "Polizei benachrichtigen"
             },
             {
-                "id": 4
+                "name": "I2X-Benachrichtigung"
             }
         ]
     },
@@ -18,16 +18,16 @@
         "decision": [],
         "actionType": [
             {
-                "id": 2
+                "name": "Rettungsdienste benachrichtigen"
             },
             {
-                "id": 3
+                "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
             },
             {
-                "id": 1
+                "name": "Polizei benachrichtigen"
             },
             {
-                "id": 5
+                "name": "Abschleppdienst benachrichtigen"
             }
         ]
     },
@@ -37,13 +37,13 @@
         "decision": [],
         "actionType": [
             {
-                "id": 3
+                "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
             },
             {
-                "id": 1
+                "name": "Polizei benachrichtigen"
             },
             {
-                "id": 4
+                "name": "I2X-Benachrichtigung"
             }
         ]
     },
@@ -53,13 +53,13 @@
         "decision": [],
         "actionType": [
             {
-                "id": 1
+                "name": "Polizei benachrichtigen"
             },
             {
-                "id": 5
+                "name": "Abschleppdienst benachrichtigen"
             },
             {
-                "id": 4
+                "name": "I2X-Benachrichtigung"
             }
         ]
     },
@@ -69,13 +69,13 @@
         "decision": [],
         "actionType": [
             {
-                "id": 2
+                "name": "Rettungsdienste benachrichtigen"
             },
             {
-                "id": 3
+                "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
             },
             {
-                "id": 1
+                "name": "Polizei benachrichtigen"
             }
         ]
     },
@@ -85,10 +85,10 @@
         "decision": [],
         "actionType": [
             {
-                "id": 3
+                "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
             },
             {
-                "id": 4
+                "name": "I2X-Benachrichtigung"
             }
         ]
     }

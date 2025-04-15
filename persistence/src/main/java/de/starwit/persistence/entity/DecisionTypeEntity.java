@@ -29,16 +29,24 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
     @OneToMany(mappedBy = "decisionType", cascade = { CascadeType.ALL })
     private Set<DecisionEntity> decision;
 
-    @JsonFilter("filterId")
+    @JsonFilter("filterIdName")
     @ManyToMany(cascade = CascadeType.REFRESH)
     @JoinTable(name = "decisiontype_actiontype", joinColumns = @JoinColumn(name = "decisiontype_id"), inverseJoinColumns = @JoinColumn(name = "actiontype_id"))
     private Set<ActionTypeEntity> actionType;
 
+    @JsonFilter("filterName")
     @ManyToOne
     @JoinColumn(name = "module_id")
     private ModuleEntity module;
 
-    // entity fields getters and setters
+    public ModuleEntity getModule() {
+        return module;
+    }
+
+    public void setModule(ModuleEntity module) {
+        this.module = module;
+    }
+
     public String getName() {
         return name;
     }
@@ -55,7 +63,6 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
         this.description = description;
     }
 
-    // entity relations getters and setters
     public Set<DecisionEntity> getDecision() {
         return decision;
     }

@@ -23,6 +23,7 @@ import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionState;
 import de.starwit.persistence.entity.DecisionTypeEntity;
+import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.ActionRepository;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionRepository;
@@ -82,6 +83,15 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
     public List<DecisionEntity> findAllOpenDecisions() {
         return decisionRepository.findByState(DecisionState.NEW);
+    }
+
+    public List<DecisionEntity> findAllOpenDecisionsByModule(Long moduleId) {
+        return decisionRepository.findByModuleIdAndState(moduleId, DecisionState.NEW);
+    }
+
+    public List<DecisionEntity> findAllByModule(Long moduleId) {
+        List<DecisionEntity> result = decisionRepository.findByModuleId(moduleId);
+        return result;
     }
 
     public DecisionService(EntityManager entityManager) {

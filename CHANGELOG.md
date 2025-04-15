@@ -2,34 +2,6 @@
 
 Changelog of ai-cockpit.
 
-### Bug Fixes
-
--  corrected errors because of new mui version ([f3900](https://github.com/starwit/ai-cockpit/commit/f3900919baf8523) Anett Hübner)  
-
-## 1 (2025-03-19)
-
-### Bug Fixes
-
--  action type null, delete actiontype, footer, jsonignore ([bd16f](https://github.com/starwit/ai-cockpit/commit/bd16f96325bdd42) Anett Hübner)  
-
-## 2 (2025-04-11)
-
-### Features
-
--  Support hierarchical object names for minio resources ([6ad91](https://github.com/starwit/ai-cockpit/commit/6ad91157c6616fd) flonix8)  
-
-## 3 (2025-04-14)
-
-### Features
-
--  ab#1479 add backend authentication for services (resource server pattern) ([80318](https://github.com/starwit/ai-cockpit/commit/8031814c645abd9) Anett Hübner)  
-
-## refs/tags/0.2.6 (2025-03-10)
-
-### Features
-
--  added automation switch ([0d92e](https://github.com/starwit/ai-cockpit/commit/0d92eed06948e56) Anett Hübner)  
-
 ## refs/tags/0.2.3 (2025-02-12)
 
 ### Features

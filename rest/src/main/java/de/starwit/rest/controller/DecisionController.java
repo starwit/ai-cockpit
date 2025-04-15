@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.DecisionEntity;
+import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.exception.NotificationException;
 import de.starwit.rest.dto.DecisionWithActionTypesDto;
 import de.starwit.rest.exception.NotificationDto;
@@ -50,7 +51,7 @@ public class DecisionController {
     @Operation(summary = "Get all decision")
     @GetMapping
     public List<DecisionEntity> findAll() {
-        return this.decisionService.findAll();
+        return this.decisionService.findAllByModule(1L);
     }
 
     @Operation(summary = "Get all open decisions")
