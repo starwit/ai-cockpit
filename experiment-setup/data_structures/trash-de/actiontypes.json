@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Ordnungsamt benachrichtigen",
+    "description": "",
+    "executionPolicy": "WITHCHECK"
+  },
+  {
+    "name": "Auftragsliste und Tour generieren",
+    "description": "",
+    "executionPolicy": "WITHCHECK"
+  },
+  {
+    "name": "Abschleppdienst benachrichtigen",
+    "description": "",
+    "executionPolicy": "WITHCHECK"
+  },
+  {
+    "name": "Grünflächenamt benachrichtigen",
+    "description": "",
+    "executionPolicy": "WITHCHECK"
+  },
+  {
+    "name": "Einsatzwagen benachrichtigen",
+    "description": "",
+    "executionPolicy": "WITHCHECK"
+  }
+]

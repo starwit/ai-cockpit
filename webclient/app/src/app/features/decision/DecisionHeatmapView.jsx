@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useMemo} from 'react';
 import {IconButton} from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -10,6 +10,12 @@ import DecisionHeatmap from './DecisionHeatmap';
 
 function DecisionHeatmapView() {
     const [selectedType, setSelectedType] = useState(['all']);
+    // Add state and time filters
+    const [selectedStates, setSelectedStates] = useState([]);
+    const [timeFilter, setTimeFilter] = useState(0);
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+
     const [decisions, setDecisions] = useState([]);
     const [hoveredDecisions, setHoveredDecisions] = useState(null);
     const decisionRest = new DecisionRest();
@@ -28,6 +34,49 @@ function DecisionHeatmapView() {
         )
     );
 
+    // Pre-filtered decisions for counting
+    const filteredDecisions = useMemo(() => {
+        if (!Array.isArray(decisions) || decisions.length === 0) return [];
+
+        return decisions.filter(decision => {
+            // Validate required location data
+            if (!decision?.cameraLatitude || !decision?.cameraLongitude) {
+                return false;
+            }
+
+            // Apply type filter
+            const typeMatch = selectedType.includes('all') ||
+                (decision.decisionType && selectedType.includes(decision.decisionType.name));
+            if (!typeMatch) return false;
+
+            // Apply state filter
+            if (selectedStates.length > 0) {
+                // Default to 'NEW' state if not set
+                const decisionState = decision.state || 'NEW';
+                if (!selectedStates.includes(decisionState)) {
+                    return false;
+                }
+            }
+
+            // Apply time range filter
+            if (timeFilter === -1 && startDate && endDate) {
+                const start = new Date(startDate);
+                start.setHours(0, 0, 0, 0);
+                const end = new Date(endDate);
+                end.setHours(23, 59, 59, 999);
+                const decisionTime = new Date(decision.acquisitionTime);
+                if (!(decisionTime >= start && decisionTime <= end)) return false;
+            } else if (timeFilter > 0) {
+                const cutoffTime = new Date();
+                cutoffTime.setHours(cutoffTime.getHours() - timeFilter);
+                const decisionTime = new Date(decision.acquisitionTime);
+                if (!(decisionTime >= cutoffTime)) return false;
+            }
+
+            return true;
+        });
+    }, [decisions, selectedType, selectedStates, timeFilter, startDate, endDate]);
+
     useEffect(() => {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000);
@@ -43,10 +92,11 @@ function DecisionHeatmapView() {
     }
 
     function handleOpenDecision(pickingInfo) {
-        if (pickingInfo.object) {
-            setSelectedDecisions(pickingInfo.object[1]);
+        if (pickingInfo.object && Array.isArray(pickingInfo.object) && pickingInfo.object.length > 0) {
+            // pickingInfo.object is an array of decisions 
+            setSelectedDecisions(pickingInfo.object);
             setDialogOpen(true);
-            setRowData(pickingInfo.object[1][0]);
+            setRowData(pickingInfo.object[0]);  // Take the first decision
         }
     }
 
@@ -121,6 +171,16 @@ function DecisionHeatmapView() {
                 selectedType={selectedType}
                 onTypeChange={setSelectedType}
                 decisionTypes={decisionTypes}
+                // Pass the state and time filters to the filter
+                selectedStates={selectedStates}
+                onStateChange={setSelectedStates}
+                timeFilter={timeFilter}
+                onTimeFilterChange={setTimeFilter}
+                startDate={startDate}
+                onStartDateChange={setStartDate}
+                endDate={endDate}
+                onEndDateChange={setEndDate}
+                filteredCount={filteredDecisions.length}
             />
             <DecisionHeatmap
                 decisions={decisions}
@@ -130,7 +190,12 @@ function DecisionHeatmapView() {
                     }
                 }}
                 onClick={handleOpenDecision}
-                selectedTypes={selectedType}  // Pass the selectedType state
+                selectedTypes={selectedType}
+                // Pass the state and time filters to the heatmap
+                selectedStates={selectedStates}
+                timeFilter={timeFilter}
+                startDate={startDate}
+                endDate={endDate}
             />
             <IconButton
                 onClick={() => setShowPanel(!showPanel)}

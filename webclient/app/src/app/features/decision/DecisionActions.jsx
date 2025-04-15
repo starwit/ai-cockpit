@@ -52,7 +52,6 @@ export function renderActions(params) {
                         variant="outlined"
                         icon={renderIcon(action.actionType.executionPolicy)}
                         deleteIcon={renderExecutionIcon(action.state)}
-                        onDelete="{() => ()}"
                     />
                 </Tooltip>
             ))

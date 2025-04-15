@@ -1,24 +1,9 @@
-import React, {useState, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import DeckGL from '@deck.gl/react';
 import {HeatmapLayer} from '@deck.gl/aggregation-layers';
 import {MapView} from '@deck.gl/core';
 import {TileLayer} from '@deck.gl/geo-layers';
 import {BitmapLayer, ScatterplotLayer} from '@deck.gl/layers';
-import {
-    FormGroup,
-    FormControlLabel,
-    FormControl,
-    Checkbox,
-    Box,
-    Paper,
-    Typography,
-    InputLabel,
-    Select,
-    MenuItem,
-    Divider,
-    TextField
-} from '@mui/material';
-import {useTranslation} from 'react-i18next';
 
 const MAP_VIEW = new MapView({repeat: true});
 
@@ -30,28 +15,17 @@ const INITIAL_VIEW_STATE = {
     bearing: 0
 };
 
-const STATES = [
-    {id: 'NEW', name: 'NEW'},
-    {id: 'ACCEPTED', name: 'ACCEPTED'},
-    {id: 'REJECTED', name: 'REJECTED'}
-];
-
-const TIME_FILTERS = [
-    {value: -1, label: 'time.range.custom'},
-    {value: 0, label: 'time.range.allTime'},
-    {value: 1, label: 'time.range.lastHour'},
-    {value: 3, label: 'time.range.last3Hours'},
-    {value: 6, label: 'time.range.last6Hours'},
-    {value: 12, label: 'time.range.last12Hours'},
-    {value: 24, label: 'time.range.last24Hours'}
-];
-
-function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['all']}) {
-    const {t} = useTranslation();
-    const [selectedStates, setSelectedStates] = useState([]);
-    const [timeFilter, setTimeFilter] = useState(0);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+function DecisionHeatmap({
+    decisions = [],
+    onHover,
+    onClick,
+    selectedTypes = ['all'],
+    // Filters from the DecisionTypeFilter component
+    selectedStates = [],
+    timeFilter = 0,
+    startDate = '',
+    endDate = ''
+}) {
 
     const filteredDecisions = useMemo(() => {
         if (!Array.isArray(decisions) || decisions.length === 0) return [];
@@ -149,7 +123,7 @@ function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['al
             data: points,
             pickable: true,
             visible: true,
-            opacity: 0.1,
+            opacity: 0,
             stroked: true,
             filled: true,
             radiusScale: 15,
@@ -191,109 +165,12 @@ function DecisionHeatmap({decisions = [], onHover, onClick, selectedTypes = ['al
     }, [filteredDecisions]);
 
     return (
-        <>
-            <Box sx={{
-                position: 'absolute',
-                left: 20,
-                bottom: 40,
-                zIndex: 1
-            }}>
-                <Paper sx={{
-                    p: 2,
-                    maxWidth: 200,
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    boxShadow: 3,
-                    borderRadius: 2
-                }}>
-                    <Typography variant="subtitle2" gutterBottom>
-                        {t('decision.state')}
-                    </Typography>
-                    <FormGroup row>
-                        {STATES.map(({id, name}) => (
-                            <FormControlLabel
-                                key={`state-label-${id}`}
-                                control={
-                                    <Checkbox
-                                        key={`state-checkbox-${id}`}
-                                        checked={selectedStates.includes(name)}
-                                        onChange={(e) => {
-                                            if (e.target.checked) {
-                                                setSelectedStates([...selectedStates, name]);
-                                            } else {
-                                                setSelectedStates(selectedStates.filter(s => s !== name));
-                                            }
-                                        }}
-                                        size="small"
-                                    />
-                                }
-                                label={t(`decision.state.${name.toLowerCase()}`)}
-                            />
-                        ))}
-                    </FormGroup>
-
-                    <Divider sx={{marginY: 2}} />
-
-                    <Box sx={{marginTop: 2}}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel>{t('time.range')}</InputLabel>
-                            <Select
-                                value={timeFilter}
-                                onChange={(e) => {
-                                    setTimeFilter(e.target.value);
-                                    if (e.target.value !== -1) {
-                                        setStartDate('');
-                                        setEndDate('');
-                                    }
-                                }}
-                                label={t('time.range')}
-                            >
-                                {TIME_FILTERS.map((filter) => (
-                                    <MenuItem key={filter.value} value={filter.value}>
-                                        {t(filter.label)}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Box>
-
-                    {timeFilter === -1 && (
-                        <Box sx={{mt: 2}}>
-                            <TextField
-                                type="date"
-                                label={t('time.range.start')}
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                size="small"
-                                fullWidth
-                                InputLabelProps={{shrink: true}}
-                                sx={{mb: 1}}
-                            />
-                            <TextField
-                                type="date"
-                                label={t('time.range.end')}
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                size="small"
-                                fullWidth
-                                InputLabelProps={{shrink: true}}
-                                inputProps={{min: startDate}}
-                            />
-                        </Box>
-                    )}
-
-                    <Typography variant="caption" sx={{marginTop: 1, display: 'block'}}>
-                        {t('decision.found', {count: filteredDecisions.length})}
-                    </Typography>
-                </Paper>
-            </Box>
-
-            <DeckGL
-                layers={layers}
-                views={MAP_VIEW}
-                initialViewState={INITIAL_VIEW_STATE}
-                controller={{dragRotate: false}}
-            />
-        </>
+        <DeckGL
+            layers={layers}
+            views={MAP_VIEW}
+            initialViewState={INITIAL_VIEW_STATE}
+            controller={{dragRotate: false}}
+        />
     );
 }
 

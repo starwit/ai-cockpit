@@ -1,0 +1,95 @@
+[
+    {
+        "name": "gefährliches Fahrverhalten",
+        "description": "Ein Verkehrsteilnehmer, der rücksichtslos oder unsicher fährt",
+        "decision": [],
+        "actionType": [
+            {
+                "name": "Polizei benachrichtigen"
+            },
+            {
+                "name": "I2X-Benachrichtigung"
+            }
+        ]
+    },
+    {
+        "name": "Unfall",
+        "description": "Ein Verkehrsvorfall, bei dem es zu einer Kollision oder einem Zusammenstoß zwischen Fahrzeugen oder anderen Hindernissen kommt",
+        "decision": [],
+        "actionType": [
+            {
+                "name": "Rettungsdienste benachrichtigen"
+            },
+            {
+                "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
+            },
+            {
+                "name": "Polizei benachrichtigen"
+            },
+            {
+                "name": "Abschleppdienst benachrichtigen"
+            }
+        ]
+    },
+    {
+        "name": "Verkehrsstau",
+        "description": "Eine Situation, in der der Verkehr überlastet ist und Fahrzeuge langsam oder gar nicht fahren",
+        "decision": [],
+        "actionType": [
+            {
+                "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
+            },
+            {
+                "name": "Polizei benachrichtigen"
+            },
+            {
+                "name": "I2X-Benachrichtigung"
+            }
+        ]
+    },
+    {
+        "name": "liegengebliebenes Fahrzeug",
+        "description": "Ein Fahrzeug blockiert den Verkehr",
+        "decision": [],
+        "actionType": [
+            {
+                "name": "Polizei benachrichtigen"
+            },
+            {
+                "name": "Abschleppdienst benachrichtigen"
+            },
+            {
+                "name": "I2X-Benachrichtigung"
+            }
+        ]
+    },
+    {
+        "name": "hilflose Person",
+        "description": "Eine Person, die Unterstützung benötigt",
+        "decision": [],
+        "actionType": [
+            {
+                "name": "Rettungsdienste benachrichtigen"
+            },
+            {
+                "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
+            },
+            {
+                "name": "Polizei benachrichtigen"
+            }
+        ]
+    },
+    {
+        "name": "Einsatz von Ersthelfern",
+        "description": "Ersthelfer sind in einem Gebiet im Einsatz",
+        "decision": [],
+        "actionType": [
+            {
+                "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
+            },
+            {
+                "name": "I2X-Benachrichtigung"
+            }
+        ]
+    }
+]

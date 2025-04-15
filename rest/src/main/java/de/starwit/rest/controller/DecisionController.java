@@ -113,12 +113,16 @@ public class DecisionController {
         decisionService.delete(id);
     }
 
-    @GetMapping("/download/{bucketName}/{objectName}")
+    @GetMapping("/download/{bucketName}/{*objectName}")
     public ResponseEntity<byte[]> download(@PathVariable("bucketName") String bucketName,
             @PathVariable("objectName") String objectName) throws InvalidKeyException, IOException, MinioException {
-        byte[] file = decisionService.getFileFromMinio(bucketName, objectName);
+            
+        // Remove the leading slash from objectName (PathPattern with * always adds a leading slash)
+        String objectNameWithoutPrefix = objectName.substring(1);
+        
+        byte[] file = decisionService.getFileFromMinio(bucketName, objectNameWithoutPrefix);
         HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + objectName);
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + objectNameWithoutPrefix);
         return ResponseEntity.ok()
                 .headers(header)
                 .contentLength(Long.valueOf(file.length))

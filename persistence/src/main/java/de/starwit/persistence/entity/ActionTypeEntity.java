@@ -3,6 +3,7 @@ package de.starwit.persistence.entity;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,7 +31,7 @@ public class ActionTypeEntity extends AbstractEntity<Long> {
     private ExecutionPolicy executionPolicy;
 
     // entity relations
-    @JsonFilter("filterId")
+    @JsonIgnore
     @OneToMany(mappedBy = "actionType")
     private Set<ActionEntity> action;
 
