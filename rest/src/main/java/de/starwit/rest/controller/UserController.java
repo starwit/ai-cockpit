@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequestMapping("${rest.base-path}/user")
 public class UserController {
 
-
     @GetMapping(value = "/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String contextPath = request.getContextPath();

@@ -1,7 +1,7 @@
 package de.starwit.rest.controller;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.PostConstruct;
@@ -67,7 +65,7 @@ public class TransparencyFunctionsController {
   private void init() {
     if (transparencyApiEnabled) {
       LOG.info("Transparency API enabled");
-      objectMapper.registerModule(new JavaTimeModule());
+
       try {
         LOG.info("Requesting transparency data from remote URI " + transparencyApiUri);
         ResponseEntity<Module[]> response = restTemplate.getForEntity(transparencyApiUri + "/v0/modules",
@@ -83,17 +81,7 @@ public class TransparencyFunctionsController {
       }
     } else {
       LOG.info("Transparency API disabled, importing default data");
-      ClassPathResource transparencyResource = new ClassPathResource("transparencytestdata.json");
-      try {
-        byte[] binaryData = FileCopyUtils.copyToByteArray(transparencyResource.getInputStream());
-        String strJson = new String(binaryData, StandardCharsets.UTF_8);
-        Module[] modulesArray = objectMapper.readValue(
-            strJson,
-            Module[].class);
-        modules = new ArrayList<>(Arrays.asList(modulesArray));
-      } catch (IOException e) {
-        LOG.error("Can't load static test data for transparency functions " + e.getMessage());
-      }
+      modules = loadPrePackagedData();
     }
   }
 
@@ -254,5 +242,18 @@ public class TransparencyFunctionsController {
     String headerValue = "attachment; filename=sbom_" + currentDateTime + fileExtension;
 
     resp.setHeader(headerKey, headerValue);
+  }
+
+  private List<Module> loadPrePackagedData() {
+    List<Module> result = new ArrayList<>();
+    try {
+      InputStream inputStream = new ClassPathResource("transparencytestdata.json").getInputStream();
+      Module[] mods = objectMapper.readValue(inputStream, Module[].class);
+      result = new ArrayList<>(Arrays.asList(mods));
+    } catch (IOException e) {
+      LOG.error("Can't load static test data for transparency functions " + e.getMessage());
+    }
+
+    return result;
   }
 }
