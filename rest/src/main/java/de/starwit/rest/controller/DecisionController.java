@@ -23,14 +23,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.starwit.aic.model.Decision;
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.DecisionEntity;
-import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.exception.NotificationException;
 import de.starwit.rest.dto.DecisionWithActionTypesDto;
 import de.starwit.rest.exception.NotificationDto;
 import de.starwit.service.impl.DecisionService;
 import de.starwit.service.impl.MinioException;
+import de.starwit.service.mapper.DecisionMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -47,6 +48,8 @@ public class DecisionController {
 
     @Autowired
     private DecisionService decisionService;
+
+    DecisionMapper decisionMapper = new DecisionMapper();
 
     @Operation(summary = "Get all decision")
     @GetMapping
@@ -68,7 +71,8 @@ public class DecisionController {
 
     @Operation(summary = "Create decision")
     @PostMapping
-    public DecisionEntity save(@Valid @RequestBody DecisionEntity entity) {
+    public DecisionEntity save(@Valid @RequestBody Decision dto) {
+        DecisionEntity entity = decisionMapper.toEntity(dto);
         return decisionService.createDecisionEntitywithAction(entity);
     }
 
@@ -116,10 +120,11 @@ public class DecisionController {
     @GetMapping("/download/{bucketName}/{*objectName}")
     public ResponseEntity<byte[]> download(@PathVariable("bucketName") String bucketName,
             @PathVariable("objectName") String objectName) throws InvalidKeyException, IOException, MinioException {
-            
-        // Remove the leading slash from objectName (PathPattern with * always adds a leading slash)
+
+        // Remove the leading slash from objectName (PathPattern with * always adds a
+        // leading slash)
         String objectNameWithoutPrefix = objectName.substring(1);
-        
+
         byte[] file = decisionService.getFileFromMinio(bucketName, objectNameWithoutPrefix);
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + objectNameWithoutPrefix);

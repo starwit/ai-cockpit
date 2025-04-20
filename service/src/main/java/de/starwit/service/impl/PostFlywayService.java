@@ -18,12 +18,14 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.starwit.aic.model.Decision;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
+import de.starwit.service.mapper.DecisionMapper;
 import jakarta.annotation.PostConstruct;
 
 /**
@@ -50,6 +52,8 @@ public class PostFlywayService {
     private String decisionTypeFileName = "decisiontypes.json";
 
     private String demoDataFileName = "demodata.json";
+
+    DecisionMapper decisionMapper = new DecisionMapper();
 
     @Autowired
     private DecisionTypeRepository decisionTypeRepository;
@@ -168,20 +172,12 @@ public class PostFlywayService {
                     content = content.replaceFirst("DATETIME", zd.toString());
                     timeOffset -= 1;
                 }
-                List<DecisionEntity> decisionTypes = mapper.readValue(
+                List<Decision> decision = mapper.readValue(
                         content,
-                        new TypeReference<List<DecisionEntity>>() {
+                        new TypeReference<List<Decision>>() {
                         });
-                for (DecisionEntity entity : decisionTypes) {
-                    List<DecisionTypeEntity> foundDecisionTypes = decisionTypeRepository
-                            .findByName(entity.getDecisionType().getName());
-                    if (!foundDecisionTypes.isEmpty()
-                            && foundDecisionTypes.get(0).getName().equals(entity.getDecisionType().getName())) {
-                        entity.setDecisionType(foundDecisionTypes.get(0));
-                        entity.setModule(foundDecisionTypes.get(0).getModule());
-                    } else {
-                        LOG.error("Could not found decisionType with the name " + entity.getDecisionType().getName());
-                    }
+                for (Decision dto : decision) {
+                    DecisionEntity entity = decisionMapper.toEntity(dto);
                     decisionService.createDecisionEntitywithAction(entity);
                 }
 

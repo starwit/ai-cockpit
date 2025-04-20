@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.ModuleRepository;
 
@@ -27,5 +26,19 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
 
     public List<ModuleEntity> findByName(String name) {
         return moduleRepository.findByName(name);
+    }
+
+    public ModuleEntity findModuleByNameOrId(String name, Long moduleId) {
+        ModuleEntity module = null;
+        if (moduleId != null) {
+            module = moduleRepository.findById(moduleId).orElse(null);
+        } else {
+            module = moduleRepository.findFirstByNameLike(name);
+        }
+        return module;
+    }
+
+    public ModuleEntity findFirstByNameLike(String name) {
+        return moduleRepository.findFirstByNameLike(name);
     }
 }
