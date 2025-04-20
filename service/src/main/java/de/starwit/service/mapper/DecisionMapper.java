@@ -15,7 +15,6 @@ public class DecisionMapper {
     public DecisionMapper() {
         modelMapper.addConverter(new ZonedToOffsetDateTimeConverter());
         modelMapper.addConverter(new OffsetToZonedDateTimeConverter());
-
         modelMapper.typeMap(DecisionEntity.class, Decision.class)
                 .addMappings(mapper -> mapper.map(DecisionEntity::getAction, Decision::setActions));
         modelMapper.typeMap(Decision.class, DecisionEntity.class)

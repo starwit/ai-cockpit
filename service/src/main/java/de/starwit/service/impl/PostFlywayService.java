@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -67,7 +67,8 @@ public class PostFlywayService {
     @Autowired
     private ModuleService moduleService;
 
-    private static final ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper mapper;
 
     @PostConstruct
     public void init() {
@@ -168,7 +169,7 @@ public class PostFlywayService {
                 String content = Files.readString(path, StandardCharsets.UTF_8);
                 int timeOffset = 13; // Decision timestamps are moved 13 hours in the past.
                 while (content.indexOf("DATETIME") != -1) {
-                    ZonedDateTime zd = ZonedDateTime.now().minusHours(timeOffset);
+                    OffsetDateTime zd = OffsetDateTime.now().minusHours(timeOffset);
                     content = content.replaceFirst("DATETIME", zd.toString());
                     timeOffset -= 1;
                 }

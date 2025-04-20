@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @SpringBootApplication(scanBasePackages = {
         "de.starwit.rest",
@@ -27,7 +28,7 @@ public class Application {
     @Bean
     public ObjectMapper mapper() {
         ObjectMapper mapper = new ObjectMapper();
-
+        mapper.registerModule(new JavaTimeModule());
         SimpleFilterProvider filterProvider = new SimpleFilterProvider();
         filterProvider.addFilter("filterName", SimpleBeanPropertyFilter.filterOutAllExcept("name"));
         filterProvider.addFilter("filterId", SimpleBeanPropertyFilter.filterOutAllExcept("id"));
