@@ -53,6 +53,7 @@ public class ModuleController {
     @Operation(summary = "Create module")
     @PostMapping
     public ModuleEntity save(@Valid @RequestBody ModuleEntity entity) {
+        LOG.info("Create module " + entity.getName());
         return update(entity);
     }
 
@@ -66,6 +67,17 @@ public class ModuleController {
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable("id") Long id) throws NotificationException {
         moduleService.delete(id);
+    }
+
+    @Operation(summary = "Find module by name")
+    @GetMapping(value = "/{name}")
+    public boolean findByName(String name) throws NotificationException {
+        List<ModuleEntity> modules = moduleService.findByName(name);
+        if (modules.isEmpty()) {
+            throw new NotificationException("false", "Module not found.");
+        } else {
+            return true;
+        }
     }
 
     @ExceptionHandler(value = { EntityNotFoundException.class })

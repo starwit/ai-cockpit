@@ -58,7 +58,7 @@ public class ModuleEntity extends AbstractEntity<Long> {
     private ModelType modelType;
 
     @Column(name = "model_link")
-    private String modeLink;
+    private String modelLink;
 
     @Column(name = "public_training_data")
     private boolean publicTrainingData = false;
@@ -159,12 +159,12 @@ public class ModuleEntity extends AbstractEntity<Long> {
         this.modelType = modelType;
     }
 
-    public String getModeLink() {
-        return modeLink;
+    public String getModelLink() {
+        return modelLink;
     }
 
-    public void setModeLink(String modeLink) {
-        this.modeLink = modeLink;
+    public void setModelLink(String modeLink) {
+        this.modelLink = modeLink;
     }
 
     public boolean isPublicTrainingData() {
