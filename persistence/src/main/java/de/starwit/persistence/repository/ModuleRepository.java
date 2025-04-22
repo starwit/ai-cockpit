@@ -15,5 +15,4 @@ public interface ModuleRepository extends JpaRepository<ModuleEntity, Long> {
     public List<ModuleEntity> findByName(String name);
 
     public ModuleEntity findFirstByNameLike(String name);
-
 }

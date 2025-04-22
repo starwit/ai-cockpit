@@ -50,9 +50,21 @@ public class ModuleController {
         return this.moduleService.findById(id);
     }
 
+    @Operation(summary = "Get module by name")
+    @GetMapping(value = "/byname/{name}")
+    public ModuleEntity findByName(@PathVariable("name") String name) {
+        var entityList = this.moduleService.findByName(name);
+        if (entityList != null && !entityList.isEmpty()) {
+            return this.moduleService.findByName(name).getFirst();
+        } else {
+            throw new EntityNotFoundException("Module not found");
+        }
+    }
+
     @Operation(summary = "Create module")
     @PostMapping
     public ModuleEntity save(@Valid @RequestBody ModuleEntity entity) {
+        LOG.info("Create module " + entity.getName());
         return update(entity);
     }
 

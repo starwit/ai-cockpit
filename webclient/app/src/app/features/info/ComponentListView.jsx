@@ -12,8 +12,8 @@ import {SimpleTreeView} from "@mui/x-tree-view/SimpleTreeView";
 
 export default function ComponentListView(props) {
     const {moduleList, reportGenerationEnabled} = props;
-    const [open, setOpen] = React.useState(false);
-    const [moduleData, setModuleData] = React.useState({});
+    const [open, setOpen] = useState(false);
+    const [moduleData, setModuleData] = useState({});
     const {t} = useTranslation();
     var uniqueIdSuffix = 0;
 
@@ -81,7 +81,6 @@ export default function ComponentListView(props) {
                             <TableCell align="right">{t("transparency.components.details.modelVersion")}</TableCell>
                             <TableCell align="right">{t("transparency.components.details")}</TableCell>
                             <TableCell align="right">{t("transparency.components.details.succesors")}</TableCell>
-                            <TableCell align="right">{t("transparency.components.details.submodules")}</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -136,17 +135,6 @@ export default function ComponentListView(props) {
                                         </List>
                                         :
                                         ""
-                                    }
-                                </TableCell>
-                                <TableCell align="right">
-                                    {(module.submodules !== null) ?
-                                        <SimpleTreeView>
-                                            {module.submodules.map((submodule, index) => (
-                                                <TreeItem key={getUniqueTreeViewItemId(submodule.id)} itemId={getUniqueTreeViewItemId(submodule.id)} label={getModuleDetails(submodule.id)} />
-                                            ))}
-                                        </SimpleTreeView>
-                                        :
-                                        "Test"
                                     }
                                 </TableCell>
                             </TableRow>

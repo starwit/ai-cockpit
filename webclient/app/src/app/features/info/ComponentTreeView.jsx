@@ -47,15 +47,6 @@ export default function ComponentTreeView(props) {
                             :
                             ""
                         }
-                        {(module.submodules !== null) ?
-                            <TreeItem key={getUniqueTreeViewItemId(module.id)} itemId={getUniqueTreeViewItemId(module.id)} label={t("transparency.components.details.submodules")} >
-                                {module.submodules.map((submodule, index) => (
-                                    <TreeItem key={getUniqueTreeViewItemId(submodule.id)} itemId={getUniqueTreeViewItemId(submodule.id)} label={getModuleDetails(submodule.id)} />
-                                ))}
-                            </TreeItem>
-                            :
-                            ""
-                        }
                     </TreeItem>
                 ))}
             </SimpleTreeView >

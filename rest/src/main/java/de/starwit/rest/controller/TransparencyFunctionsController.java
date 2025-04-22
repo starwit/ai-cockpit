@@ -1,15 +1,15 @@
 package de.starwit.rest.controller;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,22 +20,24 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
-
 import de.starwit.aic.model.Module;
 import de.starwit.aic.model.ModuleSBOMLocationValue;
+import de.starwit.persistence.entity.ModuleEntity;
+import de.starwit.persistence.exception.NotificationException;
+import de.starwit.service.impl.ModuleService;
 
 @RestController
 @RequestMapping(path = "${rest.base-path}/transparency")
@@ -43,7 +45,8 @@ public class TransparencyFunctionsController {
 
   static final Logger LOG = LoggerFactory.getLogger(TransparencyFunctionsController.class);
 
-  private List<Module> modules = new ArrayList<>();
+  @Autowired
+  ModuleService moduleService;
 
   @Autowired
   private RestTemplate restTemplate;
@@ -57,61 +60,54 @@ public class TransparencyFunctionsController {
   @Value("${sbom.generator.uri:}")
   private String reportGeneratorUri;
 
-  @Value("${aiapi.transparency.enabled:false}")
-  private boolean transparencyApiEnabled;
-
-  @Value("${aiapi.transparency.uri:}")
-  private String transparencyApiUri;
+  @Value("${aiapi.transparency.import:false}")
+  private boolean importDemoData;
 
   @PostConstruct
   private void init() {
-    if (transparencyApiEnabled) {
-      LOG.info("Transparency API enabled");
-      objectMapper.registerModule(new JavaTimeModule());
-      try {
-        LOG.info("Requesting transparency data from remote URI " + transparencyApiUri);
-        ResponseEntity<Module[]> response = restTemplate.getForEntity(transparencyApiUri + "/v0/modules",
-            Module[].class);
-        if (response.getStatusCode().is2xxSuccessful()) {
-          modules = Arrays.asList(response.getBody());
-        } else {
-          LOG.error("Can't load transparency data from remote URI " + transparencyApiUri);
+    if (importDemoData) {
+      LOG.info("importing default module data");
+      var sampleList = loadPrePackagedData();
+      for (Module module : sampleList) {
+        try {
+          moduleService.saveOrUpdate(module);
+        } catch (Exception e) {
+          LOG.error("Error importing default data: " + e.getMessage());
         }
-      } catch (Exception e) {
-        LOG.error("Can't load transparency data from remote URI " + transparencyApiUri + " " + e.getMessage());
-        LOG.debug(ExceptionUtils.getStackTrace(e));
-      }
-    } else {
-      LOG.info("Transparency API disabled, importing default data");
-      ClassPathResource transparencyResource = new ClassPathResource("transparencytestdata.json");
-      try {
-        byte[] binaryData = FileCopyUtils.copyToByteArray(transparencyResource.getInputStream());
-        String strJson = new String(binaryData, StandardCharsets.UTF_8);
-        Module[] modulesArray = objectMapper.readValue(
-            strJson,
-            Module[].class);
-        modules = new ArrayList<>(Arrays.asList(modulesArray));
-      } catch (IOException e) {
-        LOG.error("Can't load static test data for transparency functions " + e.getMessage());
       }
     }
-  }
-
-  @Operation(summary = "Get info for module with given id")
-  @GetMapping(value = "/modules/{id}")
-  public Module findById(@PathVariable("id") Long id) {
-    for (Module m : modules) {
-      if (m.getId() == id) {
-        return m;
-      }
-    }
-    return null;
   }
 
   @Operation(summary = "Get list of all modules")
   @GetMapping(value = "/modules")
   public List<Module> getModules() {
-    return modules;
+    List<Module> result = new LinkedList<>();
+    var entities = moduleService.findAll();
+    LOG.info("Found " + entities.size() + " modules");
+    for (ModuleEntity entity : entities) {
+      result.add(moduleService.convertToModule(entity));
+    }
+    return result;
+  }
+
+  @Operation(summary = "Create new module")
+  @PostMapping(value = "/modules")
+  public ResponseEntity<Module> createModule(@RequestBody Module module) {
+    LOG.info("Trying to create new module " + module.getName());
+    var entity = moduleService.saveOrUpdate(module);
+    var responseModule = moduleService.convertToModule(entity);
+    return new ResponseEntity<>(responseModule, HttpStatus.OK);
+  }
+
+  @Operation(summary = "Find module by name")
+  @GetMapping(value = "/modules/byname/{name}")
+  public ResponseEntity<Module> findByName(@PathVariable("name") String name) throws NotificationException {
+    List<ModuleEntity> modules = moduleService.findByName(name);
+    if (modules.size() == 1) {
+      return new ResponseEntity<>(moduleService.convertToModule(modules.get(0)), HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
   }
 
   @Operation(summary = "true if report generation is enabled")
@@ -120,23 +116,31 @@ public class TransparencyFunctionsController {
     return reportGenerationEnabled;
   }
 
-  @Operation(summary = "Get PDF report")
+  @Operation(summary = "Load sbom from url provided by module")
   @GetMapping(value = "/modules/sbom/{id}/{component}")
   public String loadSBomFromRemoteUri(@PathVariable("id") int id, @PathVariable("component") String component) {
-
-    Module m = modules.get(id);
-
-    try {
-      ResponseEntity<String> response = restTemplate.getForEntity(m.getsBOMLocation().get(component).getUrl(),
-          String.class);
-
-      if (response.getStatusCode().is2xxSuccessful()) {
-        return response.getBody();
-      } else {
-        return "";
+    ModuleEntity entity = moduleService.findById((long) id);
+    String sbomUri = null;
+    var sboms = entity.getSbomlocations();
+    for (String key : sboms.keySet()) {
+      if (key.equals(component)) {
+        sbomUri = sboms.get(key);
+        break;
       }
-    } catch (Exception e) {
-      LOG.error("Can't load sbom from remote URI " + e.getMessage());
+    }
+
+    if (sbomUri != null) {
+      try {
+        ResponseEntity<String> response = restTemplate.getForEntity(sbomUri, String.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+          return response.getBody();
+        } else {
+          return "";
+        }
+      } catch (Exception e) {
+        LOG.error("Can't load sbom from remote URI " + e.getMessage());
+      }
     }
 
     return "";
@@ -147,13 +151,14 @@ public class TransparencyFunctionsController {
   public byte[] loadPDF(HttpServletResponse resp, @PathVariable("id") int id, @PathVariable("type") String type) {
     byte[] result = null;
 
-    if (!reportGenerationEnabled || checkIfModuleExists(id)) {
+    var entity = moduleService.findById((long) id);
+    if (!reportGenerationEnabled || entity != null) {
       LOG.error("Report generation API called, but generation service is disabled - frontend bug.");
       prepareResponse(resp, type);
       return result;
     }
 
-    Module m = modules.get(id);
+    Module m = moduleService.convertToModule(entity);
     String reportRequest = createRequestBody(m);
     String apiEndpoint = getReportAPIEndpoint(type);
 
@@ -180,10 +185,6 @@ public class TransparencyFunctionsController {
 
     prepareResponse(resp, type);
     return result;
-  }
-
-  private boolean checkIfModuleExists(int id) {
-    return id >= modules.size();
   }
 
   private String createRequestBody(Module m) {
@@ -254,5 +255,18 @@ public class TransparencyFunctionsController {
     String headerValue = "attachment; filename=sbom_" + currentDateTime + fileExtension;
 
     resp.setHeader(headerKey, headerValue);
+  }
+
+  private List<Module> loadPrePackagedData() {
+    List<Module> result = new ArrayList<>();
+    try {
+      InputStream inputStream = new ClassPathResource("transparencytestdata.json").getInputStream();
+      Module[] mods = objectMapper.readValue(inputStream, Module[].class);
+      result = new ArrayList<>(Arrays.asList(mods));
+    } catch (IOException e) {
+      LOG.error("Can't load static test data for transparency functions " + e.getMessage());
+    }
+
+    return result;
   }
 }
