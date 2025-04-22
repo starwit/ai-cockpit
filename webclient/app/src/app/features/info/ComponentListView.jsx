@@ -27,7 +27,6 @@ export default function ComponentListView(props) {
     };
 
     function renderModuleList() {
-        console.log(open);
         if (!open) {
             return null;
         }
