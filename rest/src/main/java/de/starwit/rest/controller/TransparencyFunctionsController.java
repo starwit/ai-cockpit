@@ -154,6 +154,7 @@ public class TransparencyFunctionsController {
         break;
       }
     }
+
     if (sbomUri != null) {
       try {
         ResponseEntity<String> response = restTemplate.getForEntity(sbomUri, String.class);
