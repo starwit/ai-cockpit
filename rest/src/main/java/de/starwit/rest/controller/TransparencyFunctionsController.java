@@ -119,7 +119,7 @@ public class TransparencyFunctionsController {
   @Operation(summary = "Create new module")
   @PostMapping(value = "/modules")
   public ResponseEntity<Module> createModules(@RequestBody Module module) {
-    LOG.info("Trying to create new module " + module.toString());
+    LOG.info("Trying to create new module " + module.getName());
     var entity = moduleService.saveOrUpdate(module);
     var responseModule = moduleService.convertToModule(entity);
     return new ResponseEntity<>(responseModule, HttpStatus.OK);
