@@ -157,6 +157,11 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>3.17.0</version>
             </dependency>
+            <dependency>
+                <groupId>org.modelmapper</groupId>
+                <artifactId>modelmapper</artifactId>
+                <version>3.2.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

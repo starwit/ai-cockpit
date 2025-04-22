@@ -29,7 +29,6 @@ public class Application {
     public ObjectMapper mapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
-
         SimpleFilterProvider filterProvider = new SimpleFilterProvider();
         filterProvider.addFilter("filterName", SimpleBeanPropertyFilter.filterOutAllExcept("name"));
         filterProvider.addFilter("filterId", SimpleBeanPropertyFilter.filterOutAllExcept("id"));

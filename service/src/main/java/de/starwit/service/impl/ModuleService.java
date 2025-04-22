@@ -126,6 +126,13 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
                 successorModule.setId(successor.getId());
                 module.getSuccessors().add(successorModule);
             }
+
+    public ModuleEntity findModuleByNameOrId(String name, Long moduleId) {
+        ModuleEntity module = null;
+        if (moduleId != null) {
+            module = moduleRepository.findById(moduleId).orElse(null);
+        } else {
+            module = moduleRepository.findFirstByNameLike(name);
         }
         return module;
     }
@@ -147,5 +154,8 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
             newMap.put(entry.getKey(), location);
         }
         return newMap;
+
+      public ModuleEntity findFirstByNameLike(String name) {
+        return moduleRepository.findFirstByNameLike(name);
     }
 }

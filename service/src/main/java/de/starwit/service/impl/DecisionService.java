@@ -28,6 +28,7 @@ import de.starwit.persistence.repository.ActionRepository;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
+import de.starwit.persistence.repository.ModuleRepository;
 import de.starwit.visionapi.Reporting.IncidentMessage;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
@@ -38,6 +39,7 @@ import io.minio.errors.InvalidResponseException;
 import io.minio.errors.ServerException;
 import io.minio.errors.XmlParserException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 
 /**
  * 
@@ -49,6 +51,9 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
     @Value("${decision.type.default:dangerous driving behaviour}")
     private String defaultDecisionType;
+
+    @Value("${default.module.name:Anomaly Detection}")
+    private String anomalyDetectionName;
 
     @Value("${decision.type.random:false}")
     private Boolean randomDecisionType;
@@ -66,6 +71,9 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
     @Autowired
     private DecisionRepository decisionRepository;
+
+    @Autowired
+    private ModuleRepository moduleRepository;
 
     @Autowired
     private DecisionTypeRepository decisionTypeRepository;
@@ -109,30 +117,53 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
             entity.setCameraLongitude(new BigDecimal(decisionMessage.getCameraLocation().getLongitude()));
         }
         entity.setState(DecisionState.NEW);
+        return createDecisionEntitywithAction(entity);
+    }
+
+    // TODO: should use dto instead of entity
+    private DecisionTypeEntity processDecisionType(DecisionTypeEntity entity, Long moduleId) {
         DecisionTypeEntity decisionType = null;
-        if (randomDecisionType) {
+        if (entity != null) {
+            decisionType = findDecisionTypeByNameOrId(entity.getName(), entity.getId(), moduleId);
+        } else if (randomDecisionType) {
             List<DecisionTypeEntity> types = decisionTypeRepository.findAll();
             if (types != null) {
                 int randomNum = (int) (Math.random() * types.size());
                 decisionType = types.get(randomNum);
             }
         } else {
-            decisionType = findDecisionTypeByName(defaultDecisionType);
+            decisionType = findDecisionTypeByNameOrId(defaultDecisionType, null, moduleId);
         }
-        entity.setDecisionType(decisionType);
-        return createDecisionEntitywithAction(entity);
+        return decisionType;
+    }
+
+    private ModuleEntity processModule(ModuleEntity entity) {
+        ModuleEntity module = null;
+        if (entity != null) {
+            module = entity.getId() != null ? moduleRepository.getReferenceById(entity.getId())
+                    : moduleRepository.findFirstByNameLike(entity.getName());
+        } else {
+            module = moduleRepository.findFirstByNameLike(anomalyDetectionName);
+        }
+        return module;
     }
 
     public DecisionEntity createDecisionEntitywithAction(DecisionEntity entity) {
-        DecisionTypeEntity decisionType = entity.getDecisionType();
-        if (decisionType != null) {
+        ModuleEntity module = processModule(entity.getModule());
+        DecisionTypeEntity decisionType = processDecisionType(entity.getDecisionType(), module.getId());
+
+        if (decisionType == null) {
+            throw new EntityNotFoundException("Decision type not found.");
+        } else {
+            entity.setDecisionType(decisionType);
             List<ActionTypeEntity> actionTypes = actionTypeRepository
                     .findByDecisionType(decisionType.getId());
             addActions(entity, actionTypes);
         }
+
+        entity.setModule(module);
         entity = saveOrUpdate(entity);
         entityManager.detach(entity);
-
         return entity;
     }
 
@@ -145,10 +176,7 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
         List<ActionTypeEntity> actionTypes = new ArrayList<>();
         for (Long id : addedActionTypeIds) {
-            if (actionTypeRepository.existsById(id)) {
-                ActionTypeEntity actionType = actionTypeRepository.getReferenceById(id);
-                actionTypes.add(actionType);
-            }
+            actionTypeRepository.findById(id).ifPresent(actionType -> actionTypes.add(actionType));
         }
         addActions(persisted, actionTypes);
         removeActions(persisted, removedActionTypeIds);
@@ -172,9 +200,8 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
         for (ActionEntity action : removeActions) {
             entity.removeFromAction(action);
-            if (actionRepository.existsById(action.getId())) {
-                actionRepository.deleteById(action.getId());
-            }
+            actionTypeRepository.findById(action.getId())
+                    .ifPresent(actionType -> actionRepository.deleteById(action.getId()));
         }
     }
 
@@ -221,11 +248,12 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         }
     }
 
-    public DecisionTypeEntity findDecisionTypeByName(String name) {
+    public DecisionTypeEntity findDecisionTypeByNameOrId(String name, Long decisionTypeId, Long moduleId) {
         DecisionTypeEntity decisionType = null;
-        List<DecisionTypeEntity> result = decisionTypeRepository.findByName(name);
-        if (result != null && !result.isEmpty()) {
-            decisionType = result.getFirst();
+        if (decisionTypeId != null) {
+            decisionType = decisionTypeRepository.findById(decisionTypeId).orElse(null);
+        } else {
+            decisionType = decisionTypeRepository.findFirstByNameLikeAndModuleId(name, moduleId);
         }
         return decisionType;
     }

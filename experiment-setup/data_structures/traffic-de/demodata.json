@@ -9,7 +9,7 @@
     "decisionType": {
       "name": "Unfall"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -21,7 +21,7 @@
     "decisionType": {
       "name": "gefährliches Fahrverhalten"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -33,7 +33,7 @@
     "decisionType": {
       "name": "Unfall"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -45,7 +45,7 @@
     "decisionType": {
       "name": "gefährliches Fahrverhalten"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -57,7 +57,7 @@
     "decisionType": {
       "name": "gefährliches Fahrverhalten"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -69,7 +69,7 @@
     "decisionType": {
       "name": "liegengebliebenes Fahrzeug"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -81,7 +81,7 @@
     "decisionType": {
       "name": "Verkehrsstau"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -93,7 +93,7 @@
     "decisionType": {
       "name": "gefährliches Fahrverhalten"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -105,7 +105,7 @@
     "decisionType": {
       "name": "liegengebliebenes Fahrzeug"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -117,7 +117,7 @@
     "decisionType": {
       "name": "Einsatz von Ersthelfern"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -129,7 +129,7 @@
     "decisionType": {
       "name": "hilflose Person"
     },
-    "action": []
+    "actions": []
   },
   {
     "acquisitionTime": "DATETIME",
@@ -141,6 +141,6 @@
     "decisionType": {
       "name": "Verkehrsstau"
     },
-    "action": []
+    "actions": []
   }
 ]

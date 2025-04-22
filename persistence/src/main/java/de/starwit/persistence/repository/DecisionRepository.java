@@ -1,13 +1,12 @@
 package de.starwit.persistence.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionState;
-import de.starwit.persistence.entity.ModuleEntity;
-
-import java.util.List;
 
 /**
  * Decision Repository class
