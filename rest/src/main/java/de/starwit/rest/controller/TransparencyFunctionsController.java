@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +45,6 @@ public class TransparencyFunctionsController {
 
   static final Logger LOG = LoggerFactory.getLogger(TransparencyFunctionsController.class);
 
-  private List<Module> modules = new ArrayList<>();
-
   @Autowired
   ModuleService moduleService;
 
@@ -63,45 +60,22 @@ public class TransparencyFunctionsController {
   @Value("${sbom.generator.uri:}")
   private String reportGeneratorUri;
 
-  @Value("${aiapi.transparency.enabled:false}")
-  private boolean transparencyApiEnabled;
-
-  @Value("${aiapi.transparency.uri:}")
-  private String transparencyApiUri;
+  @Value("${aiapi.transparency.import:false}")
+  private boolean importDemoData;
 
   @PostConstruct
   private void init() {
-    if (transparencyApiEnabled) {
-      LOG.info("Transparency API enabled");
-
-      try {
-        LOG.info("Requesting transparency data from remote URI " + transparencyApiUri);
-        ResponseEntity<Module[]> response = restTemplate.getForEntity(transparencyApiUri + "/v0/modules",
-            Module[].class);
-        if (response.getStatusCode().is2xxSuccessful()) {
-          modules = Arrays.asList(response.getBody());
-        } else {
-          LOG.error("Can't load transparency data from remote URI " + transparencyApiUri);
+    if (importDemoData) {
+      LOG.info("importing default module data");
+      var sampleList = loadPrePackagedData();
+      for (Module module : sampleList) {
+        try {
+          moduleService.saveOrUpdate(module);
+        } catch (Exception e) {
+          LOG.error("Error importing default data: " + e.getMessage());
         }
-      } catch (Exception e) {
-        LOG.error("Can't load transparency data from remote URI " + transparencyApiUri + " " + e.getMessage());
-        LOG.debug(ExceptionUtils.getStackTrace(e));
-      }
-    } else {
-      LOG.info("Transparency API disabled, importing default data");
-      modules = loadPrePackagedData();
-    }
-  }
-
-  @Operation(summary = "Get info for module with given id")
-  @GetMapping(value = "/modules/{id}")
-  public Module findById(@PathVariable("id") Long id) {
-    for (Module m : modules) {
-      if (m.getId() == id) {
-        return m;
       }
     }
-    return null;
   }
 
   @Operation(summary = "Get list of all modules")
@@ -118,7 +92,7 @@ public class TransparencyFunctionsController {
 
   @Operation(summary = "Create new module")
   @PostMapping(value = "/modules")
-  public ResponseEntity<Module> createModules(@RequestBody Module module) {
+  public ResponseEntity<Module> createModule(@RequestBody Module module) {
     LOG.info("Trying to create new module " + module.getName());
     var entity = moduleService.saveOrUpdate(module);
     var responseModule = moduleService.convertToModule(entity);
@@ -177,13 +151,13 @@ public class TransparencyFunctionsController {
   public byte[] loadPDF(HttpServletResponse resp, @PathVariable("id") int id, @PathVariable("type") String type) {
     byte[] result = null;
 
-    if (!reportGenerationEnabled || checkIfModuleExists(id)) {
+    var entity = moduleService.findById((long) id);
+    if (!reportGenerationEnabled || entity != null) {
       LOG.error("Report generation API called, but generation service is disabled - frontend bug.");
       prepareResponse(resp, type);
       return result;
     }
 
-    ModuleEntity entity = moduleService.findById((long) id);
     Module m = moduleService.convertToModule(entity);
     String reportRequest = createRequestBody(m);
     String apiEndpoint = getReportAPIEndpoint(type);
@@ -211,10 +185,6 @@ public class TransparencyFunctionsController {
 
     prepareResponse(resp, type);
     return result;
-  }
-
-  private boolean checkIfModuleExists(int id) {
-    return id >= modules.size();
   }
 
   private String createRequestBody(Module m) {
