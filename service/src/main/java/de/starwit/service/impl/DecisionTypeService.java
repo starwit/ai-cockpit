@@ -68,12 +68,16 @@ public class DecisionTypeService
         }
     }
 
-    public List<DecisionTypeEntity> findByName(String name) {
-        return decisiontypeRepository.findByName(name);
+    public DecisionTypeEntity findByName(String name, Long moduleId) {
+        return decisiontypeRepository.findFirstByNameLikeAndModuleId(name, moduleId);
     }
 
     public List<DecisionTypeEntity> findByModule(Long moduleId) {
         return decisiontypeRepository.findByModuleId(moduleId);
+    }
+
+    public DecisionTypeEntity findFirstByNameLikeAndModuleId(String name, Long moduleId) {
+        return decisiontypeRepository.findFirstByNameLikeAndModuleId(name, moduleId);
     }
 
 }
