@@ -15,6 +15,7 @@ function ComponentDetailsDialog(props) {
     }, [open]);
 
     function reload() {
+        console.log("reload");
         const sboms = {}
         let size = Object.values(moduleData.sBOMLocation).length;
         Object.entries(moduleData.sBOMLocation).map((entry) => {

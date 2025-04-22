@@ -119,7 +119,7 @@ public class TransparencyFunctionsController {
   @Operation(summary = "Create new module")
   @PostMapping(value = "/modules")
   public ResponseEntity<Module> createModules(@RequestBody Module module) {
-    LOG.info("Trying to create new module " + module.getName());
+    LOG.info("Trying to create new module " + module.toString());
     var entity = moduleService.saveOrUpdate(module);
     var responseModule = moduleService.convertToModule(entity);
     return new ResponseEntity<>(responseModule, HttpStatus.OK);
@@ -142,23 +142,30 @@ public class TransparencyFunctionsController {
     return reportGenerationEnabled;
   }
 
-  @Operation(summary = "Get PDF report")
+  @Operation(summary = "Load sbom from url provided by module")
   @GetMapping(value = "/modules/sbom/{id}/{component}")
   public String loadSBomFromRemoteUri(@PathVariable("id") int id, @PathVariable("component") String component) {
-
-    Module m = modules.get(id);
-
-    try {
-      ResponseEntity<String> response = restTemplate.getForEntity(m.getsBOMLocation().get(component).getUrl(),
-          String.class);
-
-      if (response.getStatusCode().is2xxSuccessful()) {
-        return response.getBody();
-      } else {
-        return "";
+    ModuleEntity entity = moduleService.findById((long) id);
+    String sbomUri = null;
+    var sboms = entity.getSbomlocations();
+    for (String key : sboms.keySet()) {
+      if (key.equals(component)) {
+        sbomUri = sboms.get(key);
+        break;
       }
-    } catch (Exception e) {
-      LOG.error("Can't load sbom from remote URI " + e.getMessage());
+    }
+    if (sbomUri != null) {
+      try {
+        ResponseEntity<String> response = restTemplate.getForEntity(sbomUri, String.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+          return response.getBody();
+        } else {
+          return "";
+        }
+      } catch (Exception e) {
+        LOG.error("Can't load sbom from remote URI " + e.getMessage());
+      }
     }
 
     return "";
@@ -175,7 +182,8 @@ public class TransparencyFunctionsController {
       return result;
     }
 
-    Module m = modules.get(id);
+    ModuleEntity entity = moduleService.findById((long) id);
+    Module m = moduleService.convertToModule(entity);
     String reportRequest = createRequestBody(m);
     String apiEndpoint = getReportAPIEndpoint(type);
 
