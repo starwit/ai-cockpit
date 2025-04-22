@@ -143,7 +143,6 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
     private Map<String, String> convertMap(Map<String, ModuleSBOMLocationValue> map) {
         Map<String, String> newMap = new HashMap<>();
         for (Map.Entry<String, ModuleSBOMLocationValue> entry : map.entrySet()) {
-            LOG.info("Key: " + entry.getKey() + " Value: " + entry.getValue().getUrl());
             newMap.put(entry.getKey(), entry.getValue().getUrl());
         }
         return newMap;
