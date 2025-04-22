@@ -8,14 +8,6 @@ import {BitmapLayer, ScatterplotLayer} from '@deck.gl/layers';
 
 const MAP_VIEW = new MapView({repeat: true});
 
-const INITIAL_VIEW_STATE = {
-    longitude: -86.13470,
-    latitude: 39.91,
-    zoom: 10,
-    pitch: 0,
-    bearing: 0
-};
-
 function DecisionHeatmap({
     decisions = [],
     onHover,
