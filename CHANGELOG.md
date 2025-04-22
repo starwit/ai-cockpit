@@ -6,6 +6,12 @@ Changelog of ai-cockpit.
 
 ### Features
 
+-  use decision-api to import decisions ([178f2](https://github.com/starwit/ai-cockpit/commit/178f2317cfc5743) Anett Hübner)  
+
+## refs/tags/1.0.0 (2025-04-15)
+
+### Features
+
 -  ab#1389:   * add module to data schema and codebase  * use name to map decision types and action types, prevent database ids ([6c70d](https://github.com/starwit/ai-cockpit/commit/6c70d5c7ff31214) Anett Hübner)  
 
 ## 3 (2025-04-14)

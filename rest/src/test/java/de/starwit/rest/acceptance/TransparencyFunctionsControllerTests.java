@@ -12,8 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import de.starwit.aic.model.Module;
 
 @SpringBootTest
@@ -24,8 +23,6 @@ public class TransparencyFunctionsControllerTests {
 
     @Test
     void parseSampleData() throws Exception {
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         InputStream inputStream = new ClassPathResource("transparencytestdata.json").getInputStream();
         Module[] mods = objectMapper.readValue(inputStream, Module[].class);
         List<Module> modules = Arrays.asList(mods);
