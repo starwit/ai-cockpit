@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -33,9 +34,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import de.starwit.aic.model.Module;
 import de.starwit.aic.model.ModuleSBOMLocationValue;
+import de.starwit.persistence.entity.ModuleEntity;
+import de.starwit.persistence.exception.NotificationException;
 import de.starwit.service.impl.ModuleService;
 
 @RestController
@@ -105,15 +107,33 @@ public class TransparencyFunctionsController {
   @Operation(summary = "Get list of all modules")
   @GetMapping(value = "/modules")
   public List<Module> getModules() {
-    return modules;
+    List<Module> result = new LinkedList<>();
+    var entities = moduleService.findAll();
+    LOG.info("Found " + entities.size() + " modules");
+    for (ModuleEntity entity : entities) {
+      result.add(moduleService.convertToModule(entity));
+    }
+    return result;
   }
 
   @Operation(summary = "Create new module")
   @PostMapping(value = "/modules")
-  public boolean createModules(@RequestBody Module module) {
-    moduleService.saveOrUpdate(module);
-    LOG.info(module.toString());
-    return false;
+  public ResponseEntity<Module> createModules(@RequestBody Module module) {
+    LOG.info("Trying to create new module " + module.getName());
+    var entity = moduleService.saveOrUpdate(module);
+    var responseModule = moduleService.convertToModule(entity);
+    return new ResponseEntity<>(responseModule, HttpStatus.OK);
+  }
+
+  @Operation(summary = "Find module by name")
+  @GetMapping(value = "/modules/byname/{name}")
+  public ResponseEntity<Module> findByName(@PathVariable("name") String name) throws NotificationException {
+    List<ModuleEntity> modules = moduleService.findByName(name);
+    if (modules.size() == 1) {
+      return new ResponseEntity<>(moduleService.convertToModule(modules.get(0)), HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
   }
 
   @Operation(summary = "true if report generation is enabled")

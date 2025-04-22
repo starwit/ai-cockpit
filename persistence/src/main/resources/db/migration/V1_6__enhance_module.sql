@@ -1,4 +1,13 @@
 ALTER TABLE "module"
+    ADD "version" VARCHAR(255);
+
+ALTER TABLE "module"
+    ADD "application_identifier" VARCHAR(255);
+
+ALTER TABLE "module"
+    ADD UNIQUE ("application_identifier");
+
+ALTER TABLE "module"
     ADD "use_ai" BOOLEAN DEFAULT FALSE;
 
 ALTER TABLE "module"

@@ -1,7 +1,6 @@
 package de.starwit.persistence.entity;
 
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +37,12 @@ public class ModuleEntity extends AbstractEntity<Long> {
 
     @Column(name = "name", unique = true)
     private String name;
+
+    @Column(name = "version")
+    private String version;
+
+    @Column(name = "application_identifier")
+    private String applicationIdentifier;
 
     @Column(name = "use_ai")
     private boolean useAI;
@@ -197,5 +202,40 @@ public class ModuleEntity extends AbstractEntity<Long> {
 
     public void setSuccessors(Set<ModuleEntity> successors) {
         this.successors = successors;
+    }
+
+    public ZonedDateTime getLastDeployment() {
+        return lastDeployment;
+    }
+
+    public void setLastDeployment(ZonedDateTime lastDeployment) {
+        this.lastDeployment = lastDeployment;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getApplicationIdentifier() {
+        return applicationIdentifier;
+    }
+
+    public void setApplicationIdentifier(String applicationIdentifier) {
+        this.applicationIdentifier = applicationIdentifier;
+    }
+
+    @Override
+    public String toString() {
+        return "ModuleEntity [description=" + description + ", name=" + name + ", version=" + version
+                + ", applicationIdentifier=" + applicationIdentifier + ", useAI=" + useAI + ", modelName=" + modelName
+                + ", modelVersion=" + modelVersion + ", lastDeployment=" + lastDeployment + ", modelType=" + modelType
+                + ", modelLink=" + modelLink + ", publicTrainingData=" + publicTrainingData
+                + ", linkToPublicTrainingData=" + linkToPublicTrainingData + ", sbomlocations=" + sbomlocations
+                + ", decision=" + decision + ", decisionType=" + decisionType + ", actionType=" + actionType
+                + ", successors=" + successors + "]";
     }
 }

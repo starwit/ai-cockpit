@@ -50,6 +50,17 @@ public class ModuleController {
         return this.moduleService.findById(id);
     }
 
+    @Operation(summary = "Get module by name")
+    @GetMapping(value = "/byname/{name}")
+    public ModuleEntity findByName(@PathVariable("name") String name) {
+        var entityList = this.moduleService.findByName(name);
+        if (entityList != null && !entityList.isEmpty()) {
+            return this.moduleService.findByName(name).getFirst();
+        } else {
+            throw new EntityNotFoundException("Module not found");
+        }
+    }
+
     @Operation(summary = "Create module")
     @PostMapping
     public ModuleEntity save(@Valid @RequestBody ModuleEntity entity) {
@@ -67,17 +78,6 @@ public class ModuleController {
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable("id") Long id) throws NotificationException {
         moduleService.delete(id);
-    }
-
-    @Operation(summary = "Find module by name")
-    @GetMapping(value = "/{name}")
-    public boolean findByName(String name) throws NotificationException {
-        List<ModuleEntity> modules = moduleService.findByName(name);
-        if (modules.isEmpty()) {
-            throw new NotificationException("false", "Module not found.");
-        } else {
-            return true;
-        }
     }
 
     @ExceptionHandler(value = { EntityNotFoundException.class })
