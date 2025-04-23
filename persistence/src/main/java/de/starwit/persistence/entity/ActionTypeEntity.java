@@ -2,6 +2,7 @@ package de.starwit.persistence.entity;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -43,6 +44,7 @@ public class ActionTypeEntity extends AbstractEntity<Long> {
     private Set<DecisionTypeEntity> decisionType;
 
     @JsonFilter("filterName")
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "module_id")
     private ModuleEntity module;

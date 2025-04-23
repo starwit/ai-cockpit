@@ -2,7 +2,9 @@ package de.starwit.persistence.entity;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -25,7 +27,7 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
     @Column(name = "description")
     private String description;
 
-    // entity relations
+    @JsonIgnore
     @OneToMany(mappedBy = "decisionType", cascade = { CascadeType.ALL })
     private Set<DecisionEntity> decision;
 
@@ -35,6 +37,7 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
     private Set<ActionTypeEntity> actionType;
 
     @JsonFilter("filterName")
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "module_id")
     private ModuleEntity module;

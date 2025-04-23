@@ -9,6 +9,7 @@ import ComponentBreakDown from "./features/info/ComponentBreakDown";
 import DecisionOverviewMap from "./features/decision/DecisionOverviewMap";
 import DecisionHeatmapView from "./features/decision/DecisionHeatmapView";
 import CockpitFooter from "./commons/CockpitFooter";
+import ModuleOverview from "./features/module/ModuleOverview";
 
 function MainContentRouter() {
     return (
@@ -17,6 +18,7 @@ function MainContentRouter() {
             <Container sx={{paddingTop: "4em", paddingBottom: "4em"}}>
                 <Routes>
                     <Route path="/" element={<DecisionOverview />} />
+                    <Route path="/module" element={<ModuleOverview />} />
                     <Route path="/decision-map-view" element={<DecisionOverviewMap />} />
                     <Route path="/decision-heatmap-view" element={<DecisionHeatmapView />} />
                     <Route path="/action-type" element={<ActionTypeOverview />} />
