@@ -1,4 +1,5 @@
-import React, {useMemo} from 'react';
+import {WebMercatorViewport} from '@math.gl/web-mercator';
+import React, {useMemo, useRef} from 'react';
 import DeckGL from '@deck.gl/react';
 import {HeatmapLayer} from '@deck.gl/aggregation-layers';
 import {MapView} from '@deck.gl/core';
@@ -6,14 +7,6 @@ import {TileLayer} from '@deck.gl/geo-layers';
 import {BitmapLayer, ScatterplotLayer} from '@deck.gl/layers';
 
 const MAP_VIEW = new MapView({repeat: true});
-
-const INITIAL_VIEW_STATE = {
-    longitude: -86.13470,
-    latitude: 39.91,
-    zoom: 10,
-    pitch: 0,
-    bearing: 0
-};
 
 function DecisionHeatmap({
     decisions = [],
@@ -26,6 +19,7 @@ function DecisionHeatmap({
     startDate = '',
     endDate = ''
 }) {
+    const autoZoomDone = useRef(false);
 
     const filteredDecisions = useMemo(() => {
         if (!Array.isArray(decisions) || decisions.length === 0) return [];
@@ -68,6 +62,45 @@ function DecisionHeatmap({
             return true;
         });
     }, [decisions, selectedTypes, selectedStates, timeFilter, startDate, endDate]);
+
+    const viewState = (() => {
+        if (autoZoomDone.current === false) {
+            const minLatitude = filteredDecisions.map(d => d.cameraLatitude).reduce((acc, lat) => Math.min(acc, lat), 90);
+            const maxLatitude = filteredDecisions.map(d => d.cameraLatitude).reduce((acc, lat) => Math.max(acc, lat), -90);
+            const minLongitude = filteredDecisions.map(d => d.cameraLongitude).reduce((acc, lng) => Math.min(acc, lng), 180);
+            const maxLongitude = filteredDecisions.map(d => d.cameraLongitude).reduce((acc, lng) => Math.max(acc, lng), -180);
+            
+            const fitViewport = new WebMercatorViewport().fitBounds(
+                [
+                    [minLongitude, minLatitude],
+                    [maxLongitude, maxLatitude],
+                ],
+                {
+                    width: window.innerWidth,
+                    height: window.innerHeight,
+                    padding: Math.min(window.innerWidth, window.innerHeight) * 0.2,
+                    minExtent: 0.2,
+                }
+            );
+            
+            if (filteredDecisions.length > 0) {
+                // Disable auto zoom after the first fit
+                autoZoomDone.current = true;
+                return {
+                    longitude: fitViewport.longitude,
+                    latitude: fitViewport.latitude,
+                    zoom: fitViewport.zoom,
+                };
+            } else {
+                // If no decisions are available, set default view state
+                return {
+                    longitude: 10.716988775029739,
+                    latitude: 52.41988232741599,
+                    zoom: 5,
+                };
+            }
+        }        
+    })();
 
     function createBaseMapLayer() {
         return new TileLayer({
@@ -168,7 +201,7 @@ function DecisionHeatmap({
         <DeckGL
             layers={layers}
             views={MAP_VIEW}
-            initialViewState={INITIAL_VIEW_STATE}
+            initialViewState={viewState}
             controller={{dragRotate: false}}
         />
     );

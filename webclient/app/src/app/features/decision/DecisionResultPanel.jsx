@@ -21,7 +21,7 @@ function DecisionResultPanel(props) {
 
     return (
         show && (
-            <Box sx={{right: 10, position: 'fixed', top: 60, bottom: 60, overflowY: 'auto'}}>
+            <Box sx={{right: 10, position: 'fixed', top: 60, maxHeight: 'calc(100vh - 120px)', overflowY: 'auto'}}>
                 <Stack direction="row">
                     <Paper sx={{width: 300, padding: 1}}>
                         <Typography variant="h6" gutterBottom>
