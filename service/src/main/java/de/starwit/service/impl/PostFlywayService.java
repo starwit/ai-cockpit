@@ -2,10 +2,13 @@ package de.starwit.service.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -13,11 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import de.starwit.aic.model.Module;
 import de.starwit.aic.model.Decision;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
@@ -47,6 +52,8 @@ public class PostFlywayService {
     @Value("${default.module.name:Anomaly Detection}")
     private String defaultModuleName;
 
+    private String moduleDataFileName = "moduledata.json";
+
     private String mititgationTypeFileName = "actiontypes.json";
 
     private String decisionTypeFileName = "decisiontypes.json";
@@ -75,22 +82,56 @@ public class PostFlywayService {
         LOG.info("Importing sample data: " + setupScenario);
         if (setupScenario) {
             LOG.info("Importing sample data structure from folder " + scenarioImportFolder);
-            if (importactionTypes(scenarioImportFolder)) {
-                LOG.info("Import of action types successful, importing decision types");
-                if (importDecisionTypes(scenarioImportFolder)) {
-                    LOG.info("Import of desicion types successful, importing demo data");
-                    importDemoData(scenarioImportFolder);
+            LOG.info("Import module data...");
+            if (importModuleData()) {
+                if (importactionTypes()) {
+                    LOG.info("Import of action types successful, importing decision types");
+                    if (importDecisionTypes()) {
+                        LOG.info("Import of desicion types successful, importing demo data");
+                        importDemoData();
+                    }
                 }
             }
         }
     }
 
-    private boolean importactionTypes(String folder) {
+    private boolean importModuleData() {
+        if (moduleService.findAll().size() > 0) {
+            LOG.info("Module data already imported. Skipping import.");
+            return false;
+        }
+        File file = new File(scenarioImportFolder + "/" + moduleDataFileName);
+        if (file.exists()) {
+            List<Module> result = new ArrayList<>();
+            try {
+                LOG.info("Importing module data from file " + file.getAbsolutePath());
+                Module[] mods = mapper.readValue(file, Module[].class);
+                result = new ArrayList<>(Arrays.asList(mods));
+
+                for (Module module : result) {
+                    try {
+                        moduleService.saveOrUpdate(module);
+                    } catch (Exception e) {
+                        LOG.error("Error importing default data: " + e.getMessage());
+                    }
+                }
+                return true;
+            } catch (IOException e) {
+                LOG.error("Can't load module data " + e.getMessage());
+                return false;
+            }
+        } else {
+            LOG.warn("Module data file not found. Skipping import.");
+            return false;
+        }
+    }
+
+    private boolean importactionTypes() {
         if (actionRepository.findAll().size() > 0) {
             LOG.info("action types already imported. Skipping import.");
             return false;
         } else {
-            File file = new File(folder + "/" + mititgationTypeFileName);
+            File file = new File(scenarioImportFolder + "/" + mititgationTypeFileName);
             if (file.exists()) {
                 LOG.info("Importing action types from file " + file.getAbsolutePath());
                 try {
@@ -110,12 +151,12 @@ public class PostFlywayService {
         return false;
     }
 
-    private boolean importDecisionTypes(String folder) {
+    private boolean importDecisionTypes() {
         if (decisionTypeRepository.findAll().size() > 0) {
             LOG.info("Decision types already imported. Skipping import.");
             return false;
         } else {
-            File file = new File(folder + "/" + decisionTypeFileName);
+            File file = new File(scenarioImportFolder + "/" + decisionTypeFileName);
             if (file.exists()) {
                 LOG.info("Importing Decision types from file " + file.getAbsolutePath());
                 try {
@@ -156,12 +197,12 @@ public class PostFlywayService {
         return actionTypes;
     }
 
-    private boolean importDemoData(String folder) {
-        File file = new File(folder + "/" + demoDataFileName);
+    private boolean importDemoData() {
+        File file = new File(scenarioImportFolder + "/" + demoDataFileName);
         if (file.exists()) {
             LOG.info("Importing demo data from file " + file.getAbsolutePath());
             try {
-                Path path = Path.of(folder + "/" + demoDataFileName);
+                Path path = Path.of(scenarioImportFolder + "/" + demoDataFileName);
                 /*
                  * Decisions are displayed best, when timestamps are ordered.
                  * Here demo data are checked for marker DATETIME
