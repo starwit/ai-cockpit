@@ -9,6 +9,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,15 +24,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import de.starwit.aic.model.Decision;
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.DecisionEntity;
+import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.exception.NotificationException;
 import de.starwit.rest.dto.DecisionWithActionTypesDto;
 import de.starwit.rest.exception.NotificationDto;
 import de.starwit.service.impl.DecisionService;
 import de.starwit.service.impl.MinioException;
-import de.starwit.service.mapper.DecisionMapper;
+import de.starwit.service.impl.ModuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -46,15 +47,20 @@ public class DecisionController {
 
     static final Logger LOG = LoggerFactory.getLogger(DecisionController.class);
 
+    @Value("${default.module.name:Anomaly Detection}")
+    private String defaultModuleName;
+
     @Autowired
     private DecisionService decisionService;
 
-    DecisionMapper decisionMapper = new DecisionMapper();
+    @Autowired
+    private ModuleService moduleService;
 
     @Operation(summary = "Get all decision")
     @GetMapping
     public List<DecisionEntity> findAll() {
-        return this.decisionService.findAllByModule(1L);
+        ModuleEntity entity = moduleService.findFirstByNameLike(defaultModuleName);
+        return this.decisionService.findAllByModule(entity.getId());
     }
 
     @Operation(summary = "Get all open decisions")
@@ -71,8 +77,7 @@ public class DecisionController {
 
     @Operation(summary = "Create decision")
     @PostMapping
-    public DecisionEntity save(@Valid @RequestBody Decision dto) {
-        DecisionEntity entity = decisionMapper.toEntity(dto);
+    public DecisionEntity save(@Valid @RequestBody DecisionEntity entity) {
         return decisionService.createDecisionEntitywithAction(entity);
     }
 
