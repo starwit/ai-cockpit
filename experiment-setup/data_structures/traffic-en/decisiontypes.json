@@ -2,7 +2,6 @@
     {
         "name": "dangerous driving behaviour",
         "description": "A road user involving reckless or unsafe driving behavior",
-        "decision": [],
         "module": {
             "name": "Anomaly Detection"
         },
@@ -18,7 +17,6 @@
     {
         "name": "accident",
         "description": "A decision involving a collision or crash between vehicles or other obstacles",
-        "decision": [],
         "module": {
             "name": "Anomaly Detection"
         },
@@ -40,7 +38,6 @@
     {
         "name": "traffic jam",
         "description": "A situation where traffic is congested and vehicles are moving slowly or not at all",
-        "decision": [],
         "module": {
             "name": "Anomaly Detection"
         },
@@ -59,7 +56,6 @@
     {
         "name": "disabled vehicle",
         "description": "A vehicle is blocking traffic",
-        "decision": [],
         "actionType": [
             {
                 "name": "notify police"
@@ -75,7 +71,6 @@
     {
         "name": "helpless person",
         "description": "A human in need of assistance",
-        "decision": [],
         "actionType": [
             {
                 "name": "notify emergency services"
@@ -91,7 +86,6 @@
     {
         "name": "first responder ops",
         "description": "First responders operating in an area",
-        "decision": [],
         "actionType": [
             {
                 "name": "notify public alarm services"

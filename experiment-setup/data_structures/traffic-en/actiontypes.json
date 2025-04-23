@@ -5,8 +5,7 @@
         "executionPolicy": "WITHCHECK",
         "module": {
             "name": "Anomaly Detection"
-        },
-        "action": []
+        }
     },
     {
         "name": "notify emergency services",
@@ -14,8 +13,7 @@
         "executionPolicy": "MANUAL",
         "module": {
             "name": "Anomaly Detection"
-        },
-        "action": []
+        }
     },
     {
         "name": "notify public alarm services",
@@ -23,8 +21,7 @@
         "executionPolicy": "AUTOMATIC",
         "module": {
             "name": "Anomaly Detection"
-        },
-        "action": []
+        }
     },
     {
         "name": "I2X notification",
@@ -32,8 +29,7 @@
         "executionPolicy": "WITHCHECK",
         "module": {
             "name": "Anomaly Detection"
-        },
-        "action": []
+        }
     },
     {
         "name": "notify towing service",
@@ -41,7 +37,6 @@
         "executionPolicy": "AUTOMATIC",
         "module": {
             "name": "Anomaly Detection"
-        },
-        "action": []
+        }
     }
 ]

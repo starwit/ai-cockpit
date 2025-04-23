@@ -1,6 +1,7 @@
 package de.starwit.service.mapper;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 
 import de.starwit.aic.model.DecisionType;
 import de.starwit.persistence.entity.DecisionTypeEntity;
@@ -13,6 +14,7 @@ public class DecisionTypeMapper implements Mapper<DecisionType, DecisionTypeEnti
         modelMapper.addConverter(new ZonedToOffsetDateTimeConverter());
         modelMapper.addConverter(new OffsetToZonedDateTimeConverter());
         modelMapper.getConfiguration().setSkipNullEnabled(true);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
     }
 
     @Override
