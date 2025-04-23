@@ -1,10 +1,12 @@
-package de.starwit.rest.acceptance;
+package de.starwit.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+
+import de.starwit.aic.model.Module;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,8 @@ import org.springframework.core.io.ClassPathResource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.starwit.aic.model.Module;
-
 @SpringBootTest
-public class TransparencyFunctionsControllerTests {
+public class ImportTest {
 
     @Autowired
     ObjectMapper objectMapper;

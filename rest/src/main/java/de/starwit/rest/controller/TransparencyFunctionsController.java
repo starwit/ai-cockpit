@@ -1,11 +1,8 @@
 package de.starwit.rest.controller;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,14 +26,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletResponse;
 import de.starwit.aic.model.Module;
 import de.starwit.aic.model.ModuleSBOMLocationValue;
 import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.exception.NotificationException;
 import de.starwit.service.impl.ModuleService;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(path = "${rest.base-path}/transparency")
@@ -59,24 +54,6 @@ public class TransparencyFunctionsController {
 
   @Value("${sbom.generator.uri:}")
   private String reportGeneratorUri;
-
-  @Value("${aiapi.transparency.import:false}")
-  private boolean importDemoData;
-
-  @PostConstruct
-  private void init() {
-    if (importDemoData) {
-      LOG.info("importing default module data");
-      var sampleList = loadPrePackagedData();
-      for (Module module : sampleList) {
-        try {
-          moduleService.saveOrUpdate(module);
-        } catch (Exception e) {
-          LOG.error("Error importing default data: " + e.getMessage());
-        }
-      }
-    }
-  }
 
   @Operation(summary = "Get list of all modules")
   @GetMapping(value = "/modules")
@@ -257,16 +234,4 @@ public class TransparencyFunctionsController {
     resp.setHeader(headerKey, headerValue);
   }
 
-  private List<Module> loadPrePackagedData() {
-    List<Module> result = new ArrayList<>();
-    try {
-      InputStream inputStream = new ClassPathResource("transparencytestdata.json").getInputStream();
-      Module[] mods = objectMapper.readValue(inputStream, Module[].class);
-      result = new ArrayList<>(Arrays.asList(mods));
-    } catch (IOException e) {
-      LOG.error("Can't load static test data for transparency functions " + e.getMessage());
-    }
-
-    return result;
-  }
 }
