@@ -98,10 +98,10 @@ function ModuleOverview() {
                                                 <TableCell align="left">
                                                     <Button variant="contained" color="secondary" component={RouterLink} to="/">
                                                         <Stack direction="row" spacing={4}>
-                                                            <Badge badgeContent={row.openDecisions} color="error">
+                                                            <Badge badgeContent={row.openDecisions} color="error" showZero>
                                                                 <InboxIcon color="action" />
                                                             </Badge>
-                                                            <Badge badgeContent={row.madeDecisions} color="primary">
+                                                            <Badge badgeContent={row.madeDecisions} color="primary" showZero>
                                                                 <ArchiveIcon color="action" />
                                                             </Badge>
                                                         </Stack>
