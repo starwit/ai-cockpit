@@ -1,12 +1,14 @@
 import React, {useEffect, useMemo, useState} from "react";
 import ModuleRest from "../../services/ModuleRest"
-import {Card, CardContent, Divider, IconButton, Link, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography} from '@mui/material';
+import {Badge, Button, Card, CardContent, Divider, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from '@mui/material';
+import {Link as RouterLink} from 'react-router-dom';
 import Grid from "@mui/material/Grid";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import InboxIcon from '@mui/icons-material/Inbox';
+import InfoIcon from '@mui/icons-material/Info';
 import {useTranslation} from "react-i18next";
-import {styled} from '@mui/material/styles';
 
 function ModuleOverview() {
     const {t} = useTranslation();
@@ -37,7 +39,7 @@ function ModuleOverview() {
                                     <Table size="small" aria-label="a dense table">
                                         <TableBody>
                                             <TableRow>
-                                                <TableCell style={{width: '150px'}} align="left">
+                                                <TableCell style={{width: '180px'}} align="left">
                                                     {t("module.description")}
                                                 </TableCell>
                                                 <TableCell align="left">
@@ -50,6 +52,10 @@ function ModuleOverview() {
                                                         {row.description}
                                                     </Typography>
                                                 </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell align="left">{t("module.applicationId")}</TableCell>
+                                                <TableCell align="left">{row.applicationIdentifier}</TableCell>
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell align="left">{t("module.lastdeployment")}</TableCell>
@@ -66,37 +72,40 @@ function ModuleOverview() {
                                             <TableRow>
                                                 <TableCell align="left">{t("module.decisiontypes")}</TableCell>
                                                 <TableCell align="left">
-                                                    <Stack direction="row" spacing={4}>
+                                                    <Button variant="contained"
+                                                        color="secondary"
+                                                        startIcon={<InfoIcon />}
+                                                        component={RouterLink}
+                                                        to="/decision-type">
                                                         <Typography>{row.decisionType.length}</Typography>
-                                                        <ZoomInIcon />
-                                                    </Stack>
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell align="left">{t("module.actiontypes")}</TableCell>
                                                 <TableCell align="left">
-                                                    <Stack direction="row" spacing={4}>
+                                                    <Button variant="contained"
+                                                        color="secondary"
+                                                        startIcon={<InfoIcon />}
+                                                        component={RouterLink}
+                                                        to="/action-type">
                                                         <Typography>{row.actionType.length}</Typography>
-                                                        <ZoomInIcon />
-                                                    </Stack>
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow>
-                                                <TableCell align="left">{t("module.decisions.open")}</TableCell>
+                                                <TableCell align="left">{t("module.decisions")}</TableCell>
                                                 <TableCell align="left">
-                                                    <Stack direction="row" spacing={4}>
-                                                        <Typography>{row.openDecisions}</Typography>
-                                                        <ZoomInIcon />
-                                                    </Stack>
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow>
-                                                <TableCell align="left">{t("module.decisions.done")}</TableCell>
-                                                <TableCell align="left">
-                                                    <Stack direction="row" spacing={4} >
-                                                        <Typography>{row.madeDecisions}</Typography>
-                                                        <ZoomInIcon />
-                                                    </Stack>
+                                                    <Button variant="contained" color="secondary" component={RouterLink} to="/">
+                                                        <Stack direction="row" spacing={4}>
+                                                            <Badge badgeContent={row.openDecisions} color="error">
+                                                                <InboxIcon color="action" />
+                                                            </Badge>
+                                                            <Badge badgeContent={row.madeDecisions} color="primary">
+                                                                <ArchiveIcon color="action" />
+                                                            </Badge>
+                                                        </Stack>
+                                                    </Button>
                                                 </TableCell>
                                             </TableRow>
                                         </TableBody>
