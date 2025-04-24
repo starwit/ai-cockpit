@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -24,6 +25,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 /**
  * Module Entity class
@@ -79,11 +81,11 @@ public class ModuleEntity extends AbstractEntity<Long> {
     @OneToMany(mappedBy = "module", cascade = { CascadeType.ALL })
     private Set<DecisionEntity> decision;
 
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "module", cascade = { CascadeType.ALL })
     private Set<DecisionTypeEntity> decisionType;
 
-    @JsonIgnore
+    @JsonManagedReference
     @OneToMany(mappedBy = "module", cascade = { CascadeType.ALL })
     private Set<ActionTypeEntity> actionType;
 
@@ -91,6 +93,12 @@ public class ModuleEntity extends AbstractEntity<Long> {
     @ManyToMany
     @JoinTable(name = "module_successors", joinColumns = @JoinColumn(name = "predecessor_id"), inverseJoinColumns = @JoinColumn(name = "successor_id"))
     private Set<ModuleEntity> successors = new HashSet<>();
+
+    @Transient
+    private int openDecisions;
+
+    @Transient
+    private int madeDecisions;
 
     public String getDescription() {
         return description;
@@ -226,6 +234,22 @@ public class ModuleEntity extends AbstractEntity<Long> {
 
     public void setApplicationIdentifier(String applicationIdentifier) {
         this.applicationIdentifier = applicationIdentifier;
+    }
+
+    public int getOpenDecisions() {
+        return openDecisions;
+    }
+
+    public void setOpenDecisions(int openDecisions) {
+        this.openDecisions = openDecisions;
+    }
+
+    public int getMadeDecisions() {
+        return madeDecisions;
+    }
+
+    public void setMadeDecisions(int madeDecisions) {
+        this.madeDecisions = madeDecisions;
     }
 
     @Override

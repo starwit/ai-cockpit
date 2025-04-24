@@ -18,4 +18,6 @@ public interface DecisionRepository extends JpaRepository<DecisionEntity, Long> 
     List<DecisionEntity> findByModuleId(Long moduleId);
 
     List<DecisionEntity> findByModuleIdAndState(Long moduleId, DecisionState state);
+
+    long countByModuleIdAndState(Long moduleId, DecisionState state);
 }

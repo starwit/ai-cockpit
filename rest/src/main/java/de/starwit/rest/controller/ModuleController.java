@@ -1,5 +1,6 @@
 package de.starwit.rest.controller;
 
+import java.util.HashSet;
 import java.util.List;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -42,6 +43,12 @@ public class ModuleController {
     @GetMapping
     public List<ModuleEntity> findAll() {
         return this.moduleService.findAll();
+    }
+
+    @Operation(summary = "Get all modules with decision count")
+    @GetMapping(value = "/withdecisioncount")
+    public List<ModuleEntity> findAllWithDecisionCount() {
+        return this.moduleService.findAllWithDecisionCount();
     }
 
     @Operation(summary = "Get module with id")

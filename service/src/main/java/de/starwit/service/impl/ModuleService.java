@@ -2,19 +2,20 @@ package de.starwit.service.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang3.ObjectUtils.Null;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import de.starwit.persistence.entity.ModuleEntity;
+import de.starwit.persistence.repository.DecisionRepository;
 import de.starwit.persistence.repository.ModuleRepository;
 import jakarta.transaction.Transactional;
 import de.starwit.aic.model.AIModel;
 import de.starwit.aic.model.AIModelType;
 import de.starwit.aic.model.Module;
 import de.starwit.aic.model.ModuleSBOMLocationValue;
+import de.starwit.persistence.entity.DecisionState;
 import de.starwit.persistence.entity.ModelType;
 import java.util.Map;
 import java.net.URI;
@@ -36,6 +37,9 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
     @Autowired
     private ModuleRepository moduleRepository;
 
+    @Autowired
+    private DecisionRepository decisionRepository;
+
     @Override
     public ModuleRepository getRepository() {
         return moduleRepository;
@@ -43,6 +47,17 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
 
     public List<ModuleEntity> findByName(String name) {
         return moduleRepository.findByName(name);
+    }
+
+    public List<ModuleEntity> findAllWithDecisionCount() {
+        var modules = moduleRepository.findAll();
+        for (ModuleEntity moduleEntity : modules) {
+            moduleEntity.setOpenDecisions(
+                    (int) decisionRepository.countByModuleIdAndState(moduleEntity.getId(), DecisionState.NEW));
+            moduleEntity.setMadeDecisions(
+                    (int) decisionRepository.countByModuleIdAndState(moduleEntity.getId(), DecisionState.ACCEPTED));
+        }
+        return modules;
     }
 
     @Override
