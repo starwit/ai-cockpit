@@ -7,6 +7,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.rest.controller.DecisionController;
 import de.starwit.service.impl.DecisionService;
+import de.starwit.service.impl.ModuleService;
 
 /**
  * Tests for DecisionController
@@ -21,6 +22,9 @@ public class DecisionControllerIntegrationTest extends AbstractControllerIntegra
 
     @MockitoBean
     private DecisionService decisionService;
+
+    @MockitoBean
+    private ModuleService moduleService;
 
     private static final String restpath = "/api/decisions/";
 

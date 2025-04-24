@@ -15,6 +15,10 @@ public class DecisionTypeMapper implements Mapper<DecisionType, DecisionTypeEnti
         modelMapper.addConverter(new OffsetToZonedDateTimeConverter());
         modelMapper.getConfiguration().setSkipNullEnabled(true);
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+        modelMapper.typeMap(DecisionTypeEntity.class, DecisionType.class)
+                .addMappings(mapper -> mapper.map(DecisionTypeEntity::getActionType, DecisionType::setActionTypes));
+        modelMapper.typeMap(DecisionType.class, DecisionTypeEntity.class)
+                .addMappings(mapper -> mapper.map(DecisionType::getActionTypes, DecisionTypeEntity::setActionType));
     }
 
     @Override

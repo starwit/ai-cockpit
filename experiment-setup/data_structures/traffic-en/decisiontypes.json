@@ -5,7 +5,7 @@
         "module": {
             "name": "Anomaly Detection"
         },
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "notify police"
             },
@@ -20,7 +20,7 @@
         "module": {
             "name": "Anomaly Detection"
         },
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "notify emergency services"
             },
@@ -41,7 +41,7 @@
         "module": {
             "name": "Anomaly Detection"
         },
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "notify public alarm services"
             },
@@ -56,7 +56,7 @@
     {
         "name": "disabled vehicle",
         "description": "A vehicle is blocking traffic",
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "notify police"
             },
@@ -71,7 +71,7 @@
     {
         "name": "helpless person",
         "description": "A human in need of assistance",
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "notify emergency services"
             },
@@ -86,7 +86,7 @@
     {
         "name": "first responder ops",
         "description": "First responders operating in an area",
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "notify public alarm services"
             },
