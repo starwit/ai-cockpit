@@ -34,7 +34,7 @@ public interface Mapper<DTO, ENTITY> {
 
     }
 
-    public default Set<ENTITY> toEntityList(Set<DTO> dtos) {
+    public default Set<ENTITY> toEntitySet(Set<DTO> dtos) {
         Set<ENTITY> entities = dtos.stream()
                 .map(dto -> toEntity(dto))
                 .collect(Collectors.toSet());
