@@ -2,8 +2,7 @@
     {
         "name": "gefährliches Fahrverhalten",
         "description": "Ein Verkehrsteilnehmer, der rücksichtslos oder unsicher fährt",
-        "decision": [],
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "Polizei benachrichtigen"
             },
@@ -15,8 +14,7 @@
     {
         "name": "Unfall",
         "description": "Ein Verkehrsvorfall, bei dem es zu einer Kollision oder einem Zusammenstoß zwischen Fahrzeugen oder anderen Hindernissen kommt",
-        "decision": [],
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "Rettungsdienste benachrichtigen"
             },
@@ -34,8 +32,7 @@
     {
         "name": "Verkehrsstau",
         "description": "Eine Situation, in der der Verkehr überlastet ist und Fahrzeuge langsam oder gar nicht fahren",
-        "decision": [],
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
             },
@@ -50,8 +47,7 @@
     {
         "name": "liegengebliebenes Fahrzeug",
         "description": "Ein Fahrzeug blockiert den Verkehr",
-        "decision": [],
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "Polizei benachrichtigen"
             },
@@ -66,8 +62,7 @@
     {
         "name": "hilflose Person",
         "description": "Eine Person, die Unterstützung benötigt",
-        "decision": [],
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "Rettungsdienste benachrichtigen"
             },
@@ -82,8 +77,7 @@
     {
         "name": "Einsatz von Ersthelfern",
         "description": "Ersthelfer sind in einem Gebiet im Einsatz",
-        "decision": [],
-        "actionType": [
+        "actionTypes": [
             {
                 "name": "Öffentliche Alarmeinrichtungen benachrichtigen"
             },

@@ -4,7 +4,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -18,8 +17,6 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -29,7 +26,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.starwit.aic.model.Module;
 import de.starwit.aic.model.ModuleSBOMLocationValue;
 import de.starwit.persistence.entity.ModuleEntity;
-import de.starwit.persistence.exception.NotificationException;
 import de.starwit.service.impl.ModuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
@@ -54,38 +50,6 @@ public class TransparencyFunctionsController {
 
   @Value("${sbom.generator.uri:}")
   private String reportGeneratorUri;
-
-  @Operation(summary = "Get list of all modules")
-  @GetMapping(value = "/modules")
-  public List<Module> getModules() {
-    List<Module> result = new LinkedList<>();
-    var entities = moduleService.findAll();
-    LOG.info("Found " + entities.size() + " modules");
-    for (ModuleEntity entity : entities) {
-      result.add(moduleService.convertToModule(entity));
-    }
-    return result;
-  }
-
-  @Operation(summary = "Create new module")
-  @PostMapping(value = "/modules")
-  public ResponseEntity<Module> createModule(@RequestBody Module module) {
-    LOG.info("Trying to create new module " + module.getName());
-    var entity = moduleService.saveOrUpdate(module);
-    var responseModule = moduleService.convertToModule(entity);
-    return new ResponseEntity<>(responseModule, HttpStatus.OK);
-  }
-
-  @Operation(summary = "Find module by name")
-  @GetMapping(value = "/modules/byname/{name}")
-  public ResponseEntity<Module> findByName(@PathVariable("name") String name) throws NotificationException {
-    List<ModuleEntity> modules = moduleService.findByName(name);
-    if (modules.size() == 1) {
-      return new ResponseEntity<>(moduleService.convertToModule(modules.get(0)), HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-  }
 
   @Operation(summary = "true if report generation is enabled")
   @GetMapping(value = "/reports/enabled")

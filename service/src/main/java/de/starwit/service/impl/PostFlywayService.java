@@ -20,15 +20,19 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.starwit.aic.model.Module;
+import de.starwit.aic.model.ActionType;
 import de.starwit.aic.model.Decision;
+import de.starwit.aic.model.DecisionType;
+import de.starwit.aic.model.Module;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
+import de.starwit.service.mapper.ActionTypeMapper;
 import de.starwit.service.mapper.DecisionMapper;
+import de.starwit.service.mapper.DecisionTypeMapper;
 import jakarta.annotation.PostConstruct;
 
 /**
@@ -59,6 +63,10 @@ public class PostFlywayService {
     private String demoDataFileName = "demodata.json";
 
     DecisionMapper decisionMapper = new DecisionMapper();
+
+    DecisionTypeMapper decisionTypeMapper = new DecisionTypeMapper();
+
+    ActionTypeMapper actionTypeMapper = new ActionTypeMapper();
 
     @Autowired
     private DecisionTypeRepository decisionTypeRepository;
@@ -133,11 +141,12 @@ public class PostFlywayService {
             if (file.exists()) {
                 LOG.info("Importing action types from file " + file.getAbsolutePath());
                 try {
-                    List<ActionTypeEntity> actionTypes = mapper.readValue(file,
-                            new TypeReference<List<ActionTypeEntity>>() {
+                    List<ActionType> actionTypes = mapper.readValue(file,
+                            new TypeReference<List<ActionType>>() {
                             });
-                    processEntitiesWithModule(actionTypes, moduleService, this.defaultModuleName);
-                    actionRepository.saveAll(actionTypes);
+                    List<ActionTypeEntity> actionTypeEntities = actionTypeMapper.toEntityList(actionTypes);
+                    processEntitiesWithModule(actionTypeEntities, moduleService, this.defaultModuleName);
+                    actionRepository.saveAll(actionTypeEntities);
                 } catch (IOException e) {
                     LOG.error("Can't parse action types, aborting import " + e.getMessage());
                 }
@@ -158,16 +167,17 @@ public class PostFlywayService {
             if (file.exists()) {
                 LOG.info("Importing Decision types from file " + file.getAbsolutePath());
                 try {
-                    List<DecisionTypeEntity> decisionTypes = mapper.readValue(file,
-                            new TypeReference<List<DecisionTypeEntity>>() {
+                    List<DecisionType> decisionTypes = mapper.readValue(file,
+                            new TypeReference<List<DecisionType>>() {
                             });
 
-                    for (DecisionTypeEntity decisionTypeEntity : decisionTypes) {
+                    List<DecisionTypeEntity> decisionTypeEntities = decisionTypeMapper.toEntityList(decisionTypes);
+                    for (DecisionTypeEntity decisionTypeEntity : decisionTypeEntities) {
                         Set<ActionTypeEntity> actionTypes = mapActionTypesByName(decisionTypeEntity.getActionType());
                         decisionTypeEntity.setActionType(actionTypes);
                     }
-                    processEntitiesWithModule(decisionTypes, moduleService, this.defaultModuleName);
-                    decisionTypeRepository.saveAll(decisionTypes);
+                    processEntitiesWithModule(decisionTypeEntities, moduleService, this.defaultModuleName);
+                    decisionTypeRepository.saveAll(decisionTypeEntities);
                 } catch (IOException | IndexOutOfBoundsException e) {
                     LOG.error("Can't parse Decision types, aborting import " + e.getMessage());
                 }
