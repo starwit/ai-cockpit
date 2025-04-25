@@ -124,6 +124,7 @@ const translationDeDE = {
     "time.range.last24Hours": "Letzte 24 Stunden",
     "time.range.start": "Startdatum",
     "time.range.end": "Enddatum",
+    "module.heading": "Module",
     "module.title": "Modulename",
     "module.description": "Beschreibung",
     "module.lastdeployment": "Aktualisiert",

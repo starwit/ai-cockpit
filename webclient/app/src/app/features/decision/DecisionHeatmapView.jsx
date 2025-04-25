@@ -7,8 +7,10 @@ import DecisionResultPanel from './DecisionResultPanel';
 import DecisionDetail from './DecisionDetail';
 import DecisionTypeFilter from './DecisionTypeFilter';
 import DecisionHeatmap from './DecisionHeatmap';
+import {useParams} from 'react-router';
 
 function DecisionHeatmapView() {
+    const {moduleId} = useParams();
     const [selectedType, setSelectedType] = useState(['all']);
     // Add state and time filters
     const [selectedStates, setSelectedStates] = useState([]);
@@ -84,12 +86,20 @@ function DecisionHeatmapView() {
     }, []);
 
     function reloadDecisions() {
-        decisionRest.findAll().then(response => {
-            if (response.data) {
-                setDecisions(response.data);
-            }
-        });
+        if (moduleId) {
+            decisionRest.findByModuleId(moduleId).then(response => handleReloadDecisions(response));
+        } else {
+            decisionRest.findAll().then(response => handleReloadDecisions(response));
+        }
     }
+
+    function handleReloadDecisions(response) {
+        if (response.data) {
+            setDecisions(response.data);
+        }
+    }
+
+
 
     function handleOpenDecision(pickingInfo) {
         if (pickingInfo.object && Array.isArray(pickingInfo.object) && pickingInfo.object.length > 0) {
