@@ -97,7 +97,7 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         return decisionRepository.findByModuleIdAndState(moduleId, DecisionState.NEW);
     }
 
-    public List<DecisionEntity> findAllByModule(Long moduleId) {
+    public List<DecisionEntity> findByModule(Long moduleId) {
         List<DecisionEntity> result = decisionRepository.findByModuleId(moduleId);
         return result;
     }
