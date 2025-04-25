@@ -18,7 +18,7 @@ class DecisionRest extends CrudRest {
         return axios.get(this.baseUrl + "/open");
     }
 
-    findBymoduleId(moduleId) {
+    findByModuleId(moduleId) {
         return axios.get(this.baseUrl + "/by-module/" + moduleId);
     }
 }

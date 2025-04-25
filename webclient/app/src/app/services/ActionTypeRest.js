@@ -14,7 +14,7 @@ class ActionTypeRest extends CrudRest {
         return axios.get(this.baseUrl + "/by-decision-type/" + decisionTypeId);
     }
 
-    findBymoduleId(moduleId) {
+    findByModuleId(moduleId) {
         return axios.get(this.baseUrl + "/by-module/" + moduleId);
     }
 }

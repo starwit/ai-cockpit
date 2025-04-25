@@ -17,12 +17,12 @@ function MainContentRouter() {
             <CockpitAppBar />
             <Container sx={{paddingTop: "4em", paddingBottom: "4em"}}>
                 <Routes>
-                    <Route path="/" element={<DecisionOverview />} />
+                    <Route path="/:moduleId?" element={<DecisionOverview />} />
                     <Route path="/module" element={<ModuleOverview />} />
                     <Route path="/decision-map-view" element={<DecisionOverviewMap />} />
                     <Route path="/decision-heatmap-view" element={<DecisionHeatmapView />} />
-                    <Route path="/action-type" element={<ActionTypeOverview />} />
-                    <Route path="/decision-type" element={<DecisionTypeOverview />} />
+                    <Route path="/action-type/:moduleId?" element={<ActionTypeOverview />} />
+                    <Route path="/decision-type/:moduleId?" element={<DecisionTypeOverview />} />
                     <Route path="/info/component-breakdown" element={<ComponentBreakDown />} />
                     <Route path="/logout" component={() => {
                         window.location.href = window.location.pathname + "api/user/logout";

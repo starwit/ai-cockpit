@@ -36,8 +36,7 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
     @JoinTable(name = "decisiontype_actiontype", joinColumns = @JoinColumn(name = "decisiontype_id"), inverseJoinColumns = @JoinColumn(name = "actiontype_id"))
     private Set<ActionTypeEntity> actionType;
 
-    @JsonFilter("filterName")
-    @JsonBackReference
+    @JsonFilter("filterIdName")
     @ManyToOne
     @JoinColumn(name = "module_id")
     private ModuleEntity module;
