@@ -17,5 +17,9 @@ class DecisionRest extends CrudRest {
     findAllOpen() {
         return axios.get(this.baseUrl + "/open");
     }
+
+    findBymoduleId(moduleId) {
+        return axios.get(this.baseUrl + "/by-module/" + moduleId);
+    }
 }
 export default DecisionRest;
