@@ -120,7 +120,6 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         return createDecisionEntitywithAction(entity);
     }
 
-    // TODO: should use dto instead of entity
     private DecisionTypeEntity processDecisionType(DecisionTypeEntity entity, Long moduleId) {
         DecisionTypeEntity decisionType = null;
         if (entity != null) {
@@ -143,6 +142,9 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
             module = entity.getId() != null ? moduleRepository.getReferenceById(entity.getId())
                     : moduleRepository.findFirstByNameLike(entity.getName());
         } else {
+            module = moduleRepository.findFirstByNameLike(anomalyDetectionName);
+        }
+        if (module == null) {
             module = moduleRepository.findFirstByNameLike(anomalyDetectionName);
         }
         return module;
