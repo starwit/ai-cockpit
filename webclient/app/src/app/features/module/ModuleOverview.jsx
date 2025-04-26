@@ -18,7 +18,6 @@ function ModuleOverview() {
 
     useEffect(() => {
         moduleFunctions.getWithDecisions().then((response) => {
-            console.log(response.data);
             if (response.data == null) {
                 return;
             } else {
@@ -81,7 +80,7 @@ function ModuleOverview() {
                                                             color="secondary"
                                                             startIcon={<InfoIcon />}
                                                             component={RouterLink}
-                                                            to="/decision-type">
+                                                            to={"/decision-type/" + row.id}>
                                                             <Typography>{row.decisionType.length}</Typography>
                                                         </Button>
                                                     </TableCell>
@@ -93,7 +92,7 @@ function ModuleOverview() {
                                                             color="secondary"
                                                             startIcon={<InfoIcon />}
                                                             component={RouterLink}
-                                                            to="/action-type">
+                                                            to={"/action-type/" + row.id} >
                                                             <Typography>{row.actionType.length}</Typography>
                                                         </Button>
                                                     </TableCell>
