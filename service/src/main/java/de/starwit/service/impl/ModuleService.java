@@ -77,6 +77,8 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
         ModuleEntity entity = new ModuleEntity();
         entity.setDescription(module.getDescription());
         entity.setName(module.getName());
+        entity.setApplicationIdentifier(module.getApplicationIdentifier());
+        entity.setVersion(module.getVersion());
         entity.setUseAI(module.getUseAI());
         entity.setModelName(module.getModel().getName());
         entity.setModelVersion(module.getModel().getVersion());
@@ -107,6 +109,8 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
         Module module = new Module();
         module.setId(entity.getId());
         module.setDescription(entity.getDescription());
+        module.setApplicationIdentifier(entity.getApplicationIdentifier());
+        module.setVersion(entity.getVersion());
         module.setName(entity.getName());
         module.setUseAI(entity.isUseAI());
         module.setModel(new AIModel());
