@@ -10,12 +10,18 @@ import org.springframework.stereotype.Service;
 import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.DecisionRepository;
 import de.starwit.persistence.repository.ModuleRepository;
+import de.starwit.service.mapper.ActionTypeMapper;
+import de.starwit.service.mapper.DecisionTypeMapper;
 import jakarta.transaction.Transactional;
 import de.starwit.aic.model.AIModel;
 import de.starwit.aic.model.AIModelType;
+import de.starwit.aic.model.ActionType;
+import de.starwit.aic.model.DecisionType;
 import de.starwit.aic.model.Module;
 import de.starwit.aic.model.ModuleSBOMLocationValue;
+import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionState;
+import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.entity.ModelType;
 import java.util.Map;
 import java.net.URI;
@@ -23,6 +29,7 @@ import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  * 
@@ -102,6 +109,23 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
             }
         }
 
+        if (module.getDecisionTypes() != null) {
+            entity.setDecisionType(new HashSet<>());
+            DecisionTypeMapper dtm = new DecisionTypeMapper();
+            List<DecisionType> decisionTypes = new LinkedList<>();
+            decisionTypes.addAll(module.getDecisionTypes());
+            entity.setDecisionType(new HashSet<>(dtm.toEntityList(decisionTypes)));
+
+        }
+
+        if (module.getActionTypes() != null) {
+            entity.setActionType(new HashSet<>());
+            ActionTypeMapper dtm = new ActionTypeMapper();
+            List<ActionType> actionTypes = new LinkedList<>();
+            actionTypes.addAll(module.getActionTypes());
+            entity.setActionType(new HashSet<>(dtm.toEntityList(actionTypes)));
+        }
+
         return entity;
     }
 
@@ -146,6 +170,23 @@ public class ModuleService implements ServiceInterface<ModuleEntity, ModuleRepos
                 module.getSuccessors().add(successorModule);
             }
         }
+
+        if (entity.getDecisionType() != null) {
+            module.setDecisionTypes(new HashSet<>());
+            DecisionTypeMapper dtm = new DecisionTypeMapper();
+            List<DecisionTypeEntity> decisionTypes = new LinkedList<>();
+            decisionTypes.addAll(entity.getDecisionType());
+            dtm.toDtoList(decisionTypes);
+        }
+
+        if (entity.getActionType() != null) {
+            module.setActionTypes(new HashSet<>());
+            ActionTypeMapper dtm = new ActionTypeMapper();
+            List<ActionTypeEntity> actionTypes = new LinkedList<>();
+            actionTypes.addAll(entity.getActionType());
+            dtm.toDtoList(actionTypes);
+        }
+
         return module;
     }
 
