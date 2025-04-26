@@ -119,7 +119,7 @@ function DecisionDetail(props) {
     }
 
     function reload() { //reload the decision types
-        decisionTypeRest.findAll().then(response => {
+        decisionTypeRest.findByModuleId(rowData.module.id).then(response => {
             if (response.data == null) {
                 return;
             }
@@ -167,7 +167,7 @@ function DecisionDetail(props) {
             return null;
         }
 
-        actionTypeRest.findAll().then(response => {
+        actionTypeRest.findByModuleId(rowData.module.id).then(response => {
             if (response.data == null) {
                 return;
             }

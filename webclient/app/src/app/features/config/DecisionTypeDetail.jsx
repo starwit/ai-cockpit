@@ -20,7 +20,7 @@ import {deDE, enUS} from '@mui/x-data-grid/locales';
 
 function DecisionTypeDetail(props) {
     const {t, i18n} = useTranslation();
-    const {open, rowData, handleClose} = props;
+    const {moduleId, open, rowData, handleClose} = props;
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const [isSaved, setIsSaved] = useState([true]);
@@ -87,21 +87,23 @@ function DecisionTypeDetail(props) {
     }, [open]);
 
     function reload() {
-        actionTypeRest.findAll().then(response => {
-            if (response.data == null) {
-                return;
-            } else {
-                response.data.forEach(actionType => {
-                    actionType["isSelected"] = false;
-                    actionType.decisionType.forEach(decisionType => {
-                        if (decisionType.id === rowData.id) {
-                            actionType["isSelected"] = true;
-                        }
+        if (moduleId) {
+            actionTypeRest.findByModuleId(moduleId).then(response => {
+                if (response.data == null) {
+                    return;
+                } else {
+                    response.data.forEach(actionType => {
+                        actionType["isSelected"] = false;
+                        actionType.decisionType.forEach(decisionType => {
+                            if (decisionType.id === rowData.id) {
+                                actionType["isSelected"] = true;
+                            }
+                        });
                     });
-                });
-            }
-            setActionTypes(response.data);
-        });
+                }
+                setActionTypes(response.data);
+            });
+        }
     }
 
     function saveSelection() {

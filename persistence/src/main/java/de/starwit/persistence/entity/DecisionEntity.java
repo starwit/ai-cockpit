@@ -61,7 +61,7 @@ public class DecisionEntity extends AbstractEntity<Long> {
     private DecisionTypeEntity decisionType;
 
     @ManyToOne
-    @JsonIgnore
+    @JsonFilter("filterIdName")
     @JoinColumn(name = "module_id")
     private ModuleEntity module;
 

@@ -60,7 +60,13 @@ public class DecisionController {
     @GetMapping
     public List<DecisionEntity> findAll() {
         ModuleEntity entity = moduleService.findFirstByNameLike(defaultModuleName);
-        return this.decisionService.findAllByModule(entity.getId());
+        return this.decisionService.findByModule(entity.getId());
+    }
+
+    @Operation(summary = "Get all decisions for module")
+    @GetMapping("/by-module/{id}")
+    public List<DecisionEntity> findByModuleId(@PathVariable("id") Long id) {
+        return this.decisionService.findByModule(id);
     }
 
     @Operation(summary = "Get all open decisions")

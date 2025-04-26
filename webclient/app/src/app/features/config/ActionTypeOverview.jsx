@@ -10,8 +10,10 @@ import {useTranslation} from "react-i18next";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
 import ActionTypeRest from "../../services/ActionTypeRest";
 import ActionTypeSelect from "./ActionTypeSelect";
+import {useParams} from "react-router";
 
 function ActionTypeOverview() {
+    const {moduleId} = useParams();
     const {t, i18n} = useTranslation();
     const actionTypeRest = useMemo(() => new ActionTypeRest, []);
     const [actionTypes, setActionTypes] = useState([]);
@@ -69,12 +71,18 @@ function ActionTypeOverview() {
     }, []);
 
     function reloadActionTypes() {
-        actionTypeRest.findAll().then(response => {
-            if (response.data == null) {
-                return;
-            }
-            setActionTypes(response.data);
-        });
+        if (moduleId) {
+            actionTypeRest.findByModuleId(moduleId).then(response => handleReloadActionTypes(response));
+        } else {
+            actionTypeRest.findAll().then(response => handleReloadActionTypes(response));
+        }
+    }
+
+    function handleReloadActionTypes(response) {
+        if (response.data == null) {
+            return;
+        }
+        setActionTypes(response.data);
     }
 
     function updateRow(id, newValue) {

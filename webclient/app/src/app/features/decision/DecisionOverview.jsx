@@ -13,9 +13,11 @@ import ActionRest from "../../services/ActionRest";
 import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import {useParams} from "react-router";
 
 
 function DecisionOverview() {
+    const {moduleId} = useParams();
     const {t, i18n} = useTranslation();
     const [tab, setTab] = React.useState(0);
     const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
@@ -40,17 +42,21 @@ function DecisionOverview() {
     }, [open, tab]);
 
     function reloadDecisions() {
-        decisionRest.findAll().then(response => {
-            if (response.data == null) {
-                return;
-            }
-            const sortedData = response.data.sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime));
-            setNewDecisions(sortedData.filter(decision => decision.state == null || decision.state == "NEW"));
-            setCheckedDecisions(sortedData.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
-
-        });
+        if (moduleId) {
+            decisionRest.findByModuleId(moduleId).then(response => handleLoadDecisions(response));
+        } else {
+            decisionRest.findAll().then(response => handleLoadDecisions(response));
+        }
     }
 
+    function handleLoadDecisions(response) {
+        if (response.data == null) {
+            return;
+        }
+        const sortedData = response.data.sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime));
+        setNewDecisions(sortedData.filter(decision => decision.state == null || decision.state == "NEW"));
+        setCheckedDecisions(sortedData.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
+    }
     function handleActionExecution() {
         actionRest.retryActionExecution()
     }

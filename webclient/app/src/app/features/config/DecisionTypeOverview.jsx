@@ -11,9 +11,10 @@ import {useTranslation} from "react-i18next";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
 import DecisionTypeRest from "../../services/DecisionTypeRest";
 import DecisionTypeDetail from "./DecisionTypeDetail";
-
+import {useParams} from "react-router";
 
 function DecisionTypeOverview() {
+    const {moduleId} = useParams();
     const {t, i18n} = useTranslation();
     const decisionTypeRest = useMemo(() => new DecisionTypeRest, []);
     const [decisionTypes, setDecisionTypes] = useState([]);
@@ -64,17 +65,22 @@ function DecisionTypeOverview() {
     ];
 
     useEffect(function () {
-        reloadDecisionTypes();
+        if (moduleId) {
+            decisionTypeRest.findByModuleId(moduleId).then(response =>
+                reloadDecisionTypes(response));
+        } else {
+            decisionTypeRest.findAll().then(response =>
+                reloadDecisionTypes(response));
+        }
     }, []);
 
-    function reloadDecisionTypes() {
-        decisionTypeRest.findAll().then(response => {
-            if (response.data == null) {
-                return;
-            }
-            setDecisionTypes(response.data);
-        });
-    }
+    function reloadDecisionTypes(response) {
+        if (response.data == null) {
+            return;
+        }
+        setDecisionTypes(response.data);
+    };
+
 
     function updateRow(id, newValue) {
         const updatedRows = decisionTypes.map(row =>
@@ -152,6 +158,7 @@ function DecisionTypeOverview() {
             return null;
         }
         return <DecisionTypeDetail
+            moduleId={rowData.module.id}
             open={open}
             handleClose={handleClose}
             rowData={rowData}
