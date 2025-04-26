@@ -1,4 +1,4 @@
-import {ClickAwayListener, Grow, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Popper, Tooltip} from "@mui/material";
+import {Box, ClickAwayListener, Grow, IconButton, ListItemIcon, ListItemText, MenuItem, MenuList, Paper, Popper, Tooltip} from "@mui/material";
 
 import Category from "@mui/icons-material/Category";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -8,7 +8,8 @@ import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 
 
-function ConfigMenu() {
+function ConfigMenu(props) {
+    const {disabled, moduleId} = props;
     const {t} = useTranslation();
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
@@ -47,13 +48,16 @@ function ConfigMenu() {
 
     return <>
         <Tooltip title={t("menu.config")}>
-            <IconButton
-                size="large"
-                onClick={handleToggle}
-                ref={anchorRef}
-                variant="outlined">
-                <SettingsIcon />
-            </IconButton>
+            <Box>
+                <IconButton
+                    size="large"
+                    onClick={handleToggle}
+                    ref={anchorRef}
+                    disabled={disabled}
+                    variant="outlined">
+                    <SettingsIcon />
+                </IconButton>
+            </Box>
         </Tooltip>
         <Popper
             open={open}
@@ -79,11 +83,11 @@ function ConfigMenu() {
                                 aria-labelledby="composition-button"
                                 onKeyDown={handleListKeyDown}
                             >
-                                <MenuItem component={Link} to={"/decision-type"} onClick={handleClose}>
+                                <MenuItem component={Link} to={"/decision-type/" + moduleId} onClick={handleClose}>
                                     <ListItemIcon><Category fontSize="small" /></ListItemIcon>
                                     <ListItemText>{t("menu.config.decisiontype")}</ListItemText>
                                 </MenuItem>
-                                <MenuItem component={Link} to={"/action-type"} onClick={handleClose}>
+                                <MenuItem component={Link} to={"/action-type/" + moduleId} onClick={handleClose}>
                                     <ListItemIcon><Start fontSize="small" /></ListItemIcon>
                                     <ListItemText>{t("menu.config.actiontype")}</ListItemText>
                                 </MenuItem>

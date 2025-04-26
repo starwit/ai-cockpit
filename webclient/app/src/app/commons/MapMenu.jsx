@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
-import {IconButton, Menu, MenuItem, Tooltip} from '@mui/material';
 import MapIcon from '@mui/icons-material/Map';
+import {Box, IconButton, Menu, MenuItem, Tooltip} from '@mui/material';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {useNavigate} from 'react-router-dom';
 
-function MapMenu() {
+
+function MapMenu(props) {
+    const {disabled, moduleId} = props;
     const [anchorEl, setAnchorEl] = useState(null);
     const {t} = useTranslation();
     const navigate = useNavigate();
@@ -25,23 +27,26 @@ function MapMenu() {
     return (
         <>
             <Tooltip title={t('map.tooltip')}>
-                <IconButton
-                    onClick={handleClick}
-                    size="large"
-                    variant="outlined"
-                >
-                    <MapIcon />
-                </IconButton>
+                <Box>
+                    <IconButton
+                        onClick={handleClick}
+                        size="large"
+                        variant="outlined"
+                        disabled={disabled}
+                    >
+                        <MapIcon />
+                    </IconButton>
+                </Box>
             </Tooltip>
             <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={() => handleMenuItemClick('/decision-map-view')}>
+                <MenuItem onClick={() => handleMenuItemClick('/decision-map-view/' + moduleId)}>
                     {t('map.normal')}
                 </MenuItem>
-                <MenuItem onClick={() => handleMenuItemClick('/decision-heatmap-view')}>
+                <MenuItem onClick={() => handleMenuItemClick('/decision-heatmap-view/' + moduleId)}>
                     {t('map.heatmap')}
                 </MenuItem>
             </Menu>

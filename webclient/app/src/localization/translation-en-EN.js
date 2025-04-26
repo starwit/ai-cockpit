@@ -122,6 +122,7 @@ const translationEnEN = {
     "time.range.last24Hours": "Last 24 hours",
     "time.range.start": "Date start",
     "time.range.end": "Date end",
+    "module.heading": "Modules",
     "module.title": "Module Name",
     "module.description": "Description",
     "module.lastdeployment": "Last Update",

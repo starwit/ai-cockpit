@@ -16,11 +16,13 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import DecisionDetail from './DecisionDetail';
 import DecisionResultPanel from './DecisionResultPanel';
 import DecisionTypeFilter from './DecisionTypeFilter';
+import {useParams} from 'react-router';
 
 // Create map view settings - enable map repetition when scrolling horizontally
 const MAP_VIEW = new MapView({repeat: true});
 
 function DecisionOverviewMap() {
+    const {moduleId} = useParams();
     // Add state to store decisions
     const [selectedType, setSelectedType] = useState(['all']);
     // New state for state and time filters
@@ -88,7 +90,7 @@ function DecisionOverviewMap() {
             const maxLatitude = filteredDecisions.map(d => d.cameraLatitude).reduce((acc, lat) => Math.max(acc, lat), -90);
             const minLongitude = filteredDecisions.map(d => d.cameraLongitude).reduce((acc, lng) => Math.min(acc, lng), 180);
             const maxLongitude = filteredDecisions.map(d => d.cameraLongitude).reduce((acc, lng) => Math.max(acc, lng), -180);
-            
+
             const fitViewport = new WebMercatorViewport().fitBounds(
                 [
                     [minLongitude, minLatitude],
@@ -101,7 +103,7 @@ function DecisionOverviewMap() {
                     minExtent: 0.002,
                 }
             );
-            
+
             if (filteredDecisions.length > 0) {
                 // Disable auto zoom after the first fit
                 autoZoomDone.current = true;
@@ -118,7 +120,7 @@ function DecisionOverviewMap() {
                     zoom: 5,
                 };
             }
-        }        
+        }
     })();
 
     const layers = useMemo(() => {
@@ -146,11 +148,17 @@ function DecisionOverviewMap() {
 
     // Load Decisions
     function reloadDecisions() {
-        decisionRest.findAll().then(response => {
-            if (response.data) {
-                setDecisions(response.data);
-            }
-        });
+        if (moduleId) {
+            decisionRest.findByModuleId(moduleId).then(response => handleReloadDecisions(response));
+        } else {
+            decisionRest.findAll().then(response => handleReloadDecisions(response));
+        }
+    }
+
+    function handleReloadDecisions(response) {
+        if (response.data) {
+            setDecisions(response.data);
+        }
     }
 
     // This grouping is necessary to combine multiple decisions that occur at the same location (same coordinates)
