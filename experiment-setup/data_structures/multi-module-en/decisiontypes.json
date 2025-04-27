@@ -94,5 +94,157 @@
                 "name": "I2X notification"
             }
         ]
+    },
+    {
+        "name": "Damaged trash bin",
+        "description": "A trash bin is severely damaged",
+        "module": {
+            "name": "Waste Incident Classifier"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Illegal trash dumping",
+        "description": "Trash was illegally dumped",
+        "module": {
+            "name": "Waste Incident Classifier"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Vegetation problem",
+        "description": "Vegetation needs to be attended",
+        "module": {
+            "name": "Waste Incident Classifier"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Too many log message",
+        "description": "An application is flooding log messages",
+        "module": {
+            "name": "Application Bug Identifier"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Wrong data",
+        "description": "An application is forwarding faulty data",
+        "module": {
+            "name": "Application Bug Identifier"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Application compromised",
+        "description": "An application has been successfully attacked",
+        "module": {
+            "name": "Intrusion Detector"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Stress level",
+        "description": "A human collaborator experiences too high/low stress level",
+        "module": {
+            "name": "Human observatory"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Application configuration not optimal",
+        "description": "AI proposes more optimal configuration",
+        "module": {
+            "name": "Human observatory"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Memory leak detected",
+        "description": "An application suffers from a memory leak",
+        "module": {
+            "name": "Intelligent Network Operator - Observer"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Component too slow",
+        "description": "An application handles traffic not within latency requirements",
+        "module": {
+            "name": "Intelligent Network Operator - Observer"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Intrusion Detected",
+        "description": "An application component is compromised",
+        "module": {
+            "name": "Intelligent Network Operator - Observer"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Link will be down",
+        "description": "A connection will probably fail",
+        "module": {
+            "name": "Intelligent Network Operator - Observer"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Application restart",
+        "description": "Based on past behaviour an application needs to be restarted",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Re-route traffic",
+        "description": "Re-route IP traffic",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Add computing resources to function",
+        "description": "A virtualized network function needs more computation resources",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Relocate function",
+        "description": "A virtualized network function needs to be relocated",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Similarity detected",
+        "description": "An actual problem might be similar to past ones",
+        "module": {
+            "name": "Intelligent Network Operator - Workflow Generator"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Congestion predicted",
+        "description": "Production will be affected by congestion",
+        "module": {
+            "name": "Utas-toy-factory"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Maintenance necessary",
+        "description": "A production component will need maintenance",
+        "module": {
+            "name": "Utas-toy-factory"
+        },
+        "actionTypes": []
     }
 ]

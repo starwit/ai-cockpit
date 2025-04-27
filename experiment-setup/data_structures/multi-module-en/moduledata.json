@@ -220,29 +220,6 @@
     }
   },
   {
-    "name": "Intelligent Network Operator - Observer",
-    "description": "Observes a 5G network and digests problems",
-    "version": "1.1.1",
-    "applicationIdentifier": "telko",
-    "useAI": false,
-    "model": {
-      "name": "Various algorithms to analyse a OSS/BSS component status",
-      "version": "1.0.1",
-      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
-      "modelType": "MISC",
-      "modelLink": "https://example.com/",
-      "publicTrainingData": true,
-      "linkToPublicTrainingData": "https://cloud.google.com/blog/topics/telecommunications/ai-powered-network-optimization-unlocking-5gs-potential-with-amdocs"
-    },
-    "actionTypes": [],
-    "decisionTypes": [],
-    "sBOMLocation": {
-      "backend": {
-        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
-      }
-    }
-  },
-  {
     "name": "Intelligent Network Operator - Decider",
     "description": "Detect & interprets network issues",
     "version": "1.1.1",
@@ -253,9 +230,9 @@
       "version": "1.0.1",
       "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
       "modelType": "LLM",
-      "modelLink": "https://example.com/",
+      "modelLink": "https://cloud.google.com/blog/topics/telecommunications/ai-powered-network-optimization-unlocking-5gs-potential-with-amdocs",
       "publicTrainingData": true,
-      "linkToPublicTrainingData": "https://cloud.google.com/blog/topics/telecommunications/ai-powered-network-optimization-unlocking-5gs-potential-with-amdocs"
+      "linkToPublicTrainingData": "https://example.com/"
     },
     "actionTypes": [],
     "decisionTypes": [],
@@ -276,9 +253,63 @@
       "version": "1.0.1",
       "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
       "modelType": "LLM",
-      "modelLink": "https://example.com/",
+      "modelLink": "https://cloud.google.com/blog/topics/telecommunications/ai-powered-network-optimization-unlocking-5gs-potential-with-amdocs",
       "publicTrainingData": true,
-      "linkToPublicTrainingData": "https://cloud.google.com/blog/topics/telecommunications/ai-powered-network-optimization-unlocking-5gs-potential-with-amdocs"
+      "linkToPublicTrainingData": "https://example.com/"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
+      }
+    }
+  },
+  {
+    "name": "Intelligent Network Operator - Observer",
+    "description": "Observes a 5G network and digests problems",
+    "version": "1.1.1",
+    "applicationIdentifier": "telko",
+    "useAI": false,
+    "model": {
+      "name": "Various algorithms to analyse a OSS/BSS component status",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "MISC",
+      "modelLink": "https://cloud.google.com/blog/topics/telecommunications/ai-powered-network-optimization-unlocking-5gs-potential-with-amdocs",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "https://example.com/"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
+      }
+    },
+    "successors": [
+      {
+        "name": "Intelligent Network Operator - Decider"
+      },
+      {
+        "name": "Intelligent Network Operator - Workflow Generator"
+      }
+    ]
+  },
+  {
+    "name": "Factory Observer",
+    "description": "Reads all available data from Uta's toy factory and detects problems",
+    "version": "1.1.1",
+    "applicationIdentifier": "Utas-toy-factory",
+    "useAI": false,
+    "model": {
+      "name": "Aalen maintenance AI",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://www.hs-aalen.de/de/pages/human-in-command_forschungsprojekte",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "https://example.com/"
     },
     "actionTypes": [],
     "decisionTypes": [],
