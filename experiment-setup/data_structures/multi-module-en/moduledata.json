@@ -120,16 +120,30 @@
       "linkToPublicTrainingData": "http://starwit.de"
     },
     "actionTypes": [],
-    "decisionTypes": [
-      {
-        "name": "Damaged trash bin",
-        "description": "A trash bin is severely damaged",
-        "module": {
-          "name": "Waste Incident Classifier"
-        },
-        "actionTypes": []
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
       }
-    ],
+    }
+  },
+  {
+    "name": "Waste Collection Planer",
+    "description": "Plans all activities to keep a city clean",
+    "version": "0.1.1",
+    "applicationIdentifier": "trash",
+    "useAI": false,
+    "model": {
+      "name": "Starwit Workforce Planner",
+      "version": "2.0.1",
+      "lastDeployment": "2024-04-25T01:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
     "sBOMLocation": {
       "backend": {
         "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
@@ -152,16 +166,122 @@
       "linkToPublicTrainingData": "http://starwit.de"
     },
     "actionTypes": [],
-    "decisionTypes": [
-      {
-        "name": "Too many log message",
-        "description": "An application is flooding log messages",
-        "module": {
-          "name": "Application Bug Identifier"
-        },
-        "actionTypes": []
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
       }
-    ],
+    }
+  },
+  {
+    "name": "Intrusion Detector",
+    "description": "Analyses network events and detects attacks in cloud applications",
+    "version": "1.0.1",
+    "applicationIdentifier": "cloud",
+    "useAI": false,
+    "model": {
+      "name": "Attack pattern model",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
+      }
+    }
+  },
+  {
+    "name": "Human observatory",
+    "description": "Detects if humans are under to much stress or other harmful conditions",
+    "version": "1.1.1",
+    "applicationIdentifier": "cookinggame",
+    "useAI": false,
+    "model": {
+      "name": "EEG interpretor",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "https://blog.iao.fraunhofer.de/author/nektaria-tagalidou/"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
+      }
+    }
+  },
+  {
+    "name": "Intelligent Network Operator - Observer",
+    "description": "Observes a 5G network and digests problems",
+    "version": "1.1.1",
+    "applicationIdentifier": "telko",
+    "useAI": false,
+    "model": {
+      "name": "Various algorithms to analyse a OSS/BSS component status",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "MISC",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "https://cloud.google.com/blog/topics/telecommunications/ai-powered-network-optimization-unlocking-5gs-potential-with-amdocs"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
+      }
+    }
+  },
+  {
+    "name": "Intelligent Network Operator - Decider",
+    "description": "Detect & interprets network issues",
+    "version": "1.1.1",
+    "applicationIdentifier": "telko",
+    "useAI": false,
+    "model": {
+      "name": "Google Gemini",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "https://cloud.google.com/blog/topics/telecommunications/ai-powered-network-optimization-unlocking-5gs-potential-with-amdocs"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
+      }
+    }
+  },
+  {
+    "name": "Intelligent Network Operator - Workflow Generator",
+    "description": "Generates code, that fixes detected problems",
+    "version": "1.1.1",
+    "applicationIdentifier": "telko",
+    "useAI": false,
+    "model": {
+      "name": "Google Gemini",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "https://cloud.google.com/blog/topics/telecommunications/ai-powered-network-optimization-unlocking-5gs-potential-with-amdocs"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
     "sBOMLocation": {
       "backend": {
         "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
