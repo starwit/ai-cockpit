@@ -214,5 +214,45 @@
         "module": {
             "name": "Infra Mitigator"
         }
+    },
+    {
+        "name": "Re-route traffic",
+        "description": "Decrease log level",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        }
+    },
+    {
+        "name": "Generate infra patch",
+        "description": "Generate code to adapt infrastructure",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Intelligent Network Operator - Workflow Generator"
+        }
+    },
+    {
+        "name": "Apply similarity patch",
+        "description": "Generate code to adapt infrastructure",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Intelligent Network Operator - Workflow Generator"
+        }
+    },
+    {
+        "name": "Stop production",
+        "description": "Stop production",
+        "executionPolicy": "MANUAL",
+        "module": {
+            "name": "Factory Observer"
+        }
+    },
+    {
+        "name": "Slow down production",
+        "description": "Slow down production",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Factory Observer"
+        }
     }
 ]

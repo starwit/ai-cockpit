@@ -310,15 +310,23 @@
         "module": {
             "name": "Intelligent Network Operator - Decider"
         },
-        "actionTypes": []
+        "actionTypes": [
+            {
+                "name": "Re-route traffic"
+            }
+        ]
     },
     {
-        "name": "Add computing resources to function",
+        "name": "Computing resources for function insufficiant",
         "description": "A virtualized network function needs more computation resources",
         "module": {
             "name": "Intelligent Network Operator - Decider"
         },
-        "actionTypes": []
+        "actionTypes": [
+            {
+                "name": "Generate infra patch"
+            }
+        ]
     },
     {
         "name": "Relocate function",
@@ -334,13 +342,17 @@
         "module": {
             "name": "Intelligent Network Operator - Workflow Generator"
         },
-        "actionTypes": []
+        "actionTypes": [
+            {
+                "name": "Apply similarity patch"
+            }
+        ]
     },
     {
         "name": "Congestion predicted",
         "description": "Production will be affected by congestion",
         "module": {
-            "name": "Utas-toy-factory"
+            "name": "Factory Observer"
         },
         "actionTypes": []
     },
@@ -348,8 +360,12 @@
         "name": "Maintenance necessary",
         "description": "A production component will need maintenance",
         "module": {
-            "name": "Utas-toy-factory"
+            "name": "Factory Observer"
         },
-        "actionTypes": []
+        "actionTypes": [
+            {
+                "name": "Stop production"
+            }
+        ]
     }
 ]

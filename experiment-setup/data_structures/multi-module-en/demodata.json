@@ -431,5 +431,135 @@
     "module": {
       "name": "Intrusion Detector"
     }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "Policy Control Function - high latency",
+    "decisionType": {
+      "name": "Component too slow"
+    },
+    "module": {
+      "name": "Intelligent Network Operator - Observer"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "Compromised customer data",
+    "decisionType": {
+      "name": "Intrusion Detected"
+    },
+    "module": {
+      "name": "Intelligent Network Operator - Observer"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "Balanced application too slow",
+    "decisionType": {
+      "name": "Component too slow"
+    },
+    "module": {
+      "name": "Intelligent Network Operator - Observer"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "Link failure predicted - VNF will go down",
+    "decisionType": {
+      "name": "Link will be down"
+    },
+    "module": {
+      "name": "Intelligent Network Operator - Observer"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "MEC unbalanced",
+    "decisionType": {
+      "name": "Component too slow"
+    },
+    "module": {
+      "name": "Intelligent Network Operator - Observer"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "MEC function restart necessary",
+    "decisionType": {
+      "name": "Application restart"
+    },
+    "module": {
+      "name": "Intelligent Network Operator - Decider"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "Re-route necessary",
+    "decisionType": {
+      "name": "Re-route traffic"
+    },
+    "module": {
+      "name": "Intelligent Network Operator - Decider"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "Similarity detected",
+    "decisionType": {
+      "name": "Similarity detected"
+    },
+    "module": {
+      "name": "Intelligent Network Operator - Workflow Generator"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Production_Problem01.jpg",
+    "state": "NEW",
+    "description": "Problem in production anticipated",
+    "decisionType": {
+      "name": "Congestion predicted"
+    },
+    "module": {
+      "name": "Factory Observer"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Production_Problem01.jpg",
+    "state": "NEW",
+    "description": "Problem in production anticipated",
+    "decisionType": {
+      "name": "Maintenance necessary"
+    },
+    "module": {
+      "name": "Factory Observer"
+    }
   }
 ]
