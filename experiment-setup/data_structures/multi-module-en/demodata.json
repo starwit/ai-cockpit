@@ -8,8 +8,7 @@
     "description": "Veterans way / main street",
     "decisionType": {
       "name": "accident"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -20,8 +19,7 @@
     "description": "Rangeline / Medical Drive",
     "decisionType": {
       "name": "dangerous driving behaviour"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -32,8 +30,7 @@
     "description": "Rangeline / main street",
     "decisionType": {
       "name": "accident"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -44,8 +41,7 @@
     "description": "Rangeline / City Center Drive",
     "decisionType": {
       "name": "dangerous driving behaviour"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -56,8 +52,7 @@
     "description": "Rangeline / Medical Drive",
     "decisionType": {
       "name": "dangerous driving behaviour"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -68,8 +63,7 @@
     "description": "Rangeline / Medical Drive",
     "decisionType": {
       "name": "disabled vehicle"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -80,8 +74,7 @@
     "description": "Rangeline / main street",
     "decisionType": {
       "name": "traffic jam"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -92,8 +85,7 @@
     "description": "Rangeline / Medical Drive",
     "decisionType": {
       "name": "dangerous driving behaviour"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -104,8 +96,7 @@
     "description": "Keystone / main street",
     "decisionType": {
       "name": "disabled vehicle"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -116,8 +107,7 @@
     "description": null,
     "decisionType": {
       "name": "first responder ops"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -128,8 +118,7 @@
     "description": "Rangeline / Medical Drive",
     "decisionType": {
       "name": "helpless person"
-    },
-    "actions": []
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -140,8 +129,189 @@
     "description": "Hazeldell / 126th",
     "decisionType": {
       "name": "traffic jam"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-12T11:16:47Z",
+    "mediaUrl": "anomalies/weed01.jpg",
+    "cameraLatitude": 39.985589,
+    "cameraLongitude": -86.131719,
+    "state": "NEW",
+    "description": "",
+    "decisionType": {
+      "name": "Wild Weed Growth"
     },
-    "actions": []
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-12T11:16:36Z",
+    "mediaUrl": "anomalies/trafficSign01.jpg",
+    "cameraLatitude": 39.978309,
+    "cameraLongitude": -86.133787,
+    "state": "NEW",
+    "description": "",
+    "decisionType": {
+      "name": "Contaminated Traffic Signs"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-11T18:42:47Z",
+    "mediaUrl": "anomalies/illegalParking01.jpg",
+    "cameraLatitude": 39.985589,
+    "cameraLongitude": -86.131719,
+    "state": "NEW",
+    "description": "",
+    "decisionType": {
+      "name": "Illegally Parked Vehicle"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-12T11:17:07Z",
+    "mediaUrl": "anomalies/illegalParking03.jpg",
+    "cameraLatitude": 39.980254,
+    "cameraLongitude": -86.143703,
+    "state": "NEW",
+    "description": "",
+    "decisionType": {
+      "name": "Illegally Parked Vehicle"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-12T11:17:37Z",
+    "mediaUrl": "anomalies/trash03.jpg",
+    "cameraLatitude": 39.970734,
+    "cameraLongitude": -86.128939,
+    "state": "NEW",
+    "description": "",
+    "decisionType": {
+      "name": "Illegal Waste Disposal"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-12T11:17:47Z",
+    "mediaUrl": "anomalies/weed02.jpg",
+    "cameraLatitude": 39.974686,
+    "cameraLongitude": -86.141046,
+    "state": "NEW",
+    "description": "",
+    "decisionType": {
+      "name": "Wild Weed Growth"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-10-31T14:59:57Z",
+    "mediaUrl": "anomalies/weed03.jpg",
+    "cameraLatitude": 39.978309,
+    "cameraLongitude": -86.133787,
+    "state": "NEW",
+    "description": "",
+    "decisionType": {
+      "name": "Wild Weed Growth"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-10-31T15:00:08Z",
+    "mediaUrl": "anomalies/weed04.jpg",
+    "cameraLatitude": 39.985589,
+    "cameraLongitude": -86.131719,
+    "state": "NEW",
+    "description": "",
+    "decisionType": {
+      "name": "Wild Weed Growth"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-12T11:16:57Z",
+    "mediaUrl": "anomalies/trash01.mp4",
+    "cameraLatitude": 39.97078,
+    "cameraLongitude": -86.127168,
+    "state": "ACCEPTED",
+    "description": "",
+    "decisionType": {
+      "name": "Illegal Waste Disposal"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-12T11:18:07Z",
+    "mediaUrl": "anomalies/trash02.jpg",
+    "cameraLatitude": 39.975163,
+    "cameraLongitude": -86.12691,
+    "state": "ACCEPTED",
+    "description": "",
+    "decisionType": {
+      "name": "Illegal Waste Disposal"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-12T11:17:57Z",
+    "mediaUrl": "anomalies/trashContainer01.jpg",
+    "cameraLatitude": 39.97227,
+    "cameraLongitude": -86.151024,
+    "state": "ACCEPTED",
+    "description": "",
+    "decisionType": {
+      "name": "Overfilled Trash Bin"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-10-31T15:00:18Z",
+    "mediaUrl": "anomalies/illegalParking02.jpg",
+    "cameraLatitude": 39.97078,
+    "cameraLongitude": -86.127168,
+    "state": "REJECTED",
+    "description": "",
+    "decisionType": {
+      "name": "Illegally Parked Vehicle"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "2024-11-11T18:42:37Z",
+    "mediaUrl": "anomalies/trashContainer02.mp4",
+    "cameraLatitude": 39.978309,
+    "cameraLongitude": -86.133787,
+    "state": "NEW",
+    "description": "",
+    "decisionType": {
+      "name": "Overfilled Trash Bin"
+    },
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -151,9 +321,11 @@
     "state": "NEW",
     "description": "Mozartstraße",
     "decisionType": {
-      "name": "Damaged trash bin"
+      "name": "Illegal Waste Disposal"
     },
-    "actions": []
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -163,9 +335,11 @@
     "state": "NEW",
     "description": "Mozartstraße",
     "decisionType": {
-      "name": "Illegal trash dumping"
+      "name": "Illegal Waste Disposal"
     },
-    "actions": []
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
   },
   {
     "acquisitionTime": "DATETIME",
@@ -175,8 +349,87 @@
     "state": "NEW",
     "description": "Mozartstraße",
     "decisionType": {
-      "name": "Vegetation problem"
+      "name": "Wild Weed Growth"
     },
-    "actions": []
+    "module": {
+      "name": "Waste Incident Classifier"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/trash_service_plan.jpg",
+    "state": "NEW",
+    "description": "Updated collection dispatch",
+    "decisionType": {
+      "name": "Waste Collection Re-Planning"
+    },
+    "module": {
+      "name": "Waste Collection Planer"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/DatabaseCorrupt.jpg",
+    "actionVisualizationUrl": "anomalies/DatabaseCorrupt_recovery.jpg",
+    "state": "NEW",
+    "description": "Database corrupt",
+    "decisionType": {
+      "name": "Corrupt data"
+    },
+    "module": {
+      "name": "Application Bug Identifier"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/DNSBug.jpg",
+    "actionVisualizationUrl": "anomalies/DNS_Recovery.jpg",
+    "state": "NEW",
+    "description": "DNS resolution not working",
+    "decisionType": {
+      "name": "Configuration issue"
+    },
+    "module": {
+      "name": "Infra Mitigator"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/FunctionalServiceBug.jpg",
+    "actionVisualizationUrl": "anomalies/FunctionalService_Recovery.jpg",
+    "state": "NEW",
+    "description": "Buggy lambda service",
+    "decisionType": {
+      "name": "Application bug"
+    },
+    "module": {
+      "name": "Application Bug Identifier"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "Bug in application",
+    "decisionType": {
+      "name": "Application bug"
+    },
+    "module": {
+      "name": "Application Bug Identifier"
+    }
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/ApplicationBug.jpg",
+    "actionVisualizationUrl": "anomalies/Application_Recovery.jpg",
+    "state": "NEW",
+    "description": "Compromised application",
+    "decisionType": {
+      "name": "Application compromised"
+    },
+    "module": {
+      "name": "Intrusion Detector"
+    }
   }
 ]

@@ -96,28 +96,133 @@
         ]
     },
     {
-        "name": "Damaged trash bin",
-        "description": "A trash bin is severely damaged",
+        "name": "Contaminated Traffic Signs",
+        "description": "Traffic sign is no longer recognizable and needs to be cleaned",
+        "actionTypes": [
+            {
+                "name": "Notify Patrol Vehicle"
+            }
+        ],
         "module": {
             "name": "Waste Incident Classifier"
-        },
-        "actionTypes": []
+        }
     },
     {
-        "name": "Illegal trash dumping",
-        "description": "Trash was illegally dumped",
+        "name": "Wild Weed Growth",
+        "description": "Wild weeds on the sidewalk or roadside",
+        "actionTypes": [
+            {
+                "name": "Notify Parks Department"
+            }
+        ],
         "module": {
             "name": "Waste Incident Classifier"
-        },
-        "actionTypes": []
+        }
     },
     {
-        "name": "Vegetation problem",
-        "description": "Vegetation needs to be attended",
+        "name": "Overfilled Trash Bin",
+        "description": "Trash is already lying next to the trash bin",
+        "actionTypes": [
+            {
+                "name": "Notify Patrol Vehicle"
+            }
+        ],
         "module": {
             "name": "Waste Incident Classifier"
-        },
-        "actionTypes": []
+        }
+    },
+    {
+        "name": "Illegal Waste Disposal",
+        "description": "Unauthorized dumping of bulky waste or other piles of trash",
+        "actionTypes": [
+            {
+                "name": "Notify Patrol Vehicle"
+            }
+        ],
+        "module": {
+            "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Illegally Parked Vehicle",
+        "description": "Illegally parked vehicle obstructing garbage collection and needs towing",
+        "actionTypes": [
+            {
+                "name": "Notify Public Order Office"
+            },
+            {
+                "name": "Notify Towing Service"
+            }
+        ],
+        "module": {
+            "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Waste Collection Re-Planning",
+        "description": "Automatic re-planning",
+        "actionTypes": [
+            {
+                "name": "Update dispatch"
+            }
+        ],
+        "module": {
+            "name": "Waste Collection Planer"
+        }
+    },
+    {
+        "name": "Configuration issue",
+        "description": "Configuration issue prevents customers using application",
+        "actionTypes": [
+            {
+                "name": "Put App to maintenance mode"
+            },
+            {
+                "name": "Adapt configuration"
+            }
+        ],
+        "module": {
+            "name": "Infra Mitigator"
+        }
+    },
+    {
+        "name": "Corrupt data",
+        "description": "Application displays corrupt data to customers",
+        "actionTypes": [
+            {
+                "name": "Put App to maintenance mode"
+            },
+            {
+                "name": "Recover database backup"
+            },
+            {
+                "name": "Increase log level"
+            }
+        ],
+        "module": {
+            "name": "Application Bug Identifier"
+        }
+    },
+    {
+        "name": "Application bug",
+        "description": "Application bug",
+        "actionTypes": [
+            {
+                "name": "Put App to maintenance mode"
+            },
+            {
+                "name": "Patch Application/Module"
+            },
+            {
+                "name": "Recover database backup"
+            },
+            {
+                "name": "Restart Application"
+            }
+        ],
+        "module": {
+            "name": "Application Bug Identifier"
+        }
     },
     {
         "name": "Too many log message",
@@ -125,15 +230,11 @@
         "module": {
             "name": "Application Bug Identifier"
         },
-        "actionTypes": []
-    },
-    {
-        "name": "Wrong data",
-        "description": "An application is forwarding faulty data",
-        "module": {
-            "name": "Application Bug Identifier"
-        },
-        "actionTypes": []
+        "actionTypes": [
+            {
+                "name": "Restart Application"
+            }
+        ]
     },
     {
         "name": "Application compromised",
@@ -141,7 +242,11 @@
         "module": {
             "name": "Intrusion Detector"
         },
-        "actionTypes": []
+        "actionTypes": [
+            {
+                "name": "Shutdown application"
+            }
+        ]
     },
     {
         "name": "Stress level",

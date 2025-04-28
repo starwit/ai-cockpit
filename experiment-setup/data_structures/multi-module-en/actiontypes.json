@@ -40,6 +40,46 @@
         }
     },
     {
+        "name": "Notify Public Order Office",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Generate Task List and Route",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Notify Towing Service",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Notify Parks Department",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Notify Patrol Vehicle",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
         "name": "Adapt shift plan",
         "description": "Adapt next shift plan, to address issue",
         "executionPolicy": "WITHCHECK",
@@ -53,6 +93,14 @@
         "executionPolicy": "WITHCHECK",
         "module": {
             "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Update dispatch",
+        "description": "Update trash collection dispatch",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Waste Collection Planer"
         }
     },
     {
