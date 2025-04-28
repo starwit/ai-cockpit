@@ -142,5 +142,41 @@
       "name": "traffic jam"
     },
     "actions": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/trash01.mp4",
+    "cameraLatitude": 52.416188,
+    "cameraLongitude": 10.7276736,
+    "state": "NEW",
+    "description": "Mozartstraße",
+    "decisionType": {
+      "name": "Damaged trash bin"
+    },
+    "actions": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/trash02.mp4",
+    "cameraLatitude": 52.416188,
+    "cameraLongitude": 10.7276736,
+    "state": "NEW",
+    "description": "Mozartstraße",
+    "decisionType": {
+      "name": "Illegal trash dumping"
+    },
+    "actions": []
+  },
+  {
+    "acquisitionTime": "DATETIME",
+    "mediaUrl": "anomalies/trash02.mp4",
+    "cameraLatitude": 52.42025475930882,
+    "cameraLongitude": 10.724712299498925,
+    "state": "NEW",
+    "description": "Mozartstraße",
+    "decisionType": {
+      "name": "Vegetation problem"
+    },
+    "actions": []
   }
 ]

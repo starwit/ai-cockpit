@@ -105,15 +105,15 @@
     ]
   },
   {
-    "name": "Waste Incident Classifier",
-    "description": "Detects in images waste incidents",
+    "name": "Notify authorities",
+    "description": "Handles all incidents, that needs support from autorities",
     "version": "0.1.1",
     "applicationIdentifier": "trash",
     "useAI": false,
     "model": {
-      "name": "Starwit Classifier finetuned model",
-      "version": "1.0.1",
-      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "name": "Starwit Autority Notifier",
+      "version": "2.0.1",
+      "lastDeployment": "2024-04-25T01:36:50.277768993+01:00",
       "modelType": "LLM",
       "modelLink": "https://example.com/",
       "publicTrainingData": true,
@@ -151,6 +151,37 @@
     }
   },
   {
+    "name": "Waste Incident Classifier",
+    "description": "Detects in images waste incidents",
+    "version": "0.1.1",
+    "applicationIdentifier": "trash",
+    "useAI": false,
+    "model": {
+      "name": "Starwit Classifier finetuned model",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
+      }
+    },
+    "successors": [
+      {
+        "name": "Notify authorities"
+      },
+      {
+        "name": "Waste Collection Planer"
+      }
+    ]
+  },
+  {
     "name": "Application Bug Identifier",
     "description": "Detects application bugs in cloud environments",
     "version": "1.0.1",
@@ -181,6 +212,52 @@
     "useAI": false,
     "model": {
       "name": "Attack pattern model",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
+      }
+    }
+  },
+  {
+    "name": "Infra Mitigator",
+    "description": "Generates code, that fixes infrastructure problems",
+    "version": "1.0.1",
+    "applicationIdentifier": "cloud",
+    "useAI": false,
+    "model": {
+      "name": "Fancy code generator",
+      "version": "1.0.1",
+      "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
+      "modelType": "LLM",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": true,
+      "linkToPublicTrainingData": "http://starwit.de"
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {
+      "backend": {
+        "url": "http://localhost:8080/sbom-samples/aic-sbom-backend.json"
+      }
+    }
+  },
+  {
+    "name": "Customer Messaging",
+    "description": "Generates customer dialoges",
+    "version": "1.0.1",
+    "applicationIdentifier": "cloud",
+    "useAI": false,
+    "model": {
+      "name": "Fancy communication generator",
       "version": "1.0.1",
       "lastDeployment": "2025-04-25T01:36:50.277768993+01:00",
       "modelType": "LLM",
