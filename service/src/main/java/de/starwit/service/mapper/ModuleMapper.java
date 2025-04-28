@@ -10,8 +10,8 @@ public class ModuleMapper implements Mapper<Module, ModuleEntity> {
     ModelMapper modelMapper = new ModelMapper();
 
     public ModuleMapper() {
-        modelMapper.addConverter(new ZonedToOffsetDateTimeConverter());
-        modelMapper.addConverter(new OffsetToZonedDateTimeConverter());
+        modelMapper.addConverter(new EntityToModuleConverter());
+        modelMapper.addConverter(new ModuleToEntityConverter());
         modelMapper.getConfiguration().setSkipNullEnabled(true);
     }
 
@@ -26,5 +26,4 @@ public class ModuleMapper implements Mapper<Module, ModuleEntity> {
         ModuleEntity entity = modelMapper.map(dto, ModuleEntity.class);
         return entity;
     }
-
 }

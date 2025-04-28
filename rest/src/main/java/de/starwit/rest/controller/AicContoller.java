@@ -25,6 +25,7 @@ import de.starwit.persistence.exception.NotificationException;
 import de.starwit.service.impl.DecisionService;
 import de.starwit.service.impl.ModuleService;
 import de.starwit.service.mapper.DecisionMapper;
+import de.starwit.service.mapper.ModuleMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
@@ -45,6 +46,8 @@ public class AicContoller {
 
     DecisionMapper decisionMapper = new DecisionMapper();
 
+    ModuleMapper moduleMapper = new ModuleMapper();
+
     @Operation(summary = "Get list of all modules")
     @GetMapping(value = "/modules")
     public List<Module> getModules() {
@@ -52,7 +55,7 @@ public class AicContoller {
         var entities = moduleService.findAll();
         LOG.info("Found " + entities.size() + " modules");
         for (ModuleEntity entity : entities) {
-            result.add(moduleService.convertToModule(entity));
+            result.add(moduleMapper.toDto(entity));
         }
         return result;
     }
@@ -62,7 +65,7 @@ public class AicContoller {
     public ResponseEntity<Module> createModule(@RequestBody Module module) {
         LOG.info("Trying to create new module " + module.getName());
         var entity = moduleService.saveOrUpdate(module);
-        var responseModule = moduleService.convertToModule(entity);
+        var responseModule = moduleMapper.toDto(entity);
         return new ResponseEntity<>(responseModule, HttpStatus.OK);
     }
 
@@ -71,7 +74,7 @@ public class AicContoller {
     public ResponseEntity<Module> findByName(@PathVariable("name") String name) throws NotificationException {
         List<ModuleEntity> modules = moduleService.findByName(name);
         if (modules.size() == 1) {
-            return new ResponseEntity<>(moduleService.convertToModule(modules.get(0)), HttpStatus.OK);
+            return new ResponseEntity<>(moduleMapper.toDto(modules.get(0)), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
