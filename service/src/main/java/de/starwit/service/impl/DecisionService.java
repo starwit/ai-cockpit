@@ -3,12 +3,8 @@ package de.starwit.service.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +25,6 @@ import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import de.starwit.persistence.repository.ModuleRepository;
-import de.starwit.visionapi.Reporting.IncidentMessage;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.errors.ErrorResponseException;
@@ -104,20 +99,6 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
     public DecisionService(EntityManager entityManager) {
         this.entityManager = entityManager;
-    }
-
-    public DecisionEntity createNewDecisionBasedOnIncidentMessage(IncidentMessage decisionMessage) {
-        DecisionEntity entity = new DecisionEntity();
-        entity.setMediaUrl(decisionMessage.getMediaUrl());
-        ZonedDateTime dateTime = Instant.ofEpochMilli(decisionMessage.getTimestampUtcMs())
-                .atZone(ZoneId.systemDefault());
-        entity.setAcquisitionTime(dateTime);
-        if (decisionMessage.hasCameraLocation()) {
-            entity.setCameraLatitude(new BigDecimal(decisionMessage.getCameraLocation().getLatitude()));
-            entity.setCameraLongitude(new BigDecimal(decisionMessage.getCameraLocation().getLongitude()));
-        }
-        entity.setState(DecisionState.NEW);
-        return createDecisionEntitywithAction(entity);
     }
 
     private DecisionTypeEntity processDecisionType(DecisionTypeEntity entity, Long moduleId) {
