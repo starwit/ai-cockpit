@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import de.starwit.aic.model.Decision;
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
@@ -33,8 +35,7 @@ import de.starwit.persistence.repository.DecisionTypeRepository;
 import de.starwit.service.impl.DecisionService;
 import de.starwit.service.impl.DecisionTypeService;
 import de.starwit.service.impl.ModuleService;
-import de.starwit.visionapi.Common.GeoCoordinate;
-import de.starwit.visionapi.Reporting.IncidentMessage;
+import de.starwit.service.mapper.DecisionMapper;
 import jakarta.persistence.EntityNotFoundException;
 
 @Import(TestServiceConfiguration.class)
@@ -65,6 +66,8 @@ public class DecisionServiceTest {
 
         @Autowired
         private ModuleService moduleService;
+
+        private DecisionMapper mapper = new DecisionMapper();
 
         private static Long decisionId;
 
@@ -124,8 +127,7 @@ public class DecisionServiceTest {
                 DecisionTypeEntity descisionType = getDefaultDecisionType();
                 long timestamp = 1633046400000L;
                 DecisionEntity decision = new DecisionEntity();
-                ZonedDateTime expectedDateTime = Instant.ofEpochMilli(timestamp)
-                                .atZone(ZoneId.systemDefault());
+                ZonedDateTime expectedDateTime = Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault());
                 decision.setMediaUrl("http://testurl.com/media");
                 decision.setAcquisitionTime(expectedDateTime);
 
@@ -144,19 +146,20 @@ public class DecisionServiceTest {
         @Test
         @Commit
         @Order(1)
-        void testCreateNewDecisionWithActionsMessage() {
+        void testCreateNewDecisionFromApi() {
 
                 // prepare
-                getDefaultDecisionType();
                 long timestamp = 1633046400001L;
-                IncidentMessage decisionMessage = IncidentMessage.newBuilder()
-                                .setMediaUrl("http://testurl.com/media")
-                                .setTimestampUtcMs(timestamp)
-                                .build();
+                getDefaultDecisionType();
+                Decision decisionMessage = new Decision();
+                decisionMessage.setAcquisitionTime(
+                                OffsetDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault()));
+                decisionMessage.setMediaUrl("http://testurl.com/media");
 
                 // Call Methode
+                DecisionEntity entity = mapper.toEntity(decisionMessage);
                 DecisionEntity result = decisionService
-                                .createNewDecisionBasedOnIncidentMessage(decisionMessage);
+                                .createDecisionEntitywithAction(entity);
 
                 // Assert
                 assertEquals("http://testurl.com/media", result.getMediaUrl());
@@ -176,20 +179,16 @@ public class DecisionServiceTest {
 
                 // prepare
                 getDefaultDecisionType();
-                long timestamp = 1633046400002L;
-                GeoCoordinate coordinates = GeoCoordinate.newBuilder()
-                                .setLatitude(38.97)
-                                .setLongitude(40.78)
-                                .build();
-                IncidentMessage decisionMessage = IncidentMessage.newBuilder()
-                                .setMediaUrl("http://testurl.com/media")
-                                .setTimestampUtcMs(timestamp)
-                                .setCameraLocation(coordinates)
-                                .build();
+                Decision decisionMessage = new Decision();
+                decisionMessage.setAcquisitionTime(ZonedDateTime.now().toOffsetDateTime());
+                decisionMessage.setMediaUrl("http://testurl.com/media");
+                decisionMessage.setCameraLatitude(new BigDecimal(38.97));
+                decisionMessage.setCameraLongitude(new BigDecimal(40.78));
 
                 // Call Methode
+                DecisionEntity entity = mapper.toEntity(decisionMessage);
                 DecisionEntity result = decisionService
-                                .createNewDecisionBasedOnIncidentMessage(decisionMessage);
+                                .createDecisionEntitywithAction(entity);
 
                 // Assert
                 assertEquals(new BigDecimal(38.97), result.getCameraLatitude());

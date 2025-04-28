@@ -59,7 +59,7 @@ jobs:
         if [ ! -z "${{ env.RELEASE_VERSION }}" ]
         then
           echo "new version manually set to ${{ env.RELEASE_VERSION }}"
-          mvn -B build-helper:parse-version versions:set -DnewVersion=${{ env.RELEASE_VERSION }}-SNAPSHOT versions:commit --settings .github/workflows/settings.xml --file pom.xml
+          mvn -B build-helper:parse-version versions:set -DnewVersion=${{ env.RELEASE_VERSION }}-SNAPSHOT versions:commit --file pom.xml
         fi
         echo "mvn generate-sources --file pom.xml"
         mvn generate-sources --file pom.xml
@@ -72,8 +72,8 @@ jobs:
           git commit -m "modified changelog"
           git push
         fi
-        mvn -B release:clean release:prepare -Darguments="-DskipTests" --settings .github/workflows/settings.xml --file pom.xml
-        mvn -B release:clean --settings .github/workflows/settings.xml --file pom.xml
+        mvn -B release:clean release:prepare -Darguments="-DskipTests" --file pom.xml
+        mvn -B release:clean --file pom.xml
       env:
          CI: false
          PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
@@ -100,7 +100,7 @@ jobs:
         fi
 
     - name: Build with Maven
-      run: mvn clean -B package -P frontend --settings .github/workflows/settings.xml --file pom.xml
+      run: mvn clean -B package -P frontend --file pom.xml
       env:
          CI: false
          PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
@@ -159,7 +159,7 @@ jobs:
       with:
          maven-version: 3.9.2      
     - name: Build kic with Maven
-      run: mvn clean -B package -P frontend --settings .github/workflows/settings.xml --file pom.xml
+      run: mvn clean -B package -P frontend --file pom.xml
       env:
          CI: false
          PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}

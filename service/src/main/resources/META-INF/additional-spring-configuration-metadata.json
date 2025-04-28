@@ -1,34 +1,14 @@
 {
     "properties": [
         {
-            "name": "spring.data.redis.stream.ids",
-            "type": "java.lang.String",
-            "description": "Redis stream ids in order to receive or send data to redis"
-        },
-        {
-            "name": "spring.data.stream.prefix",
-            "type": "java.lang.String",
-            "description": "Redis stream prefix in order to receive or send data to redis"
-        },
-        {
-            "name": "decision.type.default",
-            "type": "java.lang.String",
-            "description": "Default name of decision type"
-        },
-        {
-            "name": "spring.data.redis.active",
-            "type": "java.lang.Boolean",
-            "description": "Activate or deactivate redis."
-        },
-        {
             "name": "rest.base-path",
             "type": "java.lang.String",
             "description": "path to rest api'"
         },
         {
-            "name": "incident.type.default",
+            "name": "decision.type.default",
             "type": "java.lang.String",
-            "description": "default decision type for valkey messages'"
+            "description": "default decision type"
         },
         {
             "name": "scenario.setup",
