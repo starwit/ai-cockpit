@@ -6,9 +6,9 @@
             "description": "path to rest api'"
         },
         {
-            "name": "incident.type.default",
+            "name": "decision.type.default",
             "type": "java.lang.String",
-            "description": "default decision type for valkey messages'"
+            "description": "default decision type"
         },
         {
             "name": "scenario.setup",
