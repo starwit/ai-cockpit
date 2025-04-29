@@ -1,8 +1,11 @@
 package de.starwit.service.mapper;
 
+import de.starwit.persistence.entity.DecisionState;
+import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
 
 import de.starwit.aic.model.Decision;
+import de.starwit.aic.model.Decision.StateEnum;
 import de.starwit.persistence.entity.DecisionEntity;
 
 public class DecisionMapper implements Mapper<Decision, DecisionEntity> {
@@ -29,6 +32,9 @@ public class DecisionMapper implements Mapper<Decision, DecisionEntity> {
     @Override
     public DecisionEntity toEntity(Decision dto) {
         DecisionEntity entity = modelMapper.map(dto, DecisionEntity.class);
+        if (entity.getState() == null) {
+            entity.setState(DecisionState.NEW);
+        }
         return entity;
     }
 
