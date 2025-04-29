@@ -1,15 +1,10 @@
-import ArchiveIcon from '@mui/icons-material/Archive';
-import CancelIcon from "@mui/icons-material/Cancel";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import InboxIcon from '@mui/icons-material/Inbox';
-import InfoIcon from '@mui/icons-material/Info';
 import Lan from "@mui/icons-material/Lan";
-import {Badge, Button, Card, CardContent, Container, Divider, Stack, Table, TableBody, TableCell, TableContainer, TableRow, Typography} from '@mui/material';
+import {Container, Stack, Typography} from '@mui/material';
 import Grid from "@mui/material/Grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {Link as RouterLink} from 'react-router-dom';
 import ModuleRest from "../../services/ModuleRest";
+import ModuleInfo from './ModuleInfo';
 
 function ModuleOverview() {
     const {t} = useTranslation();
@@ -35,91 +30,9 @@ function ModuleOverview() {
                 <Grid container spacing={2}>
                     {moduleData.map(row => (
                         <Grid size={{xs: 12, sm: 4}} key={row.id}>
-                            <Card>
-                                <CardContent>
-                                    {row.name}
-                                    <Divider />
-                                    <TableContainer >
-                                        <Table size="small" aria-label="a dense table">
-                                            <TableBody>
-                                                <TableRow>
-                                                    <TableCell style={{width: '180px'}} align="left">
-                                                        {t("module.description")}
-                                                    </TableCell>
-                                                    <TableCell align="left">
-                                                        <Typography noWrap sx={{
-                                                            maxWidth: 300,
-                                                            overflow: 'hidden',
-                                                            textOverflow: 'ellipsis',
-                                                            whiteSpace: 'nowrap'
-                                                        }}>
-                                                            {row.description}
-                                                        </Typography>
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left">{t("module.applicationId")}</TableCell>
-                                                    <TableCell align="left">{row.applicationIdentifier}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left">{t("module.lastdeployment")}</TableCell>
-                                                    <TableCell align="left">{row.lastDeployment}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left">{t("module.version")}</TableCell>
-                                                    <TableCell align="left">{row.version}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left">{t("module.isai")}</TableCell>
-                                                    <TableCell align="left">{row.useAI ? <CheckCircleIcon /> : <CancelIcon />}</TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left">{t("module.decisiontypes")}</TableCell>
-                                                    <TableCell align="left">
-                                                        <Button variant="contained"
-                                                            color="secondary"
-                                                            startIcon={<InfoIcon />}
-                                                            component={RouterLink}
-                                                            to={"/decision-type/" + row.id}>
-                                                            <Typography>{row.decisionType.length}</Typography>
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left">{t("module.actiontypes")}</TableCell>
-                                                    <TableCell align="left">
-                                                        <Button variant="contained"
-                                                            color="secondary"
-                                                            startIcon={<InfoIcon />}
-                                                            component={RouterLink}
-                                                            to={"/action-type/" + row.id} >
-                                                            <Typography>{row.actionType.length}</Typography>
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-                                                <TableRow>
-                                                    <TableCell align="left">{t("module.decisions")}</TableCell>
-                                                    <TableCell align="left">
-                                                        <Button variant="contained" color="secondary" component={RouterLink} to={"/decision/" + row.id}>
-                                                            <Stack direction="row" spacing={4}>
-                                                                <Badge badgeContent={row.openDecisions} color="error" showZero>
-                                                                    <InboxIcon color="action" />
-                                                                </Badge>
-                                                                <Badge badgeContent={row.madeDecisions} color="primary" showZero>
-                                                                    <ArchiveIcon color="action" />
-                                                                </Badge>
-                                                            </Stack>
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </CardContent>
-                            </Card>
+                            <ModuleInfo module={row} />
                         </Grid>
                     ))}
-
                 </Grid >
             </Stack>
         </Container>
@@ -127,3 +40,4 @@ function ModuleOverview() {
 }
 
 export default ModuleOverview;
+
