@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import de.starwit.persistence.entity.ActionTypeEntity;
-import de.starwit.persistence.entity.ModuleEntity;
 
 /**
  * ActionType Repository class

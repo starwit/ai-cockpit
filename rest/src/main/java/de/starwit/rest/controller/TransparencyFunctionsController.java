@@ -27,6 +27,7 @@ import de.starwit.aic.model.Module;
 import de.starwit.aic.model.ModuleSBOMLocationValue;
 import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.service.impl.ModuleService;
+import de.starwit.service.mapper.ModuleMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -44,6 +45,8 @@ public class TransparencyFunctionsController {
 
   @Autowired
   ObjectMapper objectMapper;
+
+  ModuleMapper moduleMapper = new ModuleMapper();
 
   @Value("${sbom.enabled:false}")
   private boolean reportGenerationEnabled;
@@ -99,7 +102,7 @@ public class TransparencyFunctionsController {
       return result;
     }
 
-    Module m = moduleService.convertToModule(entity);
+    Module m = moduleMapper.toDto(entity);
     String reportRequest = createRequestBody(m);
     String apiEndpoint = getReportAPIEndpoint(type);
 
