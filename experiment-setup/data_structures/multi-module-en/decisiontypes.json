@@ -1,0 +1,371 @@
+[
+    {
+        "name": "dangerous driving behaviour",
+        "description": "A road user involving reckless or unsafe driving behavior",
+        "module": {
+            "name": "Anomaly Detection"
+        },
+        "actionTypes": [
+            {
+                "name": "notify police"
+            },
+            {
+                "name": "I2X notification"
+            }
+        ]
+    },
+    {
+        "name": "accident",
+        "description": "A decision involving a collision or crash between vehicles or other obstacles",
+        "module": {
+            "name": "Anomaly Detection"
+        },
+        "actionTypes": [
+            {
+                "name": "notify emergency services"
+            },
+            {
+                "name": "notify public alarm services"
+            },
+            {
+                "name": "notify police"
+            },
+            {
+                "name": "notify towing service"
+            }
+        ]
+    },
+    {
+        "name": "traffic jam",
+        "description": "A situation where traffic is congested and vehicles are moving slowly or not at all",
+        "module": {
+            "name": "Anomaly Detection"
+        },
+        "actionTypes": [
+            {
+                "name": "notify public alarm services"
+            },
+            {
+                "name": "notify police"
+            },
+            {
+                "name": "I2X notification"
+            }
+        ]
+    },
+    {
+        "name": "disabled vehicle",
+        "description": "A vehicle is blocking traffic",
+        "actionTypes": [
+            {
+                "name": "notify police"
+            },
+            {
+                "name": "notify towing service"
+            },
+            {
+                "name": "I2X notification"
+            }
+        ]
+    },
+    {
+        "name": "helpless person",
+        "description": "A human in need of assistance",
+        "actionTypes": [
+            {
+                "name": "notify emergency services"
+            },
+            {
+                "name": "notify public alarm services"
+            },
+            {
+                "name": "notify police"
+            }
+        ]
+    },
+    {
+        "name": "first responder ops",
+        "description": "First responders operating in an area",
+        "actionTypes": [
+            {
+                "name": "notify public alarm services"
+            },
+            {
+                "name": "I2X notification"
+            }
+        ]
+    },
+    {
+        "name": "Contaminated Traffic Signs",
+        "description": "Traffic sign is no longer recognizable and needs to be cleaned",
+        "actionTypes": [
+            {
+                "name": "Notify Patrol Vehicle"
+            }
+        ],
+        "module": {
+            "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Wild Weed Growth",
+        "description": "Wild weeds on the sidewalk or roadside",
+        "actionTypes": [
+            {
+                "name": "Notify Parks Department"
+            }
+        ],
+        "module": {
+            "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Overfilled Trash Bin",
+        "description": "Trash is already lying next to the trash bin",
+        "actionTypes": [
+            {
+                "name": "Notify Patrol Vehicle"
+            }
+        ],
+        "module": {
+            "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Illegal Waste Disposal",
+        "description": "Unauthorized dumping of bulky waste or other piles of trash",
+        "actionTypes": [
+            {
+                "name": "Notify Patrol Vehicle"
+            }
+        ],
+        "module": {
+            "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Illegally Parked Vehicle",
+        "description": "Illegally parked vehicle obstructing garbage collection and needs towing",
+        "actionTypes": [
+            {
+                "name": "Notify Public Order Office"
+            },
+            {
+                "name": "Notify Towing Service"
+            }
+        ],
+        "module": {
+            "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Waste Collection Re-Planning",
+        "description": "Automatic re-planning",
+        "actionTypes": [
+            {
+                "name": "Update dispatch"
+            }
+        ],
+        "module": {
+            "name": "Waste Collection Planer"
+        }
+    },
+    {
+        "name": "Configuration issue",
+        "description": "Configuration issue prevents customers using application",
+        "actionTypes": [
+            {
+                "name": "Put App to maintenance mode"
+            },
+            {
+                "name": "Adapt configuration"
+            }
+        ],
+        "module": {
+            "name": "Infra Mitigator"
+        }
+    },
+    {
+        "name": "Corrupt data",
+        "description": "Application displays corrupt data to customers",
+        "actionTypes": [
+            {
+                "name": "Put App to maintenance mode"
+            },
+            {
+                "name": "Recover database backup"
+            },
+            {
+                "name": "Increase log level"
+            }
+        ],
+        "module": {
+            "name": "Application Bug Identifier"
+        }
+    },
+    {
+        "name": "Application bug",
+        "description": "Application bug",
+        "actionTypes": [
+            {
+                "name": "Put App to maintenance mode"
+            },
+            {
+                "name": "Patch Application/Module"
+            },
+            {
+                "name": "Recover database backup"
+            },
+            {
+                "name": "Restart Application"
+            }
+        ],
+        "module": {
+            "name": "Application Bug Identifier"
+        }
+    },
+    {
+        "name": "Too many log message",
+        "description": "An application is flooding log messages",
+        "module": {
+            "name": "Application Bug Identifier"
+        },
+        "actionTypes": [
+            {
+                "name": "Restart Application"
+            }
+        ]
+    },
+    {
+        "name": "Application compromised",
+        "description": "An application has been successfully attacked",
+        "module": {
+            "name": "Intrusion Detector"
+        },
+        "actionTypes": [
+            {
+                "name": "Shutdown application"
+            }
+        ]
+    },
+    {
+        "name": "Stress level",
+        "description": "A human collaborator experiences too high/low stress level",
+        "module": {
+            "name": "Human observatory"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Application configuration not optimal",
+        "description": "AI proposes more optimal configuration",
+        "module": {
+            "name": "Human observatory"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Memory leak detected",
+        "description": "An application suffers from a memory leak",
+        "module": {
+            "name": "Intelligent Network Operator - Observer"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Component too slow",
+        "description": "An application handles traffic not within latency requirements",
+        "module": {
+            "name": "Intelligent Network Operator - Observer"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Intrusion Detected",
+        "description": "An application component is compromised",
+        "module": {
+            "name": "Intelligent Network Operator - Observer"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Link will be down",
+        "description": "A connection will probably fail",
+        "module": {
+            "name": "Intelligent Network Operator - Observer"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Application restart",
+        "description": "Based on past behaviour an application needs to be restarted",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Re-route traffic",
+        "description": "Re-route IP traffic",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        },
+        "actionTypes": [
+            {
+                "name": "Re-route traffic"
+            }
+        ]
+    },
+    {
+        "name": "Computing resources for function insufficiant",
+        "description": "A virtualized network function needs more computation resources",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        },
+        "actionTypes": [
+            {
+                "name": "Generate infra patch"
+            }
+        ]
+    },
+    {
+        "name": "Relocate function",
+        "description": "A virtualized network function needs to be relocated",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Similarity detected",
+        "description": "An actual problem might be similar to past ones",
+        "module": {
+            "name": "Intelligent Network Operator - Workflow Generator"
+        },
+        "actionTypes": [
+            {
+                "name": "Apply similarity patch"
+            }
+        ]
+    },
+    {
+        "name": "Congestion predicted",
+        "description": "Production will be affected by congestion",
+        "module": {
+            "name": "Factory Observer"
+        },
+        "actionTypes": []
+    },
+    {
+        "name": "Maintenance necessary",
+        "description": "A production component will need maintenance",
+        "module": {
+            "name": "Factory Observer"
+        },
+        "actionTypes": [
+            {
+                "name": "Stop production"
+            }
+        ]
+    }
+]

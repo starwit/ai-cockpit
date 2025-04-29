@@ -1,0 +1,258 @@
+[
+    {
+        "name": "notify police",
+        "description": "Notify the police about the decision",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "notify emergency services",
+        "description": "Notify emergency services like ambulances or fire departments",
+        "executionPolicy": "MANUAL",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "notify public alarm services",
+        "description": "Notify public platforms or apps about the decision",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "I2X notification",
+        "description": "Issue an infrastructure to X message",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "notify towing service",
+        "description": "Get disabled vehicles or obstacles removed",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Notify Public Order Office",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Generate Task List and Route",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Notify Towing Service",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Notify Parks Department",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Notify Patrol Vehicle",
+        "description": "",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Anomaly Detection"
+        }
+    },
+    {
+        "name": "Adapt shift plan",
+        "description": "Adapt next shift plan, to address issue",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Send clearing team",
+        "description": "Send team for immediate incident handling",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Waste Incident Classifier"
+        }
+    },
+    {
+        "name": "Update dispatch",
+        "description": "Update trash collection dispatch",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Waste Collection Planer"
+        }
+    },
+    {
+        "name": "Notify authorities",
+        "description": "Send team for immediate incident handling",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Notify authorities"
+        }
+    },
+    {
+        "name": "Shutdown application",
+        "description": "An affected application needs to be shutdown immediately",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Intrusion Detector"
+        }
+    },
+    {
+        "name": "Isolate application",
+        "description": "An affected application needs to be isolated",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Intrusion Detector"
+        }
+    },
+    {
+        "name": "Update Application",
+        "description": "An update can fix appliction bug",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Application Bug Identifier"
+        }
+    },
+    {
+        "name": "File bug report",
+        "description": "Detected bug will to be reported to dev team",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Application Bug Identifier"
+        }
+    },
+    {
+        "name": "Put App to maintenance mode",
+        "description": "Application is set to maintenance mode and is not reachable for customers",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Infra Mitigator"
+        }
+    },
+    {
+        "name": "Restart Application",
+        "description": "Restart Application/Module",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Infra Mitigator"
+        }
+    },
+    {
+        "name": "Patch Application/Module",
+        "description": "Create patch for application/module",
+        "executionPolicy": "MANUAL",
+        "module": {
+            "name": "Application Bug Identifier"
+        }
+    },
+    {
+        "name": "Adapt configuration",
+        "description": "Adapt configuration for a cloud element",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Infra Mitigator"
+        }
+    },
+    {
+        "name": "Customer messaging",
+        "description": "Message all customers",
+        "executionPolicy": "WITHCHECK",
+        "module": {
+            "name": "Customer Messaging"
+        }
+    },
+    {
+        "name": "Backup database",
+        "description": "Create new database backup",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Infra Mitigator"
+        }
+    },
+    {
+        "name": "Recover database backup",
+        "description": "Recover database backup",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Infra Mitigator"
+        }
+    },
+    {
+        "name": "Increase log level",
+        "description": "Increase log level",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Infra Mitigator"
+        }
+    },
+    {
+        "name": "Decrease log level",
+        "description": "Decrease log level",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Infra Mitigator"
+        }
+    },
+    {
+        "name": "Re-route traffic",
+        "description": "Decrease log level",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Intelligent Network Operator - Decider"
+        }
+    },
+    {
+        "name": "Generate infra patch",
+        "description": "Generate code to adapt infrastructure",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Intelligent Network Operator - Workflow Generator"
+        }
+    },
+    {
+        "name": "Apply similarity patch",
+        "description": "Generate code to adapt infrastructure",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Intelligent Network Operator - Workflow Generator"
+        }
+    },
+    {
+        "name": "Stop production",
+        "description": "Stop production",
+        "executionPolicy": "MANUAL",
+        "module": {
+            "name": "Factory Observer"
+        }
+    },
+    {
+        "name": "Slow down production",
+        "description": "Slow down production",
+        "executionPolicy": "AUTOMATIC",
+        "module": {
+            "name": "Factory Observer"
+        }
+    }
+]
