@@ -37,6 +37,7 @@ public class DecisionTypeEntity extends AbstractEntity<Long> {
     private Set<ActionTypeEntity> actionType;
 
     @JsonFilter("filterIdName")
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "module_id")
     private ModuleEntity module;

@@ -19,7 +19,7 @@ function MainContentRouter() {
             <Route path="/decision-heatmap-view/:moduleId?" element={<Layout><DecisionHeatmapView /></Layout>} />
             <Route path="/action-type/:moduleId?" element={<Layout><ActionTypeOverview /></Layout>} />
             <Route path="/decision-type/:moduleId?" element={<Layout><DecisionTypeOverview /></Layout>} />
-            <Route path="/info/component-breakdown" element={<Layout><ComponentBreakDown /></Layout>} />
+            <Route path="/info/component-breakdown" element={<Layout disabled={true}><ComponentBreakDown /></Layout>} />
             <Route path="/logout" component={() => {
                 window.location.href = window.location.pathname + "api/user/logout";
                 return null;
