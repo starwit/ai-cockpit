@@ -21,6 +21,8 @@ Creates a new release for jar (pom), github release documentation, docker image 
   * helm chart is created with release version and pushed to registry
   * poms are updated to 1.1.0-3-SNAPSHOT
 
+As ai-cockpit has two themes, two docker images are created. `<<version-number>>-kic` contains the layout for KI-cockpit research project.
+
 ## pr-build.yml
 
 Minimal checks and build that are run for any pull request

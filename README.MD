@@ -10,15 +10,20 @@ This software is __open source__ and it is intended to be used a large community
 
 ![BMAS](docs/imgs/BMAS_Logo.svg)
 
-
 ## Deployment
 
 Cockpit is a part of a bundle of services. For deployment options see <https://github.com/starwit/ai-cockpit-deployment>
+
+## Development
+
+* For details on how to develop, build and run AI Cockpit see [development instructions](docs/README-DEV.MD).
+* Informations about the build pipelines can be found [here](.github/workflows/readme.md).
 
 ## Architecture & Concepts
 
 AI Cockpit is composed by a number of components. The following diagram shows, how those components are working together.
 Cockpit has three main interfaces:
+
 * Decision - here a system landscape will announce results of interpreting a problem/anomaly
 * Action - Operators can approve/disapprove proposed actions
 * Transparency - every module making decisions or executing actions, has to register via this interface. Registration will cover all necessary information for deployer/operators.
@@ -32,10 +37,6 @@ Interaction design and concepts to stay humans in control are described [here](d
 ### Data Model
 
 AI Cockpit needs a data model to collect system decisions and possible actions. Data definition are described [here](https://github.com/KI-Cockpit/ai-cockpit-api/blob/main/doc/domain-model.md#simplified-model).
-
-## Development
-
-For details on how to develop, build and run AI Cockpit see [development instructions](docs/README-DEV.MD).
 
 ## License
 
