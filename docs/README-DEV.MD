@@ -12,49 +12,6 @@ The following components and tools are necessary to build & run AICockpit in you
 * Postgres (available for development via docker-compose scripts)
 * using Keycloak is optional
 
-### Maven Dependency
-
-Project needs a library from an AI cockpit Github repo and thus you need to adapt your Maven settings (usually located here ~/.m2/settings.xml). Following example of a complete settings.xml shows you necessary additions. Please note, that you need username/Github token replaced by values, from your user.
-
-```XML
-<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
-
-  <activeProfiles>
-    <activeProfile>github</activeProfile>
-  </activeProfiles>
-
-  <profiles>
-    <profile>
-      <id>github</id>
-      <repositories>
-        <repository>
-          <id>central</id>
-          <url>https://repo1.maven.org/maven2</url>
-        </repository>
-        <repository>
-            <id>github</id>
-            <url>https://maven.pkg.github.com/starwit/vision-api</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-      </repositories>
-    </profile>
-  </profiles>
-
-  <servers>
-    <server>
-      <id>github</id>
-      <username>username</username>
-      <password>TOKEN</password>
-    </server>
-  </servers>
-</settings>
-```
-
 ## How to build
 
 In order to run a local development environment execute the following steps.
@@ -154,6 +111,7 @@ example usage:
     cd experiment-setup
     ./fillDatabaseScript.sh
   ```
+
 Please note, that this script expects an _env.sh_ file in the same folder. Content can be derived from [template](../experiment-setup/env.sh.template).
 
 This script also allows you, to test how decisions are flowing into AI Cockpit. __Note__: you will
