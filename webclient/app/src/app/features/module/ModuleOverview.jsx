@@ -1,5 +1,5 @@
 import Lan from "@mui/icons-material/Lan";
-import {Box, Card, CardContent, CardHeader, Container, Stack, Tab, Tabs, Typography} from '@mui/material';
+import {Box, Container, Stack, Tab, Tabs, Typography} from '@mui/material';
 import Grid from "@mui/material/Grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
@@ -9,7 +9,6 @@ import ModuleInfo from './ModuleInfo';
 function ModuleOverview() {
     const {t} = useTranslation();
     const moduleFunctions = useMemo(() => new ModuleRest(), []);
-    const [moduleData, setModuleData] = useState([]);
     const [groupedModules, setGroupedModules] = useState([]);
     const [applications, setApplications] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -33,7 +32,6 @@ function ModuleOverview() {
     }, [selectedIndex, applications])
 
     function reload(data) {
-        setModuleData(data);
         let grouped = groupByApplication(data);
         setGroupedModules(grouped);
         setApplications(Object.keys(grouped));
@@ -70,7 +68,7 @@ function ModuleOverview() {
         if (groupedModules[selectedName]) {
             return (
                 groupedModules[selectedName].map(row => (
-                    <Grid key={row.id} size={{xs: 4, md: 4}}>
+                    <Grid key={row.id} size={{xs: 4, md: 4}} sx={{minWidth: 550}}>
                         <ModuleInfo module={row} />
                     </Grid>
                 ))
@@ -81,7 +79,6 @@ function ModuleOverview() {
 
     return (
         <Container sx={{paddingTop: 2}}>
-
             <Stack direction="row">
                 <Tabs
                     value={selectedIndex}
@@ -91,16 +88,10 @@ function ModuleOverview() {
                 >
                     {renderApplicationsName()}
                 </Tabs>
-
                 <Container>
-                    <Stack direction="row">
-                        <Typography variant="h2" sx={{paddingBottom: 0, marginBottom: 0}}>
-                            <Lan fontSize="small" /> {t("module.heading")}
-                        </Typography>
-                        <Typography variant="h2" sx={{paddingBottom: 0, marginBottom: 0}}>
-                            | {selectedName}
-                        </Typography>
-                    </Stack>
+                    <Typography variant="h2">
+                        <Lan fontSize="small" /> {t("module.heading")}
+                    </Typography>
                     <Grid container spacing={2} sx={{paddingTop: 2}}>
                         {renderGroupedModules()}
                     </Grid >

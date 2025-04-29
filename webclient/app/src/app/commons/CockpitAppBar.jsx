@@ -1,9 +1,11 @@
 import ViewListIcon from '@mui/icons-material/ViewList';
 import {
     AppBar,
+    Box,
     Container,
     Divider,
     IconButton,
+    Stack,
     Toolbar,
     Tooltip,
     Typography
@@ -25,6 +27,7 @@ function CockpitAppBar(props) {
     const {disabled} = props;
     const {t} = useTranslation();
     const [moduleName, setModuleName] = useState("");
+    const [applicationIdentifier, setApplicationIdentifier] = useState("");
     const themeName = import.meta.env.VITE_THEME;
     const themeMap = {general, kic};
     const DynamicLogo = themeMap[themeName];
@@ -37,6 +40,7 @@ function CockpitAppBar(props) {
                     return;
                 } else {
                     setModuleName(response.data.name);
+                    setApplicationIdentifier(response.data.applicationIdentifier)
                 }
             });
     }, [moduleId]);
@@ -46,37 +50,55 @@ function CockpitAppBar(props) {
             <Container>
                 <AppBar color="secondary">
                     <Toolbar>
-                        <IconButton
-                            size="large"
-                            edge="start"
-                            color="inherit"
-                            href="./"
-                            aria-label="menu"
-                            sx={{margin: 0, padding: 0, marginRight: 2}}
+                        <Stack
+                            direction="row"
+                            sx={{justifyContent: "flex-start"}}
                         >
-                            <img src={DynamicLogo} height={40} alt="KI-Cockpit" />
-                        </IconButton>
-                        <Typography variant="h1" component="div">
-                            {import.meta.env.VITE_TITLE}
-                        </Typography>
-                        <Typography variant="h3" component="div" marginLeft={2}>
-                            {moduleName}
-                        </Typography>
-                        <AutomationSwitch />
-                        <Tooltip title={t('list.tooltip')}>
                             <IconButton
-                                href={"#/decision/" + moduleId}
                                 size="large"
-                                variant="outlined"
-                                disabled={disabled}
+                                edge="start"
+                                color="inherit"
+                                href="./"
+                                aria-label="menu"
+                                sx={{margin: 0, padding: 0, marginRight: 2}}
                             >
-                                <ViewListIcon />
+                                <img src={DynamicLogo} height={40} alt="KI-Cockpit" />
                             </IconButton>
-                        </Tooltip>
-                        <MapMenu moduleId={moduleId} disabled={disabled} />
-                        <Divider orientation="vertical" variant="middle" flexItem />
-                        <ConfigMenu moduleId={moduleId} disabled={disabled} />
-                        <InfoMenu />
+                            <Typography variant="h1" component="div">
+                                {import.meta.env.VITE_TITLE}
+                            </Typography>
+                            {applicationIdentifier && moduleName &&
+                                (<Typography
+                                    variant="h3"
+                                    color='warning'
+                                    sx={{paddingLeft: 4, paddingTop: 0.5}}
+                                    component="div"
+                                >
+                                    {applicationIdentifier} / {moduleName}
+                                </Typography>)
+                            }
+                        </Stack>
+                        <Stack
+                            direction="row"
+                            sx={{justifyContent: "right", flex: 1}}
+
+                        >
+                            <AutomationSwitch />
+                            <Tooltip title={t('list.tooltip')}>
+                                <IconButton
+                                    href={"#/decision/" + moduleId}
+                                    size="large"
+                                    variant="outlined"
+                                    disabled={disabled}
+                                >
+                                    <ViewListIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <MapMenu moduleId={moduleId} disabled={disabled} />
+                            <Divider orientation="vertical" variant="middle" flexItem />
+                            <ConfigMenu moduleId={moduleId} disabled={disabled} />
+                            <InfoMenu />
+                        </Stack>
                     </Toolbar>
                 </AppBar>
             </Container >
