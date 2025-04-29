@@ -1,12 +1,10 @@
 package de.starwit.service.mapper;
 
-import de.starwit.persistence.entity.DecisionState;
-import org.modelmapper.Condition;
 import org.modelmapper.ModelMapper;
 
 import de.starwit.aic.model.Decision;
-import de.starwit.aic.model.Decision.StateEnum;
 import de.starwit.persistence.entity.DecisionEntity;
+import de.starwit.persistence.entity.DecisionState;
 
 public class DecisionMapper implements Mapper<Decision, DecisionEntity> {
 
