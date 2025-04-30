@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 const translationDeDE = {
-    "arrow.info": "Zwischen den Gefahrensituationen kann mit den A & D navigiert werden und den Entscheidungstyp kann man mit den Zahlen 1-9 wechseln. Mit ENTER kann eine Gefahrensituation als korrekt und mit Enf als falsch markiert werden.",
-    "decisions.heading": "Gefahrensituationen",
-    "decision.title": "Gefahrensituationen",
-    "decision.create.title": "Gefahrensituation erfassen",
-    "decision.update.title": "Gefahrensituation bearbeiten",
+    "arrow.info": "Zwischen den KI-Entscheidungen kann mit den A & D navigiert werden und den Entscheidungstyp kann man mit den Zahlen 1-9 wechseln. Mit ENTER kann eine KI-Entscheidung als korrekt und mit Enf als falsch markiert werden.",
+    "decisions.heading": "KI-Entscheidungen",
+    "decision.title": "KI-Entscheidungen",
+    "decision.create.title": "KI-Entscheidung erfassen",
+    "decision.update.title": "KI-Entscheidung bearbeiten",
     "decision.id": "id",
     "decision.description": "Beschreibung",
     "decision.location": "Position auf Karte",
@@ -163,7 +163,7 @@ const translationDeDE = {
     "view.mode": "Ansichtsmodus",
     "view.mode.normal": "Normal",
     "view.mode.heatmap": "Wärmekarte",
-    "heatmap.description": "Die Wärmekarte zeigt Konzentrationsbereiche von Gefahrensituationen",
+    "heatmap.description": "Die Wärmekarte zeigt Konzentrationsbereiche von KI-Entscheidungen",
     "menu.autonomy": "Autonomiestufen",
     "map.normal": "Normalmodus",
     "map.heatmap": "Heatmap-Modus",
@@ -172,8 +172,8 @@ const translationDeDE = {
     "automation.stop": "ALLE STOPPEN",
     "autonomy.executionPolicy.description": "Folgende Ausfürungsmöglichkeiten gibt es:",
     "actiontype.policy.manual.description": "Die Maßnahme ist nur beschrieben, wird aber nicht ausgeführt",
-    "actiontype.policy.withcheck.description": "Der Nutzer muss sich die Gefahrensituation in der Detailansicht ansehen und sie als geprüft markieren. Erst dann wird die zugeordnete Maßnahme ausgeführt",
-    "actiontype.policy.automated.description": "Die Maßnahme wird sofort nach Meldung der Gefahrensituation ausgeführt",
-    "autonomy.description": "Meldet die KI eine neue Gefahrensituation, werden für den Entscheidungstyp vorkonfigurierte Maßnahmen erstellt. Die Autonomiestufen sind im Maßnahmentyp konfiguriert und legen fest, wann eine Maßnahme ausgeführt wird."
+    "actiontype.policy.withcheck.description": "Der Nutzer muss sich die KI-Entscheidung in der Detailansicht ansehen und sie als geprüft markieren. Erst dann wird die zugeordnete Maßnahme ausgeführt",
+    "actiontype.policy.automated.description": "Die Maßnahme wird sofort nach Meldung der KI-Entscheidung ausgeführt",
+    "autonomy.description": "Meldet die KI eine neue KI-Entscheidung, werden für den Entscheidungstyp vorkonfigurierte Maßnahmen erstellt. Die Autonomiestufen sind im Maßnahmentyp konfiguriert und legen fest, wann eine Maßnahme ausgeführt wird."
 };
 export default translationDeDE;
