@@ -87,7 +87,7 @@ export default function ComponentGraphView(props) {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        bgcolor: "white"
+                        bgcolor: theme => theme.palette.background.paper
                     }}
                 >
                     <Typography>{getModuleName(module.id)}</Typography>

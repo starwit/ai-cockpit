@@ -1,49 +1,34 @@
 import ViewListIcon from '@mui/icons-material/ViewList';
 import {
     AppBar,
-    Box,
+    Button,
     Container,
     Divider,
     IconButton,
+    Link,
     Stack,
     Toolbar,
     Tooltip,
     Typography
 } from "@mui/material";
-import React, {useEffect, useMemo, useState} from "react";
+import React from "react";
 import {useTranslation} from 'react-i18next';
+import {useParams} from 'react-router';
 import general from "../assets/images/general_Logo.png";
 import kic from "../assets/images/kic_Logo.png";
 import ConfigMenu from "../features/config/ConfigMenu";
 import InfoMenu from "../features/info/InfoMenu";
 import AutomationSwitch from "./AutomationSwitch";
 import MapMenu from "./MapMenu";
-import {useParams} from 'react-router';
-import ModuleRest from '../services/ModuleRest';
 
 
 function CockpitAppBar(props) {
     const {moduleId} = useParams() ?? "";
-    const {disabled} = props;
+    const {disabled, moduleName, applicationIdentifier} = props;
     const {t} = useTranslation();
-    const [moduleName, setModuleName] = useState("");
-    const [applicationIdentifier, setApplicationIdentifier] = useState("");
     const themeName = import.meta.env.VITE_THEME;
     const themeMap = {general, kic};
     const DynamicLogo = themeMap[themeName];
-    const moduleRest = useMemo(() => new ModuleRest(), []);
-
-    useEffect(() => {
-        if (!isNaN(moduleId))
-            moduleRest.findById(moduleId).then((response) => {
-                if (response.data == null) {
-                    return;
-                } else {
-                    setModuleName(response.data.name);
-                    setApplicationIdentifier(response.data.applicationIdentifier)
-                }
-            });
-    }, [moduleId]);
 
     return (
         <>
@@ -53,7 +38,6 @@ function CockpitAppBar(props) {
                         <Stack
                             direction="row"
                             sx={{justifyContent: "flex-start"}}
-                            noWrap
                         >
                             <IconButton
                                 size="large"
@@ -69,20 +53,23 @@ function CockpitAppBar(props) {
                                 {import.meta.env.VITE_TITLE}
                             </Typography>
                             {applicationIdentifier && moduleName &&
-                                (<Typography
-                                    variant="h3"
-                                    color='warning'
-                                    sx={{paddingLeft: 4, paddingTop: 0.5}}
-                                    component="div"
-                                    noWrap
-                                >
-                                    {applicationIdentifier} / {moduleName}
-                                </Typography>)
+                                (<>
+                                    <Button
+                                        href="./"
+                                        variant="h3"
+                                        color='warning'
+                                    >
+                                        <Typography variant="button" noWrap>
+                                            {t('module.appbar')}: {applicationIdentifier} / {moduleName}
+                                        </Typography>
+                                    </Button>
+                                </>
+                                )
+
                             }
                         </Stack>
                         <Stack
-                            direction="row"
-                            noWrap
+                            direction="row" spacing={0}
                             sx={{justifyContent: "right", flex: 1}}
 
                         >

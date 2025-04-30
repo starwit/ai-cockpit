@@ -2,7 +2,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
 import Start from "@mui/icons-material/Start";
-import {Button, Container, Stack, Typography} from "@mui/material";
+import {Button, Paper, Stack, Typography} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import {deDE, enUS} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
@@ -167,7 +167,7 @@ function ActionTypeOverview() {
     }
 
     return (
-        <Container sx={{paddingTop: 2}}>
+        <>
             <Stack direction="row" sx={{marginBottom: 1}}>
                 <Typography variant="h2" gutterBottom sx={{flex: 1}}>
                     <Start fontSize="small" /> {t("actiontype.heading")}
@@ -180,28 +180,30 @@ function ActionTypeOverview() {
                     {isSaved ? "" : "*"}
                 </Button>
             </Stack >
-            <DataGrid
-                localeText={locale.components.MuiDataGrid.defaultProps.localeText}
-                rows={actionTypes}
-                columns={columnsWithUpdateRow}
-                resizeable={true}
-                initialState={{
-                    pagination: {
-                        paginationModel: {
-                            pageSize: 10
+            <Paper sx={{padding: 2}}>
+                <DataGrid
+                    localeText={locale.components.MuiDataGrid.defaultProps.localeText}
+                    rows={actionTypes}
+                    columns={columnsWithUpdateRow}
+                    resizeable={true}
+                    initialState={{
+                        pagination: {
+                            paginationModel: {
+                                pageSize: 10
+                            }
+                        },
+                        sorting: {
+                            sortModel: [{field: "id", sort: "asc"}]
                         }
-                    },
-                    sorting: {
-                        sortModel: [{field: "id", sort: "asc"}]
-                    }
-                }}
-                pageSizeOptions={[10]}
-                disableRowSelectionOnClick
-                processRowUpdate={handleProcessRowUpdate}
-                onProcessRowUpdateError={handleProcessRowUpdateError}
-            />
-            {renderDeleteDialog()}
-        </Container>
+                    }}
+                    pageSizeOptions={[10]}
+                    disableRowSelectionOnClick
+                    processRowUpdate={handleProcessRowUpdate}
+                    onProcessRowUpdateError={handleProcessRowUpdateError}
+                />
+                {renderDeleteDialog()}
+            </Paper>
+        </>
     );
 }
 

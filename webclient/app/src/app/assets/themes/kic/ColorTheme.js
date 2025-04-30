@@ -28,7 +28,9 @@ const ColorTheme = createTheme({
         },
         background: {
             default: "#fefefe",
-            paper: "#fff"
+            paper: "#fff",
+            lightdark: "#cecece",
+            light: "#fff"
         },
         line: {
             width: 4

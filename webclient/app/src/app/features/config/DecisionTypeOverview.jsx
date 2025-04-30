@@ -3,15 +3,15 @@ import Category from "@mui/icons-material/Category";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
-import {Button, Container, Stack, Typography} from "@mui/material";
+import {Button, Paper, Stack, Typography} from "@mui/material";
 import {DataGrid, GridActionsCellItem} from "@mui/x-data-grid";
 import {deDE, enUS} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
+import {useParams} from "react-router";
 import ConfirmationDialog from "../../commons/dialog/ConfirmationDialog";
 import DecisionTypeRest from "../../services/DecisionTypeRest";
 import DecisionTypeDetail from "./DecisionTypeDetail";
-import {useParams} from "react-router";
 
 function DecisionTypeOverview() {
     const {moduleId} = useParams();
@@ -205,7 +205,7 @@ function DecisionTypeOverview() {
         />;
     }
 
-    return <Container sx={{paddingTop: 2}}>
+    return <>
         <Stack direction="row" sx={{marginBottom: 1}}>
             <Typography variant="h2" gutterBottom sx={{flex: 1}}>
                 <Category fontSize="small" /> {t("decisiontype.heading")}
@@ -218,28 +218,30 @@ function DecisionTypeOverview() {
                 {isSaved ? "" : "*"}
             </Button>
         </Stack>
-        <DataGrid
-            localeText={locale.components.MuiDataGrid.defaultProps.localeText}
-            rows={decisionTypes}
-            columns={columnsWithUpdateRow}
-            initialState={{
-                pagination: {
-                    paginationModel: {
-                        pageSize: 10
+        <Paper sx={{padding: 2}}>
+            <DataGrid
+                localeText={locale.components.MuiDataGrid.defaultProps.localeText}
+                rows={decisionTypes}
+                columns={columnsWithUpdateRow}
+                initialState={{
+                    pagination: {
+                        paginationModel: {
+                            pageSize: 10
+                        }
+                    },
+                    sorting: {
+                        sortModel: [{field: "id", sort: "asc"}]
                     }
-                },
-                sorting: {
-                    sortModel: [{field: "id", sort: "asc"}]
-                }
-            }}
-            pageSizeOptions={[10]}
-            disableRowSelectionOnClick
-            processRowUpdate={handleProcessRowUpdate}
-            onProcessRowUpdateError={handleProcessRowUpdateError}
-        />
-        {renderDialog()}
-        {renderDeleteDialog()}
-        {renderSaveDialog()}
-    </Container>;
+                }}
+                pageSizeOptions={[10]}
+                disableRowSelectionOnClick
+                processRowUpdate={handleProcessRowUpdate}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
+            />
+            {renderDialog()}
+            {renderDeleteDialog()}
+            {renderSaveDialog()}
+        </Paper>
+    </>;
 }
 export default DecisionTypeOverview;

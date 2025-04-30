@@ -2,7 +2,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import NearbyError from "@mui/icons-material/NearbyError";
-import {Box, Button, Container, IconButton, Stack, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Button, Container, IconButton, Paper, Stack, Tab, Tabs, Typography} from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import {deDE, enUS} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
@@ -215,54 +215,54 @@ function DecisionOverview() {
     }
 
     return (
-        <Container sx={{paddingTop: 2}}>
-            <Typography variant="h2" sx={{paddingBottom: 0, marginBottom: 0}}>
-                <NearbyError fontSize="small" /> {t("decisions.heading")}
-            </Typography>
+        <>
+            <Stack direction="row" sx={{marginBottom: 1}}>
+                <Typography variant="h2" sx={{flex: 1}}>
+                    <NearbyError fontSize="small" /> {t("decisions.heading")}
+                </Typography>
 
-            <Stack direction="row" sx={{marginBottom: 0}}>
+                <Button onClick={handleActionExecution} variant="text" color="primary" startIcon={<NotificationsActiveIcon />}>
+                    {t("decision.retryActionExecution")}
+                </Button>
+            </Stack>
+            <Paper sx={{paddingBottom: 2, paddingX: 2}}>
                 <Tabs onChange={handleTabChange} value={tab} sx={{paddingBottom: 0, marginBottom: 0, flex: 1}}>
                     <Tab label={t("home.decisionTab.title.open")} key="tab0" />
                     <Tab label={t("home.decisionTab.title.done")} key="tab1" />
                 </Tabs>
 
-                <Button onClick={handleActionExecution} variant="text" color="primary" startIcon={<NotificationsActiveIcon />}>
-                    {t("decision.retryActionExecution")}
-                </Button>
-
-            </Stack>
-
-            <DataGrid
-                columnVisibilityModel={columnVisibilityModel}
-                onColumnVisibilityModelChange={(newModel) =>
-                    setColumnVisibilityModel(newModel)
-                }
-                localeText={locale.components.MuiDataGrid.defaultProps.localeText}
-                initialState={{
-                    sorting: {
-                        sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
-                    },
-                    pagination: {
-                        paginationModel: {
-                            pageSize: pageSize,
-                        },
-                    },
-                }}
-                pageSizeOptions={[pageSize, 25, 50, 100]}
-                rows={tab == 0 ? newDecisions : checkedDecisions}
-                columns={headers}
-                isCellEditable={() => {false}}
-                slots={{toolbar: GridToolbar}}
-                slotProps={{
-                    toolbar: {
-                        showQuickFilter: true,
-                        printOptions: {disableToolbarButton: false},
-                        csvOptions: {disableToolbarButton: false}
+                <DataGrid
+                    columnVisibilityModel={columnVisibilityModel}
+                    onColumnVisibilityModelChange={(newModel) =>
+                        setColumnVisibilityModel(newModel)
                     }
-                }}
-            />
-            {renderDialog()}
-        </Container>
+                    localeText={locale.components.MuiDataGrid.defaultProps.localeText}
+                    initialState={{
+                        sorting: {
+                            sortModel: [{field: 'acquisitionTime', sort: 'desc'}],
+                        },
+                        pagination: {
+                            paginationModel: {
+                                pageSize: pageSize,
+                            },
+                        },
+                    }}
+                    pageSizeOptions={[pageSize, 25, 50, 100]}
+                    rows={tab == 0 ? newDecisions : checkedDecisions}
+                    columns={headers}
+                    isCellEditable={() => {false}}
+                    slots={{toolbar: GridToolbar}}
+                    slotProps={{
+                        toolbar: {
+                            showQuickFilter: true,
+                            printOptions: {disableToolbarButton: false},
+                            csvOptions: {disableToolbarButton: false}
+                        }
+                    }}
+                />
+                {renderDialog()}
+            </Paper>
+        </>
     );
 }
 
