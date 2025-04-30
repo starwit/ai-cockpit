@@ -53,6 +53,7 @@ function CockpitAppBar(props) {
                         <Stack
                             direction="row"
                             sx={{justifyContent: "flex-start"}}
+                            noWrap
                         >
                             <IconButton
                                 size="large"
@@ -64,7 +65,7 @@ function CockpitAppBar(props) {
                             >
                                 <img src={DynamicLogo} height={40} alt="KI-Cockpit" />
                             </IconButton>
-                            <Typography variant="h1" component="div">
+                            <Typography variant="h1" component="div" noWrap>
                                 {import.meta.env.VITE_TITLE}
                             </Typography>
                             {applicationIdentifier && moduleName &&
@@ -73,6 +74,7 @@ function CockpitAppBar(props) {
                                     color='warning'
                                     sx={{paddingLeft: 4, paddingTop: 0.5}}
                                     component="div"
+                                    noWrap
                                 >
                                     {applicationIdentifier} / {moduleName}
                                 </Typography>)
@@ -80,6 +82,7 @@ function CockpitAppBar(props) {
                         </Stack>
                         <Stack
                             direction="row"
+                            noWrap
                             sx={{justifyContent: "right", flex: 1}}
 
                         >

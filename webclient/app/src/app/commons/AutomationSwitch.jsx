@@ -1,7 +1,7 @@
 import NotificationsPausedOutlinedIcon from '@mui/icons-material/NotificationsPausedOutlined';
 import NotificationsOffOutlinedIcon from '@mui/icons-material/NotificationsOffOutlined';
 import NotificationsActiveOutlined from "@mui/icons-material/NotificationsActiveOutlined";
-import {ToggleButton, ToggleButtonGroup} from '@mui/material';
+import {ToggleButton, ToggleButtonGroup, Typography} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 import AutomationRest from '../services/AutomationRest';
 import {useEffect, useMemo, useState} from 'react';
@@ -51,7 +51,7 @@ function AutomationSwitch() {
                     borderBottom: automation === "AUTOMATIC" ? 8 : 0,
                     borderBottomColor: automation === "AUTOMATIC" ? theme.palette.success.main : ""
                 }}>
-                <NotificationsActiveOutlined />{t('automation.on')}
+                <NotificationsActiveOutlined /><Typography noWrap variant='caption'>{t('automation.on')}</Typography>
             </ToggleButton>
             <ToggleButton
                 value="WITHCHECK"
@@ -59,14 +59,15 @@ function AutomationSwitch() {
                     borderBottom: automation === "WITHCHECK" ? 8 : 0,
                     borderBottomColor: automation === "WITHCHECK" ? theme.palette.warning.main : ""
                 }}>
-                <NotificationsPausedOutlinedIcon />{t('automation.pause')}</ToggleButton>
+                <NotificationsPausedOutlinedIcon /><Typography noWrap variant='caption'>{t('automation.pause')}</Typography>
+            </ToggleButton>
             <ToggleButton
                 value="MANUAL"
                 sx={{
                     borderBottom: automation === "MANUAL" ? 8 : 0,
                     borderBottomColor: automation === "MANUAL" ? theme.palette.error.main : ""
                 }}>
-                <NotificationsOffOutlinedIcon />{t('automation.stop')}
+                <NotificationsOffOutlinedIcon /><Typography noWrap variant='caption'>{t('automation.stop')}</Typography>
             </ToggleButton>
         </ToggleButtonGroup>
     );
