@@ -44,7 +44,6 @@ function AutomationSwitch() {
             onChange={handleAutomation}
             aria-label="Platform"
             size="small"
-            sx={{justifyContent: "center", flex: 1}}
         >
             <ToggleButton
                 value="AUTOMATIC"
