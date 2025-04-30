@@ -2,16 +2,11 @@
 
 Changelog of ai-cockpit.
 
-## Current Version ()
+## refs/tags/1.0.1 (2025-04-30)
 
 ### Features
 
 -  ab#1586 added application filter to module view ([34805](https://github.com/starwit/ai-cockpit/commit/3480542144e845c) Anett Hübner)  
-
-## 1 (2025-04-28)
-
-### Features
-
 -  ab#1577 added multi module fuctionality to frontend ([45313](https://github.com/starwit/ai-cockpit/commit/453136228b89452) Anett Hübner)  
 -  Add auto zoom feature to heatmap view ([a4b0f](https://github.com/starwit/ai-cockpit/commit/a4b0fb736612a15) flonix8)  
 -  Fit viewport to data (auto zoom) once, when data is loaded ([57722](https://github.com/starwit/ai-cockpit/commit/577226819b2d15e) flonix8)  
@@ -19,8 +14,13 @@ Changelog of ai-cockpit.
 
 ### Bug Fixes
 
--  minio createbucket service does not wait for healthcheck on minio ([0dc1b](https://github.com/starwit/ai-cockpit/commit/0dc1ba9d6482270) flonix8)  
 -  Fix decision list sidebar covering the map unnecessarily ([486e9](https://github.com/starwit/ai-cockpit/commit/486e94df4f589d5) flonix8)  
+
+## 1 (2025-04-28)
+
+### Bug Fixes
+
+-  minio createbucket service does not wait for healthcheck on minio ([0dc1b](https://github.com/starwit/ai-cockpit/commit/0dc1ba9d6482270) flonix8)  
 
 ## refs/tags/1.0.0 (2025-04-15)
 
