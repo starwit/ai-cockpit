@@ -75,7 +75,7 @@ function DecisionTypeFilter({
                     top: 60,
                     left: showFilter ? 280 : 10,
                     zIndex: 1,
-                    bgcolor: 'white'
+                    bgcolor: theme => theme.palette.background.paper
                 }}
                 size="small"
             >
@@ -87,7 +87,7 @@ function DecisionTypeFilter({
                     top: 60,
                     left: 10,
                     zIndex: 1,
-                    backgroundColor: 'white',
+                    backgroundColor: theme => theme.palette.background.paper,
                     padding: 0,
                     borderRadius: 1,
                     width: '250px',

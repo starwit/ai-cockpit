@@ -369,7 +369,7 @@ function DecisionOverviewMap() {
             <IconButton
                 onClick={() => setShowPanel(!showPanel)}
                 sx={{
-                    bgcolor: 'white',
+                    bgcolor: theme => theme.palette.background.paper,
                     position: 'fixed',
                     right: showPanel ? 330 : 10,
                 }}
