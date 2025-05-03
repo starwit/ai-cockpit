@@ -35,6 +35,7 @@ import io.minio.errors.ServerException;
 import io.minio.errors.XmlParserException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 /**
  * 
@@ -95,6 +96,13 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
     public List<DecisionEntity> findByModule(Long moduleId) {
         List<DecisionEntity> result = decisionRepository.findByModuleId(moduleId);
         return result;
+    }
+
+    public void saveOrUpdateList(@Valid List<DecisionEntity> entityList) {
+        LOG.debug("save or updating list with " + entityList.size() + " items");
+        for (DecisionEntity entity : entityList) {
+            createDecisionEntitywithAction(entity);
+        }
     }
 
     public DecisionService(EntityManager entityManager) {

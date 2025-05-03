@@ -32,6 +32,7 @@ import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.repository.ActionRepository;
 import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
+import de.starwit.service.impl.AicService;
 import de.starwit.service.impl.DecisionService;
 import de.starwit.service.impl.DecisionTypeService;
 import de.starwit.service.impl.ModuleService;

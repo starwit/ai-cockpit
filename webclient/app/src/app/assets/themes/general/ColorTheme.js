@@ -12,8 +12,10 @@ const ColorTheme = createTheme({
             contrastText: "#09284f"
         },
         background: {
-            default: "#fefefe",
-            paper: "#fff"
+            default: "#eee",
+            paper: "#fff",
+            lightdark: "#cecece",
+            light: "#fff"
         },
         line: {
             width: 4
