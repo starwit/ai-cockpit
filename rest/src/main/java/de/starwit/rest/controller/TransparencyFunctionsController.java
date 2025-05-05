@@ -48,7 +48,7 @@ public class TransparencyFunctionsController {
 
   ModuleMapper moduleMapper = new ModuleMapper();
 
-  @Value("${sbom.enabled:false}")
+  @Value("${sbom.enabled}")
   private boolean reportGenerationEnabled;
 
   @Value("${sbom.generator.uri:}")
@@ -96,8 +96,8 @@ public class TransparencyFunctionsController {
     byte[] result = null;
 
     var entity = moduleService.findById((long) id);
-    if (!reportGenerationEnabled || entity != null) {
-      LOG.error("Report generation API called, but generation service is disabled - frontend bug.");
+    if (!reportGenerationEnabled || entity == null) {
+      LOG.error("Report generation API called, but generation service is disabled/module is null - frontend bug.");
       prepareResponse(resp, type);
       return result;
     }
