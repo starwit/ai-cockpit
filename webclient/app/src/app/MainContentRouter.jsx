@@ -15,12 +15,11 @@ function MainContentRouter() {
         <Routes>
             <Route path="/" element={<LayoutSimple disabled={true}><ModuleOverview /></LayoutSimple>} />
             <Route path="/decision/:moduleId?" element={<Layout><DecisionOverview /></Layout>} />
-            <Route path="/module" element={<LayoutSimple><ModuleOverview /></LayoutSimple>} />
             <Route path="/decision-map-view/:moduleId?" element={<LayoutSimple><DecisionOverviewMap /></LayoutSimple>} />
             <Route path="/decision-heatmap-view/:moduleId?" element={<LayoutSimple><DecisionHeatmapView /></LayoutSimple>} />
             <Route path="/action-type/:moduleId?" element={<Layout><ActionTypeOverview /></Layout>} />
             <Route path="/decision-type/:moduleId?" element={<Layout><DecisionTypeOverview /></Layout>} />
-            <Route path="/info/component-breakdown" element={<LayoutSimple><InfoModuleOverview /></LayoutSimple>} />
+            <Route path="/info/component-breakdown" element={<LayoutSimple disabled={true}><InfoModuleOverview /></LayoutSimple>} />
             <Route path="/logout" component={() => {
                 window.location.href = window.location.pathname + "api/user/logout";
                 return null;
