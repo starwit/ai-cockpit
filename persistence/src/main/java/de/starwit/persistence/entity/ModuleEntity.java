@@ -81,11 +81,9 @@ public class ModuleEntity extends AbstractEntity<Long> {
     @OneToMany(mappedBy = "module", cascade = { CascadeType.ALL })
     private Set<DecisionEntity> decision;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "module", cascade = { CascadeType.ALL })
     private Set<DecisionTypeEntity> decisionType;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "module", cascade = { CascadeType.ALL })
     private Set<ActionTypeEntity> actionType;
 

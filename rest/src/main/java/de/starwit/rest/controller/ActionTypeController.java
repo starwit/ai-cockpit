@@ -66,20 +66,29 @@ public class ActionTypeController {
 
     @Operation(summary = "Create actiontype")
     @PostMapping
-    public ActionTypeEntity save(@Valid @RequestBody ActionTypeEntity entity) {
+    public ActionTypeEntity save(@Valid @RequestBody ActionTypeEntity entity) throws NotificationException {
         return update(entity);
     }
 
     @Operation(summary = "Update actiontype")
     @PutMapping
-    public ActionTypeEntity update(@Valid @RequestBody ActionTypeEntity entity) {
+    public ActionTypeEntity update(@Valid @RequestBody ActionTypeEntity entity) throws NotificationException {
+        if (entity == null) {
+            throw new NotificationException("error.decisiontype.empty", "DecisionType is null.");
+        }
+        if (entity.getModule() == null || entity.getModule().getId() == null) {
+            throw new NotificationException("error.module.empty", "Module ID for decisionType not set.");
+        }
         return actiontypeService.saveOrUpdate(entity);
     }
 
     @Operation(summary = "Update a list of actiontype")
     @PutMapping(value = "/update-list")
-    public void updateList(@Valid @RequestBody List<ActionTypeEntity> entityList) {
-        actiontypeService.saveOrUpdateList(entityList);
+    public void updateList(@Valid @RequestBody List<ActionTypeEntity> entityList) throws NotificationException {
+        LOG.debug("save or updating list with " + entityList.size() + " items");
+        for (ActionTypeEntity actionTypeEntity : entityList) {
+            update(actionTypeEntity);
+        }
     }
 
     @Operation(summary = "Delete actiontype")

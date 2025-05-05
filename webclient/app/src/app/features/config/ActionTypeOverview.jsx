@@ -42,7 +42,7 @@ function ActionTypeOverview() {
             width: 300,
             editable: false,
             renderCell: params =>
-                <ActionTypeSelect row={params.row} updateRow={params.updateRow} />
+                <ActionTypeSelect editable={!isNaN(moduleId)} row={params.row} updateRow={params.updateRow} />
         },
         {
             field: "endpoint",
@@ -58,6 +58,7 @@ function ActionTypeOverview() {
             width: 100,
             renderCell: params =>
                 <GridActionsCellItem
+                    disabled={isNaN(moduleId)}
                     icon={<DeleteIcon />}
                     label="Delete"
                     onClick={e => handleDeleteClick(e, params.row)}
@@ -100,8 +101,12 @@ function ActionTypeOverview() {
 
     function addRow() {
         if (isSaved) {
+            const module = {
+                id: Number(moduleId)
+            }
             const newRow = {
                 id: "",
+                module: module,
                 name: t("entry.new"),
                 description: t("entry.new"),
                 executionPolicy: "MANUAL",
@@ -113,8 +118,12 @@ function ActionTypeOverview() {
     };
 
     function handleProcessRowUpdate(newRow) {
+        const module = {
+            id: Number(moduleId)
+        }
         actionTypes.forEach(row => {
             if (row.id === newRow.id) {
+                row.module = module;
                 row.name = newRow.name;
                 row.description = newRow.description;
                 row.executionPolicy = newRow.executionPolicy;
@@ -172,10 +181,10 @@ function ActionTypeOverview() {
                 <Typography variant="h2" gutterBottom sx={{flex: 1}}>
                     <Start fontSize="small" /> {t("actiontype.heading")}
                 </Typography>
-                <Button variant="text" color="primary" onClick={addRow} startIcon={<AddCircleIcon />}>
+                <Button variant="text" disabled={isNaN(moduleId)} color="primary" onClick={addRow} startIcon={<AddCircleIcon />}>
                     {t("actiontype.addItem")}
                 </Button>
-                <Button variant="text" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
+                <Button variant="text" disabled={isNaN(moduleId)} color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
                     {t("actiontype.saveItem")}
                     {isSaved ? "" : "*"}
                 </Button>

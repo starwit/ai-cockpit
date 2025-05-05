@@ -55,10 +55,6 @@ public class AicContoller {
 
     @Autowired
     private DecisionService decisionService;
-
-    @Autowired
-    private DecisionTypeService decisionTypeService;
-
     @Autowired
     private ActionTypeService actionTypeService;
 
@@ -134,7 +130,9 @@ public class AicContoller {
     public void updateActionTypeList(@Valid @RequestBody List<ActionType> dtos) {
         List<ActionTypeEntity> entities = actionTypeMapper.toEntityList(dtos);
         aicService.processEntitiesWithModule(entities, moduleService);
-        actionTypeService.saveOrUpdateList(entities);
+        for (ActionTypeEntity actionTypeEntity : entities) {
+            actionTypeService.saveOrUpdate(actionTypeEntity);
+        }
     }
 
     @Operation(summary = "Update a list of decision types")
