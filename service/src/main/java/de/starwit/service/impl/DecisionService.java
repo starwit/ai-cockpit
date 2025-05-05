@@ -114,7 +114,7 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         if (entity != null) {
             decisionType = findDecisionTypeByNameOrId(entity.getName(), entity.getId(), moduleId);
         } else if (randomDecisionType) {
-            List<DecisionTypeEntity> types = decisionTypeRepository.findAll();
+            List<DecisionTypeEntity> types = decisionTypeRepository.findByModuleId(moduleId);
             if (types != null) {
                 int randomNum = (int) (Math.random() * types.size());
                 decisionType = types.get(randomNum);
