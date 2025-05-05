@@ -58,20 +58,23 @@ public class DecisionTypeController {
 
     @Operation(summary = "Create decisiontype")
     @PostMapping
-    public DecisionTypeEntity save(@Valid @RequestBody DecisionTypeEntity entity) {
+    public DecisionTypeEntity save(@Valid @RequestBody DecisionTypeEntity entity) throws NotificationException {
         return update(entity);
     }
 
     @Operation(summary = "Update decisiontype")
     @PutMapping
-    public DecisionTypeEntity update(@Valid @RequestBody DecisionTypeEntity entity) {
+    public DecisionTypeEntity update(@Valid @RequestBody DecisionTypeEntity entity) throws NotificationException {
         return decisiontypeService.saveOrUpdate(entity);
     }
 
     @Operation(summary = "Update a list of Decision Types")
     @PutMapping(value = "/update-list")
-    public void updateList(@Valid @RequestBody List<DecisionTypeEntity> entityList) {
-        decisiontypeService.saveOrUpdateList(entityList);
+    public void updateList(@Valid @RequestBody List<DecisionTypeEntity> entityList) throws NotificationException {
+        LOG.debug("save or updating list with " + entityList.size() + " items");
+        for (DecisionTypeEntity decisionType : entityList) {
+            update(decisionType);
+        }
     }
 
     @Operation(summary = "Delete decisiontype")

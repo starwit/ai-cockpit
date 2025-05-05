@@ -50,12 +50,14 @@ function DecisionTypeOverview() {
                 <>
                     <GridActionsCellItem
                         icon={<DeleteIcon />}
+                        disabled={isNaN(moduleId)}
                         label="Delete"
                         onClick={e => handleDeleteClick(params.row)}
                         color="inherit"
                     />
                     <GridActionsCellItem
                         icon={<EditIcon />}
+                        disabled={isNaN(moduleId)}
                         label="Edit"
                         onClick={e => handleEditClick(params.row)}
                         color="inherit"
@@ -65,16 +67,20 @@ function DecisionTypeOverview() {
     ];
 
     useEffect(function () {
-        if (moduleId) {
-            decisionTypeRest.findByModuleId(moduleId).then(response =>
-                reloadDecisionTypes(response));
-        } else {
-            decisionTypeRest.findAll().then(response =>
-                reloadDecisionTypes(response));
-        }
+        reloadDecisionTypes();
     }, []);
 
-    function reloadDecisionTypes(response) {
+    function reloadDecisionTypes() {
+        if (moduleId) {
+            decisionTypeRest.findByModuleId(moduleId).then(response =>
+                resetDecisionTypes(response));
+        } else {
+            decisionTypeRest.findAll().then(response =>
+                resetDecisionTypes(response));
+        }
+    }
+
+    function resetDecisionTypes(response) {
         if (response.data == null) {
             return;
         }
@@ -96,10 +102,14 @@ function DecisionTypeOverview() {
     }));
 
     function addRow() {
-        if (isSaved) {
+        if (isSaved && moduleId) {
+            const module = {
+                id: Number(moduleId)
+            }
             const newRow = {
                 id: "",
                 name: t("entry.new"),
+                module: module,
                 description: t("entry.new")
             };
             setDecisionTypes([...decisionTypes, newRow]);
@@ -108,24 +118,30 @@ function DecisionTypeOverview() {
     };
 
     function handleProcessRowUpdate(newRow) {
-        decisionTypes.forEach(row => {
-            if (row.id === newRow.id) {
-                row.name = newRow.name;
-                row.description = newRow.description;
+        if (moduleId) {
+            const module = {
+                id: Number(moduleId)
             }
-        });
-        setDecisionTypes(decisionTypes);
-        setIsSaved(false);
-        return newRow;
+
+            decisionTypes.forEach(row => {
+                if (row.id === newRow.id) {
+                    row.module = module;
+                    row.name = newRow.name;
+                    row.description = newRow.description;
+                }
+            });
+            setDecisionTypes(decisionTypes);
+            setIsSaved(false);
+            return newRow;
+        }
+
     }
 
     function handleProcessRowUpdateError() {
     }
 
     function saveAll() {
-        decisionTypeRest.updateList(decisionTypes).then(function () {
-            reloadDecisionTypes();
-        });
+        decisionTypeRest.updateList(decisionTypes).then(reloadDecisionTypes);
         setIsSaved(true);
     };
 
@@ -158,7 +174,7 @@ function DecisionTypeOverview() {
             return null;
         }
         return <DecisionTypeDetail
-            moduleId={rowData.module.id}
+            moduleId={moduleId}
             open={open}
             handleClose={handleClose}
             rowData={rowData}
@@ -166,9 +182,8 @@ function DecisionTypeOverview() {
     }
 
     function submitDelete() {
-        decisionTypeRest.delete(deleteRow.id).then(function () {
-            reloadDecisionTypes();
-        });
+        decisionTypeRest.delete(deleteRow.id).then(
+            reloadDecisionTypes);
         setDeleteRow({});
         setOpenDelete(false);
     }
@@ -210,10 +225,10 @@ function DecisionTypeOverview() {
             <Typography variant="h2" gutterBottom sx={{flex: 1}}>
                 <Category fontSize="small" /> {t("decisiontype.heading")}
             </Typography>
-            <Button variant="text" color="primary" onClick={addRow} startIcon={<AddCircleIcon />}>
+            <Button disabled={isNaN(moduleId)} variant="text" color="primary" onClick={addRow} startIcon={<AddCircleIcon />}>
                 {t("decisiontype.addItem")}
             </Button>
-            <Button variant="text" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
+            <Button disabled={isNaN(moduleId)} variant="text" color="primary" onClick={saveAll} startIcon={<SaveIcon />}>
                 {t("decisiontype.saveItem")}
                 {isSaved ? "" : "*"}
             </Button>

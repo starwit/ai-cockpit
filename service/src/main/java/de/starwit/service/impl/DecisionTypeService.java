@@ -60,13 +60,6 @@ public class DecisionTypeService
         return this.getRepository().getReferenceById(entity.getId());
     }
 
-    public void saveOrUpdateList(@Valid List<DecisionTypeEntity> entityList) {
-        LOG.debug("save or updating list with " + entityList.size() + " items");
-        for (DecisionTypeEntity decisionType : entityList) {
-            saveOrUpdate(decisionType);
-        }
-    }
-
     public DecisionTypeEntity findByName(String name, Long moduleId) {
         return decisiontypeRepository.findFirstByNameLikeAndModuleId(name, moduleId);
     }
