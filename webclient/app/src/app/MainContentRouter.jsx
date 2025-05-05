@@ -6,7 +6,6 @@ import DecisionTypeOverview from "./features/config/DecisionTypeOverview";
 import DecisionHeatmapView from "./features/decision/DecisionHeatmapView";
 import DecisionOverview from "./features/decision/DecisionOverview";
 import DecisionOverviewMap from "./features/decision/DecisionOverviewMap";
-import ComponentBreakDown from "./features/info/ComponentBreakDown";
 import ModuleOverview from "./features/module/ModuleOverview";
 import LayoutSimple from "./commons/LayoutSimple";
 import InfoModuleOverview from "./features/info/InfoModuleOverview";
@@ -21,8 +20,7 @@ function MainContentRouter() {
             <Route path="/decision-heatmap-view/:moduleId?" element={<LayoutSimple><DecisionHeatmapView /></LayoutSimple>} />
             <Route path="/action-type/:moduleId?" element={<Layout><ActionTypeOverview /></Layout>} />
             <Route path="/decision-type/:moduleId?" element={<Layout><DecisionTypeOverview /></Layout>} />
-            <Route path="/info/component-breakdown" element={<Layout disabled={true}><ComponentBreakDown /></Layout>} />
-            <Route path="/info/module" element={<LayoutSimple><InfoModuleOverview /></LayoutSimple>} />
+            <Route path="/info/component-breakdown" element={<LayoutSimple><InfoModuleOverview /></LayoutSimple>} />
             <Route path="/logout" component={() => {
                 window.location.href = window.location.pathname + "api/user/logout";
                 return null;

@@ -4,11 +4,14 @@ import Grid from "@mui/material/Grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ModuleRest from "../../services/ModuleRest";
+import TransparencyFunctions from "../../services/TransparencyFunctions";
 import ModuleInfo from './ModuleInfo';
 
 function InfoModuleOverview() {
     const {t} = useTranslation();
     const moduleFunctions = useMemo(() => new ModuleRest(), []);
+    const transparencyFunctions = useMemo(() => new TransparencyFunctions(), []);
+    const [reportGenerationEnabled, setReportGenerationEnabled] = React.useState({});
     const [groupedModules, setGroupedModules] = useState([]);
     const [applications, setApplications] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -35,6 +38,14 @@ function InfoModuleOverview() {
         let grouped = groupByApplication(data);
         setGroupedModules(grouped);
         setApplications(Object.keys(grouped));
+
+        transparencyFunctions.isReportGenerationEnabled().then(response => {
+            if (response.data == null) {
+                return;
+            } else {
+                setReportGenerationEnabled(response.data);
+            }
+        });
     }
 
     function handleChange(event, newValue) {
@@ -69,7 +80,7 @@ function InfoModuleOverview() {
             return (
                 groupedModules[selectedName].map(row => (
                     <Grid key={row.id} size={{xs: 4, md: 4}} sx={{minWidth: 550}}>
-                        <ModuleInfo module={row} />
+                        <ModuleInfo module={row} reportGenerationEnabled={reportGenerationEnabled} />
                     </Grid>
                 ))
 

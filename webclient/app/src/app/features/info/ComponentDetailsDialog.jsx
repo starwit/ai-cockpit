@@ -23,7 +23,7 @@ function ComponentDetailsDialog(props) {
                 if (!(response.headers['content-type'].includes("application/json"))) {
                     return;
                 }
-                if (response.data == null) {
+                if (response.data === '') {
                     return;
                 }
                 const sbomName = entry[0];
@@ -54,13 +54,15 @@ function ComponentDetailsDialog(props) {
                 <CloseIcon />
             </IconButton>
             <DialogContent>
-                <Stack>
-                    {Object.values(sbomList).map((entry, idx) =>
-                    (
-                        <CycloneDXViewer key={idx} cycloneData={entry} />
-                    )
-                    )}
-                </Stack>
+                {sbomList === 'undefined' || sbomList.length === 0 ? <p>No SBOMs found</p> :
+                    <Stack>
+                        {Object.values(sbomList).map((entry, idx) =>
+                        (
+                            <CycloneDXViewer key={idx} cycloneData={entry} />
+                        )
+                        )}
+                    </Stack>
+                }
             </DialogContent>
         </Dialog>
     );
