@@ -258,10 +258,10 @@ function DecisionDetail(props) {
                 input={<OutlinedInput label={t("decision.action")} />}
                 renderValue={selected => (
                     <Box sx={{display: "flex", flexWrap: "wrap", gap: 0.5}}>
-                        {selected.map((value, index) => (
+                        {selected.map((value, index) => (value && value.name ?
                             <Tooltip key={index} title={createActionTooltip(value.actionState, t)}>
                                 <Chip key={index} label={value.name} variant="outlined" color={determineActionColor(value.actionState)} />
-                            </Tooltip>
+                            </Tooltip> : null
                         ))}
                     </Box>
                 )}
@@ -379,7 +379,7 @@ function DecisionDetail(props) {
             >
                 <Box>
                     <Typography variant="h2" noWrap>    {/* HEADER FOR ACCIDENT | TRAFFIC JAM | DANGEROUS DRIVING BEHAVIOUR */}
-                        {rowData.decisionType.name}
+                        {rowData.decisionType ? rowData.decisionType.name : null}
                     </Typography>
 
                     <Typography variant="subtitle2" noWrap>     {/* HEADER FOR DATE XX. MONTH YYYY um HH:MM:SS */}

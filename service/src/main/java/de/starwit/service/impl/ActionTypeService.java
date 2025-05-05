@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.repository.ActionTypeRepository;
-import jakarta.validation.Valid;
 
 @Service
 public class ActionTypeService
@@ -23,13 +22,6 @@ public class ActionTypeService
     @Override
     public ActionTypeRepository getRepository() {
         return actiontypeRepository;
-    }
-
-    public void saveOrUpdateList(@Valid List<ActionTypeEntity> entityList) {
-        LOG.debug("save or updating list with " + entityList.size() + " items");
-        for (ActionTypeEntity actionTypeEntity : entityList) {
-            saveOrUpdate(actionTypeEntity);
-        }
     }
 
     public List<ActionTypeEntity> findByDecisionType(Long decisionTypeId) {

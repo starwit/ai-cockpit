@@ -153,7 +153,7 @@ function DecisionOverview() {
             headerName: t("decision.decisionType"),
             flex: 0.7,
             editable: false,
-            valueGetter: value => value.name
+            valueGetter: value => value ? value.name : ""
         },
         {
             field: "action",
