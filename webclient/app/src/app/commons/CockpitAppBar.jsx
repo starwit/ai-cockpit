@@ -20,6 +20,7 @@ import ConfigMenu from "../features/config/ConfigMenu";
 import InfoMenu from "../features/info/InfoMenu";
 import AutomationSwitch from "./AutomationSwitch";
 import MapMenu from "./MapMenu";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 function CockpitAppBar(props) {
@@ -88,6 +89,10 @@ function CockpitAppBar(props) {
                             <Divider orientation="vertical" variant="middle" flexItem />
                             <ConfigMenu moduleId={moduleId} disabled={disabled} />
                             <InfoMenu />
+                            <Divider orientation="vertical" variant="middle" flexItem />
+                            <IconButton href="./logout" size="large">
+                                <LogoutIcon/>
+                            </IconButton>
                         </Stack>
                     </Toolbar>
                 </AppBar>
