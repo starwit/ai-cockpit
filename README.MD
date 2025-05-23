@@ -10,7 +10,7 @@ This software is __open source__ and it is intended to be used a large community
 
 ## Contact & Contribution
 
-The “KI-Cockpit” (AI Cockpit) project was funded by the Federal Ministry of Labor and Social Affairs and executed by the nexus Institute, Aalen University, the University of Stuttgart, Chemistree, Caritas Dortmund & Starwit Technologies with the support of Awesome Technologies Innovationslabor, the Institute for Innovation and Technology (iit) at VDI/VDE Innovation + Technik and keytec.
+The “KI-Cockpit” (AI Cockpit) project was funded by the Federal Ministry of Labor and Social Affairs. See [project repo](https://github.com/ki-cockpit) for more details..
 
 <img src="docs/imgs/foerderlogo.png" alt="BMAS Logo" style="width:33%; height:auto;">
 
