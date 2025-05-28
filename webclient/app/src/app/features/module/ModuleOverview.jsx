@@ -88,6 +88,7 @@ function ModuleOverview() {
                 zIndex: "-2",
                 backgroundImage: selectedName && `url(${window.location.pathname + "api/decision/download/app/" + selectedName + ".jpg"})`,
                 backgroundRepeat: 'no-repeat',
+                backgroundColor: (theme) => theme.palette.background.bgimage,
                 backgroundSize: "cover"
             }} />
             <Box sx={{backgroundColor: (theme) => alpha(theme.palette.background.bgimage, 0.8), minHeight: "100%", minWidth: "100%", position: "fixed", zIndex: "-1"}} />

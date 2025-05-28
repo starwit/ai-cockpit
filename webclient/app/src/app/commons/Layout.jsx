@@ -34,6 +34,7 @@ function Layout({disabled = false, children}) {
                 position: "fixed",
                 zIndex: "-2",
                 backgroundImage: applicationIdentifier && `url(${window.location.pathname + "api/decision/download/app/" + applicationIdentifier + ".jpg"})`,
+                backgroundColor: (theme) => theme.palette.background.bgimage,
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: "cover"
             }}>

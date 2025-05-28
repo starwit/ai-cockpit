@@ -98,6 +98,7 @@ function InfoModuleOverview() {
                 position: "fixed",
                 zIndex: "-2",
                 backgroundImage: selectedName && `url(${window.location.pathname + "api/decision/download/app/" + selectedName + ".jpg"})`,
+                backgroundColor: (theme) => theme.palette.background.bgimage,
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: "cover"
             }} />
