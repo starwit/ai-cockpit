@@ -1,11 +1,11 @@
 import CloseIcon from "@mui/icons-material/Close";
 import {Dialog, DialogContent, DialogTitle, IconButton, Stack} from "@mui/material";
 import React, {useEffect, useMemo} from "react";
-import TransparencyFunctions from "../../services/TransparencyFunctions";
+//import TransparencyFunctions from "../../services/TransparencyFunctions";
 import CycloneDXViewer from "./CycloneDXViewer";
 
 function ComponentDetailsDialog(props) {
-    const transparencyFunctions = useMemo(() => new TransparencyFunctions(), []);
+    //const transparencyFunctions = useMemo(() => new TransparencyFunctions(), []);
     const {open, moduleData, handleClose} = props;
     const [sbomList, setSbomList] = React.useState([]);
     const [isLoaded, setIsLoaded] = React.useState(false);
@@ -15,26 +15,29 @@ function ComponentDetailsDialog(props) {
     }, [open]);
 
     function reload() {
-        console.log(moduleData);
         const sboms = {}
-        let size = Object.values(moduleData.sbomlocations).length;
-        Object.entries(moduleData.sbomlocations).map((entry) => {
-            transparencyFunctions.loadSBOM(moduleData.id, entry[0]).then(response => {
-                if (!(response.headers['content-type'].includes("application/json"))) {
-                    return;
-                }
-                if (response.data === '') {
-                    return;
-                }
-                const sbomName = entry[0];
-                sboms[sbomName] = response.data;
-                setSbomList(sboms);
-                size--;
-                if (size == 0) {
-                    setIsLoaded(true);
-                }
-            });
-        });
+        /*
+let size = Object.values(moduleData.sbomlocations).length;
+
+Object.entries(moduleData.sbomlocations).map((entry) => {
+    transparencyFunctions.loadSBOM(moduleData.id, entry[0]).then(response => {
+        if (!(response.headers['content-type'].includes("application/json"))) {
+            return;
+        }
+        if (response.data === '') {
+            return;
+        }
+        const sbomName = entry[0];
+        sboms[sbomName] = response.data;
+        setSbomList(sboms);
+        size--;
+        if (size == 0) {
+            setIsLoaded(true);
+        }
+        
+    });
+});
+*/
     }
 
     return (

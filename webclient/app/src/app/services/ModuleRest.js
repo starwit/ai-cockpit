@@ -9,6 +9,10 @@ class ModuleRest extends CrudRest {
     getWithDecisions = () => {
         return axios.get(this.baseUrl + "/withdecisioncount");
     };
+
+    isReportGenerationEnabled = () => {
+        return axios.get(this.baseUrl + '/reports/enabled');
+    }
 }
 
 export default ModuleRest;
