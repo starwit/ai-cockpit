@@ -2,6 +2,12 @@
 
 Changelog of ai-cockpit.
 
+## Current Version ()
+
+### Features
+
+-  Add logout button to header bar ([9c15c](https://github.com/starwit/ai-cockpit/commit/9c15c909c288bbd) flonix8)  
+
 ## refs/tags/1.0.1 (2025-04-30)
 
 ### Features
