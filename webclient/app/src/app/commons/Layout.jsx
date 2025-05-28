@@ -38,7 +38,7 @@ function Layout({disabled = false, children}) {
                 backgroundSize: "cover"
             }}>
             </Box>
-            <Box sx={{backgroundColor: (theme) => alpha(theme.palette.background.default, 0.8), minHeight: "100%", minWidth: "100%", position: "fixed", zIndex: "-1"}}></Box>
+            <Box sx={{backgroundColor: (theme) => alpha(theme.palette.background.bgimage, 0.8), minHeight: "100%", minWidth: "100%", position: "fixed", zIndex: "-1"}}></Box>
             <Container sx={{paddingTop: "5em", paddingBottom: "4em"}}>
                 {children}
             </Container >

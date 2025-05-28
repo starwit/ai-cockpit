@@ -90,7 +90,7 @@ function ModuleOverview() {
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: "cover"
             }} />
-            <Box sx={{backgroundColor: (theme) => alpha(theme.palette.background.default, 0.8), minHeight: "100%", minWidth: "100%", position: "fixed", zIndex: "-1"}} />
+            <Box sx={{backgroundColor: (theme) => alpha(theme.palette.background.bgimage, 0.8), minHeight: "100%", minWidth: "100%", position: "fixed", zIndex: "-1"}} />
 
             <Stack direction="row" spacing={0} sx={{minHeight: "100%", minWidth: "100%"}}>
                 <Tabs sx={{
