@@ -128,6 +128,10 @@ public class ModuleController {
             }
         }
 
+        if ("spreadsheet".equals(format)) {
+            objectName = entity.getName() + "_" + entity.getVersion() + ".xlsx";
+        }
+
         byte[] file = minioService.getFileFromMinio(bucketName, objectName);
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + objectName);
