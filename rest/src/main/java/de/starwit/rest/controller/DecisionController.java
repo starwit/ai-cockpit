@@ -32,6 +32,7 @@ import de.starwit.rest.dto.DecisionWithActionTypesDto;
 import de.starwit.rest.exception.NotificationDto;
 import de.starwit.service.impl.DecisionService;
 import de.starwit.service.impl.MinioException;
+import de.starwit.service.impl.MinioService;
 import de.starwit.service.impl.ModuleService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
@@ -55,6 +56,9 @@ public class DecisionController {
 
     @Autowired
     private ModuleService moduleService;
+
+    @Autowired
+    private MinioService minioService;
 
     @Operation(summary = "Get all decision")
     @GetMapping
@@ -136,7 +140,7 @@ public class DecisionController {
         // leading slash)
         String objectNameWithoutPrefix = objectName.substring(1);
 
-        byte[] file = decisionService.getFileFromMinio(bucketName, objectNameWithoutPrefix);
+        byte[] file = minioService.getFileFromMinio(bucketName, objectNameWithoutPrefix);
         HttpHeaders header = new HttpHeaders();
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + objectNameWithoutPrefix);
         return ResponseEntity.ok()

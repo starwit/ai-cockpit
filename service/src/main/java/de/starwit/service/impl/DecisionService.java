@@ -1,10 +1,5 @@
 package de.starwit.service.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,14 +20,6 @@ import de.starwit.persistence.repository.ActionTypeRepository;
 import de.starwit.persistence.repository.DecisionRepository;
 import de.starwit.persistence.repository.DecisionTypeRepository;
 import de.starwit.persistence.repository.ModuleRepository;
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
-import io.minio.errors.ErrorResponseException;
-import io.minio.errors.InsufficientDataException;
-import io.minio.errors.InternalException;
-import io.minio.errors.InvalidResponseException;
-import io.minio.errors.ServerException;
-import io.minio.errors.XmlParserException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -53,15 +40,6 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
     @Value("${decision.type.random:false}")
     private Boolean randomDecisionType;
-
-    @Value("${minio.user:minioadmin}")
-    private String minioAccesskey;
-
-    @Value("${minio.password:minioadmin}")
-    private String minioSecretkey;
-
-    @Value("${minio.endpoint:http://localhost:9000}")
-    private String endpoint;
 
     private final EntityManager entityManager;
 
@@ -207,35 +185,6 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
                 }
                 entity.addToAction(action);
             }
-        }
-    }
-
-    public byte[] getFileFromMinio(String bucketName, String objectName)
-            throws InvalidKeyException, IOException, MinioException {
-        try {
-            MinioClient minioClient = MinioClient.builder()
-                    .endpoint(endpoint)
-                    .credentials(minioAccesskey, minioSecretkey)
-                    .build();
-
-            // Fetch the object from Minio
-            InputStream objectStream;
-
-            objectStream = minioClient
-                    .getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
-
-            // Convert the InputStream to a Base64-encoded Byte[]
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = objectStream.read(buffer)) != -1) {
-                baos.write(buffer, 0, bytesRead);
-            }
-            return baos.toByteArray();
-        } catch (ErrorResponseException | InsufficientDataException | InternalException
-                | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
-                | IllegalArgumentException e) {
-            throw new MinioException(e.getMessage());
         }
     }
 

@@ -1,11 +1,11 @@
 import CancelIcon from "@mui/icons-material/Cancel";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import {Card, CardContent, Divider, IconButton, Link, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography} from '@mui/material';
-import React, {useEffect, useMemo, useState} from "react";
-import {useTranslation} from "react-i18next";
 import DescriptionIcon from '@mui/icons-material/Description';
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import {Card, CardContent, Divider, IconButton, Link, Table, TableBody, TableCell, TableContainer, TableRow, Tooltip, Typography} from '@mui/material';
+import React, {useState} from "react";
+import {useTranslation} from "react-i18next";
 import ComponentDetailsDialog from "./ComponentDetailsDialog";
 
 function ModuleInfo(props) {
@@ -35,11 +35,11 @@ function ModuleInfo(props) {
     }
 
     function getApiPDFPath(id) {
-        return window.location.pathname + "api/transparency/reports/" + id + "/pdf";
+        return window.location.pathname + "api/module/sbom/" + id + "/pdf";
     }
 
     function getApiSpreadSheetPath(id) {
-        return window.location.pathname + "api/transparency/reports/" + id + "/spreadsheet";
+        return window.location.pathname + "api/module/sbom/" + id + "/spreadsheet";
     }
 
     return <>

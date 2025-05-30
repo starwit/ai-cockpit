@@ -2,18 +2,15 @@ package de.starwit.rest.controller;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,13 +23,11 @@ import de.starwit.aic.model.DecisionType;
 import de.starwit.aic.model.Module;
 import de.starwit.persistence.entity.ActionTypeEntity;
 import de.starwit.persistence.entity.DecisionEntity;
-import de.starwit.persistence.entity.DecisionTypeEntity;
 import de.starwit.persistence.entity.ModuleEntity;
 import de.starwit.persistence.exception.NotificationException;
 import de.starwit.service.impl.ActionTypeService;
 import de.starwit.service.impl.AicService;
 import de.starwit.service.impl.DecisionService;
-import de.starwit.service.impl.DecisionTypeService;
 import de.starwit.service.impl.ModuleService;
 import de.starwit.service.mapper.ActionTypeMapper;
 import de.starwit.service.mapper.DecisionMapper;
@@ -45,7 +40,7 @@ import jakarta.validation.Valid;
 @RequestMapping(path = "${rest.base-path}/aic")
 public class AicContoller {
 
-    static final Logger LOG = LoggerFactory.getLogger(TransparencyFunctionsController.class);
+    static final Logger LOG = LoggerFactory.getLogger(AicContoller.class);
 
     @Autowired
     ModuleService moduleService;

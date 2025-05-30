@@ -4,13 +4,11 @@ import Grid from "@mui/material/Grid";
 import React, {useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
 import ModuleRest from "../../services/ModuleRest";
-import TransparencyFunctions from "../../services/TransparencyFunctions";
 import ModuleInfo from './ModuleInfo';
 
 function InfoModuleOverview() {
     const {t} = useTranslation();
-    const moduleFunctions = useMemo(() => new ModuleRest(), []);
-    const transparencyFunctions = useMemo(() => new TransparencyFunctions(), []);
+    const moduleRest = useMemo(() => new ModuleRest(), []);
     const [reportGenerationEnabled, setReportGenerationEnabled] = React.useState({});
     const [groupedModules, setGroupedModules] = useState([]);
     const [applications, setApplications] = useState([]);
@@ -18,7 +16,7 @@ function InfoModuleOverview() {
     const [selectedName, setSelectedName] = useState();
 
     useEffect(() => {
-        moduleFunctions.getWithDecisions().then((response) => {
+        moduleRest.getWithDecisions().then((response) => {
             if (response.data == null) {
                 return;
             } else {
@@ -39,7 +37,7 @@ function InfoModuleOverview() {
         setGroupedModules(grouped);
         setApplications(Object.keys(grouped));
 
-        transparencyFunctions.isReportGenerationEnabled().then(response => {
+        moduleRest.isReportGenerationEnabled().then(response => {
             if (response.data == null) {
                 return;
             } else {
@@ -98,6 +96,7 @@ function InfoModuleOverview() {
                 position: "fixed",
                 zIndex: "-2",
                 backgroundImage: selectedName && `url(${window.location.pathname + "api/decision/download/app/" + selectedName + ".jpg"})`,
+                backgroundColor: (theme) => theme.palette.background.bgimage,
                 backgroundRepeat: 'no-repeat',
                 backgroundSize: "cover"
             }} />
