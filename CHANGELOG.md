@@ -6,6 +6,7 @@ Changelog of ai-cockpit.
 
 ### Features
 
+-  ab#1604 load module sbom from minio ([ce1dc](https://github.com/starwit/ai-cockpit/commit/ce1dc168f3b493d) Anett Hübner)  
 -  Add logout button to header bar ([9c15c](https://github.com/starwit/ai-cockpit/commit/9c15c909c288bbd) flonix8)  
 
 ## refs/tags/1.0.1 (2025-04-30)
