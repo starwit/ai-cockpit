@@ -1,15 +1,26 @@
+include: 
+  - ./docker-compose-minio.yml
+
 services:
 
   transparency-api:
-    image: starwitorg/starwit-aicapi-transparency:0.1.1
+    image: starwitorg/starwit-aicapi-transparency:1.0.3
     environment:
       SERVER_PORT: 8083
       APP_SERVICE_URI: http://localhost:8083
       SERVER_SERVLET_CONTEXT_PATH: ""
+      COCKPIT_AUTH_ENABLED: "false"
+      COCKPIT_AUTH_CLIENT_ID: "aicockpit"
+      COCKPIT_AUTH_USERNAME: "username"
+      COCKPIT_AUTH_PASSWORD: "secret"
+      COCKPIT_AUTH_URL: "https://hostname/auth/realms/default/protocol/openid-connect/token"
+      COCKPIT_HOSTNAME: "http://localhost:8081/ai-cockpit/"
+      COCKPIT_MODULEAPI: "api/module"
+      COCKPIT_AICAPI: "api/aic/modules"
     network_mode: host
   
   sbom-generator:
-    image: starwitorg/sbom-generator:0.0.10
+    image: starwitorg/sbom-generator:0.0.12
     environment:
       SERVER_PORT: 8082
     network_mode: host
