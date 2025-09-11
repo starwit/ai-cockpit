@@ -30,7 +30,7 @@ Cockpit has three main interfaces:
 * Action - Operators can approve/disapprove proposed actions
 * Transparency - every module making decisions or executing actions, has to register via this interface. Registration will cover all necessary information for deployer/operators.
 
-![composition](./docs/imgs/Service-Composition-Architecture.drawio.svg)
+<img src="docs/imgs/ServiceOverview.png" alt="dialogue" width="80%"/>
 
 A more detailed look into AI Cockpit's architecture can be found [here](docs/ARCHITECTURE.MD).
 
