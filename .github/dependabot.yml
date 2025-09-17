@@ -14,15 +14,15 @@ updates:
       maven-deps:
         patterns:
           - "*"
-  - package-ecosystem: "npm" # See documentation for possible values
-    directory: "/webclient/app" # Location of package manifests
-    target-branch: main
-    schedule:
-      interval: "weekly"
-    groups:
-      npm-deps:
-        patterns:
-          - "*"
+ # - package-ecosystem: "npm" # See documentation for possible values
+ #   directory: "/webclient/app" # Location of package manifests
+ #   target-branch: main
+ #   schedule:
+ #     interval: "weekly"
+ #   groups:
+ #     npm-deps:
+ #       patterns:
+ #         - "*"
   - package-ecosystem: "docker"
     directory: "/"
     target-branch: main
