@@ -83,11 +83,6 @@ jobs:
         run: |
           echo "TAG=$( git describe --abbrev=0 )" >> $GITHUB_ENV
 
-      - name: Create github release
-        run: gh release create ${{ env.TAG }} -F CHANGELOG.md ./application/target/ai-cockpit-*.jar
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Checkout tag
         run: |
           git checkout ${{ env.TAG }}
@@ -105,6 +100,11 @@ jobs:
           CI: false
           PRIVATE_REPO_USERNAME: ${{ vars.PRIVATE_REPO_USERNAME }}
           MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
+
+      - name: Create github release
+        run: gh release create ${{ env.TAG }} -F CHANGELOG.md ./application/target/ai-cockpit-*.jar
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish_docker:
     name: "Build and publish docker"
