@@ -102,7 +102,7 @@ jobs:
           MAVEN_REPO_READ: ${{ secrets.MAVEN_REPO_READ }}
 
       - name: Create github release
-        run: gh release create ${{ env.TAG }} -F CHANGELOG.md ./application/target/ai-cockpit-*.jar
+        run: gh release create ${{ env.TAG }} -F CHANGELOG.md ./application/target/application-*.jar
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
