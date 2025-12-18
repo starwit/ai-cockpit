@@ -22,11 +22,12 @@ auth:
   clientId: aicockpit
   clientSecret: aicockpit 
 
-postgresql:
-  auth:
-    database: ai-cockpit
-    username: ai-cockpit
-    password: ai-cockpit
+database:
+  hostname: localhost
+  port: 5432
+  database: ai-cockpit
+  username: ai-cockpit
+  password: ai-cockpit
 
 minio:
   user: minioadmin

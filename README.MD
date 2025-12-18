@@ -14,7 +14,8 @@ The “KI-Cockpit” (AI Cockpit) project was funded by the Federal Ministry of 
 
 ## Deployment
 
-Cockpit is a part of a bundle of services. For deployment options see <https://github.com/starwit/ai-cockpit-deployment>
+Cockpit is a part of a bundle of services. For deployment options see <https://github.com/starwit/ai-cockpit-deployment>. Cockpit is supposed to be installed on Kubernetes cluster 
+using Helm chart. How to use Helm chart see according [readme](deployment/helm/ai-cockpit/Readme.md).
 
 ## Development
 
