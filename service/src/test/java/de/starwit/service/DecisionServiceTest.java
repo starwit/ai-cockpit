@@ -230,6 +230,15 @@ public class DecisionServiceTest {
         void testUpdateDecisionWithActions() {
 
                 // prepare
+                DecisionTypeEntity defaultDecisionType = getDefaultDecisionType();
+                ActionTypeEntity existingActionType = defaultDecisionType.getActionType().iterator().next();
+                for (int i = 0; i < 2; i++) {
+                        ActionEntity temporaryAction = new ActionEntity();
+                        temporaryAction.setActionType(existingActionType);
+                        temporaryAction = actionRepository.save(temporaryAction);
+                        actionRepository.delete(temporaryAction);
+                }
+
                 DecisionEntity decision = getDefaultDecision();
                 assertEquals(defaultDecisionTypeName, decision.getDecisionType().getName());
 
@@ -241,10 +250,16 @@ public class DecisionServiceTest {
                 actionType = actionTypeRepository.save(actionType);
 
                 Set<ActionEntity> actions = decision.getAction();
+                ActionEntity removableAction = actions.stream()
+                                .filter(action -> actionTypeRepository.findById(action.getId()).isEmpty())
+                                .findFirst()
+                                .orElseThrow(() -> new AssertionError(
+                                                "Test setup requires different action and action-type IDs."));
+                assertTrue(actionTypeRepository.findById(removableAction.getId()).isEmpty());
 
                 decision.setState(DecisionState.ACCEPTED);
                 Set<Long> removedActionTypeIds = new HashSet<>();
-                removedActionTypeIds.add(actions.iterator().next().getActionType().getId());
+                removedActionTypeIds.add(removableAction.getActionType().getId());
 
                 Set<Long> addedActionTypeIds = new HashSet<>();
                 addedActionTypeIds.add(actionType.getId());

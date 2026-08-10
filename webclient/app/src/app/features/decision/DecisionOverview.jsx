@@ -2,7 +2,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import NearbyError from "@mui/icons-material/NearbyError";
-import {Box, Button, Container, IconButton, Paper, Stack, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, Container, IconButton, Paper, Stack, Tab, Tabs, Typography} from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import {deDE, enUS} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
@@ -13,6 +13,7 @@ import ActionRest from "../../services/ActionRest";
 import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {useParams} from "react-router";
 
 
@@ -27,19 +28,29 @@ function DecisionOverview() {
     const actionRest = useMemo(() => new ActionRest(), []);
     const [selectedDecisions, setSelectedDecisions] = useState([]);
     const [newDecisions, setNewDecisions] = useState([]);
-    const [checkedDecisions, setCheckedDecisions] = useState([]);
+    const [readyForCvatDecisions, setReadyForCvatDecisions] = useState([]);
+    const [doneDecisions, setDoneDecisions] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
+    const [exporting, setExporting] = useState(false);
     const locale = i18n.language == "de" ? deDE : enUS
     const pageSize = 10;
+    const decisionsByTab = moduleId
+        ? [newDecisions, readyForCvatDecisions, doneDecisions]
+        : [newDecisions, doneDecisions];
+    const activeTab = Math.min(tab, decisionsByTab.length - 1);
 
+
+    useEffect(() => {
+        setTab(0);
+    }, [moduleId]);
 
     useEffect(() => {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
         return () => clearInterval(interval);
-    }, [open, tab]);
+    }, [open, tab, moduleId]);
 
     function reloadDecisions() {
         if (moduleId) {
@@ -54,11 +65,36 @@ function DecisionOverview() {
             return;
         }
         const sortedData = response.data.sort((a, b) => new Date(b.acquisitionTime) - new Date(a.acquisitionTime));
+        const reviewedDecisions = sortedData.filter(
+            decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"
+        );
+        const readyForCvat = reviewedDecisions.filter(isReadyForCvat);
         setNewDecisions(sortedData.filter(decision => decision.state == null || decision.state == "NEW"));
-        setCheckedDecisions(sortedData.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
+        setReadyForCvatDecisions(moduleId ? readyForCvat : []);
+        setDoneDecisions(moduleId
+            ? reviewedDecisions.filter(decision => !isReadyForCvat(decision))
+            : reviewedDecisions);
     }
+
+    function isReadyForCvat(decision) {
+        return decision.state == "ACCEPTED" && decision.action.some(action =>
+            action.state == "NEW"
+            && action.actionType.executionPolicy == "MANUAL"
+            && action.actionType.endpoint == "cvat"
+        );
+    }
+
     function handleActionExecution() {
         actionRest.retryActionExecution()
+    }
+
+    function handleCvatExport() {
+        setExporting(true);
+        actionRest.exportCvat(moduleId)
+            .then(() => reloadDecisions())
+            // Export errors are toasted by the global ErrorHandler.
+            .catch(() => {})
+            .finally(() => setExporting(false));
     }
 
     function handleTabChange(_event, newValue) {
@@ -109,7 +145,7 @@ function DecisionOverview() {
 
     function handleOpen(row) {
         setOpen(true);
-        setSelectedDecisions(tab == 0 ? newDecisions : checkedDecisions);
+        setSelectedDecisions(decisionsByTab[activeTab]);
         setRowData(row);
     }
 
@@ -124,15 +160,15 @@ function DecisionOverview() {
             width: 70,
             editable: false,
             renderCell: cellValues => {
-                if (tab === 1 && cellValues.row.state == "ACCEPTED") {
+                if (cellValues.row.state == "ACCEPTED") {
                     return (
                         <IconButton color="success"><CheckIcon /></IconButton>
                     );
-                } else if (tab === 1 && cellValues.row.state == "REJECTED") {
+                } else if (cellValues.row.state == "REJECTED") {
                     return (
                         <IconButton color="error"><ErrorIcon /></IconButton>
                     );
-                } else if (tab === 0 && (cellValues.row.state == "NEW" || cellValues.row.state == null)) {
+                } else if (cellValues.row.state == "NEW" || cellValues.row.state == null) {
                     return (
                         <FiberNewIcon color="grey"></FiberNewIcon>
                     );
@@ -221,14 +257,20 @@ function DecisionOverview() {
                     <NearbyError fontSize="small" /> {t("decisions.heading")}
                 </Typography>
 
+                {moduleId && activeTab == 1 && readyForCvatDecisions.length > 0 ?
+                    <Button onClick={handleCvatExport} disabled={exporting} variant="text" color="primary"
+                        startIcon={exporting ? <CircularProgress size={16} /> : <CloudUploadIcon />}>
+                        {t("decision.exportCvat")}
+                    </Button> : null}
                 <Button onClick={handleActionExecution} variant="text" color="primary" startIcon={<NotificationsActiveIcon />}>
                     {t("decision.retryActionExecution")}
                 </Button>
             </Stack>
             <Paper sx={{paddingBottom: 2, paddingX: 2}}>
-                <Tabs onChange={handleTabChange} value={tab} sx={{paddingBottom: 0, marginBottom: 0, flex: 1}}>
+                <Tabs onChange={handleTabChange} value={activeTab} sx={{paddingBottom: 0, marginBottom: 0, flex: 1}}>
                     <Tab label={t("home.decisionTab.title.open")} key="tab0" />
-                    <Tab label={t("home.decisionTab.title.done")} key="tab1" />
+                    {moduleId ? <Tab label={t("home.decisionTab.title.readyCvat")} key="tab1" /> : null}
+                    <Tab label={t("home.decisionTab.title.done")} key={moduleId ? "tab2" : "tab1"} />
                 </Tabs>
 
                 <DataGrid
@@ -248,7 +290,7 @@ function DecisionOverview() {
                         },
                     }}
                     pageSizeOptions={[pageSize, 25, 50, 100]}
-                    rows={tab == 0 ? newDecisions : checkedDecisions}
+                    rows={decisionsByTab[activeTab]}
                     columns={headers}
                     isCellEditable={() => {false}}
                     slots={{toolbar: GridToolbar}}

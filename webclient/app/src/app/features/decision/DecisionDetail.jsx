@@ -52,15 +52,25 @@ function DecisionDetail(props) {
     } = props;
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
-    const [actionTypes, setActionTypes] = useState(rowData.action);
-    const [decisionType, setDecisionType] = useState([""]);
+    const [actionTypes, setActionTypes] = useState(rowData.action.map(action => action.actionType));
+    const [decisionType, setDecisionType] = useState(rowData.decisionType);
     const [allActionTypes, setAllActionTypes] = useState([""]);
     const [allDecisionType, setAllDecisionType] = useState([""]);
     const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
     const {t, i18n} = useTranslation();
     const [rowIndex, setRowIndex] = useState([""]);
 
+    function saveDecision(state) {
+        // Discarded decisions must not keep a pending CVAT export action.
+        const selectedActionTypes = state == "REJECTED"
+            ? actionTypes.filter(actionType => actionType.endpoint != "cvat")
+            : actionTypes;
+        handleSave(selectedActionTypes, decisionType, description, state);
+    }
+
     useEffect(() => {
+        setActionTypes(rowData.action.map(action => action.actionType));
+        setDecisionType(rowData.decisionType);
         reload();
         setRowIndex(searchIndex(data, rowData));    //set the index of the current decision
     }, [open, rowData]);
@@ -85,9 +95,9 @@ function DecisionDetail(props) {
                     setDecisionType(allDecisionType[index]);
                 }
             } else if (event.key == 'Enter') {
-                handleSave(actionTypes, decisionType, description, "ACCEPTED")
+                saveDecision("ACCEPTED")
             } else if (event.key == 'Delete') {
-                handleSave(actionTypes, decisionType, description, "REJECTED")
+                saveDecision("REJECTED")
             }
         }
 
@@ -441,7 +451,7 @@ function DecisionDetail(props) {
                     justifyContent: 'flex-start'
                 }}>
                     <Button
-                        onClick={() => handleSave(actionTypes, decisionType, description, rowData.state)}
+                        onClick={() => saveDecision(rowData.state)}
                         variant="contained"
                         startIcon={<SaveIcon />}>
                         {t("button.save")}
@@ -479,7 +489,7 @@ function DecisionDetail(props) {
                 }}>
                     <Button
                         sx={[DecisionDetailStyles.button, {marginRight: 5}]}
-                        onClick={() => handleSave(actionTypes, decisionType, description, "REJECTED")}
+                        onClick={() => saveDecision("REJECTED")}
                         variant="contained"
                         color="error"
                         startIcon={<ErrorIcon />}>
@@ -487,7 +497,7 @@ function DecisionDetail(props) {
                     </Button>
 
                     <Button
-                        onClick={() => handleSave(actionTypes, decisionType, description, "ACCEPTED")}
+                        onClick={() => saveDecision("ACCEPTED")}
                         variant="contained"
                         color="success"
                         startIcon={<CheckIcon />}>
