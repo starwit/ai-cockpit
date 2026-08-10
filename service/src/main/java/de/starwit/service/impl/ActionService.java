@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.persistence.entity.ActionState;
@@ -38,5 +39,15 @@ public class ActionService implements ServiceInterface<ActionEntity, ActionRepos
         List<ActionEntity> result = actionRepository.findAllNewAndCanceled();
         return result;
 
+    }
+
+    @Transactional
+    public void markCvatExported(List<ActionEntity> actions, Long taskId) {
+        // Update the complete export atomically so a retry cannot export a partial batch again.
+        for (ActionEntity action : actions) {
+            action.setState(ActionState.DONE);
+            action.setMetadata("CVAT task " + taskId);
+            actionRepository.save(action);
+        }
     }
 }
