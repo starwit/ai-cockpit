@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Small object",
+    "module": {
+      "name": "Waste Mining"
+    },
+    "actionTypes": [
+      {
+        "name": "Select for CVAT"
+      }
+    ]
+  },
+  {
+    "name": "Low confidence",
+    "module": {
+      "name": "Waste Mining"
+    },
+    "actionTypes": [
+      {
+        "name": "Select for CVAT"
+      }
+    ]
+  },
+  {
+    "name": "Many objects",
+    "module": {
+      "name": "Waste Mining"
+    },
+    "actionTypes": [
+      {
+        "name": "Select for CVAT"
+      }
+    ]
+  },
+  {
+    "name": "Periodic sample",
+    "module": {
+      "name": "Waste Mining"
+    },
+    "actionTypes": [
+      {
+        "name": "Select for CVAT"
+      }
+    ]
+  }
+]
