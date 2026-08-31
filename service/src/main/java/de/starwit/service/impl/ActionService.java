@@ -47,7 +47,7 @@ public class ActionService implements ServiceInterface<ActionEntity, ActionRepos
         for (ActionEntity action : actions) {
             action.setState(ActionState.DONE);
             action.setMetadata("CVAT task " + taskId);
-            actionRepository.save(action);
         }
+        actionRepository.saveAll(actions);
     }
 }

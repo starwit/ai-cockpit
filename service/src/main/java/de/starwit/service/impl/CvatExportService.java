@@ -120,14 +120,10 @@ public class CvatExportService {
     }
 
     private List<ActionEntity> findCvatActions(Long moduleId) {
-        List<ActionEntity> actions = new ArrayList<>();
-        for (ActionEntity action : actionService.findAllNewActions()) {
-            if (isCvatAction(action, moduleId)) {
-                actions.add(action);
-            }
-        }
-        actions.sort(Comparator.comparing(ActionEntity::getId));
-        return actions;
+        return actionService.findAllNewActions().stream()
+                .filter(action -> isCvatAction(action, moduleId))
+                .sorted(Comparator.comparing(ActionEntity::getId))
+                .toList();
     }
 
     /** An action is a CVAT export candidate when its decision is accepted and belongs to the given
@@ -188,14 +184,14 @@ public class CvatExportService {
         int batchFileIndex = 0;
 
         for (CvatImage image : images) {
-            byte[] data = minioService.getFileFromMinio(image.bucketName, image.objectName);
+            byte[] data = minioService.getFileFromMinio(image.bucketName(), image.objectName());
             if (batchFileIndex > 0 && batchSize + data.length > CVAT_MAX_UPLOAD_REQUEST_SIZE_BYTES) {
                 sendDataRequest(taskId, "Upload-Multiple", body);
                 body = newDataBody();
                 batchSize = 0;
                 batchFileIndex = 0;
             }
-            body.add("client_files[" + batchFileIndex + "]", new CvatFile(data, image.fileName));
+            body.add("client_files[" + batchFileIndex + "]", new CvatFile(data, image.fileName()));
             batchSize += data.length;
             batchFileIndex++;
         }
@@ -264,7 +260,7 @@ public class CvatExportService {
         Set<String> missingLabels = new LinkedHashSet<>();
 
         for (int frame = 0; frame < images.size(); frame++) {
-            JsonNode detections = images.get(frame).detections;
+            JsonNode detections = images.get(frame).detections();
             JsonNode frameSize = frames.get(frame);
             double frameWidth = frameSize.get("width").asDouble();
             double frameHeight = frameSize.get("height").asDouble();
@@ -343,17 +339,6 @@ public class CvatExportService {
         }
     }
 
-    private static class CvatImage {
-        private final String bucketName;
-        private final String objectName;
-        private final String fileName;
-        private final JsonNode detections;
-
-        CvatImage(String bucketName, String objectName, String fileName, JsonNode detections) {
-            this.bucketName = bucketName;
-            this.objectName = objectName;
-            this.fileName = fileName;
-            this.detections = detections;
-        }
+    private record CvatImage(String bucketName, String objectName, String fileName, JsonNode detections) {
     }
 }
