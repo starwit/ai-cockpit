@@ -138,12 +138,13 @@ function DecisionHeatmapView() {
 
     function handleSave(actionTypes, decisionType, description, state) {
         const foundDecision = selectedDecisions.find(value => value.id === rowData.id);
+        const actionTypeIds = actionTypes.map(actionType => actionType['id'])
         if (foundDecision) {
             foundDecision.decisionType = decisionType;
             foundDecision.description = description;
             foundDecision.state = state;
 
-            decisionRest.update(foundDecision).then(() => {
+            decisionRest.updateWithActions(foundDecision, actionTypeIds).then(() => {
                 if (automaticNext) {
                     handleNext(selectedDecisions, selectedDecisions.findIndex(value => value.id === rowData.id));
                 } else {
