@@ -10,6 +10,7 @@ import {useTranslation} from "react-i18next";
 import {formatDateShort} from "../../commons/formatter/DateFormatter";
 import DecisionRest from "../../services/DecisionRest";
 import ActionRest from "../../services/ActionRest";
+import ActionTypeRest from "../../services/ActionTypeRest";
 import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
@@ -26,6 +27,8 @@ function DecisionOverview() {
     });
     const decisionRest = useMemo(() => new DecisionRest(), []);
     const actionRest = useMemo(() => new ActionRest(), []);
+    const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
+    const [hasCvatAction, setHasCvatAction] = useState(false);
     const [selectedDecisions, setSelectedDecisions] = useState([]);
     const [newDecisions, setNewDecisions] = useState([]);
     const [readyForCvatDecisions, setReadyForCvatDecisions] = useState([]);
@@ -36,7 +39,7 @@ function DecisionOverview() {
     const [exporting, setExporting] = useState(false);
     const locale = i18n.language == "de" ? deDE : enUS
     const pageSize = 10;
-    const decisionsByTab = moduleId
+    const decisionsByTab = hasCvatAction
         ? [newDecisions, readyForCvatDecisions, doneDecisions]
         : [newDecisions, doneDecisions];
     const activeTab = Math.min(tab, decisionsByTab.length - 1);
@@ -44,13 +47,21 @@ function DecisionOverview() {
 
     useEffect(() => {
         setTab(0);
+        setHasCvatAction(false);
+        if (moduleId) {
+            actionTypeRest.findByModuleId(moduleId).then(response => {
+                setHasCvatAction(response.data.some(actionType =>
+                    actionType.executionPolicy == "MANUAL" && actionType.endpoint == "cvat"
+                ));
+            });
+        }
     }, [moduleId]);
 
     useEffect(() => {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
         return () => clearInterval(interval);
-    }, [open, tab, moduleId]);
+    }, [open, tab, moduleId, hasCvatAction]);
 
     function reloadDecisions() {
         if (moduleId) {
@@ -70,8 +81,8 @@ function DecisionOverview() {
         );
         const readyForCvat = reviewedDecisions.filter(isReadyForCvat);
         setNewDecisions(sortedData.filter(decision => decision.state == null || decision.state == "NEW"));
-        setReadyForCvatDecisions(moduleId ? readyForCvat : []);
-        setDoneDecisions(moduleId
+        setReadyForCvatDecisions(hasCvatAction ? readyForCvat : []);
+        setDoneDecisions(hasCvatAction
             ? reviewedDecisions.filter(decision => !isReadyForCvat(decision))
             : reviewedDecisions);
     }
@@ -257,7 +268,7 @@ function DecisionOverview() {
                     <NearbyError fontSize="small" /> {t("decisions.heading")}
                 </Typography>
 
-                {moduleId && activeTab == 1 && readyForCvatDecisions.length > 0 ?
+                {hasCvatAction && activeTab == 1 && readyForCvatDecisions.length > 0 ?
                     <Button onClick={handleCvatExport} disabled={exporting} variant="text" color="primary"
                         startIcon={exporting ? <CircularProgress size={16} /> : <CloudUploadIcon />}>
                         {t("decision.exportCvat")}
@@ -269,8 +280,8 @@ function DecisionOverview() {
             <Paper sx={{paddingBottom: 2, paddingX: 2}}>
                 <Tabs onChange={handleTabChange} value={activeTab} sx={{paddingBottom: 0, marginBottom: 0, flex: 1}}>
                     <Tab label={t("home.decisionTab.title.open")} key="tab0" />
-                    {moduleId ? <Tab label={t("home.decisionTab.title.readyCvat")} key="tab1" /> : null}
-                    <Tab label={t("home.decisionTab.title.done")} key={moduleId ? "tab2" : "tab1"} />
+                    {hasCvatAction ? <Tab label={t("home.decisionTab.title.readyCvat")} key="tab1" /> : null}
+                    <Tab label={t("home.decisionTab.title.done")} key={hasCvatAction ? "tab2" : "tab1"} />
                 </Tabs>
 
                 <DataGrid

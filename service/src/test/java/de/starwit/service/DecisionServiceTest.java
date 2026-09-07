@@ -144,6 +144,45 @@ public class DecisionServiceTest {
         }
 
         @Test
+        void testCreatesAndReusesCvatDecisionType() {
+                ModuleEntity module = getDefaultModule();
+                getDefaultDecisionType();
+
+                ActionTypeEntity cvatAction = new ActionTypeEntity();
+                cvatAction.setName("Export samples");
+                cvatAction.setModule(module);
+                cvatAction.setExecutionPolicy(ExecutionPolicy.MANUAL);
+                cvatAction.setEndpoint("cvat");
+                cvatAction = actionTypeRepository.save(cvatAction);
+
+                DecisionEntity first = createSampleDecision(module, "custom_filter");
+                DecisionEntity second = createSampleDecision(module, "custom_filter");
+
+                assertEquals("custom_filter", first.getDecisionType().getName());
+                assertEquals(first.getDecisionType().getId(), second.getDecisionType().getId());
+                assertEquals(1, first.getAction().size());
+                assertEquals(cvatAction.getId(), first.getAction().iterator().next().getActionType().getId());
+        }
+
+        @Test
+        void testUnknownDecisionTypeIsRejectedWithoutCvatAction() {
+                ModuleEntity module = getDefaultModule();
+                assertThrows(EntityNotFoundException.class,
+                                () -> createSampleDecision(module, "unconfigured_filter"));
+        }
+
+        private DecisionEntity createSampleDecision(ModuleEntity module, String reason) {
+                DecisionTypeEntity decisionType = new DecisionTypeEntity();
+                decisionType.setName(reason);
+                DecisionEntity decision = new DecisionEntity();
+                decision.setModule(module);
+                decision.setDecisionType(decisionType);
+                decision.setAcquisitionTime(ZonedDateTime.now());
+                decision.setMediaUrl("bucket/sample/annotated.jpg");
+                return decisionService.createDecisionEntitywithAction(decision);
+        }
+
+        @Test
         @Commit
         @Order(1)
         void testCreateNewDecisionFromApi() {
@@ -230,15 +269,6 @@ public class DecisionServiceTest {
         void testUpdateDecisionWithActions() {
 
                 // prepare
-                DecisionTypeEntity defaultDecisionType = getDefaultDecisionType();
-                ActionTypeEntity existingActionType = defaultDecisionType.getActionType().iterator().next();
-                for (int i = 0; i < 2; i++) {
-                        ActionEntity temporaryAction = new ActionEntity();
-                        temporaryAction.setActionType(existingActionType);
-                        temporaryAction = actionRepository.save(temporaryAction);
-                        actionRepository.delete(temporaryAction);
-                }
-
                 DecisionEntity decision = getDefaultDecision();
                 assertEquals(defaultDecisionTypeName, decision.getDecisionType().getName());
 
@@ -250,16 +280,10 @@ public class DecisionServiceTest {
                 actionType = actionTypeRepository.save(actionType);
 
                 Set<ActionEntity> actions = decision.getAction();
-                ActionEntity removableAction = actions.stream()
-                                .filter(action -> actionTypeRepository.findById(action.getId()).isEmpty())
-                                .findFirst()
-                                .orElseThrow(() -> new AssertionError(
-                                                "Test setup requires different action and action-type IDs."));
-                assertTrue(actionTypeRepository.findById(removableAction.getId()).isEmpty());
 
                 decision.setState(DecisionState.ACCEPTED);
                 Set<Long> removedActionTypeIds = new HashSet<>();
-                removedActionTypeIds.add(removableAction.getActionType().getId());
+                removedActionTypeIds.add(actions.iterator().next().getActionType().getId());
 
                 Set<Long> addedActionTypeIds = new HashSet<>();
                 addedActionTypeIds.add(actionType.getId());

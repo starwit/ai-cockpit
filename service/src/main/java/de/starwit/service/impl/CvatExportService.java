@@ -83,7 +83,7 @@ public class CvatExportService {
     @Autowired
     private ObjectMapper objectMapper;
 
-    public void exportModule(Long moduleId) throws InvalidKeyException, IOException, NotificationException {
+    public synchronized void exportModule(Long moduleId) throws InvalidKeyException, IOException, NotificationException {
         if (cvatBaseUrl.isBlank() || cvatToken.isBlank() || cvatProjectId <= 0
                 || cvatOrganizationSlug.isBlank()) {
             throw new NotificationException("error.cvat.unconfigured", "CVAT is not configured.");
@@ -133,10 +133,14 @@ public class CvatExportService {
         ActionTypeEntity actionType = action.getActionType();
 
         return decision != null
-                && actionType != null
                 && decision.getModule() != null
                 && moduleId.equals(decision.getModule().getId())
                 && decision.getState() == DecisionState.ACCEPTED
+                && isCvatActionType(actionType);
+    }
+
+    static boolean isCvatActionType(ActionTypeEntity actionType) {
+        return actionType != null
                 && actionType.getExecutionPolicy() == ExecutionPolicy.MANUAL
                 && CVAT_ENDPOINT.equals(actionType.getEndpoint());
     }

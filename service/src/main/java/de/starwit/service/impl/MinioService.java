@@ -1,6 +1,5 @@
 package de.starwit.service.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -41,14 +40,7 @@ public class MinioService {
             // MinIO requires closing the returned stream to release network resources.
             try (InputStream objectStream = minioClient
                     .getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build())) {
-                // Convert the InputStream to a Base64-encoded Byte[]
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = objectStream.read(buffer)) != -1) {
-                    baos.write(buffer, 0, bytesRead);
-                }
-                return baos.toByteArray();
+                return objectStream.readAllBytes();
             }
         } catch (ErrorResponseException | InsufficientDataException | InternalException
                 | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException

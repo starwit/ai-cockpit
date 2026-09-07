@@ -15,6 +15,8 @@ public interface DecisionTypeRepository extends JpaRepository<DecisionTypeEntity
 
     public DecisionTypeEntity findFirstByNameLikeAndModuleId(String name, Long moduleId);
 
+    public DecisionTypeEntity findFirstByNameAndModuleId(String name, Long moduleId);
+
     public List<DecisionTypeEntity> findByModuleId(Long moduleId);
 
 }
