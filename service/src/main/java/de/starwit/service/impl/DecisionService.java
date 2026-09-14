@@ -169,8 +169,7 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
         for (ActionEntity action : removeActions) {
             entity.removeFromAction(action);
-            actionTypeRepository.findById(action.getId())
-                    .ifPresent(actionType -> actionRepository.deleteById(action.getId()));
+            actionRepository.deleteById(action.getId());
         }
     }
 
