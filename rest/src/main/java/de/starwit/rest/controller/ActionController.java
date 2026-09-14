@@ -1,5 +1,7 @@
 package de.starwit.rest.controller;
 
+import java.io.IOException;
+import java.security.InvalidKeyException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ import de.starwit.persistence.exception.NotificationException;
 import de.starwit.rest.exception.NotificationDto;
 import de.starwit.service.impl.ActionExecutorService;
 import de.starwit.service.impl.ActionService;
+import de.starwit.service.impl.CvatExportService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
@@ -42,6 +45,9 @@ public class ActionController {
     @Autowired
     private ActionExecutorService actionExecutorService;
 
+    @Autowired
+    private CvatExportService cvatExportService;
+
     @Operation(summary = "Get all action")
     @GetMapping
     public List<ActionEntity> findAll() {
@@ -58,6 +64,13 @@ public class ActionController {
     @GetMapping("/retry-action-execution")
     public void retryActionExecution() {
         this.actionExecutorService.retryExecutionActions();
+    }
+
+    @Operation(summary = "Export CVAT actions for module")
+    @PostMapping("/export-cvat/{moduleId}")
+    public void exportCvat(@PathVariable("moduleId") Long moduleId)
+            throws NotificationException, InvalidKeyException, IOException {
+        cvatExportService.exportModule(moduleId);
     }
 
     @Operation(summary = "Get action with id")

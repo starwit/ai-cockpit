@@ -52,8 +52,8 @@ function DecisionDetail(props) {
     } = props;
     const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
     const decisionTypeRest = useMemo(() => new DecisionTypeRest(), []);
-    const [actionTypes, setActionTypes] = useState(rowData.action);
-    const [decisionType, setDecisionType] = useState([""]);
+    const [actionTypes, setActionTypes] = useState(rowData.action.map(action => action.actionType));
+    const [decisionType, setDecisionType] = useState(rowData.decisionType);
     const [allActionTypes, setAllActionTypes] = useState([""]);
     const [allDecisionType, setAllDecisionType] = useState([""]);
     const [description, setDescription] = useState(rowData.description == null ? "" : rowData.description);
@@ -61,6 +61,8 @@ function DecisionDetail(props) {
     const [rowIndex, setRowIndex] = useState([""]);
 
     useEffect(() => {
+        setActionTypes(rowData.action.map(action => action.actionType));
+        setDecisionType(rowData.decisionType);
         reload();
         setRowIndex(searchIndex(data, rowData));    //set the index of the current decision
     }, [open, rowData]);
