@@ -36,6 +36,9 @@ import de.starwit.persistence.entity.DecisionEntity;
 import de.starwit.persistence.entity.DecisionState;
 import de.starwit.persistence.entity.ExecutionPolicy;
 import de.starwit.persistence.exception.NotificationException;
+import de.starwit.visionapi.Sae.BoundingBox;
+import de.starwit.visionapi.Sae.Detection;
+import de.starwit.visionapi.Sae.SaeMessage;
 
 /**
  * Exports accepted decisions to CVAT by creating a task, uploading their original
@@ -49,7 +52,7 @@ public class CvatExportService {
     /** Sentinel value for {@link ActionTypeEntity#getEndpoint()}: a manual action type whose endpoint
      * equals this string is exported to CVAT instead of being sent to a remote URI. */
     private static final String CVAT_ENDPOINT = "cvat";
-    private static final String DETECTIONS_FILE_NAME = "detections.json";
+    private static final String SAE_FILE_NAME = "sae.pb";
     private static final String ORIGINAL_FILE_NAME = "original.jpg";
     private static final DateTimeFormatter TASK_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd/HHmmss");
     // CVAT defaults to 70; use 90 so small detections remain clear after image compression.
@@ -168,14 +171,14 @@ public class CvatExportService {
             int pathSeparator = mediaObjectName.lastIndexOf("/");
             // The connector stores all files for one decision in the same MinIO directory.
             String objectPrefix = mediaObjectName.substring(0, pathSeparator + 1);
-            String detectionsObjectName = objectPrefix + DETECTIONS_FILE_NAME;
-            JsonNode detections = objectMapper.readTree(
-                    minioService.getFileFromMinio(bucketName, detectionsObjectName));
+            SaeMessage sae = SaeMessage.parseFrom(
+                    minioService.getFileFromMinio(bucketName, objectPrefix + SAE_FILE_NAME));
             String objectName = objectPrefix + ORIGINAL_FILE_NAME;
             String cvatFileName = String.format(
                     "%06d-decision-%d-%s", i, decision.getId(), ORIGINAL_FILE_NAME);
 
-            images.add(new CvatImage(bucketName, objectName, cvatFileName, detections));
+            images.add(new CvatImage(bucketName, objectName, cvatFileName,
+                    sae.getDetectionsList(), sae.getModelMetadata().getClassNamesMap()));
         }
         return images;
     }
@@ -251,38 +254,38 @@ public class CvatExportService {
                 .get(apiUri("/tasks/" + taskId + "/data/meta"))
                 .headers(headers(MediaType.APPLICATION_JSON))
                 .build(), JsonNode.class).getBody().get("frames");
-        List<JsonNode> detectionsByFrame = images.stream().map(CvatImage::detections).toList();
-        List<Map<String, Object>> shapes = buildShapes(detectionsByFrame, frames, labelIds);
+        List<Map<String, Object>> shapes = buildShapes(images, frames, labelIds);
         restTemplate.exchange(RequestEntity
                 .put(apiUri("/tasks/" + taskId + "/annotations/"))
                 .headers(headers(MediaType.APPLICATION_JSON))
                 .body(Map.of("shapes", shapes)), Void.class);
     }
 
-    static List<Map<String, Object>> buildShapes(List<JsonNode> detectionsByFrame, JsonNode frames,
+    static List<Map<String, Object>> buildShapes(List<CvatImage> images, JsonNode frames,
             Map<String, Integer> labelIds) {
         List<Map<String, Object>> shapes = new ArrayList<>();
         Set<String> missingLabels = new LinkedHashSet<>();
 
-        for (int frame = 0; frame < detectionsByFrame.size(); frame++) {
-            JsonNode detections = detectionsByFrame.get(frame);
+        for (int frame = 0; frame < images.size(); frame++) {
+            CvatImage image = images.get(frame);
             JsonNode frameSize = frames.get(frame);
             double frameWidth = frameSize.get("width").asDouble();
             double frameHeight = frameSize.get("height").asDouble();
 
-            for (JsonNode detection : detections) {
-                String label = detection.get("label").asText();
+            for (Detection detection : image.detections()) {
+                String label = image.classNames().getOrDefault(
+                        detection.getClassId(), "class " + detection.getClassId());
                 Integer labelId = labelIds.get(label);
                 if (labelId == null) {
                     missingLabels.add(label);
                     continue;
                 }
-                JsonNode boundingBox = detection.get("boundingBox");
+                BoundingBox boundingBox = detection.getBoundingBox();
 
-                double minX = boundingBox.get("minX").asDouble() * frameWidth;
-                double minY = boundingBox.get("minY").asDouble() * frameHeight;
-                double maxX = boundingBox.get("maxX").asDouble() * frameWidth;
-                double maxY = boundingBox.get("maxY").asDouble() * frameHeight;
+                double minX = boundingBox.getMinX() * frameWidth;
+                double minY = boundingBox.getMinY() * frameHeight;
+                double maxX = boundingBox.getMaxX() * frameWidth;
+                double maxY = boundingBox.getMaxY() * frameHeight;
 
                 shapes.add(Map.of(
                         "type", "rectangle",
@@ -342,6 +345,7 @@ public class CvatExportService {
         }
     }
 
-    private record CvatImage(String bucketName, String objectName, String fileName, JsonNode detections) {
+    record CvatImage(String bucketName, String objectName, String fileName,
+            List<Detection> detections, Map<Integer, String> classNames) {
     }
 }
