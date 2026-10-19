@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Select for CVAT",
+    "description": "Buffer decision for CVAT relabeling",
+    "executionPolicy": "MANUAL",
+    "endpoint": "cvat",
+    "module": {
+      "name": "Waste Mining"
+    }
+  }
+]

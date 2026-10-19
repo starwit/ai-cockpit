@@ -2,7 +2,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import ErrorIcon from "@mui/icons-material/Error";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import NearbyError from "@mui/icons-material/NearbyError";
-import {Box, Button, Container, IconButton, Paper, Stack, Tab, Tabs, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, Container, IconButton, Paper, Stack, Tab, Tabs, Typography} from "@mui/material";
 import {DataGrid, GridToolbar} from "@mui/x-data-grid";
 import {deDE, enUS} from '@mui/x-data-grid/locales';
 import React, {useEffect, useMemo, useState} from "react";
@@ -10,11 +10,16 @@ import {useTranslation} from "react-i18next";
 import {formatDateShort} from "../../commons/formatter/DateFormatter";
 import DecisionRest from "../../services/DecisionRest";
 import ActionRest from "../../services/ActionRest";
+import ActionTypeRest from "../../services/ActionTypeRest";
 import {renderActions} from "./DecisionActions";
 import DecisionDetail from "./DecisionDetail";
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import {useParams} from "react-router";
 
+function isCvatActionType(actionType) {
+    return actionType.executionPolicy == "MANUAL" && actionType.endpoint == "cvat";
+}
 
 function DecisionOverview() {
     const {moduleId} = useParams();
@@ -25,21 +30,40 @@ function DecisionOverview() {
     });
     const decisionRest = useMemo(() => new DecisionRest(), []);
     const actionRest = useMemo(() => new ActionRest(), []);
+    const actionTypeRest = useMemo(() => new ActionTypeRest(), []);
+    const [hasCvatAction, setHasCvatAction] = useState(false);
     const [selectedDecisions, setSelectedDecisions] = useState([]);
     const [newDecisions, setNewDecisions] = useState([]);
     const [checkedDecisions, setCheckedDecisions] = useState([]);
     const [open, setOpen] = React.useState(false);
     const [rowData, setRowData] = React.useState({});
     const [automaticNext, setAutomaticNext] = React.useState(false);
+    const [exporting, setExporting] = useState(false);
     const locale = i18n.language == "de" ? deDE : enUS
     const pageSize = 10;
+    const readyForCvatDecisions = checkedDecisions.filter(isReadyForCvat);
+    const doneDecisions = hasCvatAction
+        ? checkedDecisions.filter(decision => !isReadyForCvat(decision))
+        : checkedDecisions;
+    const decisionsByTab = hasCvatAction
+        ? [newDecisions, readyForCvatDecisions, doneDecisions]
+        : [newDecisions, doneDecisions];
 
+    useEffect(() => {
+        setTab(0);
+        setHasCvatAction(false);
+        if (moduleId) {
+            actionTypeRest.findByModuleId(moduleId).then(response => {
+                setHasCvatAction(response.data.some(isCvatActionType));
+            });
+        }
+    }, [moduleId]);
 
     useEffect(() => {
         reloadDecisions();
         const interval = setInterval(reloadDecisions, 5000); // Update alle 5 Sekunden
         return () => clearInterval(interval);
-    }, [open, tab]);
+    }, [open, tab, moduleId]);
 
     function reloadDecisions() {
         if (moduleId) {
@@ -57,8 +81,25 @@ function DecisionOverview() {
         setNewDecisions(sortedData.filter(decision => decision.state == null || decision.state == "NEW"));
         setCheckedDecisions(sortedData.filter(decision => decision.state == "ACCEPTED" || decision.state == "REJECTED"));
     }
+
+    function isReadyForCvat(decision) {
+        return decision.state == "ACCEPTED"
+            && decision.action.some(action =>
+                action.state == "NEW" && isCvatActionType(action.actionType)
+        );
+    }
+
     function handleActionExecution() {
         actionRest.retryActionExecution()
+    }
+
+    function handleCvatExport() {
+        setExporting(true);
+        actionRest.exportCvat(moduleId)
+            .then(() => reloadDecisions())
+            // Export errors are toasted by the global ErrorHandler.
+            .catch(() => {})
+            .finally(() => setExporting(false));
     }
 
     function handleTabChange(_event, newValue) {
@@ -93,7 +134,9 @@ function DecisionOverview() {
 
     function handleSave(actionTypes, decisionType, description, state) {
         const foundDecision = getData().find(value => value.id == rowData.id);
-        const actionTypeIds = actionTypes.map(actionType => actionType['id'])
+        const actionTypeIds = actionTypes
+            .filter(actionType => state != "REJECTED" || !isCvatActionType(actionType))
+            .map(actionType => actionType.id);
         foundDecision.decisionType = decisionType;
         foundDecision.description = description;
         foundDecision.state = state;
@@ -109,7 +152,7 @@ function DecisionOverview() {
 
     function handleOpen(row) {
         setOpen(true);
-        setSelectedDecisions(tab == 0 ? newDecisions : checkedDecisions);
+        setSelectedDecisions(decisionsByTab[tab]);
         setRowData(row);
     }
 
@@ -124,15 +167,15 @@ function DecisionOverview() {
             width: 70,
             editable: false,
             renderCell: cellValues => {
-                if (tab === 1 && cellValues.row.state == "ACCEPTED") {
+                if (cellValues.row.state == "ACCEPTED") {
                     return (
                         <IconButton color="success"><CheckIcon /></IconButton>
                     );
-                } else if (tab === 1 && cellValues.row.state == "REJECTED") {
+                } else if (cellValues.row.state == "REJECTED") {
                     return (
                         <IconButton color="error"><ErrorIcon /></IconButton>
                     );
-                } else if (tab === 0 && (cellValues.row.state == "NEW" || cellValues.row.state == null)) {
+                } else if (cellValues.row.state == "NEW" || cellValues.row.state == null) {
                     return (
                         <FiberNewIcon color="grey"></FiberNewIcon>
                     );
@@ -221,6 +264,11 @@ function DecisionOverview() {
                     <NearbyError fontSize="small" /> {t("decisions.heading")}
                 </Typography>
 
+                {hasCvatAction && tab == 1 && readyForCvatDecisions.length > 0 ?
+                    <Button onClick={handleCvatExport} disabled={exporting} variant="text" color="primary"
+                        startIcon={exporting ? <CircularProgress size={16} /> : <CloudUploadIcon />}>
+                        {t("decision.exportCvat")}
+                    </Button> : null}
                 <Button onClick={handleActionExecution} variant="text" color="primary" startIcon={<NotificationsActiveIcon />}>
                     {t("decision.retryActionExecution")}
                 </Button>
@@ -228,6 +276,7 @@ function DecisionOverview() {
             <Paper sx={{paddingBottom: 2, paddingX: 2}}>
                 <Tabs onChange={handleTabChange} value={tab} sx={{paddingBottom: 0, marginBottom: 0, flex: 1}}>
                     <Tab label={t("home.decisionTab.title.open")} key="tab0" />
+                    {hasCvatAction ? <Tab label={t("home.decisionTab.title.readyCvat")} key="readyCvat" /> : null}
                     <Tab label={t("home.decisionTab.title.done")} key="tab1" />
                 </Tabs>
 
@@ -248,7 +297,7 @@ function DecisionOverview() {
                         },
                     }}
                     pageSizeOptions={[pageSize, 25, 50, 100]}
-                    rows={tab == 0 ? newDecisions : checkedDecisions}
+                    rows={decisionsByTab[tab]}
                     columns={headers}
                     isCellEditable={() => {false}}
                     slots={{toolbar: GridToolbar}}

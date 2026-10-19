@@ -33,6 +33,7 @@
         <minio-version>8.5.17</minio-version>
         <java.version>21</java.version>
         <aicockpit-api>0.1.5</aicockpit-api>
+        <vision-api>3.8.0</vision-api>
     </properties>
 
     <modules>
@@ -122,6 +123,11 @@
                 <groupId>de.starwit.aic</groupId>
                 <artifactId>aicockpit-api</artifactId>
                 <version>${aicockpit-api}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.starwit</groupId>
+                <artifactId>vision-api</artifactId>
+                <version>${vision-api}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>

@@ -8,6 +8,7 @@ import de.starwit.persistence.entity.ActionEntity;
 import de.starwit.rest.controller.ActionController;
 import de.starwit.service.impl.ActionExecutorService;
 import de.starwit.service.impl.ActionService;
+import de.starwit.service.impl.CvatExportService;
 
 /**
  * Tests for ActionController
@@ -25,6 +26,9 @@ public class ActionControllerIntegrationTest extends AbstractControllerIntegrati
 
     @MockitoBean
     private ActionExecutorService actionExecutorService;
+
+    @MockitoBean
+    private CvatExportService cvatExportService;
 
     private static final String restpath = "/api/actions/";
 

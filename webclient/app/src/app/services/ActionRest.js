@@ -10,5 +10,9 @@ class ActionRest extends CrudRest {
         return axios.get(this.baseUrl + "/retry-action-execution");
     }
 
+    exportCvat(moduleId) {
+        return axios.post(this.baseUrl + "/export-cvat/" + moduleId);
+    }
+
 }
 export default ActionRest;

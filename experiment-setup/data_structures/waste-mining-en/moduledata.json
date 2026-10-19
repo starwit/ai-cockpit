@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Waste Mining",
+    "description": "Auto-mined object detector relabel candidates",
+    "version": "0.0.1",
+    "applicationIdentifier": "waste-mining",
+    "useAI": true,
+    "model": {
+      "name": "YOLO object detector",
+      "version": "1.0.0",
+      "lastDeployment": "2025-01-25T12:36:50.277768993+01:00",
+      "modelType": "COMPUTERVISION",
+      "modelLink": "https://example.com/",
+      "publicTrainingData": false
+    },
+    "actionTypes": [],
+    "decisionTypes": [],
+    "sBOMLocation": {}
+  }
+]

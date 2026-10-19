@@ -39,4 +39,11 @@ public class ActionService implements ServiceInterface<ActionEntity, ActionRepos
         return result;
 
     }
+
+    public void markCvatExported(List<ActionEntity> actions) {
+        for (ActionEntity action : actions) {
+            action.setState(ActionState.DONE);
+        }
+        actionRepository.saveAll(actions);
+    }
 }

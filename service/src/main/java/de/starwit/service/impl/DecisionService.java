@@ -1,6 +1,7 @@
 package de.starwit.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -91,6 +92,9 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
         DecisionTypeEntity decisionType = null;
         if (entity != null) {
             decisionType = findDecisionTypeByNameOrId(entity.getName(), entity.getId(), moduleId);
+            if (decisionType == null && entity.getId() == null && entity.getName() != null) {
+                decisionType = createCvatDecisionType(entity.getName(), moduleId);
+            }
         } else if (randomDecisionType) {
             List<DecisionTypeEntity> types = decisionTypeRepository.findByModuleId(moduleId);
             if (types != null) {
@@ -101,6 +105,24 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
             decisionType = findDecisionTypeByNameOrId(defaultDecisionType, null, moduleId);
         }
         return decisionType;
+    }
+
+    private DecisionTypeEntity createCvatDecisionType(String name, Long moduleId) {
+        Set<ActionTypeEntity> cvatActionTypes = new HashSet<>();
+        for (ActionTypeEntity actionType : actionTypeRepository.findByModuleId(moduleId)) {
+            if (CvatExportService.isCvatActionType(actionType)) {
+                cvatActionTypes.add(actionType);
+            }
+        }
+        if (cvatActionTypes.isEmpty()) {
+            return null;
+        }
+
+        DecisionTypeEntity decisionType = new DecisionTypeEntity();
+        decisionType.setName(name);
+        decisionType.setModule(moduleRepository.getReferenceById(moduleId));
+        decisionType.setActionType(cvatActionTypes);
+        return decisionTypeRepository.save(decisionType);
     }
 
     private ModuleEntity processModule(ModuleEntity entity) {
@@ -169,8 +191,7 @@ public class DecisionService implements ServiceInterface<DecisionEntity, Decisio
 
         for (ActionEntity action : removeActions) {
             entity.removeFromAction(action);
-            actionTypeRepository.findById(action.getId())
-                    .ifPresent(actionType -> actionRepository.deleteById(action.getId()));
+            actionRepository.deleteById(action.getId());
         }
     }
 

@@ -12,6 +12,49 @@ The following components and tools are necessary to build & run AICockpit in you
 * Postgres (available for development via docker-compose scripts)
 * using Keycloak is optional
 
+### Maven Dependency
+
+Cockpit uses Starwit's `vision-api` library from GitHub Packages. Add the repository and your credentials to your Maven settings (usually `~/.m2/settings.xml`). The example below shows the required entries; merge them into your existing settings if necessary. Replace `username` and `TOKEN` with your GitHub username and a token with `read:packages` permission.
+
+```XML
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+  <activeProfiles>
+    <activeProfile>github</activeProfile>
+  </activeProfiles>
+
+  <profiles>
+    <profile>
+      <id>github</id>
+      <repositories>
+        <repository>
+          <id>central</id>
+          <url>https://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>github</id>
+            <url>https://maven.pkg.github.com/starwit/vision-api</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+  <servers>
+    <server>
+      <id>github</id>
+      <username>username</username>
+      <password>TOKEN</password>
+    </server>
+  </servers>
+</settings>
+```
+
 ## How to build
 
 In order to run a local development environment execute the following steps.
@@ -116,6 +159,36 @@ Please note, that this script expects an _env.sh_ file in the same folder. Conte
 
 This script also allows you, to test how decisions are flowing into AI Cockpit. __Note__: you will
 have to prepare video data on a Minio instance.
+
+### CVAT export
+
+Cockpit can send reviewed images to a CVAT project for annotation. The images come from the [detection sampler](https://github.com/starwit/sae-detection-sampler) and the [AIC connector](https://github.com/starwit/aic-connector-cv). Use connector and sampler versions that store `original.jpg`, `annotated.jpg` and `sae.pb` for each image.
+
+Configure the connector:
+
+* `http_output.target_endpoint`: `http://<cockpit-host>:<port>/ai-cockpit/api/aic/decision`
+* `http_output.module_name`: exactly the name of the Cockpit module. If the name does not match, decisions are stored in the default module instead.
+* MinIO: the same bucket that Cockpit can read.
+
+Configure Cockpit:
+
+```properties
+cvat.base-url=https://<cvat-host>
+cvat.token=<token>
+cvat.project-id=<project-id>
+cvat.organization-slug=<organization-slug>
+```
+
+`cvat.base-url` is given without `/api`. The token's account must be allowed to create and delete tasks and upload data in the CVAT project. Keep the token in deployment secrets, never in Git.
+
+The module needs an action type with execution policy `MANUAL` and endpoint `cvat` (set it under Configuration → Action Types). The other names can be chosen freely. For testing, the example in `experiment-setup/data_structures/waste-mining-en/` creates a module named "Waste Mining" with such an action on an empty database:
+
+```properties
+scenario.setup=true
+scenario.importFolder=experiment-setup/data_structures/waste-mining-en/
+```
+
+Decision types are created automatically from the sampler's filter names. Detector boxes are only exported if their class name exists as a label in the CVAT project. Images are exported even if some boxes have no matching label.
 
 ## Debugging
 
