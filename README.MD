@@ -17,6 +17,17 @@ The “KI-Cockpit” (AI Cockpit) project was funded by the Federal Ministry of 
 Cockpit is a part of a bundle of services. For deployment options see <https://github.com/starwit/ai-cockpit-deployment>. Cockpit is supposed to be installed on Kubernetes cluster 
 using Helm chart. How to use Helm chart see according [readme](deployment/helm/ai-cockpit/Readme.md).
 
+## Review images for CVAT
+
+Images from an object detector can be reviewed in Cockpit and sent to CVAT for annotation. This works in modules that have a CVAT action (see [CVAT export](docs/README-DEV.MD#cvat-export)).
+
+1. Open the module's **Open** tab and look at an image.
+2. Click **Accept** to send it to CVAT, or **Discard** to leave it out.
+3. Open **Ready for CVAT** and click **Export to CVAT**. All waiting images of this module go into one new CVAT task.
+4. Open the task in CVAT and correct the suggested boxes and labels.
+
+Cockpit shows an image with the detector's boxes drawn on it; CVAT receives the original image with editable boxes. Accept means "this image should be annotated", not "the boxes are correct". Exported and discarded images move to **Done**. If an export fails, the images stay in **Ready for CVAT** and you can try again.
+
 ## Development
 
 * For details on how to develop, build and run AI Cockpit see [development instructions](docs/README-DEV.MD).
